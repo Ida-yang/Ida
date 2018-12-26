@@ -25,7 +25,7 @@
             <span class="nameList">公司名称：</span>
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;
-            <el-button icon="el-icon-search" style="background:#ff5722;color:#ffffff;" size="mini" @click="search()">查询</el-button>
+            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
         </div>
         <div class="entry">
             <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
@@ -37,8 +37,8 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
                 <el-checkbox class="checkone" @change="showcontactsname()" label="联系人"></el-checkbox>
+                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
                 <el-checkbox class="checkone" @change="showtel()" label="电话"></el-checkbox>
                 <el-checkbox class="checkone" @change="showphone()" label="手机"></el-checkbox>
                 <el-checkbox class="checkone" @change="showtencent()" label="QQ"></el-checkbox>
@@ -72,7 +72,17 @@
             @selection-change="selectInfo">
             </el-table-column>
             <el-table-column
-                prop="name"
+                prop="contacts[0].coName"
+                fixed
+                v-if="showxingming"
+                header-align="center"
+                align="left"
+                min-width="100"
+                label="联系人"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="pName"
                 fixed
                 v-if="showmingcheng"
                 header-align="center"
@@ -82,18 +92,9 @@
                 sortable>
                 <template slot-scope="scope">
                     <div @click="openDetails(scope.$index, scope.row)">
-                        {{scope.row.name}}
+                        {{scope.row.pName}}
                     </div>
                 </template>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].coName"
-                v-if="showxingming"
-                header-align="center"
-                align="left"
-                min-width="100"
-                label="联系人"
-                sortable>
             </el-table-column>
             <el-table-column
                 prop="contacts[0].telephone"
@@ -209,17 +210,17 @@
     import qs from 'qs'
 
     export default {
-        name:'clue',
+        name:'customer',
         props:{
             totalNum:Number,
         },
         store,
         computed: {
             tableData(){
-                return store.state.clueList;
+                return store.state.customerList;
             },
             tableNumber(){
-               return store.state.clueListnumber;     
+               return store.state.customerListnumber;     
             },
         },
         data(){
@@ -263,7 +264,7 @@
                     {type:'大数据转移',label:'1',value:'大数据转移'},
                     {type:'手动新增',label:'2',value:'手动新增'}
                 ],
-                checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','客户来源'],
+                checklist:['联系人','公司名称','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','客户来源'],
                 showxingming:true,
                 showmingcheng:true,
                 showdianhua:true,
@@ -303,8 +304,8 @@
                     data: qs.stringify(searchList),
                 }).then(function(res){
                     // console.log(res.data.map.success)
-                    _this.$store.state.clueList = res.data.map.success
-                    _this.$store.state.clueListnumber = res.data.count;
+                    _this.$store.state.customerList = res.data.map.success
+                    _this.$store.state.customerListnumber = res.data.count;
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -379,17 +380,17 @@
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
                     // "cues": row.cues,
-                    "poolName": row.name,
+                    "poolName": row.pName,
                     "contactsName": row.contacts[0].coName,
-                    "telphone": row.telephone,
-                    "phone": row.phone,
-                    "qq": row.qq,
+                    "telphone": row.contacts[0].telephone,
+                    "phone": row.contacts[0].phone,
+                    "qq": row.contacts[0].qq,
                     "sex": row.contacts[0].sex,
                     "identity": row.contacts[0].identity,
                     "address": row.address,
                     "remark": row.remark};
                 addOrUpdateData.submitData = {"id": row.id,'csId':row.contacts[0].csId};
-                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/updateClue.do?cId='+this.$store.state.iscId,
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerpool/updatepool.do?cId='+this.$store.state.iscId,
                 console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/customeraddorupdate' });

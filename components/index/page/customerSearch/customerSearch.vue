@@ -6,7 +6,7 @@
             <span class="title">公司名称：</span>
             <el-input v-model="searchList.keyword" placeholder="公司名称" style="width:500px;"></el-input>
             &nbsp;&nbsp;
-            <el-button icon="el-icon-search" style="background:#ff5722;color:#ffffff;" size="mini" @click="search()">查询</el-button>
+            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
         </div>
         <!-- <br> -->
         <div class="searchList" style="width:100%;">
@@ -100,7 +100,7 @@
             <el-input v-model="searchList.AddressKeyword" placeholder="地址" style="width:223px;"></el-input>
         </div>
         <div class="searchList">
-            <el-button icon="el-icon-search" style="background:#ff5722;color:#ffffff;" size="mini" @click="search()">查询</el-button>
+            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
             &nbsp;&nbsp;
             <el-button icon="el-icon-circle-close-outline" style="background:#20222a;color:#ffffff;" size="mini" @click="reset()">清空</el-button>
         </div>

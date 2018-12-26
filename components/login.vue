@@ -2,41 +2,44 @@
     <!-- 登录页 -->
         <!-- <el-row style="width:100%;height:70%;position:absolute;top:10%;"> -->
     <el-row class="logincontent">
-        <el-col :span="16" class="content-l">
-            <div></div>
+        <el-col :span="14" class="content-l">
+            <div>
+                <img src="../assets/image/index.png" height="50%" width="60%" alt="元旦快乐" title="元旦快乐" style="margin:25% 20%;">
+            </div>
         </el-col>
         <!-- <el-col :span="10" :offset="8" class="grid-content content-r systemLogin"> -->
-        <el-col :span="8" class="content-r">
+        <el-col :span="10" class="content-r">
             <div class="login">
-                <div style="color:#fff;font-size:30px;margin-top:10%;text-align:center">用户登录</div> 
+                <div style="color:#292929;font-size:28px;margin-top:6%;text-align:center">用户登录</div> 
+                <!-- <div style="color:#fff;font-size:30px;margin-top:10%;text-align:center">用户登录</div>  -->
                 <div class="grid-content bg-purple-dark">
                     <el-form  :model="loginFrom" status-icon :rules="rules" ref="loginFrom" 
                     class="demo-ruleForm"
                     style="color:#fff" >
                         <!-- <i class="el-icon-new-zuzhiguanli selecticonSet"></i> -->
                         <el-form-item prop="public_username" style="width:100%;margin-top:30px;">
-                            <i class="el-icon-new-people_fill iconSet"></i>
+                            <!-- <i class="el-icon-new-people_fill iconSet"></i> -->
                             <el-input 
                             type="text"
-                            style="width:90%;" 
+                            prefix-icon="el-icon-new-people_fill"
                             v-model="loginFrom.public_username"
                             auto-complete="off"
                             placeholder="请输入登录账号" >
                             </el-input>
                         </el-form-item>
-                        <el-form-item  prop="public_password" style="width:100%;margin-top:30px;">
-                            <i class="el-icon-new-lock_fill iconSet"></i>
+                        <el-form-item  prop="public_password" style="width:100%;margin-top:25px;">
+                            <!-- <i class="el-icon-new-lock_fill iconSet"></i> -->
                             <el-input 
                             type="password" 
+                            prefix-icon="el-icon-new-lock_fill"
                             v-model="loginFrom.public_password"
                             placeholder="请输入登录密码" 
                             @keyup.enter.native="submitForm('loginFrom')"
-                            auto-complete="off" 
-                            style="width:90%;">
+                            auto-complete="off">
                             </el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm" style="width:80%;margin:10px 0 0 10%;">登录</el-button>
+                            <el-button class="searchbutton" @click="submitForm" style="width:100%;margin-top:10px;">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -130,13 +133,16 @@ export default {
         height: 100%;
         padding: 0;
         margin: 0;
-        background-color: #ffffff;
+        /* background-color: #ffffff; */
+       background-image: url(../assets/image/bg.jpg);
+       background-repeat: no-repeat;
+       background-size: 100% 100%;
     }
    .content-l{
        height: 100%;
-       background-image: url(../assets/image/index.jpg);
+       /* background-image: url(../assets/image/index.png);
        background-repeat: no-repeat;
-       background-size: 100% 100%;
+       background-size: 70% 50%; */
    }
    .content-r{
        height: 100%;
@@ -144,15 +150,19 @@ export default {
        position: relative;
    }
    .login{
-       width: 300px;
-       height: 400px;
-       background-color: rgba(0, 0, 0, 1);
+       width: 250px;
+       height: 320px;
+       /* background-color: rgba(0, 0, 0, 1); */
+       background-color: rgb(255, 255, 255);
        padding: 20px 30px;
-       border-radius: 50px;
+       border-radius: 20px;
        position: absolute;
        left: 50%;
        top: 50%;
        transform: translate(-50%,-50%);
+   }
+   .iconSet{
+       color: #292929;
    }
     /* .el-form-item__error{
         left: 20% !important;

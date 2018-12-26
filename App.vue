@@ -271,8 +271,13 @@ a {
     cursor: default;
 }
 .el-pager li:hover {
-    color: #0f66e8 !important;
+    color: #5281c7 !important;
     cursor: default;
+}
+
+.searchbutton{
+    background-color: #ff5722;
+    color: #ffffff;
 }
 
 .el-table__expand-icon:after {

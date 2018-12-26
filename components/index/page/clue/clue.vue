@@ -20,7 +20,7 @@
             <span class="nameList">公司名称：</span>
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;
-            <el-button icon="el-icon-search" style="background:#ff5722;color:#ffffff;" size="mini" @click="search()"></el-button>
+            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()"></el-button>
         </div>
         <div class="entry">
             <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
@@ -32,8 +32,8 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
                 <el-checkbox class="checkone" @change="showcontactsname()" label="联系人"></el-checkbox>
+                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
                 <el-checkbox class="checkone" @change="showtel()" label="电话"></el-checkbox>
                 <el-checkbox class="checkone" @change="showphone()" label="手机"></el-checkbox>
                 <el-checkbox class="checkone" @change="showtencent()" label="QQ"></el-checkbox>
@@ -67,6 +67,16 @@
             @selection-change="selectInfo">
             </el-table-column>
             <el-table-column
+                prop="contacts[0].coName"
+                fixed
+                v-if="showxingming"
+                header-align="center"
+                align="left"
+                min-width="100"
+                label="联系人"
+                sortable>
+            </el-table-column>
+            <el-table-column
                 prop="name"
                 fixed
                 v-if="showmingcheng"
@@ -80,15 +90,6 @@
                         {{scope.row.name}}
                     </div>
                 </template>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].coName"
-                v-if="showxingming"
-                header-align="center"
-                align="left"
-                min-width="100"
-                label="联系人"
-                sortable>
             </el-table-column>
             <el-table-column
                 prop="contacts[0].telephone"
@@ -249,7 +250,7 @@
                     {type:'',label:'0',value:'全部来源'},
                     {type:'大数据转移',label:'1',value:'大数据转移'},
                     {type:'手动新增',label:'2',value:'手动新增'}],
-                checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','线索来源'],
+                checklist:['联系人','公司名称','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','线索来源'],
                 showxingming:true,
                 showmingcheng:true,
                 showdianhua:true,
@@ -366,9 +367,9 @@
                     // "cues": row.cues,
                     "poolName": row.name,
                     "contactsName": row.contacts[0].coName,
-                    "telphone": row.telephone,
-                    "phone": row.phone,
-                    "qq": row.qq,
+                    "telphone": row.contacts[0].telephone,
+                    "phone": row.contacts[0].phone,
+                    "qq": row.contacts[0].qq,
                     "sex": row.contacts[0].sex,
                     "identity": row.contacts[0].identity,
                     "address": row.address,

@@ -4,7 +4,7 @@
         <div class="searchList" style="width:100%;">
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;
-            <el-button icon="el-icon-search" style="background:#ff5722;color:#ffffff;" size="mini" @click="search()">查询</el-button>
+            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
         </div>
         <div class="entry">
             <el-button class="info-btn" size="mini" @click="handleDeletes()">删除</el-button>
