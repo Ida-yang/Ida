@@ -1,0 +1,329 @@
+<template>
+    <!-- 盘点单详情 -->
+    <div>
+        <div class="grid-content " style="margin-left:3px;">
+            <span class="labelClass">单号:</span>
+            <el-input v-model="orderNum" placeholder="单号" style="width:200px" disabled></el-input>
+            <span class="labelClass">状态:</span>
+            <el-input v-model="status" placeholder="状态" style="width:200px" disabled></el-input>
+        </div>
+        <div class="grid-content " style="margin-left:3px;margin-top:10px;">
+            <span class="labelClass">仓库:</span>
+            <el-input v-model="ckName" placeholder="仓库" style="width:200px" disabled></el-input>
+            <span class="labelClass">操作员:</span>
+            <el-input v-model="operator" placeholder="操作员" style="width:200px" disabled></el-input>
+        </div>
+        <div class="grid-content " style="margin-left:3px;margin-top:10px;">
+            <span class="labelClass">创建时间:</span>
+            <el-input v-model="createtime" placeholder="创建时间" style="width:200px" disabled></el-input>
+            <span class="labelClass">更新时间:</span>
+            <el-input v-model="updatetime" placeholder="更新时间" style="width:200px" disabled></el-input>
+        </div>
+        <el-table
+            class="tableDatalList"
+            :data="tableDatalList"
+            border
+            tooltip-effect="dark"
+            row-key="id"
+            :expand-row-keys="expands"
+            style="width: 100%;margin-top:20px;">
+
+            <el-table-column 
+                type="expand"
+                width="80"
+                align="center"
+                fixed="left"
+                header-align="center"
+                label="盘点明细"
+                prop="inventoryDetails">
+                <template slot-scope="scope">
+                    <el-form class="inventoryDetails">
+                        <el-form-item
+                            class="inventoryDetailsHead">
+                            <span class="ckName">储位</span>
+                            <span class="serialStatus">状态</span>
+                            <span class="serialStatus">盘点数量</span>
+                            <span class="serialStatus">操作员</span>
+                        </el-form-item>
+                        <el-form-item
+                            class="inventoryDetail"
+                            style="height: 30px;margin:0px;border-top: 1px solid rgb(235, 233, 233);"
+                            v-for="item in scope.row.inventoryDetails"
+                            :key="item.id">
+                            <span class="ckName">
+                                {{ item.ckName }}
+                            </span>
+                            <span class="serialStatus">
+                                {{ item.status | formatStatus }}
+                            </span>
+                            <span class="serialStatus">
+                                {{ item.inventoryCount }}
+                            </span>
+                            <span class="serialStatus">
+                                {{ item.operator }}
+                            </span>
+                        </el-form-item>
+                        <!-- <el-form-item label="商品名称">
+                            <span>{{ props.row.name }}</span>
+                        </el-form-item>
+                        <el-form-item label="所属店铺">
+                            <span>{{ props.row.shop }}</span>
+                        </el-form-item> -->
+                    </el-form>
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="product.productNo"
+                label="物料编号"
+                align="center"
+                fixed="left"
+                header-align="center"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="product.productname"
+                label="物料名称"
+                align="center"
+                fixed="left"
+                header-align="center"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="status"
+                label="状态"
+                align="center"
+                header-align="center"
+                width="60">
+                <template slot-scope="scope">
+                    {{scope.row.status | formatStatus}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="planCount"
+                label="计划数量"
+                align="center"
+                header-align="center"
+                width="80">
+            </el-table-column>
+            <el-table-column
+                prop="actualCount"
+                label="实际数量"
+                align="center"
+                header-align="center"
+                width="80">
+            </el-table-column>
+            <el-table-column
+                prop="updatetime"
+                label="更新时间"
+                align="center"
+                header-align="center"
+                width="140">
+                <template slot-scope="scope">
+                    {{scope.row.updatetime | dateFormat}}
+                </template>
+            </el-table-column>
+            <el-table-column label="盘点差异"
+                width="80"
+                header-align="center"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    @click="handleDiffs(scope.$index, scope.row)">查看</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="recentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+    </div>
+</template>
+<style>
+    .labelClass{
+        display: inline-block;
+        font-size:13px;
+        width:80px;
+        font-weight: bold;
+        text-align: right;
+    }
+    .el-table__row {
+        height: 45px;
+    }
+    .el-input__inner {
+        height: 25px !important;
+        line-height: 25px!important;
+        width: 100%;
+    }
+    .inventoryDetails {
+        margin:0px 0px 20px 20px;
+        width: 460px;
+        /* line-height: 30px!important; */
+        border: 1px solid rgb(235, 233, 233);
+    }
+    .inventoryDetails span {
+        line-height: 30px!important;
+    }
+    .inventoryDetails .inventoryDetailsHead {
+        margin: 0px;
+        font-weight: bold;
+        height: 30px;
+        width: 100%;
+        background-color: gainsboro;
+        color: cornflowerblue;
+    }
+    .inventoryDetails .inventoryDetail {
+        height: 30px;
+        margin: 0px;
+        border-top: 1px solid rgb(235, 233, 233);
+    }
+    .inventoryDetails .ckName {
+        display: block;
+        float: left;
+        width: 150px;
+        height: 30px;
+        text-align: center;
+    }
+    .inventoryDetails .serialStatus {
+        display: block;
+        float: left;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        border-left: 1px solid rgb(235, 233, 233);
+    }
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import {mapState} from 'vuex'
+    import axios from 'axios'
+    export default {
+        name:'OrderDetails',
+        comptude:{  
+        },
+        inject:["reload"],
+        data(){
+            return {
+                recentPage:1,//默认第一页
+                recordCount:10,//默认10条
+                orderNum: null,
+                ckName: null,
+                operator: null,
+                status: null,
+                createtime: null,
+                updatetime: null,
+                afterProduct: null,
+                beforeProduct: null,
+                tableDatalList: null,
+                tableNumber: null,
+                
+                expands: [],// 要展开的行，数值的元素是row的key值
+            }
+        },
+        created(){
+            this.loadData();
+        },
+        filters: {
+            formatStatus: function (val) {
+                return val == 0 ? '保存' : val== 1 ?  '提交' : "未知状态";
+            },
+
+             //时间转换
+            dateFormat(cellValue){
+                const time = new Date(cellValue);
+                if(time!=null){
+                    const year = time.getFullYear();
+                    const month = time.getMonth() + 1;
+                    const day = time.getDate();
+                    const hh = time.getHours();
+                    const mm = time.getMinutes();
+                    const ss = time.getSeconds();
+                    const timeFormat= year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
+                    return timeFormat;
+                }
+            },
+        },
+        methods:{
+             //时间转换
+            dateFormat(cellValue){
+                const time = new Date(cellValue);
+                if(time!=null){
+                    const year = time.getFullYear();
+                    const month = time.getMonth() + 1;
+                    const day = time.getDate();
+                    const hh = time.getHours();
+                    const mm = time.getMinutes();
+                    const ss = time.getSeconds();
+                    const timeFormat= year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
+                    return timeFormat;
+                }
+            },
+            loadData(){
+                let _this=this;
+                axios({
+                        method: 'get',
+                        url: _this.$store.state.defaultHttp+_this.$store.state.inventoryOrderUrl+'getById?id='+_this.$store.state.inventoryOrderId,
+                    }).then(function(res){
+                        let result = res.data.result;
+                        _this.orderNum = result.orderNum;
+                        _this.ckName = result.ck.ckName;
+                        _this.operator = result.operator;
+                        _this.createtime = _this.$options.methods.dateFormat(result.createtime);
+                        _this.updatetime = _this.$options.methods.dateFormat(result.updatetime);
+                        switch(result.status) {
+                            case 0: _this.status = "未盘点";break;
+                            case 1: _this.status = "已提交";break;
+                            default: _this.status = "未知状态";
+                        }
+                        
+                        let tableData = result.inventoryPlans;
+                        let recentPage = _this.recentPage;
+                        let recordCount = _this.recordCount;
+                        _this.tableDatalList = tableData.slice((recentPage-1)*recordCount,recentPage*recordCount);
+                        _this.tableNumber = result.inventoryPlans.length;
+                    }).catch(function(err){
+                    });
+            },
+            handleSizeChange(val) {
+                this.recordCount = val;
+                this.$options.methods.loadData.bind(this)();
+            },
+            handleCurrentChange(val) {
+                this.recentPage = val;
+                this.$options.methods.loadData.bind(this)();
+            },
+
+            //查看盘点差异
+            handleDiffs(index, row){
+                this.$store.state.inventoryDiffId = ""
+                this.$store.state.inventoryDiffId = this.$store.state.inventoryOrderId;
+                this.$router.push({ path: '/inventoryDifferenceDetail' })
+            },
+
+            //在<table>里，我们已经设置row的key值设置为每行数据id：row-key="id"
+            // rowClick(row, event, column) {
+            //     Array.prototype.remove = function (val) {
+            //         let index = this.indexOf(val);
+            //         if (index > -1) {
+            //             this.splice(index, 1);
+            //         }
+            //     };
+
+            //     if (this.expands.indexOf(row.id) < 0) {
+            //         this.expands.push(row.id);
+            //     } else {
+            //         this.expands.remove(row.id);
+            //     }
+            // }
+        }
+        
+    }
+</script>

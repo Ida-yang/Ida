@@ -1,0 +1,215 @@
+<template>
+    <!-- 出库单详情 -->
+    <div>
+        <el-row>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">出库单号:</span>
+                    <el-input v-model="deliverynum" placeholder="出库单号" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">订单号:</span>
+                    <el-input v-model="ordernum" placeholder="订单号" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">客户名称:</span>
+                    <el-input v-model="customname" placeholder="客户名称" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+        
+        </el-row>
+        <el-row style="margin-top:10px">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">收货人:</span>
+                    <el-input v-model="consignee" placeholder="收货人" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">联系电话:</span>
+                    <el-input v-model="contactphone" placeholder="联系电话" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">制单人:</span>
+                    <el-input v-model="workperson" placeholder="制单人" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row style="margin-top:10px">
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">单据类别:</span>
+                    <el-input v-model="billtype" placeholder="单据类别" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">收货位置:</span>
+                    <el-input v-model="consigneeposition" placeholder="收货位置" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+                <div class="grid-content ">
+                    <span style="display: inline-block;font-size:14px;width:80px;font-weight: bold">日期:</span>
+                    <el-input v-model="deliverydate" placeholder="日期" style="width:180px" disabled></el-input>
+                </div>
+            </el-col>
+        </el-row>
+        <el-table
+            ref="multipleTable"
+            :data="materialList"
+            border
+            tooltip-effect="dark"
+            style="width: 100%;margin-top:20px;"
+            height="380"
+            >
+            <el-table-column
+            prop="materielnum"
+            label="料号"
+            align="center"
+            header-align="center"
+            width="100">
+            </el-table-column>
+            <el-table-column
+            prop="materielname"
+            label="品名"
+            align="center"
+            header-align="center"
+            width="100">
+            </el-table-column>
+            <el-table-column
+            prop="specification"
+            label="规格"
+            align="center"
+            header-align="center"
+            width="110">
+            </el-table-column>
+            <el-table-column
+            prop="status"
+            label="颜色"
+            align="center"
+            header-align="center"
+            width="80">
+            </el-table-column>
+            <el-table-column
+            prop="units"
+            label="单位"
+            align="center"
+            header-align="center"
+            width="80">
+            </el-table-column>
+            <el-table-column
+            prop="description"
+            label="描述"
+            align="center"
+            header-align="center"
+            width="240">
+            </el-table-column>
+            <el-table-column
+            prop="warehouse"
+            label="仓位"
+            align="center"
+            header-align="center"
+            width="80">
+            </el-table-column>
+            <el-table-column
+            prop="cubicnumber"
+            label="立方数"
+            align="center"
+            header-align="center"
+            width="100">
+            </el-table-column>
+            <el-table-column
+            prop="planquantity"
+            label="计划数量"
+            align="center"
+            header-align="center"
+            width="100">
+            </el-table-column><el-table-column
+            prop="actquantity"
+            label="实际数量"
+            align="center"
+            header-align="center"
+            width="100">
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+    </div>
+</template>
+<script>
+    import store from '../../../../store/store'
+    import {mapState} from 'vuex'
+    import axios from 'axios'
+    export default {
+        name:'OrderDetails',
+        comptude:{  
+        },
+        data(){
+            return {
+                currentPage:1,//默认第一页
+                pageSize:10,//默认10条
+                deliverynum:null,
+                ordernum:null,
+                customname:null,
+                consignee:null,
+                contactphone:null,
+                workperson:null,
+                billtype:null,
+                deliverydate:null,
+                consigneeposition:null,
+                orgId:null,
+                materialList:null,
+                tableNumber:null,
+            }
+        },
+        beforeCreate(){
+            let _this=this;
+            axios({
+                    method: 'get',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.orderUrl+'selectByKey?id='+_this.$store.state.outboundOrderId,
+                    headers:{'wmsnet-token':_this.$store.state.token},
+                }).then(function(res){
+                    _this.deliverynum = res.data.result.deliverynum
+                    _this.ordernum = res.data.result.ordernum
+                    _this.customname = res.data.result.customname
+                    _this.consignee = res.data.result.consignee
+                    _this.contactphone = res.data.result.contactphone
+                    _this.workperson = res.data.result.workperson
+                    _this.billtype = res.data.result.billtype
+                    _this.consigneeposition = res.data.result.consigneeposition
+                    _this.deliverydate = res.data.result.deliverydate
+                    _this.pageList = res.data.result
+                    _this.materialList = res.data.result.delimateriels
+                    _this.tableNumber = res.data.result.delimateriels.length
+                }).catch(function(err){
+                    console.log(err)
+                })
+        },
+        methods:{
+            handleSizeChange(val) {
+                this.pageSize = val
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val
+            }
+        }
+        
+    }
+</script>

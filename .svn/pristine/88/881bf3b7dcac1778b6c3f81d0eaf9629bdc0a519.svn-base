@@ -1,0 +1,313 @@
+<template>
+    <div>
+        <el-row :gutter="10">
+            <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11">
+                <div class="grid-content">
+                    <el-button type="primary" size="small" @click="dialogFormVisible = true">
+                        新增仓位
+                    </el-button>
+                </div>
+            </el-col>
+        </el-row>
+        <el-table
+            :data="ckTableData.slice(0,recentPage*recordCount)"
+            max-height="450"
+            border
+            style="width: 100% ;text-align: center">
+            <el-table-column
+                header-align="center"
+                align="center"
+                prop="ckNo"
+                label="仓位编号"
+                width="180"
+                >
+            </el-table-column>
+            <el-table-column
+                prop="ckName"
+                label="仓位名称"
+                header-align="center"
+                align="center"
+                width="320">
+            </el-table-column>
+            <el-table-column
+                prop="address"
+                header-align="center"
+                align="center"
+                label="仓位类型"
+                width="120">
+            </el-table-column>
+            <el-table-column label="操作"
+                width="200"
+                header-align="center"
+                align="center">
+            <template slot-scope="scope">
+                <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="recentPage"
+            :page-sizes="[10, 15, 20, 25]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+        <el-dialog title="新增仓位" :visible.sync="dialogFormVisible" width="47%" :modal="false">
+            <el-form :model="newForm">
+                <el-form-item label="仓位编号" :label-width="formLabelWidth">
+                <el-input v-model="newForm.addCkNo" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="仓位名称" :label-width="formLabelWidth">
+                <el-input v-model="newForm.addCkName" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="仓位类型" :label-width="formLabelWidth">
+                <el-input v-model="newForm.addAddress" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addCK">提 交</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="修改仓位" :visible.sync="dialogFormVisible2" width="47%" :modal="false">
+            <el-form :model="updateFrom">
+                <el-form-item label="仓位编号" :label-width="formLabelWidth">
+                <el-input v-model="updateFrom.newCkNo" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="仓位名称" :label-width="formLabelWidth">
+                <el-input v-model="updateFrom.newCkName" auto-complete="off" ></el-input>
+                </el-form-item>
+                <el-form-item label="仓位类型" :label-width="formLabelWidth">
+                <el-input v-model="updateFrom.newAddress" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                <el-button type="primary" @click="updateCK" >提 交</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</template>
+<style>
+    .numberPage{
+        margin-top: 20px;
+        text-align: right
+    }
+    .el-dialog__body {
+        padding: 30px 80px 30px 20px !important;
+        color: #606266;
+        font-size: 14px;
+    }
+    .el-table td, .el-table th {
+        padding: 6px 0 !important;
+        line-height: 30px;
+    }
+    .btnSet{
+        height: 40px;
+    }
+    .el-input__inner {
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+    }
+    .el-table {
+        font-size: 12px!important;
+    }
+    .el-table td, .el-table th {
+        padding: 8px 0;
+        line-height:30px; 
+    }
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import axios from 'axios'
+    export default {
+        name:'WarehouseAndManagement',
+        computed: {
+            ckTableData(){
+                return store.state.warehouseList;
+            },
+            tableNumber(){
+               return store.state.warehouseListnumber;     
+            }
+        },
+        props:{
+            totalNum:Number,
+        },
+        store,
+        data(){
+            return {
+                ckNo:null,
+                address:null,
+                ckName:null,
+                recentPage:1,//默认第一页
+                recordCount:10,//默认10条
+                newForm:{
+                    addCkNo:null,
+                    addCkName:null,
+                    addAddress:null,
+                },
+                updateFrom:{
+                    ckId:null,
+                    newCkNo:null,
+                    newCkName:null,
+                    newAddress:null,
+                },
+                dialogFormVisible2: false,
+                dialogFormVisible: false,
+                formLabelWidth: '120px'
+            }
+        },
+        beforeCreate(){
+            let _this = this;
+            this.$nextTick(function () {
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.warehouseUrl+'getByPageByWhere?recentPage='+this.recentPage+'&recordCount='+this.recordCount
+                }).then(function(res){
+                    _this.$store.state.warehouseList = res.data.result.records;
+                    _this.$store.state.warehouseListnumber = res.data.result.totalRecords;
+                    
+                }).catch(function(err){
+                    console.log(err);
+                });
+            });
+        },
+        methods: {
+            reloadTable() {
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.warehouseUrl+'getByPageByWhere?recentPage='+_this.recentPage+'&recordCount='+_this.recordCount
+                }).then(function(res){
+                    _this.$store.state.warehouseList = res.data.result.records;
+                    _this.$store.state.warehouseListnumber = res.data.result.totalRecords;
+                    
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            handleEdit(index, row) {
+                this.updateFrom.ckId = row.ckId; 
+                this.updateFrom.newCkNo = row.ckNo;
+                this.updateFrom.newCkName = row.ckName; 
+                this.updateFrom.newAddress = row.address;
+                this.dialogFormVisible2 = true;
+            },
+            handleDelete(index, row) {
+                let _this = this;
+                _this.$confirm('是否确认删除仓位[' + row.ckName + ']？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'get',
+                        url: _this.$store.state.defaultHttp+_this.$store.state.warehouseUrl+'deleteCk?ckId=' + row.ckId + "&state=1",
+                    }).then(function(res){
+                        if(res.data.code && res.data.code == 200) {
+                            _this.$message({
+                                message: '删除仓位成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadTable.bind(_this)();
+                        } else {
+                            _this.$message({
+                                message: res.data.message,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消删除仓位[' + row.ckName + ']'
+                    });       
+                });
+            },
+            handleSizeChange(val) {
+                let _this = this;
+                _this.recordCount = val;
+                _this.$options.methods.reloadTable.bind(_this)();
+            },
+            handleCurrentChange(val) {
+                let _this = this;
+                _this.recentPage = val;
+                _this.$options.methods.reloadTable.bind(_this)();
+            },
+            addCK(){
+                let _this = this;
+                let mydata = {};
+                mydata.ckNo = this.newForm.addCkNo;
+                mydata.ckName = this.newForm.addCkName;
+                mydata.address =this.newForm.addAddress;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.warehouseUrl+'add',
+                    data:JSON.stringify(mydata),
+                }).then(function(res){
+                    if(res.data.code && res.data.code == 200) {
+                        _this.$message({
+                            message: '新增仓位成功',
+                            type: 'success'
+                        });
+                        _this.dialogFormVisible = false;
+                        _this.newForm.addCkNo = null;
+                        _this.newForm.addCkName = null;
+                        _this.newForm.addAddress = null;
+                        _this.$options.methods.reloadTable.bind(_this)();
+                    } else {
+                        _this.$message({
+                            message: res.data.message,
+                            type: 'error'
+                        })
+                    }
+                }).catch(function(err){
+                    console.log(err)
+                })        
+            } ,
+            updateCK(){
+                let _this = this;
+                let mydata = {};
+                mydata.ckId = this.updateFrom.ckId;
+                mydata.ckNo = this.updateFrom.newCkNo;
+                mydata.ckName = this.updateFrom.newCkName;
+                mydata.address =this.updateFrom.newAddress;
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ _this.$store.state.warehouseUrl+'updateCk',
+                    data:JSON.stringify(mydata),
+                }).then(function(res){
+                    if(res.data.code && res.data.code == 200) {
+                        _this.$message({
+                            message: '修改仓位信息成功',
+                            type: 'success'
+                        });
+                        _this.dialogFormVisible2 = false;
+                        _this.$options.methods.reloadTable.bind(_this)();
+                    } else {
+                        _this.$message({
+                            message: res.data.message,
+                            type: 'error'
+                        });
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });      
+            }  
+        },
+        
+    }
+</script>

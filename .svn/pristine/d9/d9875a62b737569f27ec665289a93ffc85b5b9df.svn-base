@@ -1,0 +1,371 @@
+<template>
+    <div>
+        <el-row :gutter="10">
+            <el-col :xs="4" :sm="4" :md="3" :lg="3" :xl="1">
+                <div class="grid-content">
+                    <el-button type="primary" size="small" >打印出库单号条码</el-button>
+                </div>
+            </el-col>
+            <el-col :xs="4" :sm="4" :md="3" :lg="3" :xl="1" style="margin-left:10px">
+                <div class="grid-content">
+                    <el-button type="primary" size="small">导出出库单序号</el-button>
+                </div>
+            </el-col>
+            <el-col :xs="4" :sm="4" :md="3" :lg="2" :xl="1">
+                <div class="grid-content">
+                    <el-button type="danger" size="small" >作废单据</el-button>
+                </div>
+            </el-col>
+            <el-col :offset="8" :xs="4" :sm="4" :md="3" :lg="2" :xl="1">
+                <div class="grid-content">
+                    <el-button type="success" size="small" >获取U9数据</el-button>
+                </div>
+            </el-col>
+            
+        </el-row>
+        <el-row :gutter="10" style="margin-top:10px">
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="deliverynum" placeholder="出库单号" style="width:145px"></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="ordernum" placeholder="订单号"  style="width:145px"></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="customname" placeholder="客户名称"  style="width:145px"></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="consignee" placeholder="收货人"  style="width:145px"></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="4" :md="5" :lg="3" :xl="1" >
+                <div class="grid-content">
+                    <el-date-picker
+                        v-model="dataTime"
+                        type="daterange"
+                        align="center"
+                        unlink-panels
+                        size="mini"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        @change="selectTime"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="snnum" placeholder="序列号(精确查找)"  style="width:145px;margin-top:10px;"></el-input>
+                </div>
+            </el-col>
+            
+            <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="2">
+                <div class="grid-content btnSet" style=";margin-top:10px;margin-left:30px;">
+                    <el-button type="primary"  size="mini" @click="selectData">查询</el-button>
+                    <el-button type="info"  size="mini"  @click="resBtn">重置</el-button>
+                </div>
+            </el-col>
+        </el-row>
+        <el-table
+            :data="tableData3"
+            tooltip-effect="dark"
+            @cell-dblclick="CheckTheDetails"
+            style="width: 100%"
+            max-height="400"
+            :row-key="getRowKeys"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+            type="selection"
+            :reserve-selection="true"
+            prop="id"
+            width="55">
+            </el-table-column>
+            <el-table-column
+            fixed="left"
+            label="出库单号"
+            align="center"
+            header-align="center"
+            width="140">
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    style="border:none;color:#3c8dbc"
+                    @click="CheckTheDetails(scope.$index, scope.row)">{{ scope.row.deliverynum }}</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column
+            fixed="left"
+            prop="status"
+            label="状态"
+            header-align="center"
+            width="100"
+            align="center"
+            :formatter="formatter">
+            <template slot-scope="scope">
+                <el-tag
+                :type="scope.row.status ===0 ?'warning':scope.row.status ==='1' ?'primary':'success'"
+                close-transition>{{scope.row.status | formatStatus}}</el-tag>
+            </template>
+            </el-table-column>
+            <el-table-column
+            prop="ordernum"
+            fixed="left"
+            label="订单号"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+            <el-table-column
+            prop="customname"
+            label="客户名称"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+            <el-table-column
+            prop="consignee"
+            label="收货人"
+            align="center"
+            header-align="center"
+            width="80">
+            </el-table-column>
+            <el-table-column
+            prop="contactphone"
+            label="联系电话"
+            align="center"
+            header-align="center"
+            width="110">
+            </el-table-column>
+            <el-table-column
+            prop="billtype"
+            label="单据类别"
+            align="center"
+            header-align="center"
+            width="110">
+            </el-table-column>
+            <el-table-column
+            prop="consigneeposition"
+            label="收货地址"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+            <el-table-column
+            prop="deliverydate"
+            label="日期"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+    </div>
+</template>
+<style>
+    .numberPage{
+        margin-top: 20px;
+        text-align: right
+    }
+    .el-table td, .el-table th {
+        padding: 6px 0 !important;
+        line-height: 30px;
+    }
+    .btnSet{
+        height: 40px;
+    }
+    .el-input__inner {
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+    }
+    .el-table {
+        font-size: 12px!important;
+        
+    }
+    .el-table td, .el-table th {
+        padding: 8px 0;
+        line-height:30px; 
+    }
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import axios from 'axios'
+    export default {
+        name:'OutboundOrder',
+        props:{
+            totalNum:Number,
+        },
+        store,
+        filters: {
+            formatStatus: function (val) {
+                return val == 0 ? '未打印' : val== 1 ?  '已打印':'已出库';
+            },
+        },
+        data(){
+            return {
+                // 获取row的key值
+                getRowKeys(row) {
+                    return row.id;
+                },
+                deliverynum:null,
+                ordernum:null,
+                customname:null,
+                consignee:null,
+                starttime:null,
+                endtime:null,
+                snnum:null,
+                selectedData: [],
+                inputData : {},
+                currentPage:1,//默认第一页
+                pageSize:10,//默认10条
+                formLabelWidth: '120px',
+                tableData3: [],
+                tableNumber:null,
+                dataTime:null,
+                pickerOptions2: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                    },
+                
+            }
+        },
+        
+        
+        methods: {
+            selectTime(){
+                this.starttime = this.dataTime[0]
+                this.endtime = this.dataTime[1]
+                // console.log(this.starttime)
+                // console.log(this.dataTime)
+            },
+            resBtn(){
+                this.deliverynum =null;
+                this.ordernum = null;
+                this.customname = null;
+                this.consignee = null;
+                this.starttime = null;
+                this.endtime = null;
+                this.snnum = null;
+                this.lodData(1,10)
+            },
+            lodData(page,count){
+                let _this = this;
+                axios({
+                    method: 'post',
+                   url: _this.$store.state.defaultHttp+_this.$store.state.orderUrl+'selectAll?page='+page+'&count='+count,
+                }).then(function(res){
+                    console.log(res)
+                    _this.tableData3 = res.data.result.records
+                    _this.tableNumber = res.data.result.totalRecords
+                }).catch(function(err){
+                    console.log(err)
+                })
+            },
+            selectDataModel(page,count){
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.orderUrl+'selectAll?page='+page+'&count='+count,
+                    data:_this.inputData,
+                }).then(function(res){
+                    _this.tableData3 = res.data.result.records
+                    _this.tableNumber = res.data.result.totalRecords
+                    if(_this.inputData !== undefined){
+                        _this.$message({
+                        message: '查询成功',
+                        type: 'success'
+                        })
+                    }
+                }).catch(function(err){
+                    console.log(err)
+                })
+            },
+            selectData(){
+                this.inputData.deliverynum = this.deliverynum;
+                this.inputData.ordernum = this.ordernum;
+                this.inputData.customname = this.customname;
+                this.inputData.consignee = this.consignee;
+                this.inputData.starttime = this.starttime;
+                this.inputData.endtime = this.endtime;
+                this.inputData.snnum = this.snnum;
+                this.selectDataModel(1,10)
+            },
+            CheckTheDetails(index, row){
+                this.$store.state.orgId = ""
+                this.$store.state.orgId = row.id;
+                this.$router.push({ path: '/OrderDetails' })
+            },
+            formatter(row, column) {
+                return row.address;
+            },
+            handleSelectionChange(rows) {
+                this.selectedData = [];
+                if (rows) {
+                    rows.forEach(row => {
+                        if (row) {
+                            console.log(row)
+                            this.selectedData.push(row);
+                        }
+                    });
+                }
+                // console.log(this.selectData)
+            },
+            handleSizeChange(val) {
+                this.selectDataModel(1,val)
+                _this.pageSize = val;
+                
+            },
+            handleCurrentChange(val) {
+                this.selectDataModel(val,this.pageSize)
+            },
+    },
+        created(){
+            this.lodData(1,10)
+        },
+        
+    }
+</script>

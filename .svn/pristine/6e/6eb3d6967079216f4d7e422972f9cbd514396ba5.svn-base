@@ -1,0 +1,454 @@
+<template>
+    <div>
+        <el-row :gutter="10">
+            <el-col  :xs="4" :sm="4" :md="3"  :lg="3" :xl="1">
+                <div class="grid-content">
+                    <el-button type="primary" size="small" @click="printMyData">打印工单编号条码</el-button>
+                </div>
+            </el-col>
+            <el-col  :xs="4" :sm="4" :md="4" :lg="3" :xl="1" style="margin-left:10px">
+                <div class="grid-content">
+                    <el-button type="primary" size="small" @click="PrintSerial">打印产品序列号条码</el-button>
+                </div>
+            </el-col>
+            <el-col  :xs="4" :sm="4" :md="3" :lg="2" :xl="1">
+                <div class="grid-content">
+                    <el-button type="danger" size="small" >作废单据</el-button>
+                </div>
+            </el-col>
+            <el-col :xs="4" :sm="4" :md="3" :lg="2" :xl="1" :offset="5">
+                <div class="grid-content">
+                    <el-button type="success" size="small" >获取U9数据</el-button>
+                </div>
+            </el-col>
+            
+        </el-row>
+        <el-row :gutter="10" style="margin-top:10px">
+            <el-col  :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="ordernum" placeholder="生产订单编号" style="width:90%"></el-input>
+                </div>
+            </el-col>
+            <el-col :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="productnum" placeholder="产品编号"  style="width:90%"></el-input>
+                </div>
+            </el-col>
+            <el-col  :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="productname" placeholder="产品名称"  style="width:90%"></el-input>
+                </div>
+            </el-col>
+            <el-col  :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="productmodel" placeholder="产品机型"  style="width:90%"></el-input>
+                </div>
+            </el-col>
+            <el-col :md="5" :lg="3" :xl="1" >
+                <div class="grid-content">
+                    <el-date-picker
+                        v-model="dataTime"
+                        type="daterange"
+                        align="center"
+                        unlink-panels
+                        size="mini"
+                        range-separator="至"
+                        start-placeholder="开工日期-开始"
+                        end-placeholder="开工日期-结束"
+                        @change="selectTime"
+                        :picker-options="pickerOptions2">
+                    </el-date-picker>
+                </div>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col  :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="productspec" placeholder="成品规格"  style="width:90%;margin-top:10px;"></el-input>
+                </div>
+            </el-col>
+            <el-col :md="4" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="productcolor" placeholder="产品颜色"  style="width:90%;margin-top:10px;"></el-input>
+                </div>
+            </el-col>
+            <el-col :md="5" :lg="3" :xl="1">
+                <div class="grid-content ">
+                    <el-input v-model="snnum" placeholder="序列号(精确查找)"  style="width:90%;margin-top:10px;"></el-input>
+                </div>
+            </el-col>
+            
+            <el-col :md="6" :lg="6" :xl="2">
+                <div class="grid-content btnSet" style=";margin-top:10px;margin-left:30px;">
+                    <el-button type="primary"  size="mini" @click="selectData">查询</el-button>
+                    <el-button type="info"  size="mini" @click="resBtn">重置</el-button>
+                </div>
+            </el-col>
+        </el-row>
+        <el-table
+            :data="tableData3"
+            tooltip-effect="dark"
+            style="width: 100%"
+            height="350"
+            :row-key="getRowKeys"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+            type="selection"
+            :reserve-selection="true"
+            width="55">
+            </el-table-column>
+            <el-table-column
+            prop="ordernum"
+            fixed="left"
+            label="生产订单编号"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+            <el-table-column
+            fixed="left"
+            prop="status"
+            label="状态"
+            header-align="center"
+            width="140"
+            align="center"
+            :formatter="formatter">
+            <template slot-scope="scope">
+                <el-tag
+                :type="scope.row.status ===0 ?'success':scope.row.status ===1 ?'warning':scope.row.status ===2 ?'info':scope.row.status ===3 ?'primary':scope.row.status ===4 ?'primary':scope.row.status ===5 ?'info':'danger'"
+                close-transition>{{scope.row.status | formatStatus}}</el-tag>
+            </template>
+            </el-table-column>
+            <el-table-column
+            prop="productnum"
+            fixed="left"
+            label="产品编号"
+            align="center"
+            header-align="center"
+            width="100">
+            </el-table-column>
+            <el-table-column
+            prop="productname"
+            label="产品名称"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+            <el-table-column
+            prop="productmodel"
+            label="产品机型"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+            <el-table-column
+            prop="productspec"
+            label="产品规格"
+            align="center"
+            header-align="center"
+            width="140">
+            </el-table-column>
+            <el-table-column
+            prop="crtdate"
+            label="开工日期"
+            align="center"
+            header-align="center"
+            width="150">
+            </el-table-column>
+            <el-table-column
+            prop="productcolor"
+            label="颜色"
+            align="center"
+            header-align="center"
+            width="70">
+            </el-table-column>
+            <el-table-column
+            prop="quantity"
+            label="生产数量"
+            align="center"
+            header-align="center"
+            width="70">
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+        <el-dialog
+        title="打印数量"
+        :visible.sync="dialogVisible"
+        width="30%"
+        >
+            <span style="margin-left:20%">打印份数</span>
+            <el-input-number size="mini" v-model="copiesNum"></el-input-number>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="confirmPrintMyData">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<style>
+    .numberPage{
+        margin-top: 20px;
+        text-align: right
+    }
+    .el-table td, .el-table th {
+        padding: 6px 0 !important;
+        line-height: 30px;
+    }
+    .btnSet{
+        height: 40px;
+    }
+    .el-input__inner {
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+    }
+    .el-table {
+        font-size: 12px!important;
+        
+    }
+    .el-message{
+        top : 50px !important;
+    }
+    .el-table td, .el-table th {
+        padding: 8px 0;
+        line-height:30px; 
+    }
+</style>
+
+<script>
+    import bus from '../../bus';
+    import store from '../../../../store/store'
+    import axios from 'axios'
+    export default {
+        name:'OutboundOrder',
+        props:{
+            totalNum:Number,
+        },
+        store,
+        filters: {
+            formatStatus: function (val) {
+                return val == 0 ? '在制' : val== 1 ?  '已打印':val== 2 ?  '已入库':val== 3 ?  '单号已打印':val== 4 ?  '序列号已打印':val== 5 ?  '已完工':'未知状态';
+            },
+        },
+        data(){
+            return {
+                copiesNum:0,//打印工单份数
+                dialogVisible: false,
+                currentPage:1,//默认第一页
+                pageSize:10,//默认10条
+                formLabelWidth: '120px',
+                tableData3: [],
+                idKey: 'id',
+                selectedData: [],
+                tableNumber:null,
+                getRowKeys(row) {
+                    return row.id;
+                },
+                inputData : {},
+                dataTime:null,//时间
+                ordernum:null,//生产订单编号 ~
+                billtype:null,//单据类别
+                productname:null,//产品名称~
+                productnum:null,//产品编号~
+                productmodel:null,//产品机型
+                productspec :null,//产品规格
+                productcolor :null,//产品颜色
+                starttime :null,//开始时间
+                endtime  :null,//结束时间
+                snnum : null,//精确查找
+                deliverydate:null,//日期
+                pickerOptions2: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+                allData : [],
+                printIds : [],
+                indexNumber:null,
+                
+            }
+        },
+        
+        
+        methods: {
+            selectQueryTable(page,count){
+                this.inputData.ordernum = this.ordernum;
+                this.inputData.starttime = this.starttime;
+                this.inputData.endtime = this.endtime;
+                this.inputData.snnum = this.snnum;
+                this.inputData.productspec = this.productspec;
+                this.inputData.productname = this.productname;
+                this.inputData.productcolor = this.productcolor;
+                this.inputData.productmodel = this.productmodel;
+                this.inputData.productnum = this.productnum;
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.productWoUrl+'selectByCriteria?page='+page+'&count='+count,
+                    data:_this.inputData,
+                }).then(function(res){
+                    _this.tableData3 = res.data.result.records
+                    _this.tableNumber = res.data.result.totalRecords
+                    if(_this.inputData !== undefined){
+                        _this.$message({
+                        message: '查询成功',
+                        type: 'success'
+                        })
+                    }
+
+                }).catch(function(err){
+                    console.log(err)
+                })
+            },
+            queryTable(){
+                let _this=this
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.productWoUrl+'selectAll?page=1&count=10',
+                    
+                }).then(function(res){
+                    console.log(res)
+                    _this.tableData3 = res.data.result.records
+                    _this.tableNumber = res.data.result.totalRecords
+                }).catch(function(err){
+                    console.log(err)
+                })
+            },
+
+            PrintSerial(){
+                const h = this.$createElement;
+                if(this.selectedData.length == 0){
+                    this.$message({
+                        message:"请选择工单",
+                        type: 'warning',
+                        showClose:true
+                    });
+                    return
+                }
+                
+                this.$store.commit("set_serialArr",this.selectedData);
+                this.$router.push({ path: '/PrintSerialNumber' })
+            },  
+            printMyData(){
+                if(this.selectedData.length == 0){
+                    this.$message({
+                        message: '请先选择工单',
+                        type: 'warning'
+                    });
+                }else{
+                    this.dialogVisible = true
+                }
+            },
+            confirmPrintMyData(){
+                if(this.copiesNum == 0){
+                    this.$message({
+                        message: '打印份数有误',
+                        type: 'warning'
+                    });
+                }else{
+                    for(var i = 0; i < this.selectedData.length; i++) {
+                        for (var j = 0; j < this.copiesNum; j++) {
+                            var obj = this.selectedData[i];
+                            this.allData.push(obj);
+                        }
+                        var printId = {};
+                        printId.id = this.selectedData[i].id;
+                        printId.status = 1;
+                        this.printIds.push(printId);
+                    }
+                    window.external.ClickPrint(JSON.stringify(this.allData));
+                    let _this = this;
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+_this.$store.state.productWoUrl+'updateStatus',
+                        data:JSON.stringify(_this.printIds),
+                    }).then(function(resp, status, xhr){
+                    }).catch(function(err){
+                        toastr.error(resp.message);
+                    })
+                }
+            },
+            selectTime(){
+                this.starttime = this.dataTime[0]
+                this.endtime = this.dataTime[1]
+            },
+            resBtn(){
+                this.ordernum = null;
+                this.starttime = null;
+                this.endtime = null;
+                this.snnum = null;
+                this.productspec = null;
+                this.productname = null;
+                this.productcolor = null;
+                this.productmodel = null;
+                this.productnum = null;
+                this.queryTable()
+            },
+            selectData(){
+                this.selectQueryTable(1,10)
+            },
+            formatter(row, column) {
+                return row.address;
+            },
+            handleSelectionChange(rows) {
+               this.selectedData = [];
+                if (rows) {
+                    rows.forEach(row => {
+                        if (row) {
+                            console.log(row)
+                            this.selectedData.push(row);
+                        }
+                    });
+                }
+            },
+            handleSizeChange(val) {
+                // this.changePageCoreRecordData();
+                this.selectQueryTable(1,val)
+                this.pageSize = val;
+                
+            },
+            handleCurrentChange(val) {
+                // this.changePageCoreRecordData();
+                console.log(this.pageSize)
+                this.selectQueryTable(val,this.pageSize)
+                this.currentPage = val;
+            },
+    },
+    created () {
+        this.queryTable()
+    }
+        
+    }
+</script>

@@ -1,0 +1,13 @@
+<template>
+    <h1>{{msg}}</h1>
+</template>
+<script>
+    export default {
+        name:'RawMaterialSalesOrderOutOfStock',
+        data(){
+            return {
+                msg:"原材料销售订单出库"
+            }
+        }
+    }
+</script>

@@ -1,0 +1,13 @@
+<template>
+    <h1>{{msg}}</h1>
+</template>
+<script>
+    export default {
+        name:'welcome',
+        data(){
+            return {
+                msg:"欢迎"
+            }
+        }
+    }
+</script>

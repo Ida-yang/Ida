@@ -1,0 +1,13 @@
+<template>
+    <h1>{{msg}}</h1>
+</template>
+<script>
+    export default {
+        name:'finishedProductOutbound',
+        data(){
+            return {
+                msg:"成品出库"
+            }
+        }
+    }
+</script>

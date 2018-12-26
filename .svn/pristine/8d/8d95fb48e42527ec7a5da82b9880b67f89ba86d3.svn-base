@@ -1,0 +1,229 @@
+<template>
+    <!-- 入库单详情 -->
+    <div>
+        <div class="grid-content " style="margin-left:3px;">
+            <span class="labelClass">单号:</span>
+            <el-input v-model="ordername" placeholder="单号" style="width:200px" disabled></el-input>
+            <span class="labelClass">单据类型:</span>
+            <el-input v-model="idOrdertype" placeholder="单据类型" style="width:200px" disabled></el-input>
+        </div>
+        <div class="grid-content " style="margin-left:3px;margin-top:10px;">
+            <span class="labelClass">供应商:</span>
+            <el-input v-model="suppliername" placeholder="供应商" style="width:200px" disabled></el-input>
+            <span class="labelClass">业务员:</span>
+            <el-input v-model="salesmanName" placeholder="业务员" style="width:200px" disabled></el-input>
+        </div>
+        <div class="grid-content " style="margin-left:3px;margin-top:10px;">
+            <span class="labelClass">交期:</span>
+            <el-input v-model="deliveryTimeU9" placeholder="交期" style="width:200px" disabled></el-input>
+            <span class="labelClass">单据日期:</span>
+            <el-input v-model="orderDateU9" placeholder="单据日期" style="width:200px" disabled></el-input>
+        </div>
+        <el-table
+            class="tableDataList"
+            :data="tableDataList"
+            border
+            tooltip-effect="dark"
+            row-key="id"
+            :expand-row-keys="expands"
+            style="width: 100%;margin-top:20px;">
+
+            <el-table-column 
+                type="expand"
+                width="100"
+                align="center"
+                fixed="left"
+                header-align="center"
+                label="查看明细"
+                prop="purchwomatolocas">
+                <template slot-scope="scope">
+                    <el-form class="detailForm">
+                        <el-form-item
+                            class="detailFormHead">
+                            <span class="warehouse">仓库/储位</span>
+                            <span class="inNunber">数量</span>
+                        </el-form-item>
+                        <el-form-item
+                            class="serialsRow"
+                            style="height: 30px;margin:0px;border-top: 1px solid rgb(235, 233, 233);"
+                            v-for="item in scope.row.purchwomatolocas"
+                            :key="item.id">
+                            <span class="warehouse">
+                                {{ item.ckName }}
+                            </span>
+                            <span class="inNunber">
+                                {{ item.pushcount }}
+                            </span>
+                        </el-form-item>
+                    </el-form>
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="womateno"
+                label="物料号"
+                align="center"
+                fixed="left"
+                header-align="center"
+                width="140">
+            </el-table-column>
+            <el-table-column
+                prop="product.productname"
+                label="物料名称"
+                align="center"
+                fixed="left"
+                header-align="center"
+                width="160">
+            </el-table-column>
+            <el-table-column
+                prop="plancount"
+                label="下单数量"
+                align="center"
+                fixed="left"
+                header-align="center"
+                width="80">
+            </el-table-column>
+            <el-table-column
+                prop="actualcount"
+                label="到货数量"
+                align="center"
+                fixed="left"
+                header-align="center"
+                width="80">
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="recentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+    </div>
+</template>
+<style>
+    .labelClass{
+        display: inline-block;
+        font-size:13px;
+        width:80px;
+        font-weight: bold;
+        text-align: right;
+    }
+    .el-table__row {
+        height: 45px;
+    }
+    .el-input__inner {
+        height: 25px !important;
+        line-height: 25px!important;
+        width: 100%;
+    }
+    .detailForm {
+        margin:0px 0px 20px 20px;
+        width: 350px;
+        /* line-height: 30px!important; */
+        border: 1px solid rgb(235, 233, 233);
+    }
+    .detailForm span {
+        line-height: 30px!important;
+    }
+    .detailFormHead {
+        margin: 0px;
+        font-weight: bold;
+        height: 30px;
+        width: 100%;
+        background-color: gainsboro;
+        color: cornflowerblue;
+    }
+    .serialsRow {
+        height: 30px;
+        margin:0px;
+        border-top: 1px solid rgb(235, 233, 233);
+    }
+    .warehouse {
+        display: block;
+        float: left;
+        width: 70%;
+        height: 30px;
+        text-align: center;
+        border-right: 1px solid rgb(235, 233, 233);
+    }
+    .inNunber {
+        display: block;
+        float: left;
+        width: 29%;
+        height: 30px;
+        text-align: center;
+    }
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import {mapState} from 'vuex'
+    import axios from 'axios'
+    export default {
+        name:'OrderDetails',
+        comptude:{  
+        },
+        inject:["reload"],
+        data(){
+            return {
+                recentPage:1,//默认第一页
+                recordCount:10,//默认10条
+                ordername: null,//单号
+                deliveryTimeU9: null,//单据日期
+                orderDateU9: null,//交期
+                suppliername: null,//供应商
+                salesmanName: null,//业务员
+                idOrdertype: null,//单据类型
+                tableDataList: null,//详情表
+                tableNumber: null,//表数据量
+                
+                expands: [],// 要展开的行，数值的元素是row的key值
+            }
+        },
+        created(){
+            this.loadData();
+        },
+        methods:{
+            loadData(){
+                let _this=this;
+                axios({
+                        method: 'get',
+                        url: _this.$store.state.defaultHttp+_this.$store.state.purchaseOrder+'getById?id='+_this.$store.state.inboundOrderId,
+                        headers:{'wmsnet-token':sessionStorage.getItem('token')},
+                    }).then(function(res){
+                        let result = res.data.result;
+                        _this.ordername = result.ordername;
+                        _this.suppliername = result.suppliername;
+                        _this.deliveryTimeU9 = result.deliveryTimeU9;
+                        _this.orderDateU9 = result.orderDateU9;
+                        _this.salesmanName = result.salesmanName;
+                        switch(result.idOrdertype) {
+                            case 1: _this.idOrdertype = "采购单";break;
+                            case 2: _this.idOrdertype = "";break;
+                            default: _this.idOrdertype = "未知类型";
+                        }
+                        
+                        let tableData = result.purchasewomates;
+                        let recentPage = _this.recentPage;
+                        let recordCount = _this.recordCount;
+                        _this.tableDataList = tableData.slice((recentPage-1)*recordCount,recentPage*recordCount);
+                        _this.tableNumber = result.purchasewomates.length;
+                    }).catch(function(err){
+                    });
+            },
+            handleSizeChange(val) {
+                this.recordCount = val;
+                this.$options.methods.loadData.bind(this)();
+            },
+            handleCurrentChange(val) {
+                this.recentPage = val;
+                this.$options.methods.loadData.bind(this)();
+            },
+        }
+        
+    }
+</script>

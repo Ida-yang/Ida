@@ -1,0 +1,412 @@
+<template>
+    <div>
+        <div class="grid-content">
+            <el-button type="primary" size="small" @click="handleAdd()">
+                新增工序
+            </el-button>
+        </div>
+        <div class="searchList" @keyup.enter="search()">
+            <el-input v-model="searchList.code" placeholder="工序编码"></el-input>
+        </div>
+        <div class="searchList" @keyup.enter="search()">
+            <el-input v-model="searchList.name" placeholder="工序名称"></el-input>
+        </div>
+        <div class="searchList">
+            <el-button type="success" size="mini" @click="search()">查询</el-button>
+            <el-button type="info" size="mini" @click="reset()">清空</el-button>
+        </div>
+        <el-table
+            :data="badTableData"
+            :max-height="maxheight"
+            border
+            style="width: 100%;text-align: center;">
+            <el-table-column
+                header-align="center"
+                align="center"
+                prop="code"
+                label="工序编码"
+                width="120"
+                >
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                header-align="center"
+                align="center"
+                label="工序名称"
+                width="160">
+            </el-table-column>
+            <el-table-column
+                prop="mustReport"
+                header-align="center"
+                align="center"
+                label="必须报工"
+                width="80">
+                <template slot-scope="scope">
+                    <p v-if="scope.row.mustReport == 0">
+                        否
+                    </p>
+                    <p v-if="scope.row.mustReport == 1">
+                        是
+                    </p>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作"
+                width="180"
+                header-align="center"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-button
+                    size="mini"
+                    type="danger"
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="recentPage"
+            :page-sizes="[10, 15, 20, 25]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+        <el-dialog title="新增工序" :visible.sync="dialogFormVisible" width="47%" :modal="false">
+            <el-form :model="newForm">
+                <el-form-item label="工序编号" :label-width="formLabelWidth">
+                    <el-input v-model="newForm.code" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="工序名称" :label-width="formLabelWidth">
+                    <el-input v-model="newForm.name" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="必须报工" :label-width="formLabelWidth">
+                    <el-radio v-model="newForm.mustReport" label="0">否</el-radio>
+                    <el-radio v-model="newForm.mustReport" label="1">是</el-radio>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addProductLine">提 交</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="修改工序" :visible.sync="dialogFormVisible2" width="47%" :modal="false">
+            <el-form :model="updateFrom">
+                <el-form-item label="工序编号" :label-width="formLabelWidth">
+                <el-input v-model="updateFrom.code" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="工序名称" :label-width="formLabelWidth">
+                <el-input v-model="updateFrom.name" auto-complete="off" ></el-input>
+                </el-form-item>
+                <el-form-item label="必须报工" :label-width="formLabelWidth">
+                    <el-radio v-model="updateFrom.mustReport" label="0">否</el-radio>
+                    <el-radio v-model="updateFrom.mustReport" label="1">是</el-radio>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible2 = false">取 消</el-button>
+                <el-button type="primary" @click="updateProductLine" >提 交</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</template>
+<style>
+    .numberPage{
+        text-align: right;
+        position: relative;
+        top: 0;
+        background-color: #fff;
+        width: 100%;
+    }
+    .el-dialog__body {
+        padding: 30px 80px 30px 20px !important;
+        color: #606266;
+        font-size: 14px;
+    }
+    .el-table td, .el-table th {
+        padding: 5px 0 0 0 !important;
+        line-height: 30px;
+        vertical-align: middle !important;
+    }
+    .btnSet{
+        height: 40px;
+    }
+    .el-input__inner {
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+    }
+    .el-table {
+        font-size: 12px!important;
+        
+    }
+    .searchList{
+        width: 220px;
+        margin: 5px 5px 5px 0px;
+        float: left;
+    }
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import axios from 'axios'
+    export default {
+        name:'ProductProcess',
+        computed: {
+            badTableData(){
+                return store.state.productProcessList;
+            },
+            tableNumber(){
+               return store.state.productProcessListnumber;     
+            },
+            Height(){
+                return store.state.maxheight;
+            },
+        },
+        props:{
+            totalNum:Number,
+        },
+        store,
+        data(){
+            return {
+                searchList:{
+                    code:null,
+                    name:null,
+                },
+                searchListNew:{
+                    code:null,
+                    name:null,
+                },
+                recentPage:1,//默认第一页
+                recordCount:10,//默认10条
+                newForm:{
+                    code:null,
+                    name:null,
+                    mustReport:null,
+                },
+                updateFrom:{
+                    id:null,
+                    code:null,
+                    name:null,
+                    mustReport:null,
+                },
+                dialogFormVisible: false,
+                dialogFormVisible2: false,
+                formLabelWidth: '120px',
+                maxheight:null,
+            }
+        },
+        mounted() {
+            this.reloadTable();
+            var _this=this;
+            _this.$store.commit("getMaxHeight")
+            _this.maxheight = _this.Height; 
+        },
+        // beforeCreate(){
+        //     let _this = this;
+        //     this.$nextTick(function () {
+        //         axios({
+        //             method: 'post',
+        //             url: _this.$store.state.defaultHttp+_this.$store.state.productProcessUrl+'getByPage?recentPage='+_this.recentPage+'&recordCount='+_this.recordCount
+        //         }).then(function(res){
+        //             _this.$store.state.productProcessList = res.data.result.records;
+        //             _this.$store.state.productProcessListnumber = res.data.result.totalRecords;
+                    
+        //         }).catch(function(err){
+        //             // console.log(err);
+        //         });
+        //     });
+        // },
+        methods: {
+            reloadTable(flag) {
+                let _this = this;
+                let searchList = {}
+                if(flag) {
+                    if(_this.searchList.code) {
+                        searchList.code = _this.DelBlankSpace(_this.searchList.code);
+                    }
+                    if(_this.searchList.name) {
+                        searchList.name = _this.DelBlankSpace(_this.searchList.name);
+                    }
+                }
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.productProcessUrl+'getByPage?recentPage='+_this.recentPage+'&recordCount='+_this.recordCount,
+                    data: JSON.stringify(searchList),
+                }).then(function(res){
+                    _this.$store.state.productProcessList = res.data.result.records;
+                    _this.$store.state.productProcessListnumber = res.data.result.totalRecords;
+                    
+                }).catch(function(err){
+                    // console.log(err);
+                });
+            },
+            changeRejectstype() {
+                this.$options.methods.reloadTable.bind(this)(true);
+            },
+            search() {
+                this.$options.methods.reloadTable.bind(this)(true);
+                // this.searchList.code = null;
+                // this.searchList.name = null;
+            },
+            reset(){
+                this.searchList = Object.assign({}, this.searchListNew);
+                this.$options.methods.reloadTable.bind(this)(true);
+            },
+            handleAdd() {
+                let addOrUpdateData = {};
+                addOrUpdateData.title = "新增工序";
+                addOrUpdateData.createForm = [
+                    {"label":"工序编号","inputModel":"code"},
+                    {"label":"工序名称","inputModel":"name"},
+                    {
+                        "label": "必须报工",
+                        "inputModel": "mustReport",
+                        "type": "radio",
+                    }
+                ];
+                addOrUpdateData.setForm = {
+                    "code": "",
+                    "name": "",
+                    "mustReport": ""};
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+this.$store.state.productProcessUrl+'add';
+                this.$store.state.addOrUpdateData = addOrUpdateData;
+                this.$router.push({ path: '/addOrUpdate' });
+                // this.newForm.code = null;
+                // this.newForm.name = null; 
+                // this.newForm.mustReport = null;
+                // this.dialogFormVisible = true;
+            },
+            handleEdit(index, row) {
+                let addOrUpdateData = {};
+                addOrUpdateData.title = "修改工序 ["+ row.name +"]";
+                addOrUpdateData.createForm = [
+                    {"label":"工序编号","inputModel":"code"},
+                    {"label":"工序名称","inputModel":"name"},
+                    {
+                        "label": "必须报工",
+                        "inputModel": "mustReport",
+                        "type": "radio",
+                    }
+                ];
+                addOrUpdateData.setForm = {
+                    "code": row.code,
+                    "name": row.name,
+                    "mustReport": row.mustReport+""};
+                addOrUpdateData.submitData = {"id": row.id};
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+this.$store.state.productProcessUrl+'update';
+                this.$store.state.addOrUpdateData = addOrUpdateData;
+                this.$router.push({ path: '/addOrUpdate' });
+                // this.updateFrom.id = row.id; 
+                // this.updateFrom.code = row.code;
+                // this.updateFrom.name = row.name; 
+                // this.updateFrom.mustReport = row.mustReport+"";
+                // this.dialogFormVisible2 = true;
+            },
+            handleDelete(index, row) {
+                let _this = this;
+                _this.$confirm('是否确认删除工序[' + row.name + ']？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'get',
+                        url: _this.$store.state.defaultHttp+_this.$store.state.productProcessUrl+'delete?id=' + row.id,
+                    }).then(function(res){
+                        if(res.data.code && res.data.code == 200) {
+                            _this.$message({
+                                message: '删除工序成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadTable.bind(_this)(false);
+                        } else {
+                            _this.$message({
+                                message: res.data.message,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        // console.log(err);
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消删除工序[' + row.name + ']'
+                    });       
+                });
+            },
+            handleSizeChange(val) {
+                let _this = this;
+                _this.recordCount = val;
+                _this.$options.methods.reloadTable.bind(_this)(false);
+            },
+            handleCurrentChange(val) {
+                let _this = this;
+                _this.recentPage = val;
+                _this.$options.methods.reloadTable.bind(_this)(false);
+            },
+            addProductLine(){
+                let _this = this;
+                let mydata = {};
+                mydata.code = this.newForm.code;
+                mydata.name = this.newForm.name;
+                mydata.mustReport = this.newForm.mustReport;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.productProcessUrl+'add',
+                    data: JSON.stringify(mydata),
+                }).then(function(res){
+                    if(res.data.code && res.data.code == 200) {
+                        _this.$message({
+                            message: '新增工序成功',
+                            type: 'success'
+                        });
+                        _this.dialogFormVisible = false;
+                        _this.$options.methods.reloadTable.bind(_this)(false);
+                    } else {
+                        _this.$message({
+                            message: res.data.message,
+                            type: 'error'
+                        })
+                    }
+                }).catch(function(err){
+                    // console.log(err)
+                })        
+            } ,
+            updateProductLine(){
+                let _this = this;
+                let mydata = {};
+                mydata.id = this.updateFrom.id;
+                mydata.code = this.updateFrom.code;
+                mydata.name = this.updateFrom.name;
+                mydata.mustReport = this.updateFrom.mustReport;
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ _this.$store.state.productProcessUrl+'update',
+                    data:JSON.stringify(mydata),
+                }).then(function(res){
+                    if(res.data.code && res.data.code == 200) {
+                        _this.$message({
+                            message: '修改工序成功',
+                            type: 'success'
+                        });
+                        _this.dialogFormVisible2 = false;
+                        _this.$options.methods.reloadTable.bind(_this)(false);
+                    } else {
+                        _this.$message({
+                            message: res.data.message,
+                            type: 'error'
+                        });
+                    }
+                }).catch(function(err){
+                    // console.log(err);
+                });      
+            }  
+        },
+        
+    }
+</script>

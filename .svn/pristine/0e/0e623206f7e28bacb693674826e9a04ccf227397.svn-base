@@ -1,0 +1,294 @@
+<template>
+    <!-- 组织管理 -->
+    <div>
+        <div class="grid-content">
+            <el-button type="primary" size="small" @click="handleAdd()">新增组织</el-button>
+        </div>
+        <div class="searchList" @keyup.enter="search()">
+            <el-input v-model="searchList.orgnum" placeholder="组织编号"></el-input>
+        </div>
+        <div class="searchList" @keyup.enter="search()">
+            <el-input v-model="searchList.orgname" placeholder="组织名称"></el-input>
+        </div>
+        <div class="searchList" @keyup.enter="search()">
+            <el-input v-model="searchList.orgposition" placeholder="组织位置"></el-input>
+        </div>
+        <el-button type="success" size="mini" @click="search()">查询</el-button>
+        <el-button type="info" size="mini" @click="clear()">清空</el-button>
+        
+        <el-table
+            :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+            border
+            :max-height="maxheight"
+            style="width: 100% ;text-align: center">
+            <el-table-column
+                header-align="center"
+                align="center"
+                prop="orgnum"
+                label="组织编号"
+                width="180"
+                >
+            </el-table-column>
+            <el-table-column
+                prop="orgname"
+                label="组织名称"
+                header-align="center"
+                align="center"
+                width="320">
+            </el-table-column>
+            <el-table-column
+                prop="orgposition"
+                header-align="center"
+                align="center"
+                label="位置"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="orgCkType"
+                header-align="center"
+                align="center"
+                label="是否有储位"
+                width="120">
+                <template slot-scope="scope">
+                    <p v-if="scope.row.orgCkType == 0">
+                        是
+                    </p>
+                    <p v-if="scope.row.orgCkType == 1">
+                        否
+                    </p>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作"
+                width="170"
+                header-align="center"
+                align="center">
+            <template slot-scope="scope">
+                <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+    </div>
+</template>
+<style>
+    .numberPage{
+        text-align: right;
+        position: relative;
+        top: 0;
+        background-color: #fff;
+        width: 100%;
+    }
+    .el-dialog__body {
+        padding: 30px 80px 30px 20px !important;
+        color: #606266;
+        font-size: 14px;
+    }
+    .el-table td, .el-table th {
+        padding: 6px 0 !important;
+        line-height: 30px;
+    }
+    .btnSet{
+        height: 40px;
+    }
+    .el-input__inner {
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+    }
+    .el-table {
+        font-size: 12px!important;
+    }
+    .el-table td, .el-table th {
+        padding: 8px 0;
+        line-height:30px; 
+    }
+
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import axios from 'axios'
+    export default {
+        name:'OrganizationAndManagement',
+        computed: {
+            tableData(){
+                return store.state.organizationList;
+            },
+            tableNumber(){
+               return store.state.organizationListnumber;     
+            },
+            Height(){
+                return store.state.maxheight;
+            },
+        },
+        props:{
+            totalNum:Number,
+        },
+        store,
+        data(){
+            return {
+                searchList: {
+                    orgnum:null,
+                    orgposition:null,
+                    orgname:null,
+                },
+                currentPage:1,//默认第一页
+                pageSize:10,//默认10条
+                dialogFormVisible2: false,
+                dialogFormVisible: false,
+                formLabelWidth: '120px',
+                maxheight:null,
+            }
+        },
+        mounted(){
+            this.reloadTable(null);
+            let _this=this;
+            _this.$store.commit("getMaxHeight")
+            _this.maxheight = _this.Height;   
+        },
+        methods: {
+            reloadTable(flag) {
+                let _this = this;
+                let searchList = {}
+                if(flag) {
+                    if(_this.searchList.orgnum) {
+                        searchList.orgnum = _this.searchList.orgnum;
+                    }
+                    if(_this.searchList.orgname) {
+                        searchList.orgname = _this.searchList.orgname;
+                    }
+                    if(_this.searchList.orgposition) {
+                        searchList.orgposition = _this.searchList.orgposition;
+                    }
+                }
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.orgURL+'selectByCriteria',
+                    data: JSON.stringify(searchList)
+                }).then(function(res){
+                    if(res.data.code == 200) {
+                        _this.$store.state.organizationList = res.data.result.records;
+                        _this.$store.state.organizationListnumber = res.data.result.totalRecords;
+                    } else {
+                        _this.$store.state.organizationList = [];
+                        _this.$store.state.organizationListnumber = 0;
+                        _this.$message({
+                            message: res.data.message,
+                            type: 'warning'
+                        })
+                    }
+                    
+                }).catch(function(err){
+                    // console.log(err);
+                });
+            },
+            search() {
+                this.$options.methods.reloadTable.bind(this)(true);
+            },
+            clear() {
+                this.searchList.orgnum = null;
+                this.searchList.orgname = null;
+                this.searchList.orgposition = null;
+                this.$options.methods.reloadTable.bind(this)(true);
+            },
+            handleAdd(){
+                let addOrUpdateData = {};
+                addOrUpdateData.title = "新增组织";
+                addOrUpdateData.createForm = [
+                    {"label":"组织编号","inputModel":"orgnum"},
+                    {"label":"组织名称","inputModel":"orgname"},
+                    {"label":"组织位置","inputModel":"orgposition"},
+                    {
+                        "label": "成品仓有储位",
+                        "inputModel": "orgCkType",
+                        "type": "radio",
+                    }
+                ];
+                addOrUpdateData.setForm = {
+                    "orgnum": "",
+                    "orgname": "",
+                    "orgposition": "",
+                    "orgCkType": ""
+                };
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+this.$store.state.orgURL+'add';
+                this.$store.state.addOrUpdateData = addOrUpdateData;
+                this.$router.push({ path: '/addOrUpdate' });
+            },
+            handleEdit(index, row) {
+                let addOrUpdateData = {};
+                addOrUpdateData.title = "修改组织[" + row.orgname +"]";
+                addOrUpdateData.createForm = [
+                    {"label":"组织编号","inputModel":"orgnum"},
+                    {"label":"组织名称","inputModel":"orgname"},
+                    {"label":"组织位置","inputModel":"orgposition"},
+                    {
+                        "label": "成品仓有储位",
+                        "inputModel": "orgCkType",
+                        "type": "radio",
+                    }
+                ];
+                addOrUpdateData.setForm = {
+                    "orgnum": row.orgnum,
+                    "orgname": row.orgname,
+                    "orgposition": row.orgposition,
+                    "orgCkType": row.orgCkType+""
+                };
+                addOrUpdateData.submitData = {"id": row.id};
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+this.$store.state.orgURL+'update';
+                this.$store.state.addOrUpdateData = addOrUpdateData;
+                this.$router.push({ path: '/addOrUpdate' });
+            },
+            handleDelete(index, row) {
+                let _this = this
+                _this.$confirm('是否确认删除组织[' + row.orgname + ']？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'get',
+                        url: _this.$store.state.defaultHttp+_this.$store.state.orgURL+'/delete?id=' + row.id,
+                        headers:{'wmsnet-token':sessionStorage.getItem('token')}
+                    }).then(function(res){
+                            _this.$message({
+                                message: '删除组织成功',
+                                type: 'success'
+                            })
+                            _this.$options.methods.reloadTable.bind(_this)(false);
+                    }).catch(function(err){
+                        // console.log(err)
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消删除组织[' + row.orgname + ']'
+                    });       
+                });
+            },
+            handleSizeChange(val) {
+                let self = this;
+                self.pageSize = val;
+            },
+            handleCurrentChange(val) {
+                let self = this;
+                self.currentPage = val;
+            }  
+        },
+        
+    }
+</script>

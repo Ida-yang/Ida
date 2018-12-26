@@ -1,0 +1,245 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+import store from './../store/store'
+Vue.use(Router)
+
+
+if (sessionStorage.getItem('token')) {
+  store.commit('set_token', sessionStorage.getItem('token'))
+  }
+  
+
+const router =new Router({
+  
+  mode: "history",/**** 部署时要删除（注释），再进行打包 ****/
+  
+  routes: [
+    {
+      path:'/index',
+      name:'index',
+      component:resolve => require(['../components/index/index.vue'], resolve),
+      meta: { title: '首页' ,requireAuth:true},
+      children:[
+        {
+          path: '/',
+          component: resolve => require(['../components/index/page/welcome.vue'], resolve),
+          meta: { title: '欢迎页面' }
+        },
+        {
+          path: '/welcome',
+          component: resolve => require(['../components/index/page/welcome.vue'], resolve),
+          meta: { title: '欢迎页面' }
+        },
+        {
+          path: '/addOrUpdate',
+          component: resolve => require(['../components/index/page/AddAndUpdate/addOrUpdate.vue'], resolve),
+          meta: { title: '新增/编辑' }
+        },
+        {
+          path: '/selectInfo',
+          component: resolve => require(['../components/index/page/AddAndUpdate/selectInfo.vue'], resolve),
+          meta: { title: '选择列表' }
+        },
+        {
+          path: '/setRelationInfo',
+          component: resolve => require(['../components/index/page/AddAndUpdate/setRelationInfo.vue'], resolve),
+          meta: { title: '修改关联信息' }
+        },
+        {
+            path: '/OrganizationAndManagement',
+            component: resolve => require(['../components/index/page/Organization/OrganizationAndManagement.vue'], resolve),
+            meta: { title: '组织管理'}
+        },
+        {
+          path: '/OutboundOrder',
+          component: resolve => require(['../components/index/page/outbound/OutboundOrder.vue'], resolve),
+          meta: { title: '其他出库'}
+        },
+        {
+          path: '/finishedProductOutbound',
+          component: resolve => require(['../components/index/page/outbound/finishedProductOutbound.vue'], resolve),
+          meta: { title: '成品出库'}
+        },
+        {
+          path: '/SalesOtherOutbound',
+          component: resolve => require(['../components/index/page/outbound/SalesOtherOutbound.vue'], resolve),
+          meta: { title: '销售、其他出库'}
+        },
+        {
+          path: '/ProductionLeadsOutOfStorage',
+          component: resolve => require(['../components/index/page/outbound/ProductionLeadsOutOfStorage.vue'], resolve),
+          meta: { title: '生产领用出库'}
+        },
+        {
+          path: '/NoProductionLeadsOutOfStorage',
+          component: resolve => require(['../components/index/page/outbound/NoProductionLeadsOutOfStorage.vue'], resolve),
+          meta: { title: '非生产性领用出库'}
+        },
+        {
+          path: '/TransferWithinWarehouse',
+          component: resolve => require(['../components/index/page/outbound/TransferWithinWarehouse.vue'], resolve),
+          meta: { title: '形态转换'}
+        },
+        {
+          path: '/ModalShiftDetails',
+          component: resolve => require(['../components/index/page/outbound/ModalShiftDetails.vue'], resolve),
+          meta: { title: '形态转换详情'}
+        },
+        {
+          path: '/RawMaterialSalesOrderOutOfStock',
+          component: resolve => require(['../components/index/page/outbound/RawMaterialSalesOrderOutOfStock.vue'], resolve),
+          meta: { title: '原材料销售订单出库'}
+        },
+        {
+          path: '/ScrapOutbound',
+          component: resolve => require(['../components/index/page/outbound/ScrapOutbound.vue'], resolve),
+          meta: { title: '报废出库'}
+        },
+        {
+          path: '/CustomerWithdrawing',
+          component: resolve => require(['../components/index/page/outbound/CustomerWithdrawing.vue'], resolve),
+          meta: { title: '客户退库'}
+        },
+        {
+          path: '/ProcessQualityControl',
+          component: resolve => require(['../components/index/page/ProductionOperation/ProcessQualityControl.vue'], resolve),
+          meta: { title: '工序质检'}
+        },
+        {
+          path: '/ProductioWorkOrder',
+          component: resolve => require(['../components/index/page/ProductionOperation/ProductioWorkOrder.vue'], resolve),
+          meta: { title: '生产工单' }
+        },
+        {
+          path: '/ProcurementWarehousing',
+          component: resolve => require(['../components/index/page/PutInStorage/ProcurementWarehousing.vue'], resolve),
+          meta: { title: '采购入库' }
+        },
+        {
+          path: '/ProductionReceivableReturnOfStock',
+          component: resolve => require(['../components/index/page/PutInStorage/ProductionReceivableReturnOfStock.vue'], resolve),
+          meta: { title: '生产领用退库' }
+        },
+        {
+          path: '/ReturnDefectiveGoodsInProcess',
+          component: resolve => require(['../components/index/page/PutInStorage/ReturnDefectiveGoodsInProcess.vue'], resolve),
+          meta: { title: '在制品不良退库' }
+        },
+        {
+          path: '/OtherWarehouse',
+          component: resolve => require(['../components/index/page/PutInStorage/OtherWarehouse.vue'], resolve),
+          meta: { title: '其他入库' }
+        },
+        {
+          path: '/ReleaseOfProduction',
+          component: resolve => require(['../components/index/page/ProductionOperation/ReleaseOfProduction.vue'], resolve),
+          meta: { title: '工序报工' }
+        },
+        {
+          path: '/UserManagement',
+          component: resolve => require(['../components/index/page/SystemSettings/UserManagement.vue'], resolve),
+          meta: { title: '角色权限管理'}
+        },
+        {
+          path: '/UserData',
+          component: resolve => require(['../components/index/page/SystemSettings/UserData.vue'], resolve),
+          meta: { title: '用户资料' }
+        },
+        {
+          path: '/WarehouseData',
+          component: resolve => require(['../components/index/page/BasicData/WarehouseData.vue'], resolve),
+          meta: { title: '仓库资料'}
+        },
+        {
+          path: '/StoragePosition',
+          component: resolve => require(['../components/index/page/BasicData/StoragePosition.vue'], resolve),
+          meta: { title: '储位资料'}
+        },
+        {
+          path: '/CustomerData',
+          component: resolve => require(['../components/index/page/BasicData/CustomerData.vue'], resolve),
+          meta: { title: '客户资料'}
+        },
+        {
+          path: '/SupplierData',
+          component: resolve => require(['../components/index/page/BasicData/SupplierData.vue'], resolve),
+          meta: { title: '供应商资料'}
+        },
+        {
+          path: '/MaterielData',
+          component: resolve => require(['../components/index/page/BasicData/MaterielData.vue'], resolve),
+          meta: { title: '物料资料'}
+        },
+        {
+          path: '/BadCause',
+          component: resolve => require(['../components/index/page/BasicData/BadCause.vue'], resolve),
+          meta: { title: '不良原因'}
+        },
+        {
+          path: '/ProductionLine',
+          component: resolve => require(['../components/index/page/BasicData/ProductionLine.vue'], resolve),
+          meta: { title: '产线资料'}
+        },
+        {
+          path: '/ProductionProcess',
+          component: resolve => require(['../components/index/page/TechnologyRoute/ProductionProcess.vue'], resolve),
+          meta: { title: '生产工序'}
+        },
+        {
+          path: '/TechnologicalProcess',
+          component: resolve => require(['../components/index/page/TechnologyRoute/TechnologicalProcess.vue'], resolve),
+          meta: { title: '工艺流程'}
+        },
+        {
+          path: '/OrderDetails',
+          component: resolve => require(['../components/index/page/outbound/OrderDetails.vue'], resolve),
+          meta: { title: '出库单详情'}
+        },
+        {
+          path: '/WarehousingDetails',
+          component: resolve => require(['../components/index/page/PutInStorage/WarehousingDetails.vue'], resolve),
+          meta: { title: '入库单详情'}
+        },
+        {
+          path: '/PrintSerialNumber',
+          component: resolve => require(['../components/index/page/ProductionOperation/PrintSerialNumber.vue'], resolve),
+          meta: { title: '打印产品序列号条码'}
+        },
+        {
+          path: '/IncomingQualityInspection',
+          component: resolve => require(['../components/index/page/QualityOfWork/IncomingQualityInspection.vue'], resolve),
+          meta: { title: '来料质检'}
+        },
+        {
+          path: '/FinishedProductQualityInspection',
+          component: resolve => require(['../components/index/page/QualityOfWork/FinishedProductQualityInspection.vue'], resolve),
+          meta: { title: '成品质检'}
+        }
+      ]
+    },
+        {
+            path: '*',
+            redirect: '/index'
+        },
+        {
+            path: '/login',
+            component: resolve => require(['../components/Login.vue'], resolve)
+        }
+  ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(r => r.meta.requireAuth)) {
+    if (sessionStorage.getItem('token')) {
+      next();
+    }else {
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  }else {
+    next();
+  }
+})
+export default  router

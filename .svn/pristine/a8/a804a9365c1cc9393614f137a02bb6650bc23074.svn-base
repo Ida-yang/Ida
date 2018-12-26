@@ -1,0 +1,497 @@
+<template>
+    <!--  生产领用退库 -->
+    <div>
+        <el-row :gutter="10">
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+                <div class="grid-content">
+                    <el-button type="primary" size="small" @click="printMyData" >打印生产领料单</el-button>
+                    <!-- <el-button type="danger" size="small" @click="cancelOrder">作废单据</el-button> -->
+                    <el-button type="success" size="small" @click="dialogVisible2=true" >获取U9数据</el-button>
+                </div>
+            </el-col>        
+        </el-row>
+        <el-row :gutter="10" style="margin-top:10px">
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="3">
+                <div class="grid-content ">
+                    <el-input v-model="ordernum" placeholder="退库单号" style="width:120px" @keyup.enter.native="selectData()"></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="3">
+                <div class="grid-content ">
+                    <el-input v-model="productnum" placeholder="料号"  style="width:120px" @keyup.enter.native="selectData()"></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="3">
+                <div class="grid-content ">
+                    <el-input v-model="productname" placeholder="数量"  style="width:120px" @keyup.enter.native="selectData()"></el-input>
+                </div>
+            </el-col>
+            <el-col :xs="8" :sm="4" :md="4" :lg="3" :xl="3">
+                <div class="grid-content ">
+                    <el-input v-model="productmodel" placeholder="储位"  style="width:120px" @keyup.enter.native="selectData()"></el-input>
+                </div>
+            </el-col>
+        </el-row>
+        <el-table
+            :data="tableData3"
+            tooltip-effect="dark"
+            border
+            @cell-dblclick="CheckTheDetails"
+            style="width: 100%"
+            height="420"
+            :row-key="getRowKeys"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+            type="selection"
+            prop="id"
+            width="55">
+            </el-table-column>
+            <el-table-column
+                prop="ordernum"
+                fixed="left"
+                label="生产订单编号"
+                align="center"
+                header-align="center"
+                width="140">
+            </el-table-column>
+            <el-table-column
+                prop="productNo"
+                fixed="left"
+                label="产品编号"
+                align="center"
+                header-align="center"
+                width="120">
+            </el-table-column>
+            <el-table-column
+            fixed="left"
+            prop="status"
+            label="状态"
+            header-align="center"
+            width="80"
+            align="center"
+            :formatter="formatter">
+            <template slot-scope="scope">
+                <el-tag
+                :type="scope.row.status ===0 ?'primary':'success'"
+                close-transition>{{scope.row.status | formatStatus}}</el-tag>
+            </template>
+            </el-table-column>
+            <el-table-column
+                prop="productname"
+                label="产品名称"
+                align="center"
+                header-align="center"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="productmodel"
+                label="产品机型"
+                align="center"
+                header-align="center"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="productspec"
+                label="成品规格"
+                align="center"
+                header-align="center"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="crtdate"
+                label="开工日期"
+                align="center"
+                header-align="center"
+                width="120">
+            </el-table-column>
+            <el-table-column
+                prop="productcolor"
+                label="颜色"
+                align="center"
+                header-align="center"
+                width="100">
+            </el-table-column>
+            <el-table-column
+                prop="quantity"
+                label="生产数量"
+                align="center"
+                header-align="center"
+                width="80">
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="10"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
+        <el-dialog
+        title="获取U9数据"
+        v-loading="loading"
+        :visible.sync="dialogVisible2"
+        :modal="false"
+        center
+        width="50%">
+            <el-row :gutter="10">
+                <el-col  :offset="2" :xs="22" :sm="22" :md="22"  :lg="22" :xl="22">
+                <el-date-picker
+                        v-model="DateFrom"
+                        align="right"
+                        type="date"
+                        format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                        placeholder="业务日期-开始"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
+                    <el-date-picker
+                        v-model="DateTo"
+                        align="right"
+                        type="date"
+                        format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                        style="margin=left:10px;"
+                        placeholder="业务日期-结束"
+                        :picker-options="pickerOptions1">
+                    </el-date-picker>
+                </el-col>
+                <el-col :offset="2" :xs="22" :sm="22" :md="22"  :lg="22" :xl="22" style="margin-top:12px">
+                </el-col>
+                <el-col :offset="2" :xs="22" :sm="22" :md="22"  :lg="22" :xl="22" style="margin-top:12px">
+                </el-col>
+            </el-row>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="info" @click="dialogVisible = false">重 置</el-button>
+                <el-button type="success" @click="refresh" >获取U9数据</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+        :title="U9Title"
+        :modal="false" 
+        center
+        :visible.sync="dialogVisible3"
+        style="max-height:55%"
+        width="55%">
+            <el-row :gutter="10">
+                <el-col  :offset="1" :xs="22" :sm="22" :md="22"  :lg="22" :xl="22">
+                   <span>获取到数据数量：</span><span>{{successNumber}}</span>
+                </el-col>
+                <el-col  :offset="1" :xs="22" :sm="22" :md="22"  :lg="22" :xl="22" style="margin-top:30px;"  v-if="Isshow">
+                   <span>重复数量：</span><span>{{failureNumber}}</span>
+                </el-col>
+                <el-col  :offset="1" :xs="22" :sm="22" :md="22"  :lg="22" :xl="22" style="margin-top:30px;" v-if="Isshow">
+                   <span>重复单号（请先作废）:</span>
+                   <p style="margin-left:40px;margin-top:10px">{{failureStr}}</p>
+                </el-col>
+            </el-row>
+            <span slot="footer" class="dialog-footer" style="text-align: center">
+                <el-button type="primary" @click="dialogVisible3 = false">关  闭</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<style>
+    .numberPage{
+        margin-top: 20px;
+        text-align: right
+    }
+    .el-table td, .el-table th {
+        padding: 6px 0 !important;
+        line-height: 30px;
+    }
+    .btnSet{
+        height: 40px;
+    }
+    .el-input__inner {
+        height: 30px;
+        line-height: 30px;
+        width: 100%;
+    }
+    .el-table {
+        font-size: 12px!important;
+        
+    }
+    .el-table td, .el-table th {
+        padding: 8px 0;
+        line-height:30px; 
+    }
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import axios from 'axios'
+    import FileSaver from 'file-saver'
+    import XLSX from 'xlsx'
+    export default {
+        name:'ProcurementWarehousing',
+        props:{
+            totalNum:Number,
+        },
+        filters: {
+            formatStatus: function (val) {
+                return val == 0 ? '保存' :'已领取';
+            },
+        },
+        inject:["reload"],
+        store,
+        data(){
+            return {
+                // 获取row的key值
+                getRowKeys(row) {
+                    return row.id;
+                },
+                deliverynum:null,
+                dialogVisible: false,
+                dialogVisible2: false,
+                dialogVisible3: false,
+                U9Title:"失败",
+                DateFrom :'',//开始时间
+                DateTo  :'',//结束时间
+                ordernum:null,//生产订单编号 ~
+                productname:null,//产品名称~
+                productnum:null,//产品编号~
+                productmodel:null,//产品机型
+                productspec :null,//产品规格
+                productcolor :null,//产品颜色
+                data:[],
+                data1:[],
+                loading:false,
+                allData : [],
+                printIds : [],
+                indexNumber:null,
+                successNumber:0,
+                failureNumber:0,
+                failureStr:'',
+                ordername:null,
+                suppliername:null,
+                Isshow:true,
+                selectedData: [],
+                inputData : {},
+                currentPage:1,//默认第一页
+                pageSize:10,//默认10条
+                formLabelWidth: '120px',
+                tableData3: [],
+                tableNumber:null,
+                pickerOptions1: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                    },
+                
+            }
+        },
+        
+        
+        methods: {
+            formatter(row, column) {
+                return row.address;
+            },
+            //获取U9数据
+            refresh(){
+                // let _this = this;
+                // _this.loading = true;
+                // if(_this.MoDocNo == undefined || _this.MoDocNo == "") {
+                //     if(!_this.DateFrom) {//开始日期为空
+                //         this.$message({
+                //             message: '请选择开始日期',
+                //             type: 'warning'
+                //         });
+                //         return;
+                //     }
+                //     if(!_this.DateTo) {//结束日期为空
+                //         this.$message({
+                //             message: '请选择结束日期',
+                //             type: 'warning'
+                //         });
+                //         return;
+                //     }
+                // }
+                // if(_this.DateFrom && _this.DateTo) {
+                //     var DateFrom = Date.parse(_this.DateFrom)/1000/60/60/24;
+                //     var DateTo = Date.parse(_this.DateTo)/1000/60/60/24;
+                    
+                //     if(DateTo-DateFrom > 30) {
+                //         this.$message({
+                //             message: '起止日期不能超过30天',
+                //             type: 'warning'
+                //         });
+                //         return;
+                //     } else if(DateTo-DateFrom < 0) {
+                //         this.$message({
+                //             message: '开始日期不能在结束日期后',
+                //             type: 'warning'
+                //         });
+                //         return;
+                //     } else {
+                //         _this.DateFrom = _this.DateFrom + " 00:00:00";
+                //         _this.DateTo = _this.DateTo + " 23:59:59";
+                //     }
+                // }
+                // let sendData = {};
+                //     sendData.DateFrom = _this.DateFrom
+                //     sendData.DateTo  = _this.DateTo
+                //     sendData.DocNo = _this.DocNo
+                // var thisUrl = _this.$store.state.defaultHttp +"getU9Data/getDeliveryOrderByCodi";
+                // axios({
+                //         method: 'post',
+                //         url:thisUrl,
+                //         data:JSON.stringify(sendData),
+                //     }).then(function(res){
+                //         if(res.data.code == 200){
+                //             _this.successNumber = res.data.result.successcount
+                //             _this.failureNumber = res.data.result.errorcount
+                //             let dataArr=res.data.result.data
+                //             for(var i=0 ; i<dataArr.length;i++){
+                //                 _this.failureStr += '  [  '+dataArr[i]+'  ]  '
+                //             }
+                //             _this.DateFrom=null
+                //             _this.DateTo=null
+                //             _this.loading = false;
+                //             if(res.data.result.errorcount == 0){
+                //                 _this.Isshow=false;
+                //                 _this.U9Title = "成功"
+                //             }
+                //             _this.dialogVisible2 = false;
+                //             _this.dialogVisible3=true;
+                //         }
+                        
+                //     }).catch(function(err){
+                //         console.log(err)
+                //     })
+            },
+
+
+
+            printMyData(){
+                if(this.selectedData.length == 0){
+                    this.$message({
+                        message: '请先选择工单',
+                        type: 'warning'
+                    });
+                }else{
+                    this.dialogVisible = true
+                }
+            },
+            lodData(page,count){
+                let _this = this;
+                axios({
+                   method: 'get',
+                   url: _this.$store.state.defaultHttp+_this.$store.state.cancellingstocks+'selectAll?page='+page+'&count='+count,
+                }).then(function(res){
+                    // console.log(res)
+                    _this.tableData3 = res.data.result.records
+                    _this.tableNumber = res.data.result.totalRecords
+                }).catch(function(err){
+                    // console.log(err)
+                })
+            },
+            selectDataModel(page,count,selectsuccess){
+                let _this = this;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.$store.state.productWoUrl+'selectByCriteria?page='+page+'&count='+count,
+                    data:_this.inputData,
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.code == 200){
+                        _this.tableData3 = res.data.result.records
+                        _this.tableNumber = res.data.result.totalRecords
+                        if(selectsuccess){
+                        if(_this.inputData !== undefined){
+                                _this.$message({
+                                message: '查询成功',
+                                type: 'success'
+                                })
+                            }     
+                        }
+                    }else if(res.data.code == 500){
+                            if(res.data.message == 'Index: 0, Size: 0'){
+                                 _this.$message({
+                                    message: '未查询到符合条件数据',
+                                    type: 'warning'
+                                })
+                            }else{
+                                _this.$message({
+                                    message: res.data.message,
+                                    type: 'warning'
+                                })
+                            }
+                    }
+                    
+                }).catch(function(err){
+                    // console.log(err)
+                })
+            },
+            selectData(){
+                // this.inputData.ordernum= this.ordernum;//生产订单编号 ~
+                // this.inputData.productname= this.productname;//产品名称~
+                // this.inputData.productnum= this.productnum;//产品编号~
+                // this.inputData.productmodel= this.productmodel;//产品机型
+                // this.inputData.productspec = this.productspec;//产品规格
+                // this.inputData.productcolor = this.productcolor;//产品颜色
+                // this.selectDataModel(1,10,true)
+                // this.ordernum = null;//生产订单编号 ~
+                // this.productname = null;//产品名称~
+                // this.productnum = null;//产品编号~
+                // this.productmodel = null;//产品机型
+                // this.productspec = null;//产品规格
+                // this.productcolor = null;//产品颜色
+            },
+            CheckTheDetails(index, row){
+                this.$store.state.orgId = ""
+                this.$store.state.orgId = row.id;
+                this.$router.push({ path: '/OrderDetails' })
+            },
+            formatter(row, column) {
+                return row.address;
+            },
+            handleSelectionChange(rows) {
+                this.selectedData = [];
+                if (rows) {
+                    rows.forEach(row => {
+                        if (row) {
+                            this.selectedData.push(row);
+                        }
+                    });
+                }
+            },
+            handleSizeChange(val) {
+                this.selectDataModel(1,val,false)
+                this.pageSize = val;
+                
+            },
+            handleCurrentChange(val) {
+                this.selectDataModel(val,this.pageSize,false)
+            },
+    },
+    created(){
+        this.lodData(1,10)
+    },
+        
+    }
+</script>

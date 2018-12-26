@@ -1,0 +1,214 @@
+<template>
+    <div class="content">
+        <el-form :model="myForm" ref="myForm" class="myForm">
+            <h3>{{addOrUpdateData.title}}</h3>
+            <el-form-item
+                label-width="100px"
+                v-for="item in addOrUpdateData.createForm"
+                :label="item.label"
+                :key="item.inputModel"
+                :prop="item.inputModel">
+
+                <el-input 
+                    v-if="!item.type || item.type == 'input'"
+                    :value="myForm[item.inputModel]"
+                    @input="handleInput($event, item.inputModel)"
+                    style="width:300px;" 
+                    auto-complete="off"
+                    @keyup.enter.native="submit">
+                </el-input>
+                
+                <el-select 
+                    v-else-if="item.type && item.type == 'select'"
+                    :multiple="item.multiple"
+                    :collapse-tags="item.multiple"
+                    v-model="myForm[item.inputModel]"
+                    @input="handleInput($event, item.inputModel)"
+                    :placeholder="item.placeholder"
+                    style="width:300px;">
+                    <el-option
+                        v-for="o in item.options"
+                        :key="o[item.okey]"
+                        :label="o[item.olabel]"
+                        :value="o[item.ovalue]">
+                    </el-option>
+                </el-select>
+                <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'orgCkType'">
+                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="0">是</el-radio>
+                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="1">否</el-radio>
+                </div>
+                <div v-else-if="item.type && item.type == 'radio'">
+                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="0">否</el-radio>
+                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="1">是</el-radio>
+                </div>
+            </el-form-item>
+            <div style="text-align: center;">
+                <el-button size="mini" @click="closeTag">取 消</el-button>
+                <el-button size="mini" type="primary" @click="submit">提 交</el-button>
+            </div>
+        </el-form>
+    </div>
+</template>
+<style>
+    .content {
+        padding: 0px 0px 0px 5px;
+    }
+    h3 {
+        text-align: center;
+        margin-bottom: 20px
+    }
+    .myForm {
+        border: 1px solid gainsboro;
+        width: 440px;
+        padding: 20px;
+    }
+</style>
+
+<script>
+    import store from '../../../../store/store'
+    import {mapState} from 'vuex'
+    import axios from 'axios'
+    import bus from '../../bus';
+    export default {
+        name:'addOrUpdate',
+        comptude:{  
+        },
+        props: {
+            // addOrUpdateData: {
+            //     title: "什么"
+            // },
+            // myForm: {
+            //     type: Object,
+            // }
+        },
+        data(){
+            return {
+                addOrUpdateData: {"title" : null},
+                myForm: {
+                    // ckNo: null,
+                    // ckName: null,
+                    // address: null
+                },
+                submitData: {
+
+                },
+                recentPage: 1,//默认第一页
+                recordCount: 10,//默认10条
+                // 获取row的key值
+                getRowKeys(row) {
+                    if(row.id) {
+                        return row.id;
+                    } else if(row.functionId) {
+                        return row.functionId;
+                    } else {
+                        return "";
+                    }
+                    
+                },
+                selectData: null,
+                tableNumber: null
+            }
+        },
+        mounted() {
+            this.loadData();
+        },
+        methods:{
+            loadData() {
+                this.addOrUpdateData = this.$store.state.addOrUpdateData;
+
+                // 设置默认值
+                let createForm = this.addOrUpdateData.createForm;
+                let setForm = this.addOrUpdateData.setForm;
+                if(setForm) {
+                    createForm.forEach((item, index) => {
+                        if(item.type && item.type == 'select') {
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                            // let selectList = item.selectList;
+                            // this.addOrUpdateData.createForm[index].options = selectList;
+                        } else if(item.type && item.type == 'radio') {
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                        } else {
+                            this.myForm[item.inputModel] = setForm[item.inputModel];
+                        }
+                    });
+                    // console.log(this.myForm);
+                    this.$emit('input', { ...this.myForm });
+                }
+            },
+            handleInput(val, key) {
+                this.myForm[key] = val;
+                // this.$emit('input', { ...this.myForm });
+            },
+            handleCurrentChange(val) {
+                this.recentPage = val;
+                this.$options.methods.loadData.bind(this)();
+            },
+            handleSizeChange(val) {
+                this.recordCount = val;
+                this.$options.methods.loadData.bind(this)();
+            },
+            submit() {
+                let _this = this;
+                let submitData = {};
+                if(_this.addOrUpdateData.submitData) {
+                    submitData = _this.addOrUpdateData.submitData;
+                }
+                let createForm = _this.addOrUpdateData.createForm;
+                createForm.forEach(item => {
+                    submitData[item.inputModel] = _this.myForm[item.inputModel];
+                    if(item.inputModel == "orgArr") {//用户组织，需要做特殊处理
+                        let orgArr = [];
+                        _this.myForm[item.inputModel].forEach(orgId => {
+                            let org = {};
+                            org.orgId = orgId;
+                            orgArr.push(org);
+                        });
+                        submitData[item.inputModel] = orgArr;
+                    }
+                    if(item.inputModel == "password" && submitData[item.inputModel] == "") {//用户密码，若为空，则不需要传
+                        delete submitData[item.inputModel];
+                    }
+                });
+                // console.log(submitData);
+                // return;
+                axios({
+                    method: 'post',
+                    url: _this.addOrUpdateData.submitURL,
+                    data: JSON.stringify(submitData)
+                }).then(function(res){
+                    if(res.data.code && res.data.code == 200) {
+                        _this.$message({
+                            message: '成功',
+                            type: 'success'
+                        });
+                        _this.closeTag();
+                    } else {
+                        _this.$message({
+                            message: res.data.message,
+                            type: 'error'
+                        });
+                    }
+                }).catch(function(err){
+                    // console.log(err);
+                }); 
+            },
+            closeTag() {
+                let tagsList = this.$store.state.tagsList;
+                let index;
+                tagsList.forEach((element, i) => {
+                    if(element.name == this.$options.name) {
+                        index = i;
+                    }
+                });
+                const delItem = this.$store.state.tagsList.splice(index, 1)[0];
+                const item = this.$store.state.tagsList[index] ? this.$store.state.tagsList[index] : this.$store.state.tagsList[index - 1];
+                if (item) {
+                    delItem.path === this.$route.fullPath && this.$router.push(item.path);
+                }else{
+                    this.$router.push('/welcome');
+                }
+            }
+        }
+        
+    }
+</script>
