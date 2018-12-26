@@ -57,10 +57,10 @@
                             </el-form-item>
                             
                             <el-form-item label="快捷沟通" style="width:80%;">
-                                <el-radio v-model="followform.followContent" v-for="item in fastcontactList" :key="item.communicationId" :label="item.name" :value="item.communicationId"></el-radio>
+                                <el-radio v-model="followform.followContent" v-for="item in fastcontactList" :key="item.communicationId" :label="item.content">{{item.name}}</el-radio>
                             </el-form-item>
                             <el-form-item>
-                                <el-button style="float:right;" type="primary" size="mini" @click="Submitfollowform">立即提交</el-button>
+                                <el-button style="float:right;" class="searchbutton" size="mini" @click="Submitfollowform">立即提交</el-button>
                             </el-form-item>
                         </el-form>
                         <ul class="followrecord" v-for="(item,index) in record" :key="item.followId">
@@ -288,7 +288,7 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'getNameSelected.do?cId='+_this.$store.state.iscId,
                 }).then(function(res){
-                    // console.log(res.data)
+                    console.log(res.data)
                     _this.fastcontactList = res.data
                 }).catch(function(err){
                     console.log(err);

@@ -60,7 +60,7 @@
                                 <el-radio v-model="followform.followContent" v-for="item in fastcontactList" :key="item.communicationId" :label="item.name" :value="item.communicationId"></el-radio>
                             </el-form-item>
                             <el-form-item>
-                                <el-button style="float:right;" type="primary" size="mini" @click="Submitfollowform">立即提交</el-button>
+                                <el-button style="float:right;" class="searchbutton" size="mini" @click="Submitfollowform">立即提交</el-button>
                             </el-form-item>
                         </el-form>
                         <ul class="followrecord" v-for="(item,index) in record" :key="item.followId">
