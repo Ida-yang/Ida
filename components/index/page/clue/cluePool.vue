@@ -1,5 +1,5 @@
 <template>
-    <!-- 客户搜索 -->
+    <!-- 线索池 -->
     <div>
         <div class="searchList" style="width:100%;">
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
@@ -427,7 +427,8 @@
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
-                idArr.ids = this.userData.pId
+                idArr.ids = this.idArr.id
+                idArr.pId = this.userData.pId
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId,

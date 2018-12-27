@@ -13,48 +13,58 @@ const state = {
   //登录
   iscId:'',
   ispId:'',
+  user:'',
 
   //标签页
   tagsList:[],
-  
+
+  //添加或修改列表数据
+  addOrUpdateData:null,
+  //跳转详情页列表
+  detailsData:null,
 
 
-  //客户列表
+  //搜索客户列表
   customerList:[],
-  //客户列表总数
+  //搜索客户列表总数
   customerListnumber: 0,
+
   //线索列表
   clueList:[],
   //线索列表总数
   clueListnumber:0,
-  //线索详情列表
-  clueDetailsList:[],
+  //线索详情页联系人列表
+  clueDetailsList:null,
   //线索列表数据
   clueData:null,
-  //添加或修改列表数据
-  addOrUpdateData:null,
-  //线索详情页列表
-  detailsData:null,
   //线索池列表
   cluePoolList:[],
   //线索池列表总数
   cluePoolListnumber:0,
+
   //客户列表
   customerList:[],
   //客户列表总数
   customerListnumber:0,
+  //客户详情页联系人列表
+  customerDetailsList:null,
+  //客户列表数据
+  customerData:null,
   //客户池列表
   customerPoolList:[],
   //客户池列表总数
   customerPoolListnumber:0,
+
   //联系人列表
   contactsList:[],
   //联系人列表总数
   contactsListnumber:0,
+
   //合同列表
   agreementList:[],
   //合同列表总数
   agreementListnumber:0,
+
   //商机列表
   businessOpportunityList:[],
   //商机列表总数
@@ -73,6 +83,10 @@ const mutations = {
   ispId(state,msg){
     state.ispId = msg;
     localStorage.setItem('ispId',msg);
+  },
+  user(state,msg){
+    state.user = msg;
+    localStorage.setItem('user',msg);
   }
 
 }

@@ -111,6 +111,7 @@ export default {
                     })
                 _this.$store.commit('iscId',res.data.map.success.cId)
                 _this.$store.commit('ispId',res.data.map.success.pId)
+                _this.$store.commit('user',res.data.map.success.name)
                 _this.$router.push({path:'/index'})
                 console.log(res)
                 }else {

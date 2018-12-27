@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar" >
         <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#20222a"
-            text-color="#FFFFFF" active-text-color="#ff5722" unique-opened router>
+            text-color="#FFFFFF" active-text-color="#ff6722" unique-opened router>
             <div id="logo" v-if="show">
                 <span style="font-size:16px">云纵CRM信息平台</span>
             </div>
@@ -102,10 +102,6 @@
                     },
                 ],
                 itemtwo: [
-                    // {
-                    //     index:'2',
-                    //     title:'应用'
-                    // },
                     {
                         icon: 'el-icon-new-ziliao',
                         index: '3',
@@ -201,6 +197,7 @@
     .el-submenu__title {
         height: 40px !important;
         line-height: 40px !important;
+        background-color: #fff;
     }
     .sidebar{
         height: 100%;
@@ -209,6 +206,7 @@
         left: 0;
         top: 0;
         bottom: 0px;
+        border-right: 1px solid #ffff00;
         /* overflow-y: scroll; */
     }
     .sidebar::-webkit-scrollbar{

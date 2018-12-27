@@ -69,6 +69,11 @@ const router =new Router({
           meta: { title: '客户',name:'customer' }
         },
         {
+          path: '/customerDetails',
+          component: resolve => require(['../components/index/page/customer/customerDetails.vue'], resolve),
+          meta: { title: '客户详情' }
+        },
+        {
           path: '/customerPool',
           component: resolve => require(['../components/index/page/customer/customerPool.vue'], resolve),
           meta: { title: '客户池',name:'customerPool' }

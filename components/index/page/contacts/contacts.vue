@@ -14,7 +14,7 @@
         </div>
         <div class="entry">
             <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
-            <el-button class="btn info-btn" size="mini" @click="handleDeletes()">删除</el-button>
+            <!-- <el-button class="btn info-btn" size="mini" @click="handleDeletes()">删除</el-button> -->
             <el-popover
             placement="bottom"
             width="100"
@@ -146,10 +146,10 @@
                     <el-button
                     size="mini"
                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button
+                    <!-- <el-button
                     size="mini"
                     type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -333,75 +333,75 @@
                 this.$router.push({ path: '/contactsaddorupdate' });
             },
             handleDeletes(){
-                let _this = this;
-                let qs =require('querystring')
-                let idArr = [];
-                idArr.id = this.idArr.id
-                console.log(idArr.id)
-                _this.$confirm('是否确认删除吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                    axios({
-                        method: 'post',
-                        url:  _this.$store.state.defaultHttp+ 'deleteContacts.do?cId='+_this.$store.state.iscId,
-                        data:qs.stringify(idArr),
-                    }).then(function(res){
-                        console.log(res)
-                        if(res.data && res.data == 'success') {
-                            _this.$message({
-                                message: '删除成功',
-                                type: 'success'
-                            });
-                            _this.$options.methods.reloadTable.bind(_this)(true);
-                        } else {
-                            _this.$message({
-                                message: res.data.msg,
-                                type: 'error'
-                            });
-                        }
-                    }).catch(function(err){
-                        console.log(err);
-                    });
-                });
+                // let _this = this;
+                // let qs =require('querystring')
+                // let idArr = [];
+                // idArr.id = this.idArr.id
+                // console.log(idArr.id)
+                // _this.$confirm('是否确认删除吗？', '提示', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                // }).then(({ value }) => {
+                //     axios({
+                //         method: 'post',
+                //         url:  _this.$store.state.defaultHttp+ 'deleteContacts.do?cId='+_this.$store.state.iscId,
+                //         data:qs.stringify(idArr),
+                //     }).then(function(res){
+                //         console.log(res)
+                //         if(res.data && res.data == 'success') {
+                //             _this.$message({
+                //                 message: '删除成功',
+                //                 type: 'success'
+                //             });
+                //             _this.$options.methods.reloadTable.bind(_this)(true);
+                //         } else {
+                //             _this.$message({
+                //                 message: res.data.msg,
+                //                 type: 'error'
+                //             });
+                //         }
+                //     }).catch(function(err){
+                //         console.log(err);
+                //     });
+                // });
             },
             handleDelete(index,row){
-                let _this = this;
-                let qs =require('querystring')
-                let idArr = [];
-                idArr.id = row.csId
-                console.log(idArr)
-                _this.$confirm('是否确认删除[' + row.name + ']？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                    axios({
-                        method: 'post',
-                        url: _this.$store.state.defaultHttp+'deleteContacts.do?cId='+_this.$store.state.iscId,
-                        data:qs.stringify(idArr),
-                    }).then(function(res){
-                        console.log(res)
-                        if(res.data && res.data == 'success') {
-                            _this.$message({
-                                message: '删除成功',
-                                type: 'success'
-                            });
-                            _this.$options.methods.reloadTable.bind(_this)(true);
-                        } else {
-                            _this.$message({
-                                message: res.data.msg,
-                                type: 'error'
-                            });
-                        }
-                    }).catch(function(err){
-                        console.log(err);
-                    })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '取消删除[' + row.name + ']'
-                    });       
-                });
+                // let _this = this;
+                // let qs =require('querystring')
+                // let idArr = [];
+                // idArr.id = row.csId
+                // console.log(idArr)
+                // _this.$confirm('是否确认删除[' + row.name + ']？', '提示', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                // }).then(({ value }) => {
+                //     axios({
+                //         method: 'post',
+                //         url: _this.$store.state.defaultHttp+'deleteContacts.do?cId='+_this.$store.state.iscId,
+                //         data:qs.stringify(idArr),
+                //     }).then(function(res){
+                //         console.log(res)
+                //         if(res.data && res.data == 'success') {
+                //             _this.$message({
+                //                 message: '删除成功',
+                //                 type: 'success'
+                //             });
+                //             _this.$options.methods.reloadTable.bind(_this)(true);
+                //         } else {
+                //             _this.$message({
+                //                 message: res.data.msg,
+                //                 type: 'error'
+                //             });
+                //         }
+                //     }).catch(function(err){
+                //         console.log(err);
+                //     })
+                // }).catch(() => {
+                //     this.$message({
+                //         type: 'info',
+                //         message: '取消删除[' + row.name + ']'
+                //     });       
+                // });
             },
             showcontactsname(){
                 this.showxingming = !this.showxingming

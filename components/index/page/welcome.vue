@@ -49,7 +49,7 @@
         data(){
             return {
                 date,
-                public_username:'管理员'
+                public_username:this.$store.state.user
             }
         },
         filters: {

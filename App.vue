@@ -279,6 +279,21 @@ a {
     background-color: #ff5722;
     color: #ffffff;
 }
+.el-button--primary{
+    color:#ffffff;
+    background-color:#ff5722;
+    border-color:#ff5722
+}
+.el-button--primary:focus,.el-button--primary:hover{
+    background:#ff5722;
+    border-color:#ff5722;
+    color:#ffffff
+}
+.el-button--primary.is-active,.el-button--primary:active{
+    background:#ff511c;
+    border-color:#ff511c;
+    color:#ffffff
+}
 
 .el-table__expand-icon:after {
     content: "查看";

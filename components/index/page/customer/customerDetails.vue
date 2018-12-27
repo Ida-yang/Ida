@@ -1,28 +1,28 @@
 <template>
-    <!-- 线索详情页 -->
+    <!-- 客户详情页 -->
     <el-row class="content1" :gutter="10">
-        <!-- <p>线索详情页</p> -->
+        <!-- <p>客户详情页</p> -->
         <el-col :span="18">
             <div class="top">
                 <el-card class="box-card" v-model="customerdetail">
                     <div slot="header" class="clearfix">
-                        <span>{{customerdetail.name}}</span>
+                        <span>{{customerdetail[0].pName}}</span>
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
-                        <el-button style="float:right;" class="info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
-                        <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
+                        <el-button style="float:right;" class="info-btn" size="mini" @click="TocustomerPool()">转移至客户池</el-button>
+                        <!-- <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button> -->
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
-                            <li>姓名：<span>{{customerdetail.contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{customerdetail.phone}}</span></li>
-                            <li>固话：<span>{{customerdetail.telephone}}</span></li>
-                            <li>邮箱：<span>{{customerdetail.email}}</span></li>
-                            <li>QQ：<span>{{customerdetail.qq}}</span></li>
-                            <li>微信：<span>{{customerdetail.wechat}}</span></li>
-                            <li>地址：<span>{{customerdetail.address}}</span></li>
-                            <li>职务：<span>{{customerdetail.contacts[0].identity}}</span></li>
-                            <li>性别：<span>{{customerdetail.contacts[0].sex}}</span></li>
-                            <li>备注：<span>{{customerdetail.remark}}</span></li>
+                            <li>姓名：<span>{{customerdetail[0].contacts[0].coName}}</span></li>
+                            <li>手机：<span>{{customerdetail[0].phone}}</span></li>
+                            <li>固话：<span>{{customerdetail[0].telephone}}</span></li>
+                            <li>邮箱：<span>{{customerdetail[0].email}}</span></li>
+                            <li>QQ：<span>{{customerdetail[0].qq}}</span></li>
+                            <li>微信：<span>{{customerdetail[0].wechat}}</span></li>
+                            <li>地址：<span>{{customerdetail[0].address}}</span></li>
+                            <li>职务：<span>{{customerdetail[0].contacts[0].identity}}</span></li>
+                            <li>性别：<span>{{customerdetail[0].contacts[0].sex}}</span></li>
+                            <li>备注：<span>{{customerdetail[0].remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>
@@ -36,28 +36,33 @@
                             <el-form-item prop="followContent">
                                 <el-input type="textarea" placeholder="添加跟进内容" v-model="followform.followContent"></el-input>
                             </el-form-item>
-                            <el-form-item label="联系方式" style="width:28%;" prop="followType">
-                                <el-select v-model="followform.followType" placeholder="请选择" style="width:60%;">
+                            <el-form-item label="联系方式" style="width:300px;" prop="followType">
+                                <el-select v-model="followform.followType" placeholder="请选择" style="width:200px;">
                                     <el-option v-for="item in followTypes" :key="item.value" :value="item.label" :label="item.label"></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="联系人" style="width:28%;" prop="contactsId">
-                                <el-select v-model="followform.contactsId" placeholder="请选择" style="width:60%;">
+                            <el-form-item label="联系人" style="width:300px;" prop="contactsId">
+                                <el-select v-model="followform.contactsId" placeholder="请选择" style="width:200px;">
                                     <el-option v-for="item in contactList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="下次联系时间" style="width:40%;">
+                            <el-form-item label="下次联系时间" style="width:300px;">
                                 <el-date-picker
                                 v-model="followform.contactTime"
                                 type="datetime"
                                 format="yyyy-MM-dd HH:mm:ss"
                                 value-format="yyyy-MM-dd HH:mm:ss"
-                                placeholder="选择日期时间" style="width:60%;">
+                                placeholder="选择日期时间" style="width:200px;">
                                 </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="状态" style="width:300px;margin-left:25px;" prop="state">
+                                <el-select v-model="followform.state" placeholder="请选择" style="width:200px;">
+                                    <el-option v-for="item in stateList" :key="item.index" :label="item.state" :value="item.state"></el-option>
+                                </el-select>
                             </el-form-item>
                             
                             <el-form-item label="快捷沟通" style="width:80%;">
-                                <el-radio v-model="followform.followContent" v-for="item in fastcontactList" :key="item.communicationId" :label="item.name" :value="item.communicationId"></el-radio>
+                                <el-radio v-model="followform.followContent" v-for="item in fastcontactList" :key="item.communicationId" :label="item.content">{{item.name}}</el-radio>
                             </el-form-item>
                             <el-form-item>
                                 <el-button style="float:right;" class="searchbutton" size="mini" @click="Submitfollowform">立即提交</el-button>
@@ -66,8 +71,6 @@
                         <ul class="followrecord" v-for="(item,index) in record" :key="item.followId">
                             <li class="recordicon">
                                 <i class="el-icon-delete delico" @click="deletefollow(index)"></i>
-                                <!-- <div style="height:70px;width: 12px;border-right: 1px solid #c2c4c9;" class="verticalline"></div> -->
-                                <!-- <div id="verticalline"></div> -->
                             </li>
                             <li class="verticalline"></li>
                             <li class="recordcontent">
@@ -82,7 +85,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="联系人" name="second">
                         <el-table
-                        :data="detailsData"
+                        :data="customerDetails"
                         border
                         stripe
                         style="width: 100%">
@@ -190,8 +193,8 @@
         name:'clueDetails',
         store,
         computed: {
-            detailsData(){
-                return store.state.detailsData;
+            customerDetails(){
+                return store.state.customerDetailsList;
             }
         },
         data(){
@@ -202,6 +205,7 @@
                     contactTime:'',
                     contactsId:'',
                     followContent:'',
+                    state:'',
                 },
                 rules: {
                     followContent : [{ required: true, message: '请输入跟进内容', trigger: 'blur' },],
@@ -211,28 +215,23 @@
                     
                 },
                 followTypes:[
-                    {
-                        label:'电话',
-                        value:'0'
-                    },
-                    {
-                        label:'微信',
-                        value:'1'
-                    },
-                    {
-                        label:'QQ',
-                        value:'2'
-                    },
-                    {
-                        label:'邮箱',
-                        value:'3'
-                    }
+                    {label:'电话',value:'1'},
+                    {label:'微信',value:'2'},
+                    {label:'QQ',value:'3'},
+                    {label:'邮箱',value:'4'}
                 ],
+                stateList:[
+                    {state:'初步了解',label:'1',value:'初步了解'},
+                    {state:'拜访',label:'2',value:'拜访'},
+                    {state:'商务',label:'3',value:'商务'},
+                    {state:'合同',label:'4',value:'合同'},
+                    {state:'失败',label:'5',value:'失败'},],
                 searchList:{
                     keyword:null,
                 },
-                // detailsData:null,
-                customerdetail:null,
+                customerdetail:{
+                    pName:'',
+                },
                 record:null,
                 // 获取row的key值
                 getRowKeys(row) {
@@ -274,12 +273,13 @@
                 //详情页联系人
                 axios({
                     method:'post',
-                    url:_this.$store.state.defaultHttp+'customerTwo/getClueContacts.do?cId='+_this.$store.state.iscId+'&customerId='+this.detailData.id,
+                    url:_this.$store.state.defaultHttp+'customerpool/getPoolContacts.do?cId='+_this.$store.state.iscId+'&customeroneId='+this.detailData.id,
+                    data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    // console.log(res)
-                    _this.$store.state.detailsData = res.data
-                    _this.contactList = res.data
-                    _this.followform.contactsId = res.data[0].id
+                    console.log(res.data.map.success)
+                    _this.$store.state.customerDetailsList = res.data.map.success
+                    _this.contactList = res.data.map.success
+                    _this.followform.contactsId = res.data.map.success[0].id
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -296,10 +296,10 @@
                 //加载详情页右侧表格
                 axios({
                     method:'post',
-                    url:_this.$store.state.defaultHttp+'customerTwo/getUserByClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    url:_this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    // console.log(res.data)
+                    // console.log(res.data.map.success)
                     _this.tableData = res.data.map.success
                     _this.tableNumber = res.data.count
                 }).catch(function(err){
@@ -308,20 +308,20 @@
                 //加载跟进记录
                 axios({
                     method:'post',
-                    url:_this.$store.state.defaultHttp+'getFollowStaff.do?cId='+_this.$store.state.iscId+'&customertwoId='+this.detailData.id,
+                    url:_this.$store.state.defaultHttp+'customerpool/getFollowStaffAndpool.do?cId='+_this.$store.state.iscId+'&customerpool_id='+this.detailData.id,
                 }).then(function(res){
                     // console.log(res.data.map.success)
                     _this.record = res.data.map.success
                 }).catch(function(err){
                     console.log(err);
                 });
-                //加载线索详情
+                //加载客户详情
                 axios({
                     method:'post',
-                    url:_this.$store.state.defaultHttp+'customerTwo/selectByPrimaryKey.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
+                    url:_this.$store.state.defaultHttp+'customerpool/getPoolById.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    // console.log(res.data)
-                    _this.customerdetail = res.data
+                    // console.log(res.data.map.success)
+                    _this.customerdetail = res.data.map.success
                     // console.log(_this.customerdetail)
                 }).catch(function(err){
                     console.log(err);
@@ -338,7 +338,7 @@
                 // this.detailData.id = row.id
                 this.$options.methods.loadData.bind(this)(true);
             },
-            cluePool(){
+            TocustomerPool(){
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
@@ -346,7 +346,7 @@
                 console.log(idArr)
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
+                    url:  _this.$store.state.defaultHttp+ 'customerpool/updateTo.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     // console.log(res)
@@ -367,33 +367,33 @@
                 });
             },
             customerSwitching(){
-                let _this = this;
-                let qs =require('querystring')
-                let idArr = [];
-                idArr.id = this.idArr.id
-                idArr.shift()
-                console.log(idArr)
-                axios({
-                    method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
-                    data:qs.stringify(idArr),
-                }).then(function(res){
-                    console.log(res)
-                    if(res.data && res.data == 'success') {
-                        _this.$message({
-                            message: '转换成功',
-                            type: 'success'
-                        });
-                    _this.closeTag();
-                    } else {
-                        _this.$message({
-                            message: res.data,
-                            type: 'error'
-                        });
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                });
+                // let _this = this;
+                // let qs =require('querystring')
+                // let idArr = [];
+                // idArr.id = this.idArr.id
+                // idArr.shift()
+                // console.log(idArr)
+                // axios({
+                //     method: 'post',
+                //     url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
+                //     data:qs.stringify(idArr),
+                // }).then(function(res){
+                //     console.log(res)
+                //     if(res.data && res.data == 'success') {
+                //         _this.$message({
+                //             message: '转换成功',
+                //             type: 'success'
+                //         });
+                //     _this.closeTag();
+                //     } else {
+                //         _this.$message({
+                //             message: res.data,
+                //             type: 'error'
+                //         });
+                //     }
+                // }).catch(function(err){
+                //     console.log(err);
+                // });
             },
             deletefollow(index){
                 let _this = this
@@ -438,7 +438,7 @@
                 console.log(searchList)
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'customerTwo/getUserByClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    url: _this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
                     // console.log(res)
@@ -455,6 +455,7 @@
                 data.contactTime = this.followform.contactTime
                 data.followContent = this.followform.followContent;
                 data.contactsId = this.followform.contactsId;
+                data.state = this.followform.state;
                 data.customerpool_id = this.detailData.id;
                 console.log(data)
 
@@ -473,7 +474,7 @@
                         _this.followform.followContent = ''
                         _this.$store.state.detailsData.submitData = {"id":_this.detailData.id}
                         _this.$options.methods.loadData.bind(_this)(true);
-                        _this.closeTag()
+                        // _this.closeTag()
                     } else {
                         _this.$message({
                             message: res.data.msg,
@@ -495,7 +496,7 @@
                 const delItem = this.$store.state.tagsList.splice(index, 1)[0];
                 const item = this.$store.state.tagsList[index] ? this.$store.state.tagsList[index] : this.$store.state.tagsList[index - 1];
                 if (item) {
-                    delItem.path === this.$route.fullPath && this.$router.push('/clue');
+                    delItem.path === this.$route.fullPath && this.$router.push('/customer');
                 }else{
                     this.$router.push('/welcome');
                 }
@@ -609,7 +610,8 @@
         float: left;
         width:25px;
         height:25px;
-        background-color:#ff8560;
+        background-color:#ff8153;
+        border: 1px solid #ffffff;
         border-radius:50%;
         line-height:25px;
         text-align:center;

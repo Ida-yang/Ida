@@ -87,7 +87,7 @@
                 }
             };
             return {
-                public_username:'1509991560',
+                public_username:this.$store.state.user,
                 dialogFormVisible: false,
                 formLabelWidth: '120px',
                 collapse: false,
@@ -244,7 +244,7 @@
         width: 100%;
         height: 60px;
         font-size: 14px;
-        color: #20222a;
+        color: #000105;
         background: #fdfeff;
         /* background: rgb(90, 100, 248); */
         

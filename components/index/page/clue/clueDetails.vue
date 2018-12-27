@@ -4,25 +4,25 @@
         <!-- <p>线索详情页</p> -->
         <el-col :span="18">
             <div class="top">
-                <el-card class="box-card" v-model="customerdetail">
+                <el-card class="box-card" v-model="cluedetail">
                     <div slot="header" class="clearfix">
-                        <span>{{customerdetail.name}}</span>
+                        <span>{{cluedetail.name}}</span>
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
-                            <li>姓名：<span>{{customerdetail.contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{customerdetail.phone}}</span></li>
-                            <li>固话：<span>{{customerdetail.telephone}}</span></li>
-                            <li>邮箱：<span>{{customerdetail.email}}</span></li>
-                            <li>QQ：<span>{{customerdetail.qq}}</span></li>
-                            <li>微信：<span>{{customerdetail.wechat}}</span></li>
-                            <li>地址：<span>{{customerdetail.address}}</span></li>
-                            <li>职务：<span>{{customerdetail.contacts[0].identity}}</span></li>
-                            <li>性别：<span>{{customerdetail.contacts[0].sex}}</span></li>
-                            <li>备注：<span>{{customerdetail.remark}}</span></li>
+                            <li>姓名：<span>{{cluedetail.contacts[0].coName}}</span></li>
+                            <li>手机：<span>{{cluedetail.phone}}</span></li>
+                            <li>固话：<span>{{cluedetail.telephone}}</span></li>
+                            <li>邮箱：<span>{{cluedetail.email}}</span></li>
+                            <li>QQ：<span>{{cluedetail.qq}}</span></li>
+                            <li>微信：<span>{{cluedetail.wechat}}</span></li>
+                            <li>地址：<span>{{cluedetail.address}}</span></li>
+                            <li>职务：<span>{{cluedetail.contacts[0].identity}}</span></li>
+                            <li>性别：<span>{{cluedetail.contacts[0].sex}}</span></li>
+                            <li>备注：<span>{{cluedetail.remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>
@@ -36,24 +36,29 @@
                             <el-form-item prop="followContent">
                                 <el-input type="textarea" placeholder="添加跟进内容" v-model="followform.followContent"></el-input>
                             </el-form-item>
-                            <el-form-item label="联系方式" style="width:28%;" prop="followType">
-                                <el-select v-model="followform.followType" placeholder="请选择" style="width:60%;">
+                            <el-form-item label="联系方式" style="width:300px;" prop="followType">
+                                <el-select v-model="followform.followType" placeholder="请选择" style="width:200px;">
                                     <el-option v-for="item in followTypes" :key="item.value" :value="item.label" :label="item.label"></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="联系人" style="width:28%;" prop="contactsId">
-                                <el-select v-model="followform.contactsId" placeholder="请选择" style="width:60%;">
+                            <el-form-item label="联系人" style="width:300px;" prop="contactsId">
+                                <el-select v-model="followform.contactsId" placeholder="请选择" style="width:200px;">
                                     <el-option v-for="item in contactList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="下次联系时间" style="width:40%;">
+                            <el-form-item label="下次联系时间" style="width:300px;">
                                 <el-date-picker
                                 v-model="followform.contactTime"
                                 type="datetime"
                                 format="yyyy-MM-dd HH:mm:ss"
                                 value-format="yyyy-MM-dd HH:mm:ss"
-                                placeholder="选择日期时间" style="width:60%;">
+                                placeholder="选择日期时间" style="width:200px;">
                                 </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="状态" style="width:300px;" prop="state">
+                                <el-select v-model="followform.state" placeholder="请选择" style="width:200px;">
+                                    <el-option v-for="item in stateList" :key="item.index" :label="item.state" :value="item.state"></el-option>
+                                </el-select>
                             </el-form-item>
                             
                             <el-form-item label="快捷沟通" style="width:80%;">
@@ -82,7 +87,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="联系人" name="second">
                         <el-table
-                        :data="detailsData"
+                        :data="clueDetails"
                         border
                         stripe
                         style="width: 100%">
@@ -190,8 +195,8 @@
         name:'clueDetails',
         store,
         computed: {
-            detailsData(){
-                return store.state.detailsData;
+            clueDetails(){
+                return store.state.clueDetailsList;
             }
         },
         data(){
@@ -202,6 +207,7 @@
                     contactTime:'',
                     contactsId:'',
                     followContent:'',
+                    state:'',
                 },
                 rules: {
                     followContent : [{ required: true, message: '请输入跟进内容', trigger: 'blur' },],
@@ -211,28 +217,22 @@
                     
                 },
                 followTypes:[
-                    {
-                        label:'电话',
-                        value:'0'
-                    },
-                    {
-                        label:'微信',
-                        value:'1'
-                    },
-                    {
-                        label:'QQ',
-                        value:'2'
-                    },
-                    {
-                        label:'邮箱',
-                        value:'3'
-                    }
+                    {label:'电话',value:'1'},
+                    {label:'微信',value:'2'},
+                    {label:'QQ',value:'3'},
+                    {label:'邮箱',value:'4'}
                 ],
+                stateList:[
+                    {state:'未联系',label:'1',value:'未联系'},
+                    {state:'无效线索',label:'2',value:'无效线索'},
+                    {state:'无需求线索',label:'3',value:'无需求线索'},
+                    {state:'电话错误',label:'4',value:'电话错误'},],
                 searchList:{
                     keyword:null,
                 },
-                // detailsData:null,
-                customerdetail:null,
+                cluedetail:{
+                    // name:'',
+                },
                 record:null,
                 // 获取row的key值
                 getRowKeys(row) {
@@ -274,12 +274,13 @@
                 //详情页联系人
                 axios({
                     method:'post',
-                    url:_this.$store.state.defaultHttp+'customerTwo/getClueContacts.do?cId='+_this.$store.state.iscId+'&customerId='+this.detailData.id,
+                    url:_this.$store.state.defaultHttp+'customerTwo/getClueContacts.do?cId='+_this.$store.state.iscId+'&customeroneId='+this.detailData.id,
+                    data:qs.stringify(pageInfo)
                 }).then(function(res){
                     // console.log(res)
-                    _this.$store.state.detailsData = res.data
-                    _this.contactList = res.data
-                    _this.followform.contactsId = res.data[0].id
+                    _this.$store.state.clueDetailsList = res.data.map.success
+                    _this.contactList = res.data.map.success
+                    _this.followform.contactsId = res.data.map.success[0].id
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -288,7 +289,7 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'getNameSelected.do?cId='+_this.$store.state.iscId,
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.fastcontactList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -320,9 +321,9 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'customerTwo/selectByPrimaryKey.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    // console.log(res.data)
-                    _this.customerdetail = res.data
-                    // console.log(_this.customerdetail)
+                    console.log(res.data)
+                    _this.cluedetail = res.data
+                    // console.log(_this.cluedetail)
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -455,6 +456,7 @@
                 data.contactTime = this.followform.contactTime
                 data.followContent = this.followform.followContent;
                 data.contactsId = this.followform.contactsId;
+                data.state = this.followform.state;
                 data.customertwo_id = this.detailData.id;
                 console.log(data)
 
@@ -473,7 +475,7 @@
                         _this.followform.followContent = ''
                         _this.$store.state.detailsData.submitData = {"id":_this.detailData.id}
                         _this.$options.methods.loadData.bind(_this)(true);
-                        _this.closeTag()
+                        // _this.closeTag()
                     } else {
                         _this.$message({
                             message: res.data.msg,
@@ -609,7 +611,8 @@
         float: left;
         width:25px;
         height:25px;
-        background-color:#ff8560;
+        background-color:#ff8153;
+        border: 1px solid #ffffff;
         border-radius:50%;
         line-height:25px;
         text-align:center;

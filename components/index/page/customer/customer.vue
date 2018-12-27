@@ -30,7 +30,7 @@
         <div class="entry">
             <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
             <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增客户</el-button>
-            <el-button class="btn info-btn" size="mini" @click="customerPool()">转移至客户池</el-button>
+            <el-button class="btn info-btn" size="mini" @click="TocustomerPool()">转移至客户池</el-button>
             <!-- <el-button class="btn info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button> -->
             <el-popover
             placement="bottom"
@@ -395,14 +395,14 @@
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/customeraddorupdate' });
             },
-            customerPool(){
+            TocustomerPool(){
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
+                    url:  _this.$store.state.defaultHttp+ 'customerpool/updateTo.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     // console.log(res)

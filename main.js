@@ -68,6 +68,7 @@ new Vue({
     }
     this.$store.state.iscId = localStorage.getItem('iscId');
     this.$store.state.ispId = localStorage.getItem('ispId');
+    this.$store.state.user = localStorage.getItem('user');
     // if(this.$store.state.userData == null){
     //   this.$store.state.userData = JSON.parse(localStorage.getItem('userData'))
     // }
