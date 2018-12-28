@@ -14,15 +14,15 @@
                     <div class="text item" v-show="thisshow">
                         <ul>
                             <li>姓名：<span>{{customerdetail[0].contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{customerdetail[0].phone}}</span></li>
+                            <!-- <li>手机：<span>{{customerdetail[0].phone}}</span></li> -->
                             <li>电话：<span>{{customerdetail[0].telephone}}</span></li>
                             <li>邮箱：<span>{{customerdetail[0].email}}</span></li>
-                            <li>QQ：<span>{{customerdetail[0].qq}}</span></li>
+                            <!-- <li>QQ：<span>{{customerdetail[0].qq}}</span></li> -->
                             <li>微信：<span>{{customerdetail[0].wechat}}</span></li>
-                            <li>地址：<span>{{customerdetail[0].address}}</span></li>
+                            <!-- <li>地址：<span>{{customerdetail[0].address}}</span></li> -->
                             <li>职务：<span>{{customerdetail[0].contacts[0].identity}}</span></li>
                             <li>性别：<span>{{customerdetail[0].contacts[0].sex}}</span></li>
-                            <li>备注：<span>{{customerdetail[0].remark}}</span></li>
+                            <!-- <li>备注：<span>{{customerdetail[0].remark}}</span></li> -->
                         </ul>
                         <p>&nbsp;</p>
                     </div>

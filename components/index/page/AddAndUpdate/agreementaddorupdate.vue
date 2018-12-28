@@ -1,14 +1,13 @@
 <template>
     <div class="content">
-        <el-form :model="myForm" ref="myForm" class="myForm">
+        <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
             <el-form-item
                 label-width="100px"
                 v-for="item in addOrUpdateData.createForm"
                 :label="item.label"
                 :key="item.inputModel"
-                :prop="item.inputModel"
-                class="agreeform">
+                :prop="item.inputModel">
 
                 <el-input 
                     v-if="!item.type || item.type == 'input'"
@@ -19,40 +18,68 @@
                     @keyup.enter.native="submit">
                 </el-input>
                 <el-input 
-                    v-else-if="item.type && item.type == 'require' && item.inputModel == 'poolName'"
-                    class="require"
-                    :value="myForm[item.inputModel]"
-                    @input="handleoninput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
-                <el-input 
-                    v-else-if="item.type && item.type == 'require'"
-                    class="require"
+                    v-else-if="item.type && item.type == 'number'"
+                    type="number"
                     :value="myForm[item.inputModel]"
                     @input="handleInput($event, item.inputModel)"
                     style="width:90%;" 
                     auto-complete="off">
                 </el-input>
                 <el-select 
+                    v-else-if="item.type && item.type == 'select' && item.inputModel == 'customerpool_id'"
+                    :multiple="item.multiple"
+                    :collapse-tags="item.multiple"
+                    v-model="myForm[item.inputModel]"
+                    @change="handleChange($event, item.inputModel)"
+                    :placeholder="item.placeholder"
+                    style="width:90%;">
+                    <el-option
+                        v-for="item in cusoptions"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                    </el-option>
+                </el-select>
+                <el-select 
+                    v-else-if="item.type && item.type == 'select' && item.inputModel == 'opportunity_id'"
+                    :multiple="item.multiple"
+                    :collapse-tags="item.multiple"
+                    v-model="myForm[item.inputModel]"
+                    @change="handleInput($event, item.inputModel)"
+                    :placeholder="item.placeholder"
+                    style="width:90%;">
+                    <el-option
+                        v-for="item in oppoptions"
+                        :key="item.opportunity_id"
+                        :label="item.opportunity_name"
+                        :value="item.opportunity_id">
+                    </el-option>
+                </el-select>
+                <el-select 
                     v-else-if="item.type && item.type == 'select'"
                     :multiple="item.multiple"
                     :collapse-tags="item.multiple"
                     v-model="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
+                    @change="handleInput($event, item.inputModel)"
                     :placeholder="item.placeholder"
-                    style="width:30px;">
+                    style="width:90%;">
                     <el-option
                         v-for="o in item.options"
-                        :key="o[item.okey]"
-                        :label="o[item.olabel]"
-                        :value="o[item.ovalue]">
+                        :key="o.okey"
+                        :label="o.olabel"
+                        :value="o.ovalue">
                     </el-option>
                 </el-select>
-                <!-- <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'cues'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="0">大数据</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="1">手动新增</el-radio>
-                </div> -->
+                <el-date-picker
+                    v-else-if="item.type && item.type == 'date'"
+                    v-model="myForm[item.inputModel]"
+                    type="date"
+                    @change="handleInput($event, item.inputModel)"
+                    :placeholder="item.placeholder"
+                    format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                    style="width:90%;" 
+                    auto-complete="off">
+                </el-date-picker>
                 <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'sex'">
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
@@ -61,6 +88,14 @@
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
                 </div>
+                <el-input 
+                    v-else-if="item.prop"
+                    prop="item.prop"
+                    :value="myForm[item.inputModel]"
+                    @input="handleInput($event, item.inputModel)"
+                    style="width:90%;" 
+                    auto-complete="off">
+                </el-input>
             </el-form-item>
             <div style="margin-left:60px;">
                 <el-button class="searchbutton" @click="submit">立即提交</el-button>
@@ -68,62 +103,9 @@
                 <el-button @click="closeTag">取消</el-button>
             </div>
         </el-form>
-        <div class="line"></div>
-        <div class="formlist">
-            <el-table
-                :data="tableData"
-                border
-                stripe
-                :default-sort = "{order: 'ascending'}"
-                max-height="580"
-                style="text-align:center">
-                <el-table-column
-                    header-align="center"
-                    align="center"
-                    width="35">
-                    <template slot-scope="scope">
-                        <el-button style="width:15px;height:15px;padding:0;border-radius:50%;" @click="getRow(scope.$index,scope.row)">&nbsp;</el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="name"
-                    header-align="center"
-                    align="left"
-                    min-width="80"
-                    label="公司名称"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="address"
-                    header-align="center"
-                    align="left"
-                    min-width="130"
-                    label="公司地址"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="representative"
-                    header-align="center"
-                    align="left"
-                    min-width="40"
-                    label="法人"
-                    sortable>
-                </el-table-column>
-            </el-table>
-            <div class="block numberPage">
-                <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="page"
-                :page-sizes="[15, 30, 50, 100]"
-                :page-size="15"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="tableNumber">
-                </el-pagination>
-            </div>
-        </div>
     </div>
 </template>
+
 <style>
     .content {
         width: 98%;
@@ -132,26 +114,10 @@
         width: 41%;;
         float: left;
     }
-    .line{
-        float: left;
-        height: 95%;
-        border-left: 1px solid #000;
-        margin-right: 5px;
-    }
-    .formlist{
-        width: 57%;
-        height: auto;
-        /* background-color: pink; */
-        float: left;
-    }
-    .agreeform{
-        margin-bottom: 18px;
-    }
-    .require.el-input::after {
-        position: absolute;
-        right: -15px;
-        content: "*";
-        color: #ee5722;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{
+        -webkit-appearance: none !important;
+        margin: 0;
     }
 </style>
 
@@ -175,64 +141,73 @@
         },
         data(){
             return {
-                tableData:null,
                 addOrUpdateData: {},
                 myForm: {
-                    poolName:null,
-                    address:null,
-                    name:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
+                    contract_type:null,
+                    contract_number:null,
+                    contract_name:null,
+                    customerpool_id:null,
+                    opportunity_id:null,
+                    amount:null,
+                    start_date:null,
+                    end_date:null,
+                    signatories:null,
+                    our_signatories:null,
+                    remarks:null,
                 },
                 subData: {
-                    poolName:null,
-                    address:null,
-                    name:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
+                    contract_type:null,
+                    contract_number:null,
+                    contract_name:null,
+                    customerpool_id:null,
+                    opportunity_id:null,
+                    amount:null,
+                    start_date:null,
+                    end_date:null,
+                    signatories:null,
+                    our_signatories:null,
+                    remarks:null,
                 },
+                cusoptions:null,
+                oppoptions:null,
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
-                tableNumber: null,
+                customerId:null,
+                rules: {
+                    our_signatories : [{ required: true, message: '我方签约人不能为空', trigger: 'blur' },],
+                    signatories : [{ required: true, message: '客户签约人不能为空', trigger: 'blur' },],
+                    end_date : [{ required: true, message: '合同结束时间不能为空', trigger: 'blur' },],
+                    start_date : [{ required: true, message: '合同开始时间不能为空', trigger: 'blur' },],
+                    amount : [{ required: true, message: '合同金额不能为空', trigger: 'blur' },],
+                    customerpool_id : [{ required: true, message: '客户不能为空', trigger: 'blur' },],
+                    contract_type : [{ required: true, message: '合同类型不能为空', trigger: 'blur' },],
+                    contract_number : [{ required: true, message: '合同编号不能为空', trigger: 'blur' },],
+                    contract_name : [{ required: true, message: '合同名称不能为空', trigger: 'blur' },],
+                },
             }
+        },
+        beforeCreate(){
+            let _this = this
+            axios({
+                method:'get',
+                url: _this.$store.state.defaultHttp+'customerpool/getPool.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+            }).then(function(res){
+                console.log(res.data)
+                _this.cusoptions = res.data
+            }).catch(function(err){
+                console.log(err)
+            });
         },
         mounted() {
             this.loadData();
-            this.loadTable();
             // this.restaurants = this.loadData();
         },
         methods:{
-            loadTable(){
-                let _this = this
-                let qs =require('querystring')
-                let pageInfo = {}
-                pageInfo.page = this.page;
-                pageInfo.limit = this.limit;
-                // console.log(pageInfo)
-                axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'rightPoolName.do?cId='+_this.$store.state.iscId,
-                    data: qs.stringify(pageInfo),
-                }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.tableData = res.data.map.success
-                    _this.tableNumber = res.data.count;
-                }).catch(function(err){
-                    console.log(err);
-                });
-            },
             //加载或重载页面
             loadData() {
                 this.addOrUpdateData = this.$store.state.addOrUpdateData;
+                this.oppoptions = this.$store.state.addOrUpdateData.customerpool_id
                 // console.log(this.addOrUpdateData)
 
                 // 设置默认值
@@ -254,34 +229,31 @@
                     this.$emit('input', this.myForm);
                 }
             },
-            handleSelect(item) {
-                console.log(item);
-            },
             handleInput(val, key) {
                 this.myForm[key] = val;
                 // console.log(val)
                 // this.$emit('input', { ...this.myForm });
             },
-            handleoninput(val,key){
-                let _this = this
+            handleChange(val, key){
+                console.log(val)
                 this.myForm[key] = val
-                console.log(this.myForm[key])
-                let qs =require('querystring')
-                let pageInfo = {}
-                pageInfo.page = this.page;
-                pageInfo.limit = this.limit;
-                pageInfo.searchName = val
-                // console.log(pageInfo)
+                this.customerId = val
+                this.loadOpp()
+            },
+            loadOpp(){
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.customerpool_id = this.customerId
                 axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'rightPoolName.do?cId='+_this.$store.state.iscId,
-                    data: qs.stringify(pageInfo),
+                    method:'post',
+                    url: _this.$store.state.defaultHttp+'opportunity/getOpportunityAll.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
                 }).then(function(res){
                     console.log(res.data)
-                    _this.tableData = res.data.map.success
-                    _this.tableNumber = res.data.count;
+                    _this.oppoptions = res.data
                 }).catch(function(err){
-                    console.log(err);
+                    console.log(err)
                 });
             },
             //提交或修改
@@ -291,29 +263,72 @@
                 let subData = {};
                 if(_this.addOrUpdateData.submitData) {
                     subData.id = _this.addOrUpdateData.submitData.id;
+                    subData.csId = _this.addOrUpdateData.submitData.csId;
                 }
                 let createForm = _this.addOrUpdateData.createForm;
                 let flag = false;
                 createForm.forEach(item => {
                     subData[item.inputModel] = _this.myForm[item.inputModel];
-                    console.log(_this.myForm)
-                    if(item.inputModel == "name" && !subData[item.inputModel]) {//联系人名称不能为空
+                    // console.log(_this.myForm)
+                    if(item.inputModel == "our_signatories" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
                         _this.$message({
-                            message: "联系人名称不能为空",
+                            message: "我方签约人不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
-                    if(item.inputModel == "poolName" && !subData[item.inputModel]) {//公司名称不能为空
+                    if(item.inputModel == "signatories" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
                         _this.$message({
-                            message: "公司名称不能为空",
+                            message: "客户签约人不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
-                    if(item.inputModel == "telephone" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
+                    if(item.inputModel == "end_date" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
                         _this.$message({
-                            message: "电话号码不能为空",
+                            message: "合同结束日期不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "start_date" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
+                        _this.$message({
+                            message: "合同开始日期不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "amount" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
+                        _this.$message({
+                            message: "合同金额不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "customerpool_id" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
+                        _this.$message({
+                            message: "客户不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "contract_number" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
+                        _this.$message({
+                            message: "合同编号不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "contract_type" && !subData[item.inputModel]) {//联系人名称不能为空
+                        _this.$message({
+                            message: "合同类型不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "contract_name" && !subData[item.inputModel]) {//公司名称不能为空
+                        _this.$message({
+                            message: "合同名称不能为空",
                             type: 'error'
                         });
                         flag = true;
@@ -329,7 +344,7 @@
                     data: qs.stringify(subData)
                 }).then(function(res){
                     console.log(res)
-                    if(res.data.code && res.data.code == "200") {
+                    if(res.status && res.status == "200") {
                         _this.$message({
                             message: '成功',
                             type: 'success'
@@ -373,16 +388,6 @@
                 // this.$store.state.addOrUpdateData.setForm.address = row.address
                 // this.$options.methods.loadData.bind(this)(true);
                 // console.log(this.myForm);
-            },
-            handleSizeChange(val) {
-                let _this = this;
-                _this.limit = val;
-                _this.$options.methods.loadTable.bind(_this)(true);
-            },
-            handleCurrentChange(val) {
-                let _this = this;
-                _this.page = val;
-                _this.$options.methods.loadTable.bind(_this)(true);
             },
         }
         

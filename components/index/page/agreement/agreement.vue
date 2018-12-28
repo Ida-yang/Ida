@@ -26,7 +26,7 @@
                 <el-checkbox class="checkone" @change="showcusSigning()" label="客户签约人"></el-checkbox>
                 <el-checkbox class="checkone" @change="showwoSigning()" label="我方签约人"></el-checkbox>
                 <el-checkbox class="checkone" @change="showremark()" label="备注"></el-checkbox>
-                <el-checkbox class="checkone" @change="showAlready()" label="已汇款金额"></el-checkbox>
+                <el-checkbox class="checkone" @change="showAlready()" label="已回款金额"></el-checkbox>
                 <el-checkbox class="checkone" @change="showSurplus()" label="剩余款项金额"></el-checkbox>
             </el-checkbox-group>
             <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
@@ -167,7 +167,7 @@
                 header-align="center"
                 align="left"
                 min-width="130"
-                label="已汇款金额"
+                label="已回款金额"
                 sortable>
                 <template slot-scope="scope">
                     <div>
@@ -191,17 +191,17 @@
             </el-table-column>
             <el-table-column label="操作"
                 fixed="right"
-                width="80"
+                width="150"
                 header-align="center"
                 align="center">
                 <template slot-scope="scope">
                     <el-button
                     size="mini"
                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <!-- <el-button
+                    <el-button
                     size="mini"
                     type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -257,7 +257,7 @@
                 idArr:{
                     ids:null,
                 },
-                checklist:['合同编号','合同名称','合同类型','对应客户','商机','合同金额','合同开始日期','合同到期日期','客户签约人','我方签约人','备注','已汇款金额','剩余款项金额'],
+                checklist:['合同编号','合同名称','合同类型','对应客户','商机','合同金额','合同开始日期','合同到期日期','客户签约人','我方签约人','备注','已回款金额','剩余款项金额'],
                 showbianhao:true,
                 showmingcheng:true,
                 showleixing:true,
@@ -307,7 +307,7 @@
                 let newArr = [new Array()];
                 arr.forEach((item) => {
                     if(item.contract_id != 0){
-                        console.log(item.contract_id)
+                        // console.log(item.contract_id)
                         newArr.push(item.contract_id)
                     }
                 });
@@ -318,49 +318,60 @@
                 let detailsData = {};
                 detailsData.submitData = {"id": row.contract_id};
                 this.$store.state.detailsData = detailsData;
-                this.$router.push({ path: '/clueDetails' });
+                this.$router.push({ path: '/agreementDetails' });
             },
             handleDeletes(){
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.ids = this.idArr.ids
-                axios({
-                    method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'delContract.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(idArr),
-                }).then(function(res){
-                    console.log(res)
-                    if(res.status && res.status == 200) {
-                        _this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        _this.$options.methods.reloadTable.bind(_this)(true);
-                    } else {
-                        _this.$message({
-                            message: res.data,
-                            type: 'error'
-                        });
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                });
+                _this.$confirm('是否确认删除[' + row.name + ']？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'post',
+                        url:  _this.$store.state.defaultHttp+ 'delContract.do?cId='+_this.$store.state.iscId,
+                        data:qs.stringify(idArr),
+                    }).then(function(res){
+                        console.log(res)
+                        if(res.status && res.status == 200) {
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadTable.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                })
             },
             handleAdd(){
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "添加线索";
                 addOrUpdateData.createForm = [
-                    {"label":"合同类型","inputModel":"contract_type","type":"radio"},
-                    {"label":"合同编号","inputModel":"contract_number","type":"require"},
-                    {"label":"合同名称","inputModel":"contract_name","type":"require"},
-                    {"label":"客户","inputModel":"customerpool_id","type":"require"},
-                    {"label":"对应商机","inputModel":"opportunity_id"},
-                    {"label":"合同金额","inputModel":"amount"},
-                    {"label":"开始时间","inputModel":"start_date"},
-                    {"label":"结束时间","inputModel":"end_date"},
-                    {"label":"客户签约人","inputModel":"signatories"},
-                    {"label":"我方签约人","inputModel":"our_signatories"},
+                    {"label":"合同类型","inputModel":"contract_type","type":"select","prop":"contract_type","options":[
+                        {"okey":'0',"olabel":"销售合同","ovalue":"销售合同"},
+                        {"okey":'1',"olabel":"采购合同","ovalue":"采购合同"},
+                        {"okey":'2',"olabel":"服务合同","ovalue":"服务合同"},
+                        {"okey":'3',"olabel":"代理合同","ovalue":"代理合同"},
+                        {"okey":'4',"olabel":"其他","ovalue":"其他"},
+                    ]},
+                    {"label":"合同编号","inputModel":"contract_number","prop":"contract_type",},
+                    {"label":"合同名称","inputModel":"contract_name","prop":"contract_name",},
+                    {"label":"客户","inputModel":"customerpool_id","prop":"customerpool_id","type":"select"},
+                    {"label":"对应商机","inputModel":"opportunity_id","prop":"opportunity_id","type":"select"},
+                    {"label":"合同金额","inputModel":"amount","prop":"amount","type":"number"},
+                    {"label":"开始时间","inputModel":"start_date","prop":"start_date","type":"date"},
+                    {"label":"结束时间","inputModel":"end_date","prop":"end_date","type":"date"},
+                    {"label":"客户签约人","inputModel":"signatories","prop":"signatories",},
+                    {"label":"我方签约人","inputModel":"our_signatories","prop":"our_signatories",},
                     {"label":"备注","inputModel":"remarks"}];
                 addOrUpdateData.setForm = {
                     "contract_type": '',
@@ -374,7 +385,7 @@
                     "signatories": '',
                     "our_signatories": '',
                     "remarks": ''};
-                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/saveClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'insertContract.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/agreementaddorupdate' });
             },
@@ -383,16 +394,16 @@
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [
-                    {"label":"合同类型","inputModel":"contract_type","type":"radio"},
-                    {"label":"合同编号","inputModel":"contract_number","type":"require"},
-                    {"label":"合同名称","inputModel":"contract_name","type":"require"},
-                    {"label":"客户","inputModel":"customerpool_id","type":"require"},
-                    {"label":"对应商机","inputModel":"opportunity_id"},
-                    {"label":"合同金额","inputModel":"amount"},
-                    {"label":"开始时间","inputModel":"start_date"},
-                    {"label":"结束时间","inputModel":"end_date"},
-                    {"label":"客户签约人","inputModel":"signatories"},
-                    {"label":"我方签约人","inputModel":"our_signatories"},
+                    {"label":"合同类型","inputModel":"contract_type","type":"select","prop":"contract_type",},
+                    {"label":"合同编号","inputModel":"contract_number","prop":"contract_number",},
+                    {"label":"合同名称","inputModel":"contract_name","prop":"contract_name",},
+                    {"label":"客户","inputModel":"customerpool_id","prop":"customerpool_id","type":"select"},
+                    {"label":"对应商机","inputModel":"opportunity_id","prop":"opportunity_id","type":"select"},
+                    {"label":"合同金额","inputModel":"amount","prop":"amount","type":"number"},
+                    {"label":"开始时间","inputModel":"start_date","prop":"start_date","type":"date"},
+                    {"label":"结束时间","inputModel":"end_date","prop":"end_date","type":"date"},
+                    {"label":"客户签约人","inputModel":"signatories","prop":"signatories",},
+                    {"label":"我方签约人","inputModel":"our_signatories","prop":"our_signatories",},
                     {"label":"备注","inputModel":"remarks"}];
                 addOrUpdateData.setForm = {
                     "contract_type": row.contract_type,
@@ -407,7 +418,7 @@
                     "our_signatories": row.our_signatories,
                     "remarks": row.remarks};
                 addOrUpdateData.submitData = {"id": row.contract_id};
-                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/updateClue.do?cId='+this.$store.state.iscId,
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'updateContract.do?cId='+this.$store.state.iscId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/agreementaddorupdate' });
             },
@@ -422,7 +433,7 @@
                 }).then(({ value }) => {
                     axios({
                         method: 'post',
-                        url: _this.$store.state.defaultHttp+'customerTwo/delete.do?cId='+_this.$store.state.iscId,
+                        url: _this.$store.state.defaultHttp+'delContract.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
                         if(res.status && res.status == 200) {

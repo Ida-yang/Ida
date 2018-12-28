@@ -13,9 +13,13 @@ import store from './store/store';
 import VueResource from 'vue-resource';
 
 import base from './base';
+
+import VueAreaLinkage from 'vue-area-linkage';
+
+
 Vue.use(base)
 
-
+Vue.use(VueAreaLinkage)
 
 Vue.use(VueResource);
 Vue.use(ElementUI);

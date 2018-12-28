@@ -48,7 +48,7 @@
                     </el-option>
                 </el-select>
                 <el-date-picker
-                    v-else-if="item.type && item.type == 'date' && item.inputModel == 'birthday'"
+                    v-else-if="item.type && item.type == 'date'"
                     v-model="myForm[item.inputModel]"
                     type="date"
                     @change="handleInput($event, item.inputModel)"

@@ -1,141 +1,133 @@
 <template>
-  <div>
-    <my-tree :data="theData" :name="menuName" :loading="loading" @getSubMenu="getSubMenu"></my-tree>
+  <div class="linkage">
+    <el-select
+      v-model="sheng"
+      @change="choseProvince"
+      placeholder="省级地区">
+      <el-option
+        v-for="item in province"
+        :key="item.id"
+        :label="item.value"
+        :value="item.id">
+      </el-option>
+    </el-select>
+    <el-select
+      v-model="shi"
+      @change="choseCity"
+      placeholder="市级地区">
+      <el-option
+        v-for="item in shi1"
+        :key="item.id"
+        :label="item.value"
+        :value="item.id">
+      </el-option>
+    </el-select>
+    <el-select
+      v-model="qu"
+      @change="choseBlock"
+      placeholder="区级地区">
+      <el-option
+        v-for="item in qu1"
+        :key="item.id"
+        :label="item.value"
+        :value="item.id">
+      </el-option>
+    </el-select>
   </div>
 </template>
- 
+
 <script>
-const myData = [
-  {
-    id: '1',
-    menuName: '基础管理',
-    menuCode: '10'
-  },
-  {
-    id: '2',
-    menuName: '商品管理',
-    menuCode: ''
-  },
-  {
-    id: '3',
-    menuName: '订单管理',
-    menuCode: '30',
-    children: [
-      {
-        menuName: '订单列表',
-        menuCode: '31'
-      },
-      {
-        menuName: '退货列表',
-        menuCode: '32',
-        children: []
-      }
-    ]
-  },
-  {
-    id: '4',
-    menuName: '商家管理',
-    menuCode: '',
-    children: []
-  }
-];
- 
-const subMenuData1 = {
-  parentId: '1',
-  children: [
-    {
-      menuName: '用户管理',
-      menuCode: '11'
-    },
-    {
-      id: '12',
-      menuName: '角色管理',
-      menuCode: '12',
-      children: [
-        {
-          menuName: '管理员',
-          menuCode: '121'
-        },
-        {
-          menuName: 'CEO',
-          menuCode: '122'
-        },
-        {
-          menuName: 'CFO',
-          menuCode: '123'
-        },
-        {
-          menuName: 'COO',
-          menuCode: '124'
-        },
-        {
-          menuName: '普通人',
-          menuCode: '124'
-        }
-      ]
-    },
-    {
-      menuName: '权限管理',
-      menuCode: '13'
-    }
-  ]
-};
- 
-const subMenuData2 = {
-  parentId: '2',
-  children: [
-    {
-      menuName: '商品一',
-      menuCode: '21'
-    },
-    {
-      id: '22',
-      menuName: '商品二',
-      menuCode: '22',
-      children: [
-        {
-          menuName: '子类商品1',
-          menuCode: '221'
-        },
-        {
-          menuName: '子类商品2',
-          menuCode: '222'
-        }
-      ]
-    }
-  ]
-};
- 
-import myTree from './s'
+import axios from 'axios'
 export default {
-  components: {
-    myTree
-  },
   data () {
     return {
-      theData: myData,
-      menuName: 'menuName', // 显示菜单名称的属性
-      loading: false
+      mapJson:'../../../../static/map.json',
+      province:'',
+      sheng: '',
+      shi: '',
+      shi1: [],
+      qu: '',
+      qu1: [],
+      city:'',
+      block:'',
     }
   },
-  methods: {
-    getSubMenu (menuItem, callback) {
-      this.loading = true;
- 
-      if (menuItem.id === subMenuData1.parentId) {
-        this.loading = false;
-        menuItem.children = subMenuData1.children;
-        callback(menuItem.children);
-      }
- 
-      setTimeout(() => {
-        if (menuItem.id === subMenuData2.parentId) {
-          this.loading = false;
-          menuItem.children = subMenuData2.children;
-          callback(menuItem.children);
+  methods:{
+    // 加载china地点数据，三级
+      getCityData:function(){
+        var that = this
+        axios.get(this.mapJson).then(function(response){
+          if (response.status==200) {
+            var data = response.data
+            that.province = []
+            that.city = []
+            that.block = []
+            // 省市区数据分类
+            for (var item in data) {
+              if (item.match(/0000$/)) {//省
+                that.province.push({id: item, value: data[item], children: []})
+              } else if (item.match(/00$/)) {//市
+                that.city.push({id: item, value: data[item], children: []})
+              } else {//区
+                that.block.push({id: item, value: data[item]})
+              }
+            }
+            // 分类市级
+            for (var index in that.province) {
+              for (var index1 in that.city) {
+                if (that.province[index].id.slice(0, 2) === that.city[index1].id.slice(0, 2)) {
+                  that.province[index].children.push(that.city[index1])
+                }
+              }
+            }
+            // 分类区级
+            for(var item1 in that.city) {
+              for(var item2 in that.block) {
+                if (that.block[item2].id.slice(0, 4) === that.city[item1].id.slice(0, 4)) {
+                  that.city[item1].children.push(that.block[item2])
+                }
+              }
+            }
+          }
+          else{
+            console.log(response.status)
+          }
+        }).catch(function(error){console.log(typeof+ error)})
+      },
+      // 选省
+      choseProvince:function(e) {
+        for (var index2 in this.province) {
+          if (e === this.province[index2].id) {
+            this.shi1 = this.province[index2].children
+            this.shi = this.province[index2].children[0].value
+            this.qu1 =this.province[index2].children[0].children
+            this.qu = this.province[index2].children[0].children[0].value
+            this.E = this.qu1[0].id
+          }
         }
-      }, 2000);
+      },
+      // 选市
+      choseCity:function(e) {
+        for (var index3 in this.city) {
+          if (e === this.city[index3].id) {
+            this.qu1 = this.city[index3].children
+            this.qu = this.city[index3].children[0].value
+            this.E = this.qu1[0].id
+            // console.log(this.E)
+          }
+        }
+      },
+      // 选区
+      choseBlock:function(e) {
+        this.E=e;
+        // console.log(this.E)
+      },
+    },
+    created:function(){
+      this.getCityData()
     }
-  }
 }
 </script>
+
+<style scoped>
+</style>
