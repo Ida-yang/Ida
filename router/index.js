@@ -109,6 +109,11 @@ const router =new Router({
           meta: { title: '组织机构',name:'organization' }
         },
         {
+          path: '/suibian',
+          component: resolve => require(['../components/index/page/organization/name.vue'], resolve),
+          meta: { title: '随便',name:'suibian' }
+        },
+        {
           path: '/user',
           component: resolve => require(['../components/index/page/user/user.vue'], resolve),
           meta: { title: '用户',name:'user' }

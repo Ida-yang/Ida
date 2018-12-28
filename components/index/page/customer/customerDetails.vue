@@ -15,7 +15,7 @@
                         <ul>
                             <li>姓名：<span>{{customerdetail[0].contacts[0].coName}}</span></li>
                             <li>手机：<span>{{customerdetail[0].phone}}</span></li>
-                            <li>固话：<span>{{customerdetail[0].telephone}}</span></li>
+                            <li>电话：<span>{{customerdetail[0].telephone}}</span></li>
                             <li>邮箱：<span>{{customerdetail[0].email}}</span></li>
                             <li>QQ：<span>{{customerdetail[0].qq}}</span></li>
                             <li>微信：<span>{{customerdetail[0].wechat}}</span></li>

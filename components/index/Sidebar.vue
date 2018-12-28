@@ -127,13 +127,13 @@
                                 index: 'contacts',
                                 title: '联系人',
                             },
-                             {
-                                index: 'agreement',
-                                title: '合同',
-                            },
                             {
                                 index: 'businessOpportunity',
                                 title: '商机',
+                            },
+                                                         {
+                                index: 'agreement',
+                                title: '合同',
                             },
                         ]
                     },
@@ -148,6 +148,10 @@
                             {
                                 index: 'organization',
                                 title: '组织机构',
+                            },
+                            {
+                                index: 'suibian',
+                                title: '随便',
                             },
                             {
                                 index: 'user',

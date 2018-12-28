@@ -123,7 +123,7 @@
                 <el-checkbox class="checkone" @change="showrepresent()" label="法人"></el-checkbox>
                 <el-checkbox class="checkone" @change="showdate()" label="成立日期"></el-checkbox>
                 <el-checkbox class="checkone" @change="showphone()" label="手机"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtel()" label="固话"></el-checkbox>
+                <el-checkbox class="checkone" @change="showtel()" label="电话"></el-checkbox>
                 <el-checkbox class="checkone" @change="showemile()" label="邮箱"></el-checkbox>
                 <el-checkbox class="checkone" @change="showweb()" label="网站"></el-checkbox>
                 <el-checkbox class="checkone" @change="showindustry()" label="行业"></el-checkbox>
@@ -359,7 +359,7 @@
                 },
 
                 // showcheck:[{index:0,label:'公司名称'},{index:1,label:'公司地址'},{index:2,label:'注册资金'},{index:3,label:'法人'},{index:4,label:'成立日期'},{index:5,label:'手机'},{index:6,label:'固话'},{index:7,label:'邮箱'},{index:8,label:'网站'},{index:9,label:'行业'},{index:10,label:'企业规模'},],
-                checklist:['公司名称','公司地址','注册资金','法人','成立日期','手机','固话','邮箱','网站','行业','企业规模',],
+                checklist:['公司名称','公司地址','注册资金','法人','成立日期','手机','电话','邮箱','网站','行业','企业规模',],
                 // checklist:[],
                 showmingcheng:true,
                 showdizhi:true,

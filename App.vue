@@ -63,7 +63,7 @@ body,
     line-height: 14px;
 }
 .el-table th {
-        background: #eef1f6 
+    background: #eef1f6 
 }
 .numberPage {
     margin-bottom: 10px;
@@ -129,7 +129,8 @@ a {
 }
 .el-table {
     font-size: 12px;
-    padding-bottom: 15px;
+    padding-bottom: 1px;
+    margin-bottom: 15px;
     color: #000;
 }
 .el-table thead {
@@ -157,9 +158,10 @@ a {
 
 .entry{
     width: 100%;
-    height: 35px;
+    height: 50px;
     background: #f7f7f7;
     border-bottom: 1px solid #ebeef5;
+    padding-left: 4px;
     clear: both;
     position: relative;
 }
@@ -170,7 +172,7 @@ a {
     top: 4px;
 }
 .btn{
-    margin-top:4px;
+    margin-top:15px;
 }
 .info-btn{
     background: #ffffff;
