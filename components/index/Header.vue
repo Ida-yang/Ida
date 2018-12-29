@@ -177,12 +177,12 @@
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if(command == 'loginout'){
-                    axios({
-                        method: 'get',
-                        url: this.$store.state.defaultHttp+this.$store.state.userUrl+'logout',
-                    }).then(function(res){}).catch(function(err){});
-                    localStorage.removeItem('ms_username');
-                    localStorage.removeItem('userData');
+                    // axios({
+                    //     method: 'get',
+                    //     url: this.$store.state.defaultHttp+this.$store.state.userUrl+'logout',
+                    // }).then(function(res){}).catch(function(err){});
+                    // localStorage.removeItem('ms_username');
+                    // localStorage.removeItem('userData');
                     this.$router.push('/login');
                 }
                 if(command == 'resPassWord'){

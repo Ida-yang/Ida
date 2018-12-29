@@ -24,7 +24,7 @@
         </div>
         <div class="entry">
             <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
-            <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增线索</el-button>
+            <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
             <el-button class="btn info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
             <el-button class="btn info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
             <el-popover
@@ -331,6 +331,9 @@
                     {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
+                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
+                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
+                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
@@ -339,6 +342,9 @@
                     "contactsName": '',
                     "telphone": '',
                     "phone": '',
+                    "country":'',
+                    "city":'',
+                    "area":'',
                     "qq": '',
                     "sex": '',
                     "identity": '',
@@ -361,6 +367,9 @@
                     {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
+                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
+                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
+                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
@@ -369,6 +378,9 @@
                     "contactsName": row.contacts[0].coName,
                     "telphone": row.contacts[0].telephone,
                     "phone": row.contacts[0].phone,
+                    "country":row.country,
+                    "city":row.city,
+                    "area":row.area,
                     "qq": row.contacts[0].qq,
                     "sex": row.contacts[0].sex,
                     "identity": row.contacts[0].identity,

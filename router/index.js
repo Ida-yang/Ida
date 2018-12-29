@@ -7,12 +7,16 @@ Vue.use(Router)
 
 const router =new Router({
   
-  mode: "history",/**** 部署时要删除（注释），再进行打包 ****/
+  // mode: "history",/**** 部署时要删除（注释），再进行打包 ****/
   
   routes: [
     {
       path: '*',
       redirect: '/index'
+    },
+    {
+      path: '/',
+      component: resolve => require(['../components/Login.vue'], resolve)
     },
     {
       path: '/login',

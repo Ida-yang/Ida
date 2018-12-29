@@ -284,6 +284,9 @@
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},
+                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
+                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
+                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
@@ -291,6 +294,9 @@
                     "poolName": '',
                     "telephone": '',
                     "phone": '',
+                    "country":'',
+                    "city":'',
+                    "area":'',
                     "qq": '',
                     "sex": '',
                     "birthday":'',
@@ -313,6 +319,9 @@
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},
+                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
+                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
+                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
@@ -320,6 +329,9 @@
                     "poolName": row.poolname,
                     "telephone": row.telephone,
                     "phone": row.phone,
+                    "country":row.country,
+                    "city":row.city,
+                    "area":row.area,
                     "qq": row.qq,
                     "sex": row.sex,
                     "birthday":row.birthday,

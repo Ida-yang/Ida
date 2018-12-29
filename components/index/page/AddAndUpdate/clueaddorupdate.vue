@@ -32,14 +32,45 @@
                     style="width:90%;" 
                     auto-complete="off">
                 </el-input>
-                <el-input 
-                    v-else-if="item.prop"
-                    prop="item.prop"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
+                <el-select 
+                    v-else-if="item.inputModel == 'country'"
+                    v-model="myForm[item.inputModel]"
+                    @change="choseProvince"
+                    :placeholder="item.placeholder"
+                    style="width:90%;">
+                    <el-option
+                        v-for="o in Provinces"
+                        :key="o.id"
+                        :label="o.value"
+                        :value="o.value">
+                    </el-option>
+                </el-select>
+                <el-select
+                    v-else-if="item.inputModel == 'city'"
+                    v-model="myForm[item.inputModel]"
+                    @change="choseCity"
+                    :placeholder="item.placeholder"
+                    style="width:90%;">
+                    <el-option
+                        v-for="o in shi1"
+                        :key="o.id"
+                        :label="o.value"
+                        :value="o.value">
+                    </el-option>
+                </el-select>
+                <el-select
+                    v-else-if="item.inputModel == 'area'"
+                    v-model="myForm[item.inputModel]"
+                    @change="choseBlock"
+                    :placeholder="item.placeholder"
+                    style="width:90%;">
+                    <el-option
+                        v-for="o in qu1"
+                        :key="o.id"
+                        :label="o.value"
+                        :value="o.value">
+                    </el-option>
+                </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select'"
                     :multiple="item.multiple"
@@ -67,6 +98,14 @@
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
                 </div>
+                <el-input 
+                    v-else-if="item.prop"
+                    prop="item.prop"
+                    :value="myForm[item.inputModel]"
+                    @input="handleInput($event, item.inputModel)"
+                    style="width:90%;" 
+                    auto-complete="off">
+                </el-input>
             </el-form-item>
             <div style="margin-left:60px;">
                 <el-button class="searchbutton" @click="submit">立即提交</el-button>
@@ -195,6 +234,9 @@
                 myForm: {
                     poolName:null,
                     address:null,
+                    country:null,
+                    city:null,
+                    area:null,
                     contactsName:null,
                     telphone:null,
                     phone:null,
@@ -206,6 +248,9 @@
                 subData: {
                     poolName:null,
                     address:null,
+                    country:null,
+                    city:null,
+                    area:null,
                     contactsName:null,
                     telphone:null,
                     phone:null,
@@ -214,6 +259,15 @@
                     identity:null,
                     remark:null,
                 },
+                mapJson:'../../../../static/map.json',
+                Provinces:'',
+                country: '',
+                city: '',
+                shi1: [],
+                area: '',
+                qu1: [],
+                Citys:'',
+                block:'',
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
@@ -227,6 +281,9 @@
                     // qq : [{ type: 'number', message: 'QQ仅能输入数字', trigger: 'blur' },],
                 },
             }
+        },
+        created(){
+            this.getCityData()
         },
         mounted() {
             this.loadData();
@@ -398,6 +455,80 @@
                 // this.$options.methods.loadData.bind(this)(true);
                 // console.log(this.myForm);
             },
+
+            // 加载china地点数据，三级
+            getCityData(){
+                var that = this
+                axios.get(this.mapJson).then(function(res){
+                    console.log(res)
+                if (res.status==200) {
+                    var data = res.data
+                    that.Provinces = []
+                    that.Citys = []
+                    that.block = []
+                    // 省市区数据分类
+                    for (var item in data) {
+                    if (item.match(/0000$/)) {//省
+                        that.Provinces.push({id: item, value: data[item], children: []})
+                    } else if (item.match(/00$/)) {//市
+                        that.Citys.push({id: item, value: data[item], children: []})
+                    } else {//区
+                        that.block.push({id: item, value: data[item]})
+                    }
+                    }
+                    // 分类市级
+                    for (var index in that.Provinces) {
+                    for (var index1 in that.Citys) {
+                        if (that.Provinces[index].id.slice(0, 2) === that.Citys[index1].id.slice(0, 2)) {
+                        that.Provinces[index].children.push(that.Citys[index1])
+                        }
+                    }
+                    }
+                    // 分类区级
+                    for(var item1 in that.Citys) {
+                    for(var item2 in that.block) {
+                        if (that.block[item2].id.slice(0, 4) === that.Citys[item1].id.slice(0, 4)) {
+                        that.Citys[item1].children.push(that.block[item2])
+                        }
+                    }
+                    }
+                }
+                else{
+                    console.log(res.status)
+                }
+                }).catch(function(error){
+                    console.log(typeof+ error)
+                })
+            },
+            // 选省
+            choseProvince(e) {
+                for (var index2 in this.Provinces) {
+                if (e === this.Provinces[index2].value) {
+                    this.shi1 = this.Provinces[index2].children
+                    this.city = this.Provinces[index2].children[0].value
+                    this.qu1 =this.Provinces[index2].children[0].children
+                    this.area = this.Provinces[index2].children[0].children[0].value
+                    this.E = this.qu1[0].id
+                }
+                }console.log(this.myForm.country)
+            },
+            // 选市
+            choseCity(e) {
+                for (var index3 in this.Citys) {
+                if (e === this.Citys[index3].value) {
+                    this.qu1 = this.Citys[index3].children
+                    this.area = this.Citys[index3].children[0].value
+                    this.E = this.qu1[0].id
+                    // console.log(this.E)
+                }
+                }console.log(this.myForm.city)
+            },
+            // 选区
+            choseBlock(e) {
+                this.E=e;
+                console.log(this.myForm.area)
+            },
+
             handleSizeChange(val) {
                 let _this = this;
                 _this.limit = val;
