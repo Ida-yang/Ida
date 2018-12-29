@@ -268,12 +268,12 @@ a {
 .el-upload--text em {
     font-style: normal;
 }
-.el-pager li.active {
-    color: #ff5722 !important;
-    cursor: default;
-}
 .el-pager li:hover {
     color: #5281c7 !important;
+    cursor: default;
+}
+.el-pager li.active {
+    color: #ff5722 !important;
     cursor: default;
 }
 

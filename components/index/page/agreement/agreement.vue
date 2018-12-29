@@ -471,7 +471,7 @@
                 //     console.log(res)
                 //     if(res.status && res.status == 200) {
                 //         _this.$message({
-                //             message: '转入成功',
+                //             message: '转移成功',
                 //             type: 'success'
                 //         });
                 //         _this.$options.methods.reloadTable.bind(_this)(true);
