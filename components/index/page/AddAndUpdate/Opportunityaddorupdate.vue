@@ -26,51 +26,12 @@
                     auto-complete="off">
                 </el-input>
                 <el-input 
-                    v-else-if="item.type && item.type == 'require' && item.inputModel == 'poolName'"
+                    v-else-if="item.type && item.type == 'require' && item.inputModel == 'opportunity_name'"
                     :value="myForm[item.inputModel]"
                     @input="handleoninput($event, item.inputModel)"
                     style="width:90%;" 
                     auto-complete="off">
                 </el-input>
-                <el-select 
-                    v-else-if="item.inputModel == 'country'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseProvince"
-                    :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in Provinces"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
-                </el-select>
-                <el-select
-                    v-else-if="item.inputModel == 'city'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseCity"
-                    :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in shi1"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
-                </el-select>
-                <el-select
-                    v-else-if="item.inputModel == 'area'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseBlock"
-                    :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in qu1"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
-                </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select'"
                     :multiple="item.multiple"
@@ -78,7 +39,7 @@
                     v-model="myForm[item.inputModel]"
                     @select="handleInput($event, item.inputModel)"
                     :placeholder="item.placeholder"
-                    style="width:30px;">
+                    style="width:30%;">
                     <el-option
                         v-for="o in item.options"
                         :key="o[item.okey]"
@@ -149,7 +110,7 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="address"
+                    prop="opportunity_number"
                     header-align="center"
                     align="left"
                     min-width="130"
@@ -208,7 +169,6 @@
 
 <script>
     import store from '../../../../store/store'
-    import {pca,pcaa} from 'area-data'
     import {mapState} from 'vuex'
     import axios from 'axios'
     import bus from '../../bus';
@@ -229,57 +189,41 @@
                 tableData:null,
                 addOrUpdateData: {},
                 myForm: {
-                    poolName:null,
-                    address:null,
-                    country:null,
-                    city:null,
-                    area:null,
-                    name:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    birthday:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
+                    opportunity_name:null,
+                    opportunity_number:null,
+                    opportunity_time:null,
+                    customerpool_id:null,
+                    contacts_id:null,
+                    opportunity_achievement:null,
+                    opportunity_deal:null,
+                    bumen:null,
+                    jigou:null,
+                    user_id:null,
+                    opportunity_remarks:null,
                 },
                 subData: {
-                    poolName:null,
-                    address:null,
-                    country:null,
-                    city:null,
-                    area:null,
-                    name:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    birthday:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
+                    opportunity_name:null,
+                    opportunity_number:null,
+                    opportunity_time:null,
+                    customerpool_id:null,
+                    contacts_id:null,
+                    opportunity_achievement:null,
+                    opportunity_deal:null,
+                    bumen:null,
+                    jigou:null,
+                    user_id:null,
+                    opportunity_remarks:null,
                 },
-                mapJson:'../../../../dist/static/map.json',
-                Provinces:'',
-                country: '',
-                city: '',
-                shi1: [],
-                area: '',
-                qu1: [],
-                Citys:'',
-                block:'',
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
                 tableNumber: null,
                 rules: {
-                    poolName : [{ required: true, message: '公司名称不能为空', trigger: 'blur' },],
+                    opportunity_name : [{ required: true, message: '公司名称不能为空', trigger: 'blur' },],
                     name : [{ required: true, message: '联系人名称不能为空', trigger: 'blur' },],
                     telephone : [{ required: true, message: '电话不能为空', trigger: 'blur' },],
                 },
             }
-        },
-        created(){
-            this.getCityData()
         },
         mounted() {
             this.loadData();
@@ -382,7 +326,7 @@
                         });
                         flag = true;
                     }
-                    if(item.inputModel == "poolName" && !subData[item.inputModel]) {//公司名称不能为空
+                    if(item.inputModel == "opportunity_name" && !subData[item.inputModel]) {//公司名称不能为空
                         _this.$message({
                             message: "公司名称不能为空",
                             type: 'error'
@@ -407,18 +351,18 @@
                     data: qs.stringify(subData)
                 }).then(function(res){
                     console.log(res)
-                    if(res.data.code && res.data.code == "200") {
-                        _this.$message({
-                            message: '成功',
-                            type: 'success'
-                        });
-                        _this.closeTag();
-                    } else {
-                        _this.$message({
-                            message: res.data.msg,
-                            type: 'error'
-                        });
-                    }
+                    // if(res.status && res.status == "200") {
+                    //     _this.$message({
+                    //         message: '成功',
+                    //         type: 'success'
+                    //     });
+                    //     _this.closeTag();
+                    // } else {
+                    //     _this.$message({
+                    //         message: res.data.msg,
+                    //         type: 'error'
+                    //     });
+                    // }
                 }).catch(function(err){
                     console.log(err);
                 }); 
@@ -442,88 +386,15 @@
             },
             //获取table的索引和行数据，当该行被点击时，将公司名称地址填充到表单（会刷新当前页面，之前填写的信息会被覆盖）
             getRow(index,row){
-                // console.log(row.address)
-                this.myForm.poolName = row.name
-                this.myForm.address = row.address
+                // console.log(row.opportunity_number)
+                this.myForm.opportunity_name = row.name
+                this.myForm.opportunity_number = row.opportunity_number
                 // this.addOrUpdateData.setForm.name = row.name
-                // this.addOrUpdateData.setForm.address = row.address
-                // this.$store.state.addOrUpdateData.setForm.poolName = row.name
-                // this.$store.state.addOrUpdateData.setForm.address = row.address
+                // this.addOrUpdateData.setForm.opportunity_number = row.opportunity_number
+                // this.$store.state.addOrUpdateData.setForm.opportunity_name = row.name
+                // this.$store.state.addOrUpdateData.setForm.opportunity_number = row.opportunity_number
                 // this.$options.methods.loadData.bind(this)(true);
                 // console.log(this.myForm);
-            },
-            
-            // 加载china地点数据，三级
-            getCityData(){
-                var that = this
-                axios.get(this.mapJson).then(function(res){
-                    console.log(res)
-                if (res.status==200) {
-                    var data = res.data
-                    that.Provinces = []
-                    that.Citys = []
-                    that.block = []
-                    // 省市区数据分类
-                    for (var item in data) {
-                    if (item.match(/0000$/)) {//省
-                        that.Provinces.push({id: item, value: data[item], children: []})
-                    } else if (item.match(/00$/)) {//市
-                        that.Citys.push({id: item, value: data[item], children: []})
-                    } else {//区
-                        that.block.push({id: item, value: data[item]})
-                    }
-                    }
-                    // 分类市级
-                    for (var index in that.Provinces) {
-                    for (var index1 in that.Citys) {
-                        if (that.Provinces[index].id.slice(0, 2) === that.Citys[index1].id.slice(0, 2)) {
-                        that.Provinces[index].children.push(that.Citys[index1])
-                        }
-                    }
-                    }
-                    // 分类区级
-                    for(var item1 in that.Citys) {
-                    for(var item2 in that.block) {
-                        if (that.block[item2].id.slice(0, 4) === that.Citys[item1].id.slice(0, 4)) {
-                        that.Citys[item1].children.push(that.block[item2])
-                        }
-                    }
-                    }
-                }
-                else{
-                    console.log(res.status)
-                }
-                }).catch(function(error){
-                    console.log(typeof+ error)
-                })
-            },
-            // 选省
-            choseProvince(e) {
-                for (var index2 in this.Provinces) {
-                if (e === this.Provinces[index2].value) {
-                    this.shi1 = this.Provinces[index2].children
-                    this.city = this.Provinces[index2].children[0].value
-                    this.qu1 =this.Provinces[index2].children[0].children
-                    this.area = this.Provinces[index2].children[0].children[0].value
-                    this.E = this.qu1[0].id
-                }
-                }console.log(this.myForm.country)
-            },
-            // 选市
-            choseCity(e) {
-                for (var index3 in this.Citys) {
-                if (e === this.Citys[index3].value) {
-                    this.qu1 = this.Citys[index3].children
-                    this.area = this.Citys[index3].children[0].value
-                    this.E = this.qu1[0].id
-                    // console.log(this.E)
-                }
-                }console.log(this.myForm.city)
-            },
-            // 选区
-            choseBlock(e) {
-                this.E=e;
-                console.log(this.myForm.area)
             },
             handleSizeChange(val) {
                 let _this = this;

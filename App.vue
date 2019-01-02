@@ -277,6 +277,11 @@ a {
     cursor: default;
 }
 
+.hoverline:hover{
+        color: blue;
+        text-decoration:underline;
+    }
+
 .searchbutton{
     background-color: #ff5722;
     color: #ffffff;

@@ -259,7 +259,7 @@
                     identity:null,
                     remark:null,
                 },
-                mapJson:'../../../../static/map.json',
+                mapJson:'../../../../dist/static/map.json',
                 Provinces:'',
                 country: '',
                 city: '',

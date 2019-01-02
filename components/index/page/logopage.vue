@@ -1,6 +1,6 @@
 <template>
     <div class="logoColor">
-        <img class="logoImg" src="../../assets/image/icon.png">
+        <img class="logoImg" src="../../assets/img/icon.png">
         <span class="logiTitle">{{compy}}</span>
         <span slot="title" class="logoSpan">{{name}}</span>
     </div>

@@ -58,7 +58,7 @@
             ref="multipleTable"
             border
             stripe
-            :default-sort = "{order: 'ascending'}"
+            :default-sort = "{prop:'pName',order: 'descending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >
@@ -81,7 +81,7 @@
                 label="公司名称"
                 sortable>
                 <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)">
+                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
                         {{scope.row.pName}}
                     </div>
                 </template>
@@ -341,7 +341,7 @@
                     // {"label":"线索来源","inputModel":"cues","type":"radio"},
                     {"label":"公司名称","inputModel":"poolName","prop":"poolName","type":"require"},
                     {"label":"联系人","inputModel":"contactsName","prop":"contactsName"},
-                    {"label":"电话","inputModel":"telphone","prop":"telphone"},
+                    {"label":"电话","inputModel":"telphone","prop":"telphone","type":"number"},
                     {"label":"手机","inputModel":"phone","prop":"phone","type":"number"},
                     {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
@@ -377,7 +377,7 @@
                     // {"label":"线索来源","inputModel":"cues","type":"radio"},
                     {"label":"客户名称","inputModel":"poolName","prop":"poolName","type":"require"},
                     {"label":"联系人","inputModel":"contactsName","prop":"contactsName"},
-                    {"label":"电话","inputModel":"telphone","prop":"telphone"},
+                    {"label":"电话","inputModel":"telphone","prop":"telphone","type":"number"},
                     {"label":"手机","inputModel":"phone","prop":"phone","type":"number"},
                     {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},

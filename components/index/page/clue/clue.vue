@@ -20,7 +20,7 @@
             <span class="nameList">公司名称：</span>
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;
-            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()"></el-button>
+            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
         </div>
         <div class="entry">
             <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
@@ -50,10 +50,10 @@
         </div>
         <el-table
             :data="tableData"
+            :default-sort = "{prop:'contacts[0].coName',order: 'descending'}"
             ref="multipleTable"
             border
             stripe
-            :default-sort = "{order: 'ascending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >
@@ -86,7 +86,7 @@
                 label="公司名称"
                 sortable>
                 <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)">
+                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
                         {{scope.row.name}}
                     </div>
                 </template>
@@ -515,4 +515,5 @@
     .el-row{
         margin-bottom: 10px;
     }
+    
 </style>

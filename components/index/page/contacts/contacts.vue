@@ -40,7 +40,7 @@
             ref="multipleTable"
             border
             stripe
-            :default-sort= "{order: 'ascending'}"
+            :default-sort= "{prop:'name',order: 'descending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >
@@ -278,9 +278,9 @@
                 addOrUpdateData.createForm = [
                     {"label":"联系人","inputModel":"name","prop":"name"},
                     {"label":"公司名称","inputModel":"poolName","type":"require"},
-                    {"label":"电话","inputModel":"telephone","prop":"telephone"},
-                    {"label":"手机","inputModel":"phone"},
-                    {"label":"QQ","inputModel":"qq"},
+                    {"label":"电话","inputModel":"telephone","prop":"telephone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},
@@ -313,9 +313,9 @@
                 addOrUpdateData.createForm = [
                     {"label":"联系人","inputModel":"name","prop":"name"},
                     {"label":"客户名称","inputModel":"poolName","type":"require"},
-                    {"label":"电话","inputModel":"telephone","prop":"telephone"},
-                    {"label":"手机","inputModel":"phone"},
-                    {"label":"QQ","inputModel":"qq"},
+                    {"label":"电话","inputModel":"telephone","prop":"telephone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},

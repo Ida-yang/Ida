@@ -42,6 +42,7 @@
                 </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select' && item.inputModel == 'opportunity_id'"
+                    filterable
                     :multiple="item.multiple"
                     :collapse-tags="item.multiple"
                     v-model="myForm[item.inputModel]"

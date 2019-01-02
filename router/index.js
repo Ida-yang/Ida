@@ -30,102 +30,112 @@ const router =new Router({
         {
           path: '/',
           component: resolve => require(['../components/index/page/welcome.vue'], resolve),
-          meta: { title: '欢迎页面' }
+          meta: { title: '欢迎页面' ,requireAuth:true}
         },
         {
           path: '/welcome',
           component: resolve => require(['../components/index/page/welcome.vue'], resolve),
-          meta: { title: '欢迎页面' }
+          meta: { title: '欢迎页面' ,requireAuth:true}
         },
         {
           path: '/customerSearch',
           component: resolve => require(['../components/index/page/customerSearch/customerSearch.vue'], resolve),
-          meta: { title: '搜索客户',name:'customerSearch' }
+          meta: { title: '搜索客户',name:'customerSearch' ,requireAuth:true}
         },
         {
           path: '/automaticSearch',
           component: resolve => require(['../components/index/page/customerSearch/automaticSearch.vue'], resolve),
-          meta: { title: '智能获客' }
+          meta: { title: '智能获客' ,requireAuth:true}
         },
         {
           path: '/clue',
           component: resolve => require(['../components/index/page/clue/clue.vue'], resolve),
-          meta: { title: '线索',name:'clue' }
+          meta: { title: '线索',name:'clue' ,requireAuth:true}
         },
         {
           path: '/clueDetails',
           component: resolve => require(['../components/index/page/clue/clueDetails.vue'], resolve),
-          meta: { title: '线索详情' }
+          meta: { title: '线索详情' ,requireAuth:true}
         },
         {
           path: '/clueaddorupdate',
           component: resolve => require(['../components/index/page/AddAndUpdate/clueaddorupdate.vue'], resolve),
-          meta: { title: '编辑线索' }
+          meta: { title: '编辑线索' ,requireAuth:true}
         },
         {
           path: '/cluePool',
           component: resolve => require(['../components/index/page/clue/cluePool.vue'], resolve),
-          meta: { title: '线索池',name:'cluePool' }
+          meta: { title: '线索池',name:'cluePool' ,requireAuth:true}
         },
         {
           path: '/customer',
           component: resolve => require(['../components/index/page/customer/customer.vue'], resolve),
-          meta: { title: '客户',name:'customer' }
+          meta: { title: '客户',name:'customer' ,requireAuth:true}
         },
         {
           path: '/customerDetails',
           component: resolve => require(['../components/index/page/customer/customerDetails.vue'], resolve),
-          meta: { title: '客户详情' }
+          meta: { title: '客户详情' ,requireAuth:true}
         },
         {
           path: '/customerPool',
           component: resolve => require(['../components/index/page/customer/customerPool.vue'], resolve),
-          meta: { title: '客户池',name:'customerPool' }
+          meta: { title: '客户池',name:'customerPool' ,requireAuth:true}
         },
         {
           path: '/contacts',
           component: resolve => require(['../components/index/page/contacts/contacts.vue'], resolve),
-          meta: { title: '联系人',name:'contacts' }
+          meta: { title: '联系人',name:'contacts' ,requireAuth:true}
         },
         {
           path: '/contactsaddorupdate',
           component: resolve => require(['../components/index/page/AddAndUpdate/contactsaddorupdate.vue'], resolve),
-          meta: { title: '编辑联系人' }
+          meta: { title: '编辑联系人' ,requireAuth:true}
         },
         {
           path: '/agreement',
           component: resolve => require(['../components/index/page/agreement/agreement.vue'], resolve),
-          meta: { title: '合同',name:'agreement' }
+          meta: { title: '合同',name:'agreement' ,requireAuth:true}
         },
         {
           path: '/agreementaddorupdate',
           component: resolve => require(['../components/index/page/AddAndUpdate/agreementaddorupdate.vue'], resolve),
-          meta: { title: '编辑合同' }
+          meta: { title: '编辑合同' ,requireAuth:true}
         },
         {
           path: '/businessOpportunity',
           component: resolve => require(['../components/index/page/businessOpportunity/businessOpportunity.vue'], resolve),
-          meta: { title: '商机',name:'businessOpportunity' }
+          meta: { title: '商机',name:'businessOpportunity' ,requireAuth:true}
+        },
+        {
+          path: '/businessOpportunityDetails',
+          component: resolve => require(['../components/index/page/businessOpportunity/businessOpportunityDetails.vue'], resolve),
+          meta: { title: '商机详情' ,requireAuth:true}
+        },
+        {
+          path: '/Opportunityaddorupdate',
+          component: resolve => require(['../components/index/page/AddAndUpdate/Opportunityaddorupdate.vue'], resolve),
+          meta: { title: '编辑商机' ,requireAuth:true}
         },
         {
           path: '/organization',
           component: resolve => require(['../components/index/page/organization/organization.vue'], resolve),
-          meta: { title: '组织机构',name:'organization' }
+          meta: { title: '组织机构',name:'organization' ,requireAuth:true}
         },
         {
           path: '/suibian',
           component: resolve => require(['../components/index/page/organization/name.vue'], resolve),
-          meta: { title: '随便',name:'suibian' }
+          meta: { title: '随便',name:'suibian' ,requireAuth:true}
         },
         {
           path: '/user',
           component: resolve => require(['../components/index/page/user/user.vue'], resolve),
-          meta: { title: '用户',name:'user' }
+          meta: { title: '用户',name:'user' ,requireAuth:true}
         },
         {
           path: '/customeraddorupdate',
           component: resolve => require(['../components/index/page/AddAndUpdate/customeraddorupdate.vue'], resolve),
-          meta: { title: '编辑客户' }
+          meta: { title: '编辑客户' ,requireAuth:true}
         },
       ]
     },

@@ -35,10 +35,10 @@
         </div>
         <el-table
             :data="tableData"
+            :default-sort = "{prop:'contract_number',order: 'descending'}"
             ref="multipleTable"
             border
             stripe
-            :default-sort = "{order: 'ascending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >
@@ -71,7 +71,7 @@
                 label="合同名称"
                 sortable>
                 <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)">
+                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
                         {{scope.row.contract_name}}
                     </div>
                 </template>

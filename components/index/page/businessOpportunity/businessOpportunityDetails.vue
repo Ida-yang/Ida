@@ -1,28 +1,28 @@
 <template>
-    <!-- 客户详情页 -->
+    <!-- 线索详情页 -->
     <el-row class="content1" :gutter="10">
-        <!-- <p>客户详情页</p> -->
+        <!-- <p>线索详情页</p> -->
         <el-col :span="18">
             <div class="top">
-                <el-card class="box-card" v-model="customerdetail">
+                <el-card class="box-card" v-model="cluedetail">
                     <div slot="header" class="clearfix">
-                        <span>{{customerdetail[0].pName}}</span>
+                        <span>{{cluedetail.name}}</span>
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
-                        <el-button style="float:right;" class="info-btn" size="mini" @click="TocustomerPool()">转移至客户池</el-button>
-                        <!-- <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button> -->
+                        <el-button style="float:right;" class="info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
+                        <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
-                            <li>姓名：<span>{{customerdetail[0].contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{customerdetail[0].contacts[0].phone}}</span></li>
-                            <li>电话：<span>{{customerdetail[0].contacts[0].telephone}}</span></li>
-                            <li>邮箱：<span>{{customerdetail[0].contacts[0].email}}</span></li>
-                            <li>QQ：<span>{{customerdetail[0].contacts[0].qq}}</span></li>
-                            <li>微信：<span>{{customerdetail[0].contacts[0].wechat}}</span></li>
-                            <li>地址：<span>{{customerdetail[0].address}}</span></li>
-                            <li>职务：<span>{{customerdetail[0].contacts[0].identity}}</span></li>
-                            <li>性别：<span>{{customerdetail[0].contacts[0].sex}}</span></li>
-                            <li>备注：<span>{{customerdetail[0].remark}}</span></li>
+                            <li>姓名：<span>{{cluedetail.contacts[0].coName}}</span></li>
+                            <li>手机：<span>{{cluedetail.phone}}</span></li>
+                            <li>电话：<span>{{cluedetail.telephone}}</span></li>
+                            <li>邮箱：<span>{{cluedetail.email}}</span></li>
+                            <li>QQ：<span>{{cluedetail.qq}}</span></li>
+                            <li>微信：<span>{{cluedetail.wechat}}</span></li>
+                            <li>地址：<span>{{cluedetail.address}}</span></li>
+                            <li>职务：<span>{{cluedetail.contacts[0].identity}}</span></li>
+                            <li>性别：<span>{{cluedetail.contacts[0].sex}}</span></li>
+                            <li>备注：<span>{{cluedetail.remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>
@@ -55,7 +55,7 @@
                                 placeholder="选择日期时间" style="width:200px;">
                                 </el-date-picker>
                             </el-form-item>
-                            <el-form-item label="状态" style="width:300px;margin-left:25px;" prop="state">
+                            <el-form-item label="状态" style="width:300px;" prop="state">
                                 <el-select v-model="followform.state" placeholder="请选择" style="width:200px;">
                                     <el-option v-for="item in stateList" :key="item.index" :label="item.state" :value="item.state"></el-option>
                                 </el-select>
@@ -71,12 +71,15 @@
                         <ul class="followrecord" v-for="(item,index) in record" :key="item.followId">
                             <li class="recordicon">
                                 <i class="el-icon-delete delico" @click="deletefollow(index)"></i>
+                                <!-- <div style="height:70px;width: 12px;border-right: 1px solid #c2c4c9;" class="verticalline"></div> -->
+                                <!-- <div id="verticalline"></div> -->
                             </li>
                             <li class="verticalline"></li>
                             <li class="recordcontent">
                                 <div>
                                     <p>{{item.createTime}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
                                         &nbsp;&nbsp;&nbsp;<span>并约定下次联系时间：{{item.contactTime}}</span>
+                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} </span> 
                                     </p>
                                     <p style="margin-top:15px;margin-bottom:15px;">{{item.followContent}}</p>
                                 </div>
@@ -85,7 +88,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="联系人" name="second">
                         <el-table
-                        :data="customerDetails"
+                        :data="clueDetails"
                         border
                         stripe
                         style="width: 100%">
@@ -190,11 +193,11 @@
     import qs from 'qs'
 
     export default {
-        name:'clueDetails',
+        name:'businessOpportunityDetails',
         store,
         computed: {
-            customerDetails(){
-                return store.state.customerDetailsList;
+            clueDetails(){
+                return store.state.clueDetailsList;
             }
         },
         data(){
@@ -221,16 +224,15 @@
                     {label:'邮箱',value:'4'}
                 ],
                 stateList:[
-                    {state:'初步了解',label:'1',value:'初步了解'},
-                    {state:'拜访',label:'2',value:'拜访'},
-                    {state:'商务',label:'3',value:'商务'},
-                    {state:'合同',label:'4',value:'合同'},
-                    {state:'失败',label:'5',value:'失败'},],
+                    {state:'未联系',label:'1',value:'未联系'},
+                    {state:'无效线索',label:'2',value:'无效线索'},
+                    {state:'无需求线索',label:'3',value:'无需求线索'},
+                    {state:'电话错误',label:'4',value:'电话错误'},],
                 searchList:{
                     keyword:null,
                 },
-                customerdetail:{
-                    pName:'',
+                cluedetail:{
+                    // name:'',
                 },
                 record:null,
                 // 获取row的key值
@@ -273,59 +275,17 @@
                 //详情页联系人
                 axios({
                     method:'post',
-                    url:_this.$store.state.defaultHttp+'customerpool/getPoolContacts.do?cId='+_this.$store.state.iscId+'&customeroneId='+this.detailData.id,
+                    url:_this.$store.state.defaultHttp+'opportunity/getopportunityById.do?cId='+_this.$store.state.iscId+'&opportunity_id='+this.detailData.id,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
                     console.log(res.data.map.success)
-                    _this.$store.state.customerDetailsList = res.data.map.success
-                    _this.contactList = res.data.map.success
-                    _this.followform.contactsId = res.data.map.success[0].id
+                    // _this.$store.state.clueDetailsList = res.data.map.success
+                    // _this.contactList = res.data.map.success
+                    // _this.followform.contactsId = res.data.map.success[0].id
                 }).catch(function(err){
                     console.log(err);
                 });
-                //加载快捷方式
-                axios({
-                    method:'post',
-                    url:_this.$store.state.defaultHttp+'getNameSelected.do?cId='+_this.$store.state.iscId,
-                }).then(function(res){
-                    // console.log(res.data)
-                    _this.fastcontactList = res.data
-                }).catch(function(err){
-                    console.log(err);
-                });
-                //加载详情页右侧表格
-                axios({
-                    method:'post',
-                    url:_this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
-                    data:qs.stringify(pageInfo)
-                }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.tableData = res.data.map.success
-                    _this.tableNumber = res.data.count
-                }).catch(function(err){
-                    console.log(err);
-                });
-                //加载跟进记录
-                axios({
-                    method:'post',
-                    url:_this.$store.state.defaultHttp+'customerpool/getFollowStaffAndpool.do?cId='+_this.$store.state.iscId+'&customerpool_id='+this.detailData.id,
-                }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.record = res.data.map.success
-                }).catch(function(err){
-                    console.log(err);
-                });
-                //加载客户详情
-                axios({
-                    method:'post',
-                    url:_this.$store.state.defaultHttp+'customerpool/getPoolById.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
-                }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.customerdetail = res.data.map.success
-                    // console.log(_this.customerdetail)
-                }).catch(function(err){
-                    console.log(err);
-                });
+                
             },
             retract(){
                 this.thisshow = !this.thisshow
@@ -338,7 +298,7 @@
                 // this.detailData.id = row.id
                 this.$options.methods.loadData.bind(this)(true);
             },
-            TocustomerPool(){
+            cluePool(){
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
@@ -346,7 +306,7 @@
                 console.log(idArr)
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerpool/updateTo.do?cId='+_this.$store.state.iscId,
+                    url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     // console.log(res)
@@ -367,33 +327,33 @@
                 });
             },
             customerSwitching(){
-                // let _this = this;
-                // let qs =require('querystring')
-                // let idArr = [];
-                // idArr.id = this.idArr.id
-                // idArr.shift()
-                // console.log(idArr)
-                // axios({
-                //     method: 'post',
-                //     url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
-                //     data:qs.stringify(idArr),
-                // }).then(function(res){
-                //     console.log(res)
-                //     if(res.data && res.data == 'success') {
-                //         _this.$message({
-                //             message: '转换成功',
-                //             type: 'success'
-                //         });
-                //     _this.closeTag();
-                //     } else {
-                //         _this.$message({
-                //             message: res.data,
-                //             type: 'error'
-                //         });
-                //     }
-                // }).catch(function(err){
-                //     console.log(err);
-                // });
+                let _this = this;
+                let qs =require('querystring')
+                let idArr = [];
+                idArr.id = this.idArr.id
+                idArr.shift()
+                console.log(idArr)
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
+                    data:qs.stringify(idArr),
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data && res.data == 'success') {
+                        _this.$message({
+                            message: '转换成功',
+                            type: 'success'
+                        });
+                    _this.closeTag();
+                    } else {
+                        _this.$message({
+                            message: res.data,
+                            type: 'error'
+                        });
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             deletefollow(index){
                 let _this = this
@@ -438,7 +398,7 @@
                 console.log(searchList)
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    url: _this.$store.state.defaultHttp+'customerTwo/getUserByClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
                     // console.log(res)
@@ -456,7 +416,7 @@
                 data.followContent = this.followform.followContent;
                 data.contactsId = this.followform.contactsId;
                 data.state = this.followform.state;
-                data.customerpool_id = this.detailData.id;
+                data.customertwo_id = this.detailData.id;
                 console.log(data)
 
                 axios({
@@ -496,7 +456,7 @@
                 const delItem = this.$store.state.tagsList.splice(index, 1)[0];
                 const item = this.$store.state.tagsList[index] ? this.$store.state.tagsList[index] : this.$store.state.tagsList[index - 1];
                 if (item) {
-                    delItem.path === this.$route.fullPath && this.$router.push('/customer');
+                    delItem.path === this.$route.fullPath && this.$router.push('/clue');
                 }else{
                     this.$router.push('/welcome');
                 }

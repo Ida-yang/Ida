@@ -4,7 +4,7 @@
     <el-row class="logincontent">
         <el-col :span="14" class="content-l">
             <div>
-                <img src="../assets/image/index.png" height="50%" width="60%" alt="元旦快乐" title="元旦快乐" style="margin:25% 20%;">
+                <img src="../assets/img/index.png" height="50%" width="60%" alt="元旦快乐" title="元旦快乐" style="margin:25% 20%;">
             </div>
         </el-col>
         <!-- <el-col :span="10" :offset="8" class="grid-content content-r systemLogin"> -->
@@ -135,13 +135,13 @@ export default {
         padding: 0;
         margin: 0;
         /* background-color: #ffffff; */
-       background-image: url(../assets/image/bg.jpg);
+       background-image: url('../assets/img/bg.jpg');
        background-repeat: no-repeat;
        background-size: 100% 100%;
     }
    .content-l{
        height: 100%;
-       /* background-image: url(../assets/image/index.png);
+       /* background-image: url(../assets/img/index.png);
        background-repeat: no-repeat;
        background-size: 70% 50%; */
    }

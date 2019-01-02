@@ -158,7 +158,7 @@
                 label="公司名称"
                 sortable>
                 <template slot-scope="scope">
-                    <div class="hovercol" style="color:#0000FF;">
+                    <div class="hoverline">
                         {{scope.row.name}}
                     </div>
                 </template>
@@ -621,9 +621,6 @@
     .el-input {
         /* width: 260px; */
         width: 100%;
-    }
-    .hovercol:hover{
-        color: #000;
     }
     .el-row{
         margin-bottom: 10px;
