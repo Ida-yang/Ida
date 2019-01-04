@@ -180,7 +180,7 @@ a {
     color: #222222;
 }
 .info-btn:hover,.info-btn:focus{
-    background: #009688;
+    background: #ff5722;
     color: #ffffff;
 }
 .checklist .checkone{

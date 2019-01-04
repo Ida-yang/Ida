@@ -73,7 +73,7 @@
                 label="商机名称"
                 sortable>
                 <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)">
+                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
                         {{scope.row.opportunity_name}}
                     </div>
                 </template>
@@ -166,7 +166,7 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="cues"
+                prop="contacts[0].user_id"
                 v-if="showyonghu"
                 header-align="center"
                 align="left"

@@ -4,25 +4,23 @@
         <!-- <p>线索详情页</p> -->
         <el-col :span="18">
             <div class="top">
-                <el-card class="box-card" v-model="cluedetail">
+                <el-card class="box-card" v-model="opportunitydetail">
                     <div slot="header" class="clearfix">
-                        <span>{{cluedetail.name}}</span>
+                        <span>{{opportunitydetail[0].customerpool[0].name}}</span>
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
-                        <el-button style="float:right;" class="info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
-                        <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
-                            <li>姓名：<span>{{cluedetail.contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{cluedetail.phone}}</span></li>
-                            <li>电话：<span>{{cluedetail.telephone}}</span></li>
-                            <li>邮箱：<span>{{cluedetail.email}}</span></li>
-                            <li>QQ：<span>{{cluedetail.qq}}</span></li>
-                            <li>微信：<span>{{cluedetail.wechat}}</span></li>
-                            <li>地址：<span>{{cluedetail.address}}</span></li>
-                            <li>职务：<span>{{cluedetail.contacts[0].identity}}</span></li>
-                            <li>性别：<span>{{cluedetail.contacts[0].sex}}</span></li>
-                            <li>备注：<span>{{cluedetail.remark}}</span></li>
+                            <li>姓名：<span>{{opportunitydetail[0].contacts[0].coName}}</span></li>
+                            <li>手机：<span>{{opportunitydetail[0].contacts[0].phone}}</span></li>
+                            <li>电话：<span>{{opportunitydetail[0].contacts[0].telephone}}</span></li>
+                            <li>邮箱：<span>{{opportunitydetail[0].contacts[0].email}}</span></li>
+                            <li>QQ：<span>{{opportunitydetail[0].contacts[0].qq}}</span></li>
+                            <li>微信：<span>{{opportunitydetail[0].contacts[0].wechat}}</span></li>
+                            <li>地址：<span>{{opportunitydetail[0].customerpool[0].address}}</span></li>
+                            <li>性别：<span>{{opportunitydetail[0].contacts[0].sex}}</span></li>
+                            <li>职务：<span>{{opportunitydetail[0].contacts[0].dentity}}</span></li>
+                            <li>备注：<span>{{opportunitydetail[0].customerpool[0].remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>
@@ -30,132 +28,44 @@
                 </el-card>
             </div>
             <div class="bottom">
-                <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-                    <el-tab-pane label="跟进记录" name="first">
-                        <el-form class="followform" :rules="rules" ref="followform" :model="followform">
-                            <el-form-item prop="followContent">
-                                <el-input type="textarea" placeholder="添加跟进内容" v-model="followform.followContent"></el-input>
-                            </el-form-item>
-                            <el-form-item label="联系方式" style="width:300px;" prop="followType">
-                                <el-select v-model="followform.followType" placeholder="请选择" style="width:200px;">
-                                    <el-option v-for="item in followTypes" :key="item.value" :value="item.label" :label="item.label"></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="联系人" style="width:300px;" prop="contactsId">
-                                <el-select v-model="followform.contactsId" placeholder="请选择" style="width:200px;">
-                                    <el-option v-for="item in contactList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="下次联系时间" style="width:300px;">
-                                <el-date-picker
-                                v-model="followform.contactTime"
-                                type="datetime"
-                                format="yyyy-MM-dd HH:mm:ss"
-                                value-format="yyyy-MM-dd HH:mm:ss"
-                                placeholder="选择日期时间" style="width:200px;">
-                                </el-date-picker>
-                            </el-form-item>
-                            <el-form-item label="状态" style="width:300px;" prop="state">
-                                <el-select v-model="followform.state" placeholder="请选择" style="width:200px;">
-                                    <el-option v-for="item in stateList" :key="item.index" :label="item.state" :value="item.state"></el-option>
-                                </el-select>
-                            </el-form-item>
-                            
-                            <el-form-item label="快捷沟通" style="width:80%;">
-                                <el-radio v-model="followform.followContent" v-for="item in fastcontactList" :key="item.communicationId" :label="item.content">{{item.name}}</el-radio>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button style="float:right;" class="searchbutton" size="mini" @click="Submitfollowform">立即提交</el-button>
-                            </el-form-item>
-                        </el-form>
-                        <ul class="followrecord" v-for="(item,index) in record" :key="item.followId">
-                            <li class="recordicon">
-                                <i class="el-icon-delete delico" @click="deletefollow(index)"></i>
-                                <!-- <div style="height:70px;width: 12px;border-right: 1px solid #c2c4c9;" class="verticalline"></div> -->
-                                <!-- <div id="verticalline"></div> -->
-                            </li>
-                            <li class="verticalline"></li>
-                            <li class="recordcontent">
-                                <div>
-                                    <p>{{item.createTime}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
-                                        &nbsp;&nbsp;&nbsp;<span>并约定下次联系时间：{{item.contactTime}}</span>
-                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} </span> 
-                                    </p>
-                                    <p style="margin-top:15px;margin-bottom:15px;">{{item.followContent}}</p>
-                                </div>
-                            </li>
+                <el-card class="box-card" v-model="opportunitydetail">
+                    <div slot="header" class="clearfix">
+                        <span>{{opportunitydetail[0].opportunity_name}}</span>
+                        <el-button class="info-btn" size="mini" style="float:right;margin-left:10px;" @click="nextStep()" v-if="shownext">下一步</el-button>
+                        <el-button class="info-btn" size="mini" style="float:right;margin-left:100px;" @click="endStep()">失败关闭</el-button>
+                    </div>
+                    <el-steps :active="active" finish-status="success" align-center style="padding:10px;">
+                        <el-step v-for="item in stepList" :key="item.step_id" :title="item.step_name" :description="item.step_probability"></el-step>
+                    </el-steps>
+                </el-card>
+            </div>
+            <div class="bottom2">
+                <el-card class="box-card" v-model="opportunitydetail">
+                    <div slot="header" class="clearfix">
+                        <span>基本信息</span>
+                    </div>
+                    <div class="text item" style="min-height:150px;">
+                        <ul>
+                            <li>创建人：<span>{{opportunitydetail[0].privateUser[0].private_employee}}</span></li>
+                            <li>部门：<span>{{opportunitydetail[0].opportunity_id}}</span></li>
+                            <li>机构：<span>{{opportunitydetail[0].opportunity_id}}</span></li>
+                            <li>决策人：<span>{{opportunitydetail[0].contacts[0].coName}}</span></li>
+                            <li>创建时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li>
+                            <!-- <li>签约时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li> -->
+                            <!-- <li>失败时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li> -->
+                            <li>预计成交金额：<span>{{opportunitydetail[0].opportunity_achievement}}</span></li>
+                            <li>预计成交时间：<span>{{opportunitydetail[0].opportunity_deal}}</span></li>
+                            <!-- <li>预计成交几率：<span>{{opportunitydetail[0].opportunityProgress.progress_probability}}</span></li> -->
+                            <li>备注：<span>{{opportunitydetail[0].opportunity_remarks}}</span></li>
                         </ul>
-                    </el-tab-pane>
-                    <el-tab-pane label="联系人" name="second">
-                        <el-table
-                        :data="clueDetails"
-                        border
-                        stripe
-                        style="width: 100%">
-                            <el-table-column
-                            prop="name"
-                            header-align="center"
-                            label="名称">
-                            </el-table-column>
-                            <el-table-column
-                            prop="phone"
-                            header-align="center"
-                            label="手机">
-                            </el-table-column>
-                            <el-table-column
-                            prop="telephone"
-                            header-align="center"
-                            label="固话">
-                            </el-table-column>
-                            <el-table-column
-                            prop="email"
-                            header-align="center"
-                            label="邮箱">
-                            </el-table-column>
-                            <el-table-column
-                            prop="qq"
-                            header-align="center"
-                            label="QQ">
-                            </el-table-column>
-                            <el-table-column
-                            prop="wechat"
-                            header-align="center"
-                            label="微信">
-                            </el-table-column>
-                            <el-table-column
-                            prop="address"
-                            header-align="center"
-                            label="地址">
-                            </el-table-column>
-                            <el-table-column
-                            prop="identity"
-                            header-align="center"
-                            label="职务">
-                            </el-table-column>
-                            <el-table-column
-                            prop="sex"
-                            header-align="center"
-                            label="性别">
-                            </el-table-column>
-                            <el-table-column
-                            prop="status"
-                            header-align="center"
-                            label="是否在职">
-                            </el-table-column>
-                            <el-table-column
-                            prop="remark"
-                            header-align="center"
-                            label="备注">
-                            </el-table-column>
-                        </el-table>
-                    </el-tab-pane>
-                </el-tabs>
+                        <p>&nbsp;</p>
+                    </div>
+                </el-card>
             </div>
         </el-col>
         
         <el-col :span="6" style="padding:10px;" class="right">
             <div class="searchList" style="width:100%;">
-                <!-- <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:200px;"></el-input> -->
                 <el-input  v-model="searchList.keyword" placeholder="请输入标题" style="width:80%;"></el-input>
                 <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()"></el-button>
             </div>
@@ -163,11 +73,11 @@
             :data="tableData"
             style="width: 100%">
                 <el-table-column
-                prop="name"
-                label="公司名称">
+                prop="opportunity_name"
+                label="商机名称">
                     <template slot-scope="scope">
                     <div @click="getRow(scope.$index, scope.row)">
-                        {{scope.row.name}}
+                        {{scope.row.opportunity_name}}
                     </div>
                 </template>
                 </el-table-column>
@@ -184,6 +94,23 @@
                 </el-pagination>
             </div>
         </el-col>
+        <el-dialog
+            title="添加商机阶段"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <!-- <span>这是一段信息</span> -->
+            <el-form label-width="80px" :model="addstepList">
+                <el-form-item label="商机阶段">
+                    <el-input class="oppinput" v-model="addstepList.progress_name"></el-input>
+                    <span class="protext">&nbsp;成功几率&nbsp;</span>
+                    <el-input class="proinput" v-model="addstepList.progress_probability"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addStep()">确 定</el-button>
+            </span>
+        </el-dialog>
     </el-row>
 </template>
 
@@ -195,67 +122,31 @@
     export default {
         name:'businessOpportunityDetails',
         store,
-        computed: {
-            clueDetails(){
-                return store.state.clueDetailsList;
-            }
-        },
         data(){
             return {
                 detailData:null,
-                followform:{
-                    followType:'电话',
-                    contactTime:'',
-                    contactsId:'',
-                    followContent:'',
-                    state:'',
-                },
-                rules: {
-                    followContent : [{ required: true, message: '请输入跟进内容', trigger: 'blur' },],
-                    contactsId : [{ required: true, message: '请选择联系人', trigger: 'blur' },],
-                    followType : [{ required: true, message: '请选择联系方式', trigger: 'blur' },],
-                    // contactTime : [{ required: true, message: '请选择下次联系时间', trigger: 'blur' },],
-                    
-                },
-                followTypes:[
-                    {label:'电话',value:'1'},
-                    {label:'微信',value:'2'},
-                    {label:'QQ',value:'3'},
-                    {label:'邮箱',value:'4'}
-                ],
-                stateList:[
-                    {state:'未联系',label:'1',value:'未联系'},
-                    {state:'无效线索',label:'2',value:'无效线索'},
-                    {state:'无需求线索',label:'3',value:'无需求线索'},
-                    {state:'电话错误',label:'4',value:'电话错误'},],
                 searchList:{
                     keyword:null,
                 },
-                cluedetail:{
-                    // name:'',
-                },
-                record:null,
-                // 获取row的key值
-                getRowKeys(row) {
-                    if(row.id) {
-                        return row.id;
-                    } else if(row.functionId) {
-                        return row.functionId;
-                    } else {
-                        return "";
-                    }
-                },
-                fastcontactList:null,
-                contactList:null,
-                activeName2: 'first',
+                opportunitydetail:null,
                 tableData: null,
                 tableNumber:null,
                 page:1,
                 limit:20,
                 thisshow:true,
                 idArr:{
-                    id:null,
+                    opportunity_id:null,
                 },
+                active: 0,
+                stepList:null,
+                addstepList:{
+                    progress_id:null,
+                    progress_name:null,
+                    progress_probability:null,
+                },
+                dialogVisible:false,
+                addstep:null,
+                shownext:true,
             }
         },
         mounted(){
@@ -264,7 +155,7 @@
         methods: {
             loadData() {
                 this.detailData = this.$store.state.detailsData.submitData;
-                this.idArr.id = this.$store.state.detailsData.submitData.id
+                this.idArr.opportunity_id = this.$store.state.detailsData.submitData.id
                 // console.log(this.detailData)
                 let _this = this
                 let qs =require('querystring')
@@ -274,116 +165,164 @@
                 // console.log(this);
                 //详情页联系人
                 axios({
-                    method:'post',
-                    url:_this.$store.state.defaultHttp+'opportunity/getopportunityById.do?cId='+_this.$store.state.iscId+'&opportunity_id='+this.detailData.id,
-                    data:qs.stringify(pageInfo)
+                    method:'get',
+                    url:_this.$store.state.defaultHttp+'opportunity/getopportunityById.do?cId='+_this.$store.state.iscId+'&opportunity_id='+_this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data.map.success)
-                    // _this.$store.state.clueDetailsList = res.data.map.success
-                    // _this.contactList = res.data.map.success
-                    // _this.followform.contactsId = res.data.map.success[0].id
+                    // console.log(res.data.map.success)
+                    _this.opportunitydetail = res.data.map.success
+                    _this.stepList = _this.opportunitydetail[0].addstep
+                    _this.addstep = _this.opportunitydetail[0].opportunityProgress
+                    // console.log(_this.addstep)
+                    let addStep = _this.addstep
+                    if(addStep == ''){
+                        _this.active = 0;
+                    }else{
+                        for(var i = 0,length = addStep.length;i < length;i++){
+                            // console.log(addStep[i].progress_name)
+                            // console.log(i)
+                            if(addStep[i].progress_name == '失败关闭'){
+                                _this.active = i+6
+                            }else{
+                                _this.active = i+1
+                            }
+                        }
+                    }
                 }).catch(function(err){
                     console.log(err);
                 });
-                
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'opportunity/query.do?cId='+_this.$store.state.iscId,
+                    data: qs.stringify(pageInfo),
+                }).then(function(res){
+                    // console.log(res)
+                    _this.tableData = res.data.map.success
+                    _this.tableNumber = res.data.count
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            addStep(){
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.progress_name = this.addstepList.progress_name
+                data.progress_probability = this.addstepList.progress_probability
+                // console.log(data)
+                _this.$confirm('是否确认添加该商机阶段？一旦添加将不可修改', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method:'post',
+                        url:_this.$store.state.defaultHttp+'insertStep.do?cId='+_this.$store.state.iscId+'&opportunity_id='+this.detailData.id,
+                        data:qs.stringify(data)
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.data.code && res.data.code == '200'){
+                            _this.$message({
+                                message:'添加成功',
+                                type:'success'
+                            })
+                        }else{
+                            _this.$message({
+                                message:res.data.msg,
+                                type:'error'
+                            })
+                        }
+                        // _this.dialogVisible = false
+                        _this.addstepList.progress_name = ''
+                        _this.addstepList.progress_probability = ''
+                        _this.$options.methods.loadData.bind(_this)(true);
+                    }).catch(function(err){
+                        console.log(err)
+                    });
+                });
+            },
+            nextStep(){
+                for(var i = 0,length = this.stepList.length;i < length;i++){
+                    let _this = this;
+                    let qs =require('querystring')
+                    let data = {}
+                    if(_this.active == i){
+                        data.progress_name = this.stepList[i].step_name
+                        data.progress_probability = this.stepList[i].step_probability
+                        // console.log(data)
+                        _this.$confirm('确认修改商机进度吗？一旦确定将不可撤回','提示',{
+                            confirmButtonText:'确定',
+                            cancelButtonText:'取消',
+                        }).then(({value}) =>{
+                            axios({
+                                method:'post',
+                                url:_this.$store.state.defaultHttp+ 'saveOpportunityProgress.do?cId='+_this.$store.state.iscId+'&oy_id='+_this.detailData.id,
+                                data:qs.stringify(data),
+                            }).then(function(res){
+                                // console.log(res)
+                                if(res.status && res.status == 200) {
+                                    _this.$message({
+                                        message: '修改成功',
+                                        type: 'success'
+                                    });
+                                    _this.active += 1
+                                // _this.$options.methods.reloadTable.bind(_this)(true);
+                                } else {
+                                    _this.$message({
+                                        message: res.data.msg,
+                                        type: 'error'
+                                    });
+                                }
+                            }).catch(function(err){
+                                console.log(err)
+                            })
+                        })
+                    }
+                }
+            },
+            endStep(){
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.progress_name = '失败关闭'
+                data.progress_probability = '0%'
+                _this.$confirm('确认关闭商机进度吗？一旦确定将不可撤回','提示',{
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                }).then(({value}) =>{
+                    axios({
+                        method:'post',
+                        url:_this.$store.state.defaultHttp+ 'saveOpportunityProgress.do?cId='+_this.$store.state.iscId+'&oy_id='+_this.detailData.id,
+                        data:qs.stringify(data),
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.status && res.status == 200) {
+                            _this.$message({
+                                message: '关闭成功',
+                                type: 'success'
+                            });
+                            _this.active += 6
+                            _this.shownext = !_this.shownext
+                        // _this.$options.methods.reloadTable.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err)
+                    })
+                })
             },
             retract(){
                 this.thisshow = !this.thisshow
             },
             getRow(index,row){
-                console.log(row.id)
-                this.$store.state.detailsData.submitData = {"id":row.id}
-                this.idArr.id = row.id
+                console.log(row.opportunity_id)
+                this.$store.state.detailsData.submitData = {"id":row.opportunity_id}
+                this.idArr.opportunity_id = row.opportunity_id
                 
-                // this.detailData.id = row.id
+                // this.detailData.opportunity_id = row.opportunity_id
                 this.$options.methods.loadData.bind(this)(true);
-            },
-            cluePool(){
-                let _this = this;
-                let qs =require('querystring')
-                let idArr = [];
-                idArr.id = this.idArr.id
-                console.log(idArr)
-                axios({
-                    method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(idArr),
-                }).then(function(res){
-                    // console.log(res)
-                    if(res.status && res.status == 200) {
-                        _this.$message({
-                            message: '转移成功',
-                            type: 'success'
-                        });
-                        _this.closeTag();
-                    } else {
-                        _this.$message({
-                            message: res.data,
-                            type: 'error'
-                        });
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                });
-            },
-            customerSwitching(){
-                let _this = this;
-                let qs =require('querystring')
-                let idArr = [];
-                idArr.id = this.idArr.id
-                idArr.shift()
-                console.log(idArr)
-                axios({
-                    method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
-                    data:qs.stringify(idArr),
-                }).then(function(res){
-                    console.log(res)
-                    if(res.data && res.data == 'success') {
-                        _this.$message({
-                            message: '转换成功',
-                            type: 'success'
-                        });
-                    _this.closeTag();
-                    } else {
-                        _this.$message({
-                            message: res.data,
-                            type: 'error'
-                        });
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                });
-            },
-            deletefollow(index){
-                let _this = this
-                let followData = {}
-                followData.followId = this.record[index].followId
-                // console.log(this.record[index].followId)
-                let qs =require('querystring')
-                axios({
-                    method:'post',
-                    url:_this.$store.state.defaultHttp+'delFollow.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(followData)
-                }).then(function(res){
-                    // console.log(res)
-                    if(res.data && res.data == '1' ) {
-                        _this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        _this.$store.state.detailsData.submitData = {"id":_this.detailData.id}
-                        _this.$options.methods.loadData.bind(_this)(true);
-                        
-                    } else {
-                        _this.$message({
-                            message: res.data,
-                            type: 'error'
-                        });
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                });
             },
             handleClick(tab, event) {
                 // console.log(tab, event);
@@ -395,52 +334,15 @@
                 searchList.searchName = this.searchList.keyword;
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'customerTwo/getUserByClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    url: _this.$store.state.defaultHttp+'opportunity/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
                     // console.log(res)
                     _this.tableData = res.data.map.success
                     _this.tableNumber = res.data.count
-                }).catch(function(err){
-                    console.log(err);
-                });
-            },
-            Submitfollowform(){
-                let _this = this
-                let data = {}
-                data.followType = this.followform.followType
-                data.contactTime = this.followform.contactTime
-                data.followContent = this.followform.followContent;
-                data.contactsId = this.followform.contactsId;
-                data.state = this.followform.state;
-                data.customertwo_id = this.detailData.id;
-                console.log(data)
-
-                axios({
-                    method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'addFollow.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(data,this),
-                }).then(function(res){
-                    // console.log(res)
-                    if(res.data.msg && res.data.msg == 'success' ) {
-                        _this.$message({
-                            message: '提交成功',
-                            type: 'success'
-                        });
-                        _this.followform.contactTime = ''
-                        _this.followform.followContent = ''
-                        _this.$store.state.detailsData.submitData = {"id":_this.detailData.id}
-                        _this.$options.methods.loadData.bind(_this)(true);
-                        // _this.closeTag()
-                    } else {
-                        _this.$message({
-                            message: res.data.msg,
-                            type: 'error'
-                        });
-                    }
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -493,10 +395,16 @@
         background-color: #fff;
     }
     .bottom{
+        height: auto;
+        background-color: #fff;
+        margin-top: 20px;
+        /* padding: 5px 20px; */
+    }
+    .bottom2{
         height: 100%;
         background-color: #fff;
         margin-top: 20px;
-        padding: 5px 20px;
+        /* padding: 5px 20px; */
     }
     .el-card__body{
         padding: 0;
@@ -512,16 +420,6 @@
     }
     .text ul li:not(:last-child){
         width: 31.5%;
-    }
-    .followform{
-        height: auto;
-        min-height: 200px;
-        margin-bottom: 30px;
-        position: relative;
-    }
-    .followform > .el-form-item:not(:first-child){
-        float: left;
-        margin-bottom: 5px;
     }
     .followrecord{
         clear: both;
@@ -575,5 +473,17 @@
         border-radius:50%;
         line-height:25px;
         text-align:center;
+    }
+    .oppinput{
+        width:50%;
+        float:left;
+    }
+    .protext{
+        font-size:12px;
+        float:left;
+    }
+    .proinput{
+        width:20%;
+        float:left;
     }
 </style>
