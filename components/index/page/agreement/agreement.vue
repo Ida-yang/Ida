@@ -325,7 +325,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.ids = this.idArr.ids
-                _this.$confirm('是否确认删除[' + row.name + ']？', '提示', {
+                _this.$confirm('是否确认删除？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
@@ -427,7 +427,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.ids = row.contract_id
-                _this.$confirm('是否确认删除[' + row.name + ']？', '提示', {
+                _this.$confirm('是否确认删除[' + row.contract_name + ']？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
@@ -454,7 +454,7 @@
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '取消删除[' + row.name + ']'
+                        message: '取消删除[' + row.contract_name + ']'
                     });       
                 });
             },

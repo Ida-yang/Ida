@@ -58,7 +58,7 @@
             ref="multipleTable"
             border
             stripe
-            :default-sort = "{prop:'pName',order: 'descending'}"
+            :default-sort = "{prop:'follow[0].createTime',order: 'descending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >

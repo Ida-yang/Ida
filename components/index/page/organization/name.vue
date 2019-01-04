@@ -1,134 +1,78 @@
 <template>
-  <div class="linkage">
-    <el-select
-      v-model="country"
-      @change="choseProvince"
-      placeholder="省级地区"
-      style="width:100px;">
-      <el-option
-        v-for="item in Provinces"
-        :key="item.id"
-        :label="item.value"
-        :value="item.id">
-      </el-option>
-    </el-select>
-    <el-select
-      v-model="city"
-      @change="choseCity"
-      placeholder="市级地区"
-      style="width:100px;">
-      <el-option
-        v-for="item in shi1"
-        :key="item.id"
-        :label="item.value"
-        :value="item.id">
-      </el-option>
-    </el-select>
-    <el-select
-      v-model="area"
-      @change="choseBlock"
-      placeholder="区级地区"
-      style="width:100px;">
-      <el-option
-        v-for="item in qu1"
-        :key="item.id"
-        :label="item.value"
-        :value="item.id">
-      </el-option>
-    </el-select>
-  </div>
+  <el-tree 
+    class="expand-tree"
+    node-key="deptid"
+    highlight-current
+    :data="datalist" 
+    :props="defaultProps"
+    :expand-on-click-node="false"
+    :render-content="renderContent"
+    default-expand-all>
+  </el-tree>
+  <!--
+* highlight-current ：为了点击时节点高亮
+* expand-on-click-node : 只能箭头控制树形的展开收缩
+* render-content : 节点渲染方式
+* default-expanded-keys ：默认展开节点
+-->
 </template>
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
+
 export default {
-  data () {
-    return {
-      mapJson:'../../../../static/map.json',
-      Provinces:'',
-      country: '',
-      city: '',
-      shi1: [],
-      area: '',
-      qu1: [],
-      Citys:'',
-      block:'',
+  data(){
+    return{
+      datalist:[],
+      defaultProps:{
+        children:'next',
+        label:'deptname'
+      }
     }
   },
+  mounted(){
+    this.load()
+  },
   methods:{
-    // 加载china地点数据，三级
-      getCityData:function(){
-        var that = this
-        axios.get(this.mapJson).then(function(response){
-          if (response.status==200) {
-            var data = response.data
-            that.Provinces = []
-            that.Citys = []
-            that.block = []
-            // 省市区数据分类
-            for (var item in data) {
-              if (item.match(/0000$/)) {//省
-                that.Provinces.push({id: item, value: data[item], children: []})
-              } else if (item.match(/00$/)) {//市
-                that.Citys.push({id: item, value: data[item], children: []})
-              } else {//区
-                that.block.push({id: item, value: data[item]})
-              }
-            }
-            // 分类市级
-            for (var index in that.Provinces) {
-              for (var index1 in that.Citys) {
-                if (that.Provinces[index].id.slice(0, 2) === that.Citys[index1].id.slice(0, 2)) {
-                  that.Provinces[index].children.push(that.Citys[index1])
-                }
-              }
-            }
-            // 分类区级
-            for(var item1 in that.Citys) {
-              for(var item2 in that.block) {
-                if (that.block[item2].id.slice(0, 4) === that.Citys[item1].id.slice(0, 4)) {
-                  that.Citys[item1].children.push(that.block[item2])
-                }
-              }
-            }
-          }
-          else{
-            console.log(response.status)
-          }
-        }).catch(function(error){console.log(typeof+ error)})
-      },
-      // 选省
-      choseProvince:function(e) {
-        for (var index2 in this.Provinces) {
-          if (e === this.Provinces[index2].id) {
-            this.shi1 = this.Provinces[index2].children
-            this.city = this.Provinces[index2].children[0].value
-            this.qu1 =this.Provinces[index2].children[0].children
-            this.area = this.Provinces[index2].children[0].children[0].value
-            this.E = this.qu1[0].id
-          }
-        }
-      },
-      // 选市
-      choseCity:function(e) {
-        for (var index3 in this.Citys) {
-          if (e === this.Citys[index3].id) {
-            this.qu1 = this.Citys[index3].children
-            this.area = this.Citys[index3].children[0].value
-            this.E = this.qu1[0].id
-            // console.log(this.E)
-          }
-        }
-      },
-      // 选区
-      choseBlock:function(e) {
-        this.E=e;
-        // console.log(this.E)
-      },
+    load(){
+      let _this = this
+      axios({
+        method: 'get',
+        url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
+      }).then(function(res){
+        // console.log(res.data.map.success)
+        _this.datalist = res.data.map.success
+        console.log(_this.datalist)
+      }).catch(function(err){
+        console.log(err);
+      });
     },
-    created:function(){
-      this.getCityData()
+    renderContent(h,{node,data,store}){
+      let _this = this;//指向vue
+      return h(this.datalist,{
+        props: {
+          DATA: data,//节点数据
+          NODE: node,//节点内容
+          STORE: store,//完整树形内容
+        },
+        on: {//绑定方法
+          nodeAdd: ((s,d,n) => _this.handleAdd(s,d,n)),
+          nodeEdit: ((s,d,n) => _this.handleEdit(s,d,n)),
+          nodeDel: ((s,d,n) => _this.handleDelete(s,d,n))
+        }
+      });
+    },
+    handleAdd(s,d,n){//增加节点
+      console.log(s,d,n)
+    },
+    handleEdit(s,d,n){//编辑节点
+      console.log(s,d,n)
+    },
+    handleDelete(s,d,n){//删除节点
+      console.log(s,d,n)
     }
+  }
 }
 </script>
 

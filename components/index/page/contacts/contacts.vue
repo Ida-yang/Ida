@@ -38,9 +38,9 @@
         <el-table
             :data="tableData"
             ref="multipleTable"
+            :default-sort= "{prop:'name',order: 'descending'}"
             border
             stripe
-            :default-sort= "{prop:'name',order: 'descending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >

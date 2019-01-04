@@ -64,7 +64,8 @@
             type="selection"
             width="45"
             scope.row.id
-            @selection-change="selectInfo">
+            @selection-change="selectInfo"
+                sortable>
             </el-table-column>
             <el-table-column
                 prop="contacts[0].coName"
@@ -320,6 +321,7 @@
                 this.$router.push({ path: '/clueDetails' });
             },
             handleAdd(){
+                let _this = this
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "添加线索";
                 addOrUpdateData.createForm = [
@@ -352,10 +354,26 @@
                     "remark": ''};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/saveClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
-                this.$router.push({ path: '/clueaddorupdate' });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'clueJurisdiction/insertClue.do',
+                }).then(function(res){
+                    console.log(res.data.msg)
+                    if(res.data.msg && res.data.msg == '权限不足'){
+                        _this.$message({
+                            message:'对不起，您没有新增线索的权限',
+                            type:'error'
+                        })
+                    }else{
+                        _this.$router.push({ path: '/clueaddorupdate' });
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             handleEdit(index,row){
                 console.log(row)
+                let _this = this
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [
@@ -390,7 +408,23 @@
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/updateClue.do?cId='+this.$store.state.iscId,
                 console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
-                this.$router.push({ path: '/clueaddorupdate' });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'clueJurisdiction/updateClue.do',
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data.msg && res.data.msg == '权限不足'){
+                        _this.$message({
+                            message:'对不起，您没有修改线索的权限',
+                            type:'error'
+                        })
+                    }else{
+                        _this.$router.push({ path: '/clueaddorupdate' });
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                // this.$router.push({ path: '/clueaddorupdate' });
             },
             cluePool(){
                 let _this = this;

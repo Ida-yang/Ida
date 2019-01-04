@@ -40,7 +40,7 @@
             ref="multipleTable"
             border
             stripe
-            :default-sort = "{prop:'opportunity_number',order: 'descending'}"
+            :default-sort = "{prop:'opportunity_time',order: 'descending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >
@@ -88,11 +88,11 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="customerpool_id"
+                prop="customerpool[0].name"
                 v-if="showkehu"
                 header-align="center"
                 align="left"
-                min-width="110"
+                min-width="180"
                 label="关联客户"
                 sortable>
             </el-table-column>
@@ -132,6 +132,11 @@
                 min-width="140"
                 label="预计成绩金额"
                 sortable>
+                <template slot-scope="scope">
+                    <div>
+                        {{scope.row.opportunity_achievement | rounding}}
+                    </div>
+                </template>
             </el-table-column>
             <el-table-column
                 prop="opportunity_deal"
@@ -227,6 +232,12 @@
                return store.state.businessOpportunityListnumber;     
             },
         },
+        filters: {
+            rounding (value) {
+                // console.log(value)
+                return value
+            }
+        },
         data(){
             return {
                 searchList:{
@@ -315,9 +326,9 @@
                     // {"label":"线索来源","inputModel":"cues","type":"radio"},
                     {"label":"商机编号","inputModel":"opportunity_number","prop":"opportunity_number"},
                     {"label":"商机名称","inputModel":"opportunity_name","prop":"opportunity_name","type":"require"},
-                    {"label":"日期","inputModel":"opportunity_time","prop":"opportunity_time","type":"date"},
-                    {"label":"关联客户","inputModel":"customerpool_id","prop":"customerpool_id"},
-                    {"label":"决策人","inputModel":"contacts_id","prop":"contacts_id"},
+                    // {"label":"日期","inputModel":"opportunity_time","prop":"opportunity_time","type":"date"},
+                    {"label":"关联客户","inputModel":"customerpool_id","prop":"customerpool_id","type":"select"},
+                    {"label":"决策人","inputModel":"contacts_id","prop":"contacts_id","type":"select"},
                     {"label":"预计成绩金额","inputModel":"opportunity_achievement","prop":"opportunity_achievement","type":"number"},
                     {"label":"预计成交时间","inputModel":"opportunity_deal","prop":"opportunity_deal","type":"date"},
                     // {"label":"部门","inputModel":"bumen","prop":"bumen"},
@@ -328,14 +339,16 @@
                     // "cues": '',
                     "opportunity_number": '',
                     "opportunity_name": '',
-                    "opportunity_time": '',
+                    // "opportunity_time": '',
                     "customerpool_id": '',
+                    "customerpool_name": '',
                     "contacts_id": '',
+                    "contacts_name": '',
                     "opportunity_achievement":'',
                     "opportunity_deal":'',
                     // "bumen":'',
                     // "jigou": '',
-                    "user_id":'',
+                    "user_id":this.$store.state.user,
                     "opportunity_remarks": ''};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'opportunity/saveOrUpdate.do?cId='+this.$store.state.iscId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
@@ -349,7 +362,7 @@
                     // {"label":"线索来源","inputModel":"cues","type":"radio"},
                     {"label":"商机编号","inputModel":"opportunity_number","prop":"opportunity_number"},
                     {"label":"商机名称","inputModel":"opportunity_name","prop":"opportunity_name","type":"require"},
-                    {"label":"日期","inputModel":"opportunity_time","prop":"opportunity_time","type":"date"},
+                    // {"label":"日期","inputModel":"opportunity_time","prop":"opportunity_time","type":"date"},
                     {"label":"关联客户","inputModel":"customerpool_id","prop":"customerpool_id"},
                     {"label":"决策人","inputModel":"contacts_id","prop":"contacts_id"},
                     {"label":"预计成绩金额","inputModel":"opportunity_achievement","prop":"opportunity_achievement","type":"number"},
@@ -362,16 +375,18 @@
                     // "cues": row.cues,
                     "opportunity_number": row.opportunity_number,
                     "opportunity_name": row.opportunity_name,
-                    "opportunity_time": row.opportunity_time,
-                    "customerpool_id": row.customerpool_id,
+                    // "opportunity_time": row.opportunity_time,
+                    "customerpool_id": row.customerpool[0].name,
+                    "customerpool_name": row.customerpool[0].id,
                     "contacts_id": row.contacts[0].coName,
+                    "contacts_name": row.contacts[0].id,
                     "opportunity_achievement":row.opportunity_achievement,
                     "opportunity_deal":row.opportunity_deal,
                     // "bumen":'',
                     // "jigou": '',
-                    "user_id":'',
+                    "user_id":this.$store.state.user,
                     "opportunity_remarks": row.opportunity_remarks};
-                addOrUpdateData.submitData = {"id": row.id,'opportunity_id':row.opportunity_id};
+                addOrUpdateData.submitData = {"id":row.opportunity_id};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'opportunity/saveOrUpdate.do?cId='+this.$store.state.iscId,
                 console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
@@ -444,7 +459,7 @@
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '取消删除[' + row.name + ']'
+                        message: '取消删除[' + row.opportunity_name + ']'
                     });       
                 });
             },
