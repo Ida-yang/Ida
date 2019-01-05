@@ -284,7 +284,7 @@
                 let qs =require('querystring')
                 let searchList = {}
                 searchList.searchName = this.searchList.searchName
-                searchList.pId = this.$store.state.ispId
+                // searchList.pId = this.$store.state.ispId
                 searchList.page = this.page
                 searchList.limit = this.limit
                 console.log(searchList)
