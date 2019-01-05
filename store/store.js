@@ -48,6 +48,12 @@ const state = {
   customerListnumber:0,
   //客户详情页联系人列表
   customerDetailsList:null,
+  //客户详情页商机列表
+  opportunityDetailsList:null,
+  //客户详情页合同列表
+  agreementDetailsList:null,
+  //客户详情页开票列表
+  InvoiceDetailsLis:null,
   //客户列表数据
   customerData:null,
   //客户池列表

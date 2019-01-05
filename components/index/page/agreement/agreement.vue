@@ -90,7 +90,7 @@
                 v-if="showkehu"
                 header-align="center"
                 align="left"
-                min-width="110"
+                min-width="180"
                 label="对应客户"
                 sortable>
             </el-table-column>

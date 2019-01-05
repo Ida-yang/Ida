@@ -1,7 +1,7 @@
 <template>
-    <!-- 线索详情页 -->
+    <!-- 商机详情页 -->
     <el-row class="content1" :gutter="10">
-        <!-- <p>线索详情页</p> -->
+        <!-- <p>商机详情页</p> -->
         <el-col :span="18">
             <div class="top">
                 <el-card class="box-card" v-model="opportunitydetail">
@@ -358,7 +358,7 @@
                 const delItem = this.$store.state.tagsList.splice(index, 1)[0];
                 const item = this.$store.state.tagsList[index] ? this.$store.state.tagsList[index] : this.$store.state.tagsList[index - 1];
                 if (item) {
-                    delItem.path === this.$route.fullPath && this.$router.push('/clue');
+                    delItem.path === this.$route.fullPath && this.$router.push('/businessOpportunity');
                 }else{
                     this.$router.push('/welcome');
                 }

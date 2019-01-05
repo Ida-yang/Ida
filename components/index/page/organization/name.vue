@@ -1,13 +1,28 @@
 <template>
   <el-tree 
-    class="expand-tree"
     node-key="deptid"
     highlight-current
     :data="datalist" 
     :props="defaultProps"
     :expand-on-click-node="false"
-    :render-content="renderContent"
     default-expand-all>
+    <span class="custom-tree-node" slot-scope="{ node, data }">
+      <span>{{ data.deptname }}</span>
+      <span>
+        <el-button
+          type="text"
+          size="mini"
+          @click="append(data)">
+          添加
+        </el-button>
+        <el-button
+          type="text"
+          size="mini"
+          @click="remove(node, data)">
+          删除
+        </el-button>
+      </span>
+    </span>
   </el-tree>
   <!--
 * highlight-current ：为了点击时节点高亮
@@ -18,63 +33,65 @@
 </template>
 
 <script>
-import axios from 'axios'
-import qs from 'qs'
+  import axios from 'axios'
+  import qs from 'qs'
 
-export default {
-  data(){
-    return{
-      datalist:[],
-      defaultProps:{
-        children:'next',
-        label:'deptname'
-      }
-    }
-  },
-  mounted(){
-    this.load()
-  },
-  methods:{
-    load(){
-      let _this = this
-      axios({
-        method: 'get',
-        url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
-      }).then(function(res){
-        // console.log(res.data.map.success)
-        _this.datalist = res.data.map.success
-        console.log(_this.datalist)
-      }).catch(function(err){
-        console.log(err);
-      });
-    },
-    renderContent(h,{node,data,store}){
-      let _this = this;//指向vue
-      return h(this.datalist,{
-        props: {
-          DATA: data,//节点数据
-          NODE: node,//节点内容
-          STORE: store,//完整树形内容
+  let deptid = 1000;
+
+  export default {
+    data(){
+      return{
+        datalist:[],
+        defaultProps:{
+          children:'next',
+          label:'deptname'
         },
-        on: {//绑定方法
-          nodeAdd: ((s,d,n) => _this.handleAdd(s,d,n)),
-          nodeEdit: ((s,d,n) => _this.handleEdit(s,d,n)),
-          nodeDel: ((s,d,n) => _this.handleDelete(s,d,n))
+        // deptData:JSON.parse(JSON.stringify(this.datalist)),
+      }
+    },
+    mounted(){
+      this.loadData()
+    },
+    methods:{
+      loadData(){
+        let _this = this
+        axios({
+          method: 'get',
+          url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
+        }).then(function(res){
+          console.log(res.data.map.success)
+          let data = res.data.map.success
+          _this.datalist = data
+          console.log(_this.datalist)
+        }).catch(function(err){
+          console.log(err);
+        });
+      },
+      append(data) {
+        const newChild = { deptid: deptid++, deptname: 'testtest', next: [] };
+        if (!data.next) {
+          this.$set(data, 'next', []);
         }
-      });
-    },
-    handleAdd(s,d,n){//增加节点
-      console.log(s,d,n)
-    },
-    handleEdit(s,d,n){//编辑节点
-      console.log(s,d,n)
-    },
-    handleDelete(s,d,n){//删除节点
-      console.log(s,d,n)
+        data.next.push(newChild);
+      },
+
+      remove(node, data) {
+        const parent = node.parent;
+        const next = parent.data.next || parent.data;
+        const index = next.findIndex(d => d.deptid === data.deptid);
+        next.splice(index, 1);
+      },
     }
   }
-}
 </script>
 
 <style>
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+  }
 </style>

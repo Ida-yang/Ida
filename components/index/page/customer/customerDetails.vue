@@ -146,6 +146,130 @@
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
+                    <el-tab-pane label="商机" name="third">
+                        <el-table
+                        :data="opportunityDetails"
+                        border
+                        stripe
+                        style="width: 100%">
+                            <el-table-column
+                            prop="opportunity_name"
+                            header-align="center"
+                            label="商机名称">
+                            </el-table-column>
+                            <el-table-column
+                            prop="opportunity_achievement"
+                            header-align="center"
+                            label="商机金额">
+                            <template slot-scope="scope">
+                                <div>
+                                    {{scope.row.opportunity_achievement}}
+                                </div>
+                            </template>
+                            </el-table-column>
+                            <el-table-column
+                            prop="opportunity_deal"
+                            header-align="center"
+                            label="预计签单时间">
+                            </el-table-column>
+                            <el-table-column
+                            prop="opportunityProgress[0].progress_name"
+                            header-align="center"
+                            label="商机阶段">
+                            </el-table-column>
+                            <el-table-column
+                            prop="opportunityProgress[0].progress_probability"
+                            header-align="center"
+                            label="预计成功率">
+                            </el-table-column>
+                            <el-table-column
+                            prop="opportunity_time"
+                            header-align="center"
+                            label="商机新建时间">
+                            </el-table-column>
+                            <!-- <el-table-column
+                            prop="address"
+                            header-align="center"
+                            label="耗时天数">
+                            </el-table-column> -->
+                        </el-table>
+                    </el-tab-pane>
+                    <el-tab-pane label="合同" name="fouth">
+                        <el-table
+                        :data="agreementDetails"
+                        border
+                        stripe
+                        style="width: 100%">
+                            <el-table-column
+                            prop="contract_number"
+                            header-align="center"
+                            label="合同代码">
+                            </el-table-column>
+                            <el-table-column
+                            prop="contract_name"
+                            header-align="center"
+                            label="合同名称">
+                            </el-table-column>
+                            <el-table-column
+                            prop="contract_type"
+                            header-align="center"
+                            label="合同类型">
+                            </el-table-column>
+                            <el-table-column
+                            prop="amount"
+                            header-align="center"
+                            label="合同金额">
+                            <template slot-scope="scope">
+                                <div>
+                                    {{scope.row.amount | rounding}}
+                                </div>
+                            </template>
+                            </el-table-column>
+                            <el-table-column
+                            prop="signatories"
+                            header-align="center"
+                            label="签约人">
+                            </el-table-column>
+                            <el-table-column
+                            prop="start_date"
+                            header-align="center"
+                            label="合同开始时间">
+                            </el-table-column>
+                            <el-table-column
+                            prop="end_date"
+                            header-align="center"
+                            label="合同到期时间">
+                            </el-table-column>
+                            <el-table-column
+                            prop="due_time"
+                            header-align="center"
+                            label="剩余天数">
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
+                    <el-tab-pane label="开票" name="fifth">
+                        <el-table
+                        :data="InvoiceDetails"
+                        border
+                        stripe
+                        style="width: 100%">
+                            <el-table-column
+                            prop="name"
+                            header-align="center"
+                            label="公司名称">
+                            </el-table-column>
+                            <el-table-column
+                            prop="creditCode"
+                            header-align="center"
+                            label="税务登记号">
+                            </el-table-column>
+                            <el-table-column
+                            prop="address"
+                            header-align="center"
+                            label="税务地址">
+                            </el-table-column>
+                        </el-table>
+                    </el-tab-pane>
                 </el-tabs>
             </div>
         </el-col>
@@ -190,11 +314,25 @@
     import qs from 'qs'
 
     export default {
-        name:'clueDetails',
+        name:'customerDetails',
         store,
         computed: {
             customerDetails(){
                 return store.state.customerDetailsList;
+            },
+            opportunityDetails(){
+                return store.state.opportunityDetailsList;
+            },
+            agreementDetails(){
+                return store.state.agreementDetailsList;
+            },
+            InvoiceDetails(){
+                return store.state.InvoiceDetailsList;
+            }
+        },
+        filters: {
+            rounding (value) {
+                return value.toFixed(2)
             }
         },
         data(){
@@ -269,20 +407,7 @@
                 let pageInfo = {}
                 pageInfo.page = this.page
                 pageInfo.limit = this.limit
-                // console.log(this);
-                //详情页联系人
-                axios({
-                    method:'post',
-                    url:_this.$store.state.defaultHttp+'customerpool/getPoolContacts.do?cId='+_this.$store.state.iscId+'&customeroneId='+this.detailData.id,
-                    data:qs.stringify(pageInfo)
-                }).then(function(res){
-                    console.log(res.data.map.success)
-                    _this.$store.state.customerDetailsList = res.data.map.success
-                    _this.contactList = res.data.map.success
-                    _this.followform.contactsId = res.data.map.success[0].id
-                }).catch(function(err){
-                    console.log(err);
-                });
+                console.log(pageInfo);
                 //加载快捷方式
                 axios({
                     method:'post',
@@ -323,6 +448,52 @@
                     // console.log(res.data.map.success)
                     _this.customerdetail = res.data.map.success
                     // console.log(_this.customerdetail)
+                }).catch(function(err){
+                    console.log(err);
+                });
+                //详情页联系人
+                axios({
+                    method:'post',
+                    url:_this.$store.state.defaultHttp+'customerpool/getPoolContacts.do?cId='+_this.$store.state.iscId+'&customeroneId='+this.detailData.id,
+                    data:qs.stringify(pageInfo)
+                }).then(function(res){
+                    // console.log(res.data.map.success)
+                    _this.$store.state.customerDetailsList = res.data.map.success
+                    _this.contactList = res.data.map.success
+                    _this.followform.contactsId = res.data.map.success[0].id
+                }).catch(function(err){
+                    console.log(err);
+                });
+                //详情页商机
+                axios({
+                    method:'post',
+                    url:_this.$store.state.defaultHttp+'customerpool/queryForPoolList.do?cId='+_this.$store.state.iscId+'&customerpool_id='+this.detailData.id,
+                    data:qs.stringify(pageInfo)
+                }).then(function(res){
+                    // console.log(res.data.map.success)
+                    _this.$store.state.opportunityDetailsList = res.data.map.success
+                }).catch(function(err){
+                    console.log(err);
+                });
+                //详情页合同
+                axios({
+                    method:'post',
+                    url:_this.$store.state.defaultHttp+'customerpool/getContractByPool.do?cId='+_this.$store.state.iscId+'&customerpool_id='+this.detailData.id,
+                    data:qs.stringify(pageInfo)
+                }).then(function(res){
+                    // console.log(res.data.map.success)
+                    _this.$store.state.agreementDetailsList = res.data.map.success
+                }).catch(function(err){
+                    console.log(err);
+                });
+                //详情页开票
+                axios({
+                    method:'post',
+                    url:_this.$store.state.defaultHttp+'customerpool/getPoolNameAndNumber.do?cId='+_this.$store.state.iscId+'&customerpool_id='+this.detailData.id,
+                    data:qs.stringify(pageInfo)
+                }).then(function(res){
+                    // console.log(res.data.map.success)
+                    _this.$store.state.InvoiceDetailsList = res.data.map.success
                 }).catch(function(err){
                     console.log(err);
                 });

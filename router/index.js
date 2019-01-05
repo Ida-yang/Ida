@@ -98,6 +98,11 @@ const router =new Router({
           meta: { title: '合同',name:'agreement' ,requireAuth:true}
         },
         {
+          path: '/agreementDetails',
+          component: resolve => require(['../components/index/page/agreement/agreementDetails.vue'], resolve),
+          meta: { title: '合同详情',name:'agreementDetails' ,requireAuth:true}
+        },
+        {
           path: '/agreementaddorupdate',
           component: resolve => require(['../components/index/page/AddAndUpdate/agreementaddorupdate.vue'], resolve),
           meta: { title: '编辑合同' ,requireAuth:true}

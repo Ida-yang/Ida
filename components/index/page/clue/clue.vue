@@ -359,7 +359,7 @@
                     url: _this.$store.state.defaultHttp+'clueJurisdiction/insertClue.do',
                 }).then(function(res){
                     console.log(res.data.msg)
-                    if(res.data.msg && res.data.msg == '权限不足'){
+                    if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
                             message:'对不起，您没有新增线索的权限',
                             type:'error'
@@ -413,7 +413,7 @@
                     url: _this.$store.state.defaultHttp+'clueJurisdiction/updateClue.do',
                 }).then(function(res){
                     console.log(res)
-                    if(res.data.msg && res.data.msg == '权限不足'){
+                    if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
                             message:'对不起，您没有修改线索的权限',
                             type:'error'
