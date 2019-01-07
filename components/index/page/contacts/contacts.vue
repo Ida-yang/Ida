@@ -1,5 +1,5 @@
 <template>
-    <!-- 客户搜索 -->
+    <!-- 联系人列表 -->
     <div>
         <div class="searchList" style="width:100%;padding:10px 0 0 10px;">
             <el-radio-group v-model="searchList.pId" style="margin:5px 0;">

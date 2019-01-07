@@ -93,6 +93,7 @@
                     @change="handleInput($event, item.inputModel)"
                     :placeholder="item.placeholder"
                     format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                    default-value="1985-06-15"
                     style="width:90%;" 
                     auto-complete="off">
                 </el-date-picker>

@@ -52,6 +52,7 @@
                                 type="datetime"
                                 format="yyyy-MM-dd HH:mm:ss"
                                 value-format="yyyy-MM-dd HH:mm:ss"
+                                default-time="12:00:00"
                                 placeholder="选择日期时间" style="width:200px;">
                                 </el-date-picker>
                             </el-form-item>
@@ -146,7 +147,7 @@
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
-                    <el-tab-pane label="商机" name="third">
+                    <el-tab-pane label="商机管理" name="third">
                         <el-table
                         :data="opportunityDetails"
                         border
@@ -194,7 +195,7 @@
                             </el-table-column> -->
                         </el-table>
                     </el-tab-pane>
-                    <el-tab-pane label="合同" name="fouth">
+                    <el-tab-pane label="合同管理" name="fouth">
                         <el-table
                         :data="agreementDetails"
                         border
@@ -247,7 +248,7 @@
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
-                    <el-tab-pane label="开票" name="fifth">
+                    <el-tab-pane label="开票资料" name="fifth">
                         <el-table
                         :data="InvoiceDetails"
                         border

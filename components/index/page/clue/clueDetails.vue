@@ -52,6 +52,7 @@
                                 type="datetime"
                                 format="yyyy-MM-dd HH:mm:ss"
                                 value-format="yyyy-MM-dd HH:mm:ss"
+                                default-time="12:00:00"
                                 placeholder="选择日期时间" style="width:200px;">
                                 </el-date-picker>
                             </el-form-item>
