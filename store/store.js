@@ -5,7 +5,7 @@ Vue.use(Vuex)
 /*配置全局数据*/
 const state = {
   //配置访问地址
-  defaultHttp: 'http://139.159.155.153:8080/yzcrm/', //线上服务器
+  defaultHttp: 'http://crm.yunzoe.com/yzcrm/', //线上服务器
   // defaultHttp:'http://192.168.1.105:8080/', //测试服务器
 
   //作者
@@ -75,6 +75,11 @@ const state = {
   businessOpportunityList:[],
   //商机列表总数
   businessOpportunityListnumber:0,
+
+  //用户列表
+  userList:[],
+  //用户列表总数
+  userListnumber:0,
 
 }
 /*配置全局函数*/

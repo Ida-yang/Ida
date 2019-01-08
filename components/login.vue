@@ -4,7 +4,7 @@
     <el-row class="logincontent">
         <el-col :span="14" class="content-l">
             <div>
-                <img src="../assets/img/index.png" height="50%" width="60%" alt="元旦快乐" title="元旦快乐" style="margin:25% 20%;">
+                <img :src="bgimg" height="50%" width="60%" alt="元旦快乐" title="元旦快乐" style="margin:25% 20%;">
             </div>
         </el-col>
         <!-- <el-col :span="10" :offset="8" class="grid-content content-r systemLogin"> -->
@@ -60,20 +60,21 @@ export default {
     name: 'login',
     store,
     data () {
-    return {
-        loginFrom:{
-            public_username :'',
-            public_password :''
-        },
-        rules: {
-            public_username : [
-                { required: true, message: '请输入用户名', trigger: 'blur' },
-            ],
-            public_password : [
-                { required: true, message: '请输入密码', trigger: 'blur' },
-            ],
+        return {
+            loginFrom:{
+                public_username :'',
+                public_password :''
+            },
+            rules: {
+                public_username : [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                ],
+                public_password : [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                ],
+            },
+            bgimg:'C:/a.jpg'
         }
-    }
     },
     mounted() {
         // var backgroundImage = $("body").css("background-image");

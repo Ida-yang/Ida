@@ -168,7 +168,7 @@
                     method:'get',
                     url:_this.$store.state.defaultHttp+'opportunity/getopportunityById.do?cId='+_this.$store.state.iscId+'&opportunity_id='+_this.detailData.id,
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.opportunitydetail = res.data.map.success
                     _this.stepList = _this.opportunitydetail[0].addstep
                     _this.addstep = _this.opportunitydetail[0].opportunityProgress
