@@ -421,59 +421,6 @@
     .text ul li:not(:last-child){
         width: 31.5%;
     }
-    .followrecord{
-        clear: both;
-        width: 100%;
-        list-style: none;
-        position: relative;
-        /* background-color: pink; */
-    }
-    .followrecord li{
-        float: left;
-        font-size: 12px;
-        margin-bottom: 10px;
-        box-sizing:border-box; 
-        -moz-box-sizing:border-box; /* Firefox */ 
-        -webkit-box-sizing:border-box;
-    }
-    .followrecord .recordicon {
-        float: left;
-        position: absolute;
-        /* right: 0; */
-        width: 3%;
-        /* height: auto; */
-        height: 80px;
-        /* height: 100px; */
-        color: #ffffff;
-        padding-top: 5px;
-    }
-    .verticalline{
-        float: left;
-        width: 3%;
-        height: 19px;
-        border-bottom: 1px solid #c2c4c9;
-    }
-    .followrecord .recordcontent{
-        width:94%;
-        line-height:20px;
-        height: auto;
-        /* min-height: 80px; */
-        color: #000000;
-        padding-top: 5px;
-        padding-left: 10px;
-        background-color: #f7f7f7;
-        border-radius: 5px;
-    }
-    .delico{
-        float: left;
-        width:25px;
-        height:25px;
-        background-color:#ff8153;
-        border: 1px solid #ffffff;
-        border-radius:50%;
-        line-height:25px;
-        text-align:center;
-    }
     .oppinput{
         width:50%;
         float:left;

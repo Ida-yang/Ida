@@ -132,9 +132,10 @@
     import store from '../../../../store/store'
     import {mapState} from 'vuex'
     import axios from 'axios'
-    import bus from '../../bus';
+    import bus from '../../bus'
+    
     export default {
-        name:'Opportunityaddorupdate',
+        name:'useraddOrUpdate',
         computed:{  
         },
         props: {
