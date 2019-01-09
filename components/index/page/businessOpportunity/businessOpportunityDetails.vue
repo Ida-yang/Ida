@@ -27,7 +27,7 @@
                     <div v-show="!thisshow"></div>
                 </el-card>
             </div>
-            <div class="bottom">
+            <div class="bottom1">
                 <el-card class="box-card" v-model="opportunitydetail">
                     <div slot="header" class="clearfix">
                         <span>{{opportunitydetail[0].opportunity_name}}</span>
@@ -394,7 +394,7 @@
         height: auto;
         background-color: #fff;
     }
-    .bottom{
+    .bottom1{
         height: auto;
         background-color: #fff;
         margin-top: 20px;

@@ -175,6 +175,7 @@
             </el-table>
             <div class="block numberPage number">
                 <el-pagination
+                small
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="page"

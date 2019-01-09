@@ -18,8 +18,22 @@
                     @keyup.enter.native="submit">
                 </el-input>
                 <el-input 
+                    v-else-if="item.type && item.type == 'disabled'"
+                    :disabled="true"
+                    :value="myForm[item.inputModel]"
+                    style="width:90%;">
+                </el-input>
+                <el-input 
                     v-else-if="item.type && item.type == 'number'"
                     type="number"
+                    :value="myForm[item.inputModel]"
+                    @input="handleInput($event, item.inputModel)"
+                    style="width:90%;" 
+                    auto-complete="off">
+                </el-input>
+                <el-input 
+                    v-else-if="item.type && item.type == 'password'"
+                    type="password"
                     :value="myForm[item.inputModel]"
                     @input="handleInput($event, item.inputModel)"
                     style="width:90%;" 
@@ -81,8 +95,8 @@
                     auto-complete="off">
                 </el-date-picker>
                 <div v-else-if="item.type && item.type == 'radio'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
+                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">启用</el-radio>
+                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">禁用</el-radio>
                 </div>
                 <el-input 
                     v-else-if="item.prop"
@@ -126,6 +140,11 @@
         /* background-color: pink; */
         float: left;
     }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{
+        -webkit-appearance: none !important;
+        margin: 0;
+    }
 </style>
 
 <script>
@@ -147,43 +166,34 @@
             // }
         },
         data(){
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                callback(new Error('请再次输入密码'));
+                } else if (value !== this.myForm.private_password) {
+                callback(new Error('两次输入密码不一致!'));
+                } else {
+                callback();
+                }
+            };
             return {
                 customerlist:null,
                 contactslist:null,
                 addOrUpdateData: {},
                 myForm: {
-                    opportunity_name:null,
-                    opportunity_number:null,
-                    opportunity_time:null,
-                    customerpool_id:null,
-                    contacts_id:null,
-                    opportunity_achievement:null,
-                    opportunity_deal:null,
-                    // bumen:null,
-                    // jigou:null,
-                    user_id:null,
-                    opportunity_remarks:null,
                 },
                 subData: {
-                    opportunity_name:null,
-                    opportunity_number:null,
-                    opportunity_time:null,
-                    customerpool_id:null,
-                    contacts_id:null,
-                    opportunity_achievement:null,
-                    opportunity_deal:null,
-                    // bumen:null,
-                    // jigou:null,
-                    user_id:null,
-                    opportunity_remarks:null,
                 },
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
                 rules: {
-                    opportunity_number : [{ required: true, message: '商机编号不能为空', trigger: 'blur' },],
-                    opportunity_name : [{ required: true, message: '商机名称不能为空', trigger: 'blur' },],
-                    // telephone : [{ required: true, message: '电话不能为空', trigger: 'blur' },],
+                    second_id : [{ required: true, message: '所属部门不能为空', trigger: 'blur' },],
+                    role_id : [{ required: true, message: '用户角色不能为空', trigger: 'blur' },],
+                    private_employee : [{ required: true, message: '用户名称不能为空', trigger: 'blur' },],
+                    private_phone : [{ required: true, message: '登录账号不能为空', trigger: 'blur' },{ max: 11, message: '请输入11位手机号码', trigger: 'blur' }],
+                    private_password : [{ required: true, message: '密码不能为空', trigger: 'blur' },],
+                    private_passwords : [{ required: true, validator: validatePass, trigger: 'blur' },],
+                    private_state : [{ required: true, message: '请选择用户状态', trigger: 'blur' },],
                 },
             }
         },

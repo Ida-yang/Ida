@@ -1,163 +1,182 @@
 <template>
-    <div>
-        <div class="searchList" style="width:100%;">
-            <el-input v-model="searchList.searchName" placeholder="用户名称" style="width:300px;"></el-input>
-            &nbsp;&nbsp;
-            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
+    <div class="contentall">
+        <div class="leftcontent">
+            <el-tree
+                node-key="deptid"
+                highlight-current
+                default-expand-all
+                :data="datalist"
+                :props="defaultProps"
+                :expand-on-click-node="false"
+                @node-click="handleNodeClick">
+            </el-tree>
         </div>
-        <div class="entry">
-            <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
-            <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
-            <el-popover
-            placement="bottom"
-            width="100"
-            trigger="click">
-            <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="shownumber()" label="编号"></el-checkbox>
-                <el-checkbox class="checkone" @change="showname()" label="员工"></el-checkbox>
-                <el-checkbox class="checkone" @change="showaccount()" label="登录账号"></el-checkbox>
-                <el-checkbox class="checkone" @change="showrole()" label="角色"></el-checkbox>
-                <el-checkbox class="checkone" @change="showphone()" label="手机号"></el-checkbox>
-                <el-checkbox class="checkone" @change="showemail()" label="邮箱"></el-checkbox>
-                <el-checkbox class="checkone" @change="showdepart()" label="部门"></el-checkbox>
-                <el-checkbox class="checkone" @change="showposition()" label="职位"></el-checkbox>
-            </el-checkbox-group>
-            <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
-            <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
-            </el-popover>
-        </div>
-        <el-table
-            :data="tableData"
-            :default-sort = "{prop:'private_number',order: 'descending'}"
-            ref="multipleTable"
-            border
-            stripe
-            style="width:100%;text-align:center"
-            @selection-change="selectInfo"
-            >
-            <el-table-column
-                fixed
-                header-align="center"
-                align="center"
-                type="selection"
-                width="45"
-                scope.row.private_id
+        <div class="centercontent"></div>
+        <div class="rightcontent">
+            <div class="searchList" style="width:100%;">
+                <el-input v-model="searchList.searchName" placeholder="用户名称" style="width:300px;"></el-input>
+                &nbsp;&nbsp;
+                <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
+            </div>
+            <div class="entry">
+                <el-button class="btn" size="mini" @click="handleDeletes()">同步</el-button>
+                <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
+                <el-popover
+                placement="bottom"
+                width="100"
+                trigger="click">
+                <el-checkbox-group class="checklist" v-model="checklist">
+                    <el-checkbox class="checkone" @change="shownumber()" label="编号"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showname()" label="用户"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showaccount()" label="登录账号"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showrole()" label="角色"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showphone()" label="手机号"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showemail()" label="邮箱"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showdepart()" label="部门"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showposition()" label="职位"></el-checkbox>
+                </el-checkbox-group>
+                <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
+                <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
+                </el-popover>
+            </div>
+            <el-table
+                :data="tableData"
+                :default-sort = "{prop:'private_number',order: 'descending'}"
+                ref="multipleTable"
+                border
+                stripe
+                style="width:100%;text-align:center"
                 @selection-change="selectInfo"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="private_number"
-                fixed
-                v-if="showbianhao"
-                header-align="center"
-                align="left"
-                min-width="100"
-                label="编号"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="private_employee"
-                fixed
-                v-if="showmingcheng"
-                header-align="center"
-                align="left"
-                min-width="100"
-                label="员工"
-                sortable>
-                <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
-                        {{scope.row.private_employee}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="private_username"
-                v-if="showzhanghao"
-                header-align="center"
-                align="left"
-                min-width="120"
-                label="登录账号"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="name"
-                v-if="showjuese"
-                header-align="center"
-                align="left"
-                min-width="100"
-                label="角色"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="private_phone"
-                v-if="showshouji"
-                header-align="center"
-                align="left"
-                min-width="120"
-                label="手机号"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="private_email"
-                v-if="showyouxiang"
-                header-align="center"
-                align="left"
-                min-width="130"
-                label="邮箱"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="deptname"
-                show-overflow-tooltip
-                v-if="showbumen"
-                header-align="center"
-                align="left"
-                min-width="100"
-                label="部门"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="private_name"
-                v-if="showzhiwei"
-                header-align="center"
-                align="left"
-                min-width="80"
-                label="职位"
-                sortable>
-            </el-table-column>
-            <el-table-column label="操作"
-                fixed="right"
-                width="80"
-                header-align="center"
-                align="center">
-                <template slot-scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <!-- <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
-                </template>
-            </el-table-column>
-        </el-table>
-        <div class="block numberPage">
-            <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="page"
-            :page-sizes="[20, 50, 100, 500]"
-            :page-size="20"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="tableNumber">
-            </el-pagination>
+                >
+                <el-table-column
+                    fixed
+                    header-align="center"
+                    align="center"
+                    type="selection"
+                    width="45"
+                    scope.row.private_id
+                    @selection-change="selectInfo"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="private_number"
+                    fixed
+                    v-if="showbianhao"
+                    header-align="center"
+                    align="left"
+                    min-width="150"
+                    label="编号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="private_employee"
+                    fixed
+                    v-if="showmingcheng"
+                    header-align="center"
+                    align="left"
+                    min-width="90"
+                    label="用户"
+                    sortable>
+                    <!-- <template slot-scope="scope">
+                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                            {{scope.row.private_employee}}
+                        </div>
+                    </template> -->
+                </el-table-column>
+                <el-table-column
+                    prop="private_username"
+                    v-if="showzhanghao"
+                    header-align="center"
+                    align="left"
+                    min-width="120"
+                    label="登录账号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    v-if="showjuese"
+                    header-align="center"
+                    align="left"
+                    min-width="100"
+                    label="角色"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="private_phone"
+                    v-if="showshouji"
+                    header-align="center"
+                    align="left"
+                    min-width="120"
+                    label="手机号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="private_email"
+                    v-if="showyouxiang"
+                    header-align="center"
+                    align="left"
+                    min-width="130"
+                    label="邮箱"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="deptname"
+                    show-overflow-tooltip
+                    v-if="showbumen"
+                    header-align="center"
+                    align="left"
+                    min-width="100"
+                    label="部门"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="private_name"
+                    v-if="showzhiwei"
+                    header-align="center"
+                    align="left"
+                    min-width="80"
+                    label="职位"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="操作"
+                    fixed="right"
+                    width="80"
+                    header-align="center"
+                    align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                        size="mini"
+                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <!-- <el-button
+                        size="mini"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block numberPage">
+                <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="page"
+                :page-sizes="[20, 50, 100, 500]"
+                :page-size="20"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="tableNumber">
+                </el-pagination>
+            </div>
         </div>
         <el-dialog
             title="添加用户"
             :visible.sync="dialogVisible"
             width="30%">
-            <el-form>
-                <span>这是一段信息</span>
+                <el-form ref="newform" :model="newform" label-width="80px">
+                <el-form-item label="上级部门">
+                    <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
+                </el-form-item>
+                <el-form-item label="名称">
+                    <el-input v-model="newform.deptname" style="200px;"></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -168,7 +187,14 @@
             title="修改用户"
             :visible.sync="dialogVisible2"
             width="30%">
-            <span>这是一段信息</span>
+            <el-form ref="newform" :model="newform" label-width="80px">
+                <el-form-item label="上级部门">
+                    <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
+                </el-form-item>
+                <el-form-item label="名称">
+                    <el-input v-model="newform.deptname" style="200px;"></el-input>
+                </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible2 = false">取 消</el-button>
                 <el-button type="primary" @click="updateuser()">确 定</el-button>
@@ -197,13 +223,26 @@
         },
         data(){
             return {
+                datalist:[],
+                defaultProps:{
+                    label:'deptname',
+                    children:'next',
+                },
+                newform:{
+                    parentid:null,
+                    parentname:null,
+                    deptid:null,
+                    deptname:null,
+                },
                 searchList:{
                     searchName:null,
+                    deptid:null,
                 },
-                checklist:['编号','员工','登录账号','角色','手机号','邮箱','部门','职位'],
+                checklist:['编号','用户','登录账号','角色','手机号','邮箱','部门','职位'],
                 idArr:{
                     private_id:null,
                 },
+                clickdata:null,
                 showbianhao:true,
                 showmingcheng:true,
                 showzhanghao:true,
@@ -232,6 +271,7 @@
                 pageInfo.page = this.page
                 pageInfo.limit = this.limit
                 pageInfo.searchName = this.searchList.searchName
+                pageInfo.deptid = this.searchList.deptid
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'getPrivateUserAll.do?cId='+_this.$store.state.iscId,
@@ -243,6 +283,22 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+                axios({
+                    method: 'get',
+                    url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
+                }).then(function(res){
+                    // console.log(res.data.map.success)
+                    _this.datalist = res.data.map.success
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            handleNodeClick(data){
+                // console.log(data)
+                this.searchList.deptid = data.deptid
+                // console.log(this.searchList)
+                this.clickdata = data
+                this.$options.methods.reloadTable.bind(this)(true);
             },
             selectInfo(val){
                 this.multipleSelection = val;
@@ -259,8 +315,21 @@
             },
             //用户添加
             handleAdd(){
-                let _this = this;
-                this.dialogVisible = true
+                let _this = this
+                // console.log(this.clickdata.next)
+                if(!this.clickdata){
+                    _this.$message({
+                        message:'请先选择部门，再添加角色',
+                        type:'info'
+                    })
+                }else if(this.clickdata && this.clickdata.next == ''){
+                    this.dialogVisible = true
+                }else{
+                    _this.$message({
+                        message:'该部门下还有部门，不可添加角色',
+                        type:'error'
+                    })
+                }
             },
             //用户添加提交按钮
             adduser(){
@@ -269,8 +338,21 @@
             },
             //用户修改
             handleEdit(index,row){
-                let _this = this;
-                this.dialogVisible2 = true
+                let _this = this
+                // console.log(this.clickdata.next)
+                if(!this.clickdata){
+                    _this.$message({
+                        message:'请先选择部门，再修改角色',
+                        type:'info'
+                    })
+                }else if(this.clickdata && this.clickdata.next == ''){
+                    this.dialogVisible2 = true
+                }else{
+                    _this.$message({
+                        message:'该部门下还有部门，不可修改角色',
+                        type:'error'
+                    })
+                }
             },
             //用户修改提交按钮
             updateuser(){
@@ -317,3 +399,28 @@
         }
     }
 </script>
+<style>
+    .contentall{
+        background-color: #ffffff;
+        height: 100%;
+    }
+    .leftcontent{
+        width: 30%;
+        height: auto;
+        float: left;
+        box-sizing: border-box;
+    }
+    .centercontent{
+        display: block;
+        width: 1%;
+        height: 100%;
+        float: left;
+        background-color: #f0f0f0;
+    }
+    .rightcontent{
+        width: 69%;
+        height: 100%;
+        float: left;
+        box-sizing: border-box;
+    }
+</style>

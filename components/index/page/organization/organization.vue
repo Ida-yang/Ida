@@ -7,9 +7,10 @@
                 default-expand-all
                 :data="datalist"
                 :props="defaultProps"
-                :expand-on-click-node="false">
+                :expand-on-click-node="false"
+                @node-click="handleNodeClick">
                 <span class="custom-tree-node" slot-scope="{ node, data }">
-                    <span>{{ node.label }}</span>
+                    <span><i class="el-icon-info">&nbsp;</i>{{ node.label }}</span>
                     <span class="showhover">
                         <el-button type="text" size="mini" icon="el-icon-circle-plus-outline" @click="handleappend(data)">
                         </el-button>
@@ -23,10 +24,13 @@
         </div>
         <div class="centercontent"></div>
         <div class="rightcontent">
-            <!-- <ul class="followrecord"> -->
+            <div style="margin:0 0 15px 15px;">
+                <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
+                <el-button class="btn" size="mini" @click="handleEdit()">修改</el-button>
+            </div>
             <ul class="followrecord" v-for="item in roleList" :key="item.id">
                 <li class="rolecontent">
-                    ----<span><i class="el-icon-bell"></i>{{item.name}}</span>
+                    ----<span>&nbsp;<i class="el-icon-bell">&nbsp;</i>{{item.name}} - 【{{item.deptname}}】</span>
                 </li>
             </ul>
         </div>
@@ -64,6 +68,114 @@
                 <el-button type="primary" @click="updatedept()">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog
+            title="添加角色"
+            :visible.sync="dialogVisible3"
+            width="30%">
+            <el-form ref="roleform" :model="roleform" label-width="80px">
+                <el-form-item label="所属部门">
+                    <el-input v-model="roleform.deptname" :disabled="true" style="200px;"></el-input>
+                </el-form-item>
+                <el-form-item label="角色名称">
+                    <el-input v-model="roleform.name" style="200px;"></el-input>
+                </el-form-item>
+            </el-form>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="线索" name="first">
+                    <el-checkbox :indeterminate="checksomeclue" v-model="checkAllclue" @change="CheckAllclues">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in cluerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="客户" name="second">
+                    <el-checkbox :indeterminate="checksomecustomer" v-model="checkAllcustomer" @change="checkAllcustomers">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in customerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="联系人" name="third">
+                    <el-checkbox :indeterminate="checksomecontact" v-model="checkAllcontact" @change="CheckAllcontacts">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in contactrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="商机" name="fourth">
+                    <el-checkbox :indeterminate="checksomeopportunity" v-model="checkAllopportunity" @change="CheckAllopportunitys">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in opportunityrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="合同" name="fifth">
+                    <el-checkbox :indeterminate="checksomeagreement" v-model="checkAllagreement" @change="CheckAllagreements">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in agreementrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+            </el-tabs>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible3 = false">取 消</el-button>
+                <el-button type="primary" @click="addrole()">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog
+            title="修改角色"
+            :visible.sync="dialogVisible4"
+            width="30%">
+            <el-form ref="roleform" :model="roleform" label-width="80px">
+                <el-form-item label="所属部门">
+                    <el-input v-model="roleform.deptname" :disabled="true" style="200px;"></el-input>
+                </el-form-item>
+                <el-form-item label="角色名称">
+                    <el-input v-model="roleform.name" style="200px;"></el-input>
+                </el-form-item>
+            </el-form>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="线索" name="first">
+                    <el-checkbox :indeterminate="checksomeclue" v-model="checkAllclue" @change="CheckAllclues">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in cluerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="客户" name="second">
+                    <el-checkbox :indeterminate="checksomecustomer" v-model="checkAllcustomer" @change="checkAllcustomers">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in customerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="联系人" name="third">
+                    <el-checkbox :indeterminate="checksomecontact" v-model="checkAllcontact" @change="CheckAllcontacts">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in contactrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="商机" name="fourth">
+                    <el-checkbox :indeterminate="checksomeopportunity" v-model="checkAllopportunity" @change="CheckAllopportunitys">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in opportunityrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="合同" name="fifth">
+                    <el-checkbox :indeterminate="checksomeagreement" v-model="checkAllagreement" @change="CheckAllagreements">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
+                        <el-checkbox v-for="item in agreementrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+            </el-tabs>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible4 = false">取 消</el-button>
+                <el-button type="primary" @click="updaterole()">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -71,6 +183,8 @@
     import store from '../../../../store/store'
     import axios from 'axios'
     import qs from 'qs'
+
+    const roleOptions = [];
 
     export default {
         name:'organization',
@@ -88,26 +202,54 @@
                     deptid:null,
                     deptname:null,
                 },
-                props:{
-                    value:'deptid',
-                    label:'deptname',
-                    children:'next',
+                roleform:{
+                    deptid:null,
+                    deptname:null,
+                    name:null,
+                    ids:[],
+                },
+                searchList:{
+                    deptid:null,
+                    parentid:null,
                 },
                 roleList:[],
+                clickdata:null,
                 dialogVisible:false,
                 dialogVisible2:false,
+                dialogVisible3:false,
+                dialogVisible4:false,
+                
+                activeName: 'first',
+                
+                checkAllclue: false,
+                checkAllcustomer: false,
+                checkAllcontact: false,
+                checkAllopportunity: false,
+                checkAllagreement: false,
+                
+                checksomeclue: false,
+                checksomecustomer:false,
+                checksomecontact:false,
+                checksomeopportunity:false,
+                checksomeagreement:false,
+
+                checkedroles: [],
+
+                cluerole: null,
+                customerole:null,
+                contactrole:null,
+                opportunityrole:null,
+                agreementrole:null,
             }
         },
         mounted(){
-            this.reloadTable()
+            this.loadData()
+            this.reloadData()
+            this.getresource()
         },
         methods:{
-            reloadTable(){
+            loadData(){
                 let _this = this
-                let qs = require('querystring')
-                let pageInfo = {}
-                pageInfo.page = this.page
-                pageInfo.limit = this.limit
                 axios({
                     method: 'get',
                     url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
@@ -117,15 +259,50 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+            },
+            reloadData(){
+                let _this = this
+                let qs = require('querystring')
+                let searchInfo = {}
+                searchInfo.deptid = this.searchList.deptid
+                searchInfo.parentid = this.searchList.parentid
+                // console.log(searchInfo)
                 axios({
-                    method: 'get',
-                    url: _this.$store.state.defaultHttp+'role/query.do?cId='+_this.$store.state.iscId,
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(searchInfo)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.roleList = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
+            },
+            getresource(){
+                let _this = this
+                axios({
+                    method: 'get',
+                    url: _this.$store.state.defaultHttp+'resource/getResources.do',
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.cluerole = res.data.name1
+                    _this.customerole = res.data.name2
+                    _this.contactrole = res.data.name3
+                    _this.opportunityrole = res.data.name4
+                    _this.agreementrole = res.data.name5
+                    // console.log(_this.cluerole)
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            handleNodeClick(data){
+                // console.log(data)
+                this.searchList.deptid = data.deptid
+                this.searchList.parentid = data.parentid
+                // console.log(this.searchList)
+                this.clickdata = data
+                // console.log(this.clickdata)
+                this.$options.methods.reloadData.bind(this)(true);
             },
             //上级部门添加
             handleappend(data){
@@ -162,7 +339,7 @@
                         })
                     }
                     _this.dialogVisible = false
-                    _this.$options.methods.reloadTable.bind(_this)(true);
+                    _this.$options.methods.loadData.bind(_this)(true);
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -202,7 +379,7 @@
                         })
                     }
                     _this.dialogVisible2 = false
-                    _this.$options.methods.reloadTable.bind(_this)(true);
+                    _this.$options.methods.loadData.bind(_this)(true);
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -229,7 +406,7 @@
                                 message: '删除成功',
                                 type: 'success'
                             });
-                            _this.$options.methods.reloadTable.bind(_this)(true);
+                            _this.$options.methods.loadData.bind(_this)(true);
                         } else {
                             _this.$message({
                                 message: res.data.msg,
@@ -241,6 +418,99 @@
                     });
                 });
             },
+            handleClick(tab, event){
+                // console.log(tab, event);
+            },
+            handleAdd(){
+                let _this = this
+                // console.log(this.clickdata.next)
+                if(!this.clickdata){
+                    _this.$message({
+                        message:'请先选择部门，再添加角色',
+                        type:'info'
+                    })
+                }else if(this.clickdata && this.clickdata.next == ''){
+                    this.roleform.deptname = this.clickdata.deptname
+                    this.dialogVisible3 = true
+                }else{
+                    _this.$message({
+                        message:'该部门下还有部门，不可添加角色',
+                        type:'error'
+                    })
+                }
+            },
+            addrole(){
+                console.log(this.checkedroles)
+            },
+            handleEdit(){
+                let _this = this
+                // console.log(this.clickdata.next)
+                if(!this.clickdata){
+                    _this.$message({
+                        message:'请先选择部门，再修改角色',
+                        type:'info'
+                    })
+                }else if(this.clickdata && this.clickdata.next == ''){
+                    this.dialogVisible4 = true
+                }else{
+                    _this.$message({
+                        message:'该部门下还有部门，不可修改角色',
+                        type:'error'
+                    })
+                }
+            },
+            updaterole(){},
+            CheckAllclues(val) {
+                if(val == true){
+                    for(var i = 0,length = this.cluerole.length; i < length; i++){
+                        this.checkedroles.push(this.cluerole[i].id)
+                    }
+                }else{
+                    this.checkedroles = []
+                }
+            },
+            checkAllcustomers(val) {
+                if(val == true){
+                    for(var i = 0,length = this.customerole.length; i < length; i++){
+                        this.checkedroles.push(this.customerole[i].id)
+                    }
+                }else{
+                    this.checkedroles = []
+                }
+            },
+            CheckAllcontacts(val) {
+                if(val == true){
+                    for(var i = 0,length = this.contactrole.length; i < length; i++){
+                        this.checkedroles.push(this.contactrole[i].id)
+                    }
+                }else{
+                    this.checkedroles = []
+                }
+            },
+            CheckAllopportunitys(val) {
+                if(val == true){
+                    for(var i = 0,length = this.opportunityrole.length; i < length; i++){
+                        this.checkedroles.push(this.opportunityrole[i].id)
+                    }
+                }else{
+                    this.checkedroles = []
+                }
+            },
+            CheckAllagreements(val) {
+                if(val == true){
+                    for(var i = 0,length = this.agreementole.length; i < length; i++){
+                        this.checkedroles.push(this.agreementole[i].id)
+                    }
+                }else{
+                    this.checkedroles = []
+                }
+            },
+            handleCheckedrole(e) {
+                console.log(e)
+                let checkedCount = e.length;
+                this.checkAllclue = checkedCount === this.cluerole.length;
+                this.checksomeclue = checkedCount > 0 && checkedCount < this.cluerole.length;
+            }
         }
     }
 </script>
@@ -291,5 +561,8 @@
     }
     .showhover:focus{
         visibility: hidden;
+    }
+    .el-icon-info{
+        font-size: 12px;
     }
 </style>

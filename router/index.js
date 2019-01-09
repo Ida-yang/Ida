@@ -78,6 +78,11 @@ const router =new Router({
           meta: { title: '客户详情' ,requireAuth:true}
         },
         {
+          path: '/customeraddorupdate',
+          component: resolve => require(['../components/index/page/AddAndUpdate/customeraddorupdate.vue'], resolve),
+          meta: { title: '编辑客户' ,requireAuth:true}
+        },
+        {
           path: '/customerPool',
           component: resolve => require(['../components/index/page/customer/customerPool.vue'], resolve),
           meta: { title: '客户池',name:'customerPool' ,requireAuth:true}
@@ -138,9 +143,9 @@ const router =new Router({
           meta: { title: '用户',name:'user' ,requireAuth:true}
         },
         {
-          path: '/customeraddorupdate',
-          component: resolve => require(['../components/index/page/AddAndUpdate/customeraddorupdate.vue'], resolve),
-          meta: { title: '编辑客户' ,requireAuth:true}
+          path: '/useraddorupdate',
+          component: resolve => require(['../components/index/page/AddAndUpdate/useraddorupdate.vue'], resolve),
+          meta: { title: '编辑用户' ,requireAuth:true}
         },
       ]
     },
