@@ -81,6 +81,9 @@ const state = {
   //用户列表总数
   userListnumber:0,
 
+  //状态列表
+  stateList:[],
+
 }
 /*配置全局函数*/
 const mutations = {

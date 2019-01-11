@@ -12,11 +12,14 @@
                 <span class="custom-tree-node" slot-scope="{ node, data }">
                     <span><i class="el-icon-info">&nbsp;</i>{{ node.label }}</span>
                     <span class="showhover">
-                        <el-button type="text" size="mini" icon="el-icon-circle-plus-outline" @click="handleappend(data)">
+                        <el-button type="text" size="mini" style="font-size:12px;" @click="handleappend(data)">添加/
+                        <!-- <el-button type="text" size="mini" icon="el-icon-circle-plus-outline" @click="handleappend(data)"> -->
                         </el-button>
-                        <el-button type="text" size="mini" icon="el-icon-edit" @click="handleUpdate(data)">
+                        <el-button type="text" size="mini" style="font-size:12px;" @click="handleUpdate(data)">修改/
+                        <!-- <el-button type="text" size="mini" icon="el-icon-edit" @click="handleUpdate(data)"> -->
                         </el-button>
-                        <el-button type="text" size="mini" icon="el-icon-remove-outline" @click="deletedept(node,data)">
+                        <el-button type="text" size="mini" style="font-size:12px;" @click="deletedept(node,data)">删除
+                        <!-- <el-button type="text" size="mini" icon="el-icon-remove-outline" @click="deletedept(node,data)"> -->
                         </el-button>
                     </span>
                 </span>
@@ -26,18 +29,19 @@
         <div class="rightcontent">
             <div style="margin:0 0 15px 15px;">
                 <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
-                <el-button class="btn" size="mini" @click="handleEdit()">修改</el-button>
             </div>
-            <ul class="followrecord" v-for="item in roleList" :key="item.id">
+            <ul class="rolerecord" v-for="item in roleList" :key="item.id">
                 <li class="rolecontent">
                     ----<span>&nbsp;<i class="el-icon-bell">&nbsp;</i>{{item.name}} - 【{{item.deptname}}】</span>
+                    <el-button type="text" size="mini" @click="handleEdit($event,item)">修改</el-button>
+                    <el-button type="text" size="mini" @click="handledelete(item.id)">删除</el-button>
                 </li>
             </ul>
         </div>
         <el-dialog
             title="添加"
             :visible.sync="dialogVisible"
-            width="30%">
+            width="40%">
             <el-form ref="newform" :model="newform" label-width="80px">
                 <el-form-item label="上级部门">
                     <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
@@ -54,7 +58,7 @@
         <el-dialog
             title="修改"
             :visible.sync="dialogVisible2"
-            width="30%">
+            width="40%">
             <el-form ref="newform" :model="newform" label-width="80px">
                 <el-form-item label="上级部门">
                     <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
@@ -71,7 +75,7 @@
         <el-dialog
             title="添加角色"
             :visible.sync="dialogVisible3"
-            width="30%">
+            width="40%">
             <el-form ref="roleform" :model="roleform" label-width="80px">
                 <el-form-item label="所属部门">
                     <el-input v-model="roleform.deptname" :disabled="true" style="200px;"></el-input>
@@ -84,36 +88,43 @@
                 <el-tab-pane label="线索" name="first">
                     <el-checkbox :indeterminate="checksomeclue" v-model="checkAllclue" @change="CheckAllclues">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in cluerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedroleclues" @change="handleCheckedroleclue">
+                        <el-checkbox class="checkboxclass" v-for="item in cluerole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="客户" name="second">
-                    <el-checkbox :indeterminate="checksomecustomer" v-model="checkAllcustomer" @change="checkAllcustomers">全选</el-checkbox>
+                    <el-checkbox :indeterminate="checksomecustomer" v-model="checkAllcustomer" @change="CheckAllcustomers">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in customerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedrolecustomers" @change="handleCheckedrolecustomer">
+                        <el-checkbox class="checkboxclass" v-for="item in customerole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="联系人" name="third">
                     <el-checkbox :indeterminate="checksomecontact" v-model="checkAllcontact" @change="CheckAllcontacts">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in contactrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedrolecontacts" @change="handleCheckedrolecontact">
+                        <el-checkbox class="checkboxclass" v-for="item in contactrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="商机" name="fourth">
                     <el-checkbox :indeterminate="checksomeopportunity" v-model="checkAllopportunity" @change="CheckAllopportunitys">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in opportunityrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedroleopportunitys" @change="handleCheckedroleopportunity">
+                        <el-checkbox class="checkboxclass" v-for="item in opportunityrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="合同" name="fifth">
                     <el-checkbox :indeterminate="checksomeagreement" v-model="checkAllagreement" @change="CheckAllagreements">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in agreementrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedroleagreements" @change="handleCheckedroleagreement">
+                        <el-checkbox class="checkboxclass" v-for="item in agreementrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="系统设置" name="sixth">
+                    <el-checkbox :indeterminate="checksomeset" v-model="checkAllset" @change="CheckAllsets">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedrolesets" @change="handleCheckedroleset">
+                        <el-checkbox class="checkboxclass" v-for="item in setrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
             </el-tabs>
@@ -125,7 +136,7 @@
         <el-dialog
             title="修改角色"
             :visible.sync="dialogVisible4"
-            width="30%">
+            width="40%">
             <el-form ref="roleform" :model="roleform" label-width="80px">
                 <el-form-item label="所属部门">
                     <el-input v-model="roleform.deptname" :disabled="true" style="200px;"></el-input>
@@ -138,36 +149,43 @@
                 <el-tab-pane label="线索" name="first">
                     <el-checkbox :indeterminate="checksomeclue" v-model="checkAllclue" @change="CheckAllclues">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in cluerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedroleclues" @change="handleCheckedroleclue">
+                        <el-checkbox class="checkboxclass" v-for="item in cluerole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="客户" name="second">
-                    <el-checkbox :indeterminate="checksomecustomer" v-model="checkAllcustomer" @change="checkAllcustomers">全选</el-checkbox>
+                    <el-checkbox :indeterminate="checksomecustomer" v-model="checkAllcustomer" @change="CheckAllcustomers">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in customerole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedrolecustomers" @change="handleCheckedrolecustomer">
+                        <el-checkbox class="checkboxclass" v-for="item in customerole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="联系人" name="third">
                     <el-checkbox :indeterminate="checksomecontact" v-model="checkAllcontact" @change="CheckAllcontacts">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in contactrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedrolecontacts" @change="handleCheckedrolecontact">
+                        <el-checkbox class="checkboxclass" v-for="item in contactrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="商机" name="fourth">
                     <el-checkbox :indeterminate="checksomeopportunity" v-model="checkAllopportunity" @change="CheckAllopportunitys">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in opportunityrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedroleopportunitys" @change="handleCheckedroleopportunity">
+                        <el-checkbox class="checkboxclass" v-for="item in opportunityrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
                 <el-tab-pane label="合同" name="fifth">
                     <el-checkbox :indeterminate="checksomeagreement" v-model="checkAllagreement" @change="CheckAllagreements">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="checkedroles" @change="handleCheckedrole">
-                        <el-checkbox v-for="item in agreementrole" :key="item.id" :label="item.id">{{item.resourcename}}</el-checkbox>
+                    <el-checkbox-group v-model="checkedroleagreements" @change="handleCheckedroleagreement">
+                        <el-checkbox class="checkboxclass" v-for="item in agreementrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="系统设置" name="sixth">
+                    <el-checkbox :indeterminate="checksomeset" v-model="checkAllset" @change="CheckAllsets">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedrolesets" @change="handleCheckedroleset">
+                        <el-checkbox class="checkboxclass" v-for="item in setrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
             </el-tabs>
@@ -226,20 +244,28 @@
                 checkAllcontact: false,
                 checkAllopportunity: false,
                 checkAllagreement: false,
+                checkAllset: false,
                 
                 checksomeclue: false,
                 checksomecustomer:false,
                 checksomecontact:false,
                 checksomeopportunity:false,
                 checksomeagreement:false,
+                checksomeset:false,
 
-                checkedroles: [],
+                checkedroleclues: [],
+                checkedrolecustomers: [],
+                checkedrolecontacts: [],
+                checkedroleopportunitys: [],
+                checkedroleagreements: [],             
+                checkedrolesets: [],             
 
                 cluerole: null,
                 customerole:null,
                 contactrole:null,
                 opportunityrole:null,
                 agreementrole:null,
+                setrole:null,
             }
         },
         mounted(){
@@ -272,7 +298,7 @@
                     url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(searchInfo)
                 }).then(function(res){
-                    // console.log(res.data)
+                    console.log(res.data)
                     _this.roleList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -290,7 +316,7 @@
                     _this.contactrole = res.data.name3
                     _this.opportunityrole = res.data.name4
                     _this.agreementrole = res.data.name5
-                    // console.log(_this.cluerole)
+                    _this.setrole = res.data.name6
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -302,6 +328,7 @@
                 // console.log(this.searchList)
                 this.clickdata = data
                 // console.log(this.clickdata)
+                this.roleform.deptid = data.deptid
                 this.$options.methods.reloadData.bind(this)(true);
             },
             //上级部门添加
@@ -339,7 +366,9 @@
                         })
                     }
                     _this.dialogVisible = false
+                    _this.searchList = []
                     _this.$options.methods.loadData.bind(_this)(true);
+                    _this.$options.methods.reloadData.bind(_this)(true);
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -379,7 +408,9 @@
                         })
                     }
                     _this.dialogVisible2 = false
+                    _this.searchList = []
                     _this.$options.methods.loadData.bind(_this)(true);
+                    _this.$options.methods.reloadData.bind(_this)(true);
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -406,13 +437,15 @@
                                 message: '删除成功',
                                 type: 'success'
                             });
-                            _this.$options.methods.loadData.bind(_this)(true);
                         } else {
                             _this.$message({
                                 message: res.data.msg,
                                 type: 'error'
                             });
                         }
+                        _this.searchList = []
+                        _this.$options.methods.loadData.bind(_this)(true);
+                        _this.$options.methods.reloadData.bind(_this)(true);
                     }).catch(function(err){
                         console.log(err);
                     });
@@ -423,6 +456,8 @@
             },
             handleAdd(){
                 let _this = this
+                this.roleform.name = ''
+                this.roleform.ids = []
                 // console.log(this.clickdata.next)
                 if(!this.clickdata){
                     _this.$message({
@@ -440,77 +475,247 @@
                 }
             },
             addrole(){
-                console.log(this.checkedroles)
-            },
-            handleEdit(){
                 let _this = this
-                // console.log(this.clickdata.next)
-                if(!this.clickdata){
-                    _this.$message({
-                        message:'请先选择部门，再修改角色',
-                        type:'info'
-                    })
-                }else if(this.clickdata && this.clickdata.next == ''){
-                    this.dialogVisible4 = true
-                }else{
-                    _this.$message({
-                        message:'该部门下还有部门，不可修改角色',
-                        type:'error'
-                    })
-                }
+                let qs = require('querystring')
+                let data = {}
+                data.deptid = this.roleform.deptid
+                data.name = this.roleform.name
+                data.ids = this.roleform.ids
+                console.log(data)
+                axios({
+                    method:'post',
+                    url:_this.$store.state.defaultHttp+'role/saveOrUpdate.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    if(res.data.msg && res.data.msg == 'success'){
+                        _this.$message({
+                            message:'添加成功',
+                            type:'success'
+                        })
+                        _this.dialogVisible3 = false
+                        _this.$options.methods.reloadData.bind(_this)(true);
+                    }else{
+                        _this.$message({
+                            message:res.data.msg,
+                            type:'error'
+                        })
+                    }
+                }).catch(function(err){
+                    console.log(err)
+                })
             },
-            updaterole(){},
+            handleEdit(e,val){
+                this.roleform.ids = []
+                this.checkedroleclues = []
+                this.checkedrolecustomers = []
+                this.checkedrolecontacts = []
+                this.checkedroleopportunitys = []
+                this.checkedroleagreements = []
+                this.checkedrolesets = []
+                let ids = val.resources
+                ids.forEach(el => {
+                    if(el.id){
+                        // console.log(el.id)
+                        this.roleform.ids.push(el.id)
+                        this.checkedroleclues.push(el.id)
+                        this.checkedrolecustomers.push(el.id)
+                        this.checkedrolecontacts.push(el.id)
+                        this.checkedroleopportunitys.push(el.id)
+                        this.checkedroleagreements.push(el.id)
+                        this.checkedrolesets.push(el.id)
+                    }
+                });
+                console.log(this.roleform.ids)
+                this.roleform.id = val.id
+                this.roleform.name = val.name
+                this.roleform.deptid = val.deptid
+                this.roleform.deptname = val.deptname
+                this.dialogVisible4 = true
+            },
+            updaterole(){
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.id = this.roleform.id
+                data.name = this.roleform.name
+                data.deptid = this.roleform.deptid
+                let arr = Array.from(new Set(this.roleform.ids))
+                console.log(arr)
+                data.ids = arr
+                console.log(data)
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'role/saveOrUpdate.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'success') {
+                        _this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        });
+                        _this.dialogVisible4 = false
+                    } else {
+                        _this.$message({
+                            message: res.data.msg,
+                            type: 'error'
+                        });
+                    }
+                    _this.$options.methods.reloadData.bind(_this)(true);
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            handledelete(val){
+                console.log(val)
+                let _this = this
+                let data = {}
+                let qs = require('querystring')
+                data.id = val
+                _this.$confirm('是否确认删除吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'post',
+                        url:  _this.$store.state.defaultHttp+ 'role/delete.do?cId='+_this.$store.state.iscId,
+                        data:qs.stringify(data),
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.data.msg && res.data.msg == 'success') {
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadData.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data.msg,
+                                type: 'error'
+                            });
+                        }
+                        
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                })
+            },
             CheckAllclues(val) {
-                if(val == true){
-                    for(var i = 0,length = this.cluerole.length; i < length; i++){
-                        this.checkedroles.push(this.cluerole[i].id)
+                console.log(val)
+                let data = this.cluerole
+                data.forEach(el => {
+                    if(val == true){
+                        this.checkedroleclues.push(el.id)
+                        this.roleform.ids.push(el.id)
+                    }else{
+                        this.checkedroleclues.pop(el.id)
+                        this.roleform.ids.pop(el.id)
                     }
-                }else{
-                    this.checkedroles = []
-                }
+                });
             },
-            checkAllcustomers(val) {
-                if(val == true){
-                    for(var i = 0,length = this.customerole.length; i < length; i++){
-                        this.checkedroles.push(this.customerole[i].id)
+            CheckAllcustomers(val) {
+                let data = this.customerole
+                data.forEach(el => {
+                    if(val == true){
+                        this.checkedrolecustomers.push(el.id)
+                        this.roleform.ids.push(el.id)
+                    }else{
+                        this.checkedrolecustomers.pop(el.id)
+                        this.roleform.ids.pop(el.id)
                     }
-                }else{
-                    this.checkedroles = []
-                }
+                });
             },
             CheckAllcontacts(val) {
-                if(val == true){
-                    for(var i = 0,length = this.contactrole.length; i < length; i++){
-                        this.checkedroles.push(this.contactrole[i].id)
+                let data = this.contactrole
+                data.forEach(el => {
+                    if(val == true){
+                        this.checkedrolecontacts.push(el.id)
+                        this.roleform.ids.push(el.id)
+                    }else{
+                        this.checkedrolecontacts.pop(el.id)
+                        this.roleform.ids.pop(el.id)
                     }
-                }else{
-                    this.checkedroles = []
-                }
+                });
             },
             CheckAllopportunitys(val) {
-                if(val == true){
-                    for(var i = 0,length = this.opportunityrole.length; i < length; i++){
-                        this.checkedroles.push(this.opportunityrole[i].id)
+                let data = this.opportunityrole
+                data.forEach(el => {
+                    if(val == true){
+                        this.checkedroleopportunitys.push(el.id)
+                        this.roleform.ids.push(el.id)
+                    }else{
+                        this.checkedroleopportunitys.pop(el.id)
+                        this.roleform.ids.pop(el.id)
                     }
-                }else{
-                    this.checkedroles = []
-                }
+                });
             },
             CheckAllagreements(val) {
-                if(val == true){
-                    for(var i = 0,length = this.agreementole.length; i < length; i++){
-                        this.checkedroles.push(this.agreementole[i].id)
+                let data = this.agreementrole
+                data.forEach(el => {
+                    if(val == true){
+                        this.checkedroleagreements.push(el.id)
+                        this.roleform.ids.push(el.id)
+                    }else{
+                        this.checkedroleagreements.pop(el.id)
+                        this.roleform.ids.pop(el.id)
                     }
-                }else{
-                    this.checkedroles = []
-                }
+                });
             },
-            handleCheckedrole(e) {
-                console.log(e)
+            CheckAllsets(val) {
+                let data = this.setrole
+                data.forEach(el => {
+                    if(val == true){
+                        this.checkedrolesets.push(el.id)
+                        this.roleform.ids.push(el.id)
+                    }else{
+                        this.checkedrolesets.pop(el.id)
+                        this.roleform.ids.pop(el.id)
+                    }
+                });
+            },
+            handleCheckedroleclue(e) {
+                // console.log(e)
                 let checkedCount = e.length;
                 this.checkAllclue = checkedCount === this.cluerole.length;
                 this.checksomeclue = checkedCount > 0 && checkedCount < this.cluerole.length;
-            }
+            },
+            handleCheckedrolecustomer(e) {
+                // console.log(e)
+                let checkedCount = e.length;
+                this.checkAllcustomer = checkedCount === this.customerole.length;
+                this.checksomecustomer = checkedCount > 0 && checkedCount < this.customerole.length;
+            },
+            handleCheckedrolecontact(e) {
+                // console.log(e)
+                let checkedCount = e.length;
+                this.checkAllcontact = checkedCount === this.contactrole.length;
+                this.checksomecontact = checkedCount > 0 && checkedCount < this.contactrole.length;
+            },
+            handleCheckedroleopportunity(e) {
+                // console.log(e)
+                let checkedCount = e.length;
+                this.checkAllopportunity = checkedCount === this.opportunityrole.length;
+                this.checksomeopportunity = checkedCount > 0 && checkedCount < this.opportunityrole.length;
+            },
+            handleCheckedroleagreement(e) {
+                // console.log(e)
+                let checkedCount = e.length;
+                this.checkAllagreement = checkedCount === this.agreementrole.length;
+                this.checksomeagreement = checkedCount > 0 && checkedCount < this.agreementrole.length;
+            },
+            handleCheckedroleset(e) {
+                // console.log(e)
+                let checkedCount = e.length;
+                this.checkAllset = checkedCount === this.setrole.length;
+                this.checksomeset = checkedCount > 0 && checkedCount < this.setrole.length;
+            },
+            changevalue(e,val){
+                if(e == false){
+                    this.roleform.ids.pop(val)
+                }else{
+                    this.roleform.ids.push(val)
+                }
+            },
         }
     }
 </script>
@@ -523,6 +728,7 @@
     .leftcontent{
         width: 30%;
         height: auto;
+        margin-top: 20px;
         float: left;
         box-sizing: border-box;
     }
@@ -538,6 +744,19 @@
         height: 100%;
         float: left;
         box-sizing: border-box;
+    }
+    .rolerecord{
+        clear: both;
+        width: 100%;
+        list-style: none;
+        position: relative;
+    }
+    .rolerecord li{
+        float: left;
+        font-size: 12px;
+        box-sizing:border-box; 
+        -moz-box-sizing:border-box; /* Firefox */ 
+        -webkit-box-sizing:border-box;
     }
     .rolecontent{
         width:94%;
@@ -559,8 +778,14 @@
     .showhover{
         visibility: visible;
     }
-    .showhover:focus{
+    /* .showhover:focus,.showhover:hover{
         visibility: hidden;
+    } */
+    .checkboxclass{
+        width: 100px;
+    }
+    .checkboxclass:first-child{
+        margin-left: 30px;
     }
     .el-icon-info{
         font-size: 12px;

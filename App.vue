@@ -316,7 +316,6 @@ a {
         width: 100%;
         list-style: none;
         position: relative;
-        list-style: none;
         /* background-color: pink; */
     }
     .followrecord li{

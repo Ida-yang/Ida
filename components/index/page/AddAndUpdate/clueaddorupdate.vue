@@ -98,14 +98,14 @@
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
                 </div>
-                <el-input 
+                <!-- <el-input 
                     v-else-if="item.prop"
                     prop="item.prop"
                     :value="myForm[item.inputModel]"
                     @input="handleInput($event, item.inputModel)"
                     style="width:90%;" 
                     auto-complete="off">
-                </el-input>
+                </el-input> -->
             </el-form-item>
             <div style="margin-left:60px;">
                 <el-button class="searchbutton" @click="submit">立即提交</el-button>

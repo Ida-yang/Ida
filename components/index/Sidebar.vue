@@ -150,13 +150,17 @@
                                 title: '组织机构',
                             },
                             {
-                                index: 'suibian',
-                                title: '随便',
-                            },
-                            {
                                 index: 'user',
                                 title: '用户管理',
                             }, 
+                            {
+                                index: 'basicset',
+                                title: '基础设置'
+                            },
+                            {
+                                index: 'suibian',
+                                title: '随便',
+                            },
                         ]
                     },
                 ],

@@ -291,12 +291,12 @@
                         // console.log(item.id)
                         newArr.push(item.id)
                         // newArr.shift(item.id)
-                        console.log(newArr)
+                        // console.log(newArr)
                     }
                 });
                 // console.log(newArr)
                 this.idArr.id = newArr;
-                // console.log(this.idArr.id)
+                // console.log(qs.stringify(this.idArr))
                 
             },
             handleDeletes(){
@@ -304,7 +304,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(idArr)
+                console.log(qs.stringify(idArr))
                 _this.$confirm('是否确认删除吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',

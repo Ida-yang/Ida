@@ -19,7 +19,7 @@
                 <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
             </div>
             <div class="entry">
-                <el-button class="btn" size="mini" @click="handleDeletes()">同步</el-button>
+                <el-button class="btn" size="mini" @click="handlesynchros()">同步</el-button>
                 <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
                 <el-popover
                 placement="bottom"
@@ -140,17 +140,17 @@
                 </el-table-column>
                 <el-table-column label="操作"
                     fixed="right"
-                    width="80"
+                    width="140"
                     header-align="center"
                     align="center">
                     <template slot-scope="scope">
                         <el-button
                         size="mini"
                         @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <!-- <el-button
+                        <el-button
                         size="mini"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                        @click="handlesynchro(scope.$index, scope.row)">同步</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -169,14 +169,38 @@
         <el-dialog
             title="添加用户"
             :visible.sync="dialogVisible"
-            width="30%">
-                <el-form ref="newform" :model="newform" label-width="80px">
-                <el-form-item label="上级部门">
-                    <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
-                </el-form-item>
-                <el-form-item label="名称">
-                    <el-input v-model="newform.deptname" style="200px;"></el-input>
-                </el-form-item>
+            width="40%">
+                <el-form ref="newform" :model="newform" label-width="80px" :rules="rules">
+                    <el-form-item prop="second_id" label="所属部门">
+                        <el-input v-model="newform.secondname" :disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="private_phone" label="手机号码">
+                        <el-input type="number" v-model="newform.private_phone" placeholder="请输入用户手机号码"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="private_password" label="密码">
+                        <el-input type="password" v-model="newform.private_password" placeholder="请输入用户密码"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="private_passwords" label="确认密码">
+                        <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入用户密码"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="role_id" label="角色">
+                        <el-select v-model="newform.role_id" placeholder="请选择用户角色">
+                            <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item prop="private_employee" label="用户名称">
+                        <el-input v-model="newform.private_employee" placeholder="请输入用户名称"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="private_state" label="用户状态">
+                        <el-radio v-model="newform.private_state" label="启用">启用</el-radio>
+                        <el-radio v-model="newform.private_state" label="禁止">禁止</el-radio>
+                    </el-form-item>
+                    <el-form-item prop="private_email" label="邮箱">
+                        <el-input type="email" v-model="newform.private_email" placeholder="请输入用户邮箱"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="private_QQ" label="QQ">
+                        <el-input type="number" v-model="newform.private_QQ" placeholder="请输入用户QQ"></el-input>
+                    </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -186,13 +210,37 @@
         <el-dialog
             title="修改用户"
             :visible.sync="dialogVisible2"
-            width="30%">
-            <el-form ref="newform" :model="newform" label-width="80px">
-                <el-form-item label="上级部门">
-                    <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
+            width="40%">
+            <el-form ref="newform" :model="newform" :rules="rules" label-width="80px">
+                <el-form-item prop="second_id" label="所属部门">
+                    <el-input v-model="newform.secondname" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item label="名称">
-                    <el-input v-model="newform.deptname" style="200px;"></el-input>
+                <el-form-item prop="private_phone" label="手机号码">
+                    <el-input type="number" v-model="newform.private_phone" :disabled="true" placeholder="请输入用户手机号码"></el-input>
+                </el-form-item>
+                <el-form-item prop="private_password" label="密码">
+                    <el-input type="password" v-model="newform.private_password" placeholder="请输入用户密码"></el-input>
+                </el-form-item>
+                <el-form-item prop="private_passwords" label="确认密码">
+                    <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入用户密码"></el-input>
+                </el-form-item>
+                <el-form-item prop="role_id" label="角色">
+                    <el-select v-model="newform.role_id" placeholder="请选择用户角色">
+                        <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="private_employee" label="用户名称">
+                    <el-input v-model="newform.private_employee" placeholder="请输入用户名称"></el-input>
+                </el-form-item>
+                <el-form-item prop="private_state" label="用户状态">
+                    <el-radio v-model="newform.private_state" label="启用">启用</el-radio>
+                    <el-radio v-model="newform.private_state" label="禁止">禁止</el-radio>
+                </el-form-item>
+                <el-form-item prop="private_email" label="邮箱">
+                    <el-input type="email" v-model="newform.private_email" placeholder="请输入用户邮箱"></el-input>
+                </el-form-item>
+                <el-form-item prop="private_QQ" label="QQ">
+                    <el-input type="number" v-model="newform.private_QQ" placeholder="请输入用户QQ"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -222,6 +270,15 @@
             },
         },
         data(){
+            const validatePass = (rule, value, callback) => {
+                if (value === '') {
+                callback(new Error('请再次输入密码'));
+                } else if (value !== this.newform.private_password) {
+                callback(new Error('两次输入密码不一致!'));
+                } else {
+                callback();
+                }
+            };
             return {
                 datalist:[],
                 defaultProps:{
@@ -229,10 +286,17 @@
                     children:'next',
                 },
                 newform:{
-                    parentid:null,
-                    parentname:null,
-                    deptid:null,
-                    deptname:null,
+                    second_id:null,
+                    secondname:null,
+                    private_id:null,
+                    role_id:null,
+                    private_phone:null,
+                    private_password:null,
+                    private_passwords:null,
+                    private_employee:null,
+                    private_state:'启用',
+                    private_email:null,
+                    private_QQ:null,
                 },
                 searchList:{
                     searchName:null,
@@ -242,6 +306,7 @@
                 idArr:{
                     private_id:null,
                 },
+                roleList:null,
                 clickdata:null,
                 showbianhao:true,
                 showmingcheng:true,
@@ -258,7 +323,27 @@
                 limit:20,
                 dialogVisible:false,
                 dialogVisible2:false,
+                rules: {
+                    role_id : [{ required: true, message: '用户角色不能为空', trigger: 'blur' },],
+                    private_employee : [{ required: true, message: '用户名称不能为空', trigger: 'blur' },],
+                    private_phone : [{ required: true, max: 11, min: 11, message: '请输入11位手机号码', trigger: 'blur' }],
+                    private_password : [{ required: true, message: '密码不能为空', trigger: 'blur' },],
+                    private_passwords : [{ required: true, validator: validatePass, trigger: 'blur' },],
+                    private_state : [{ required: true, message: '请选择用户状态', trigger: 'blur' },],
+                },
             }
+        },
+        beforeCreate(){
+            let _this = this
+            axios({
+                method: 'get',
+                url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
+            }).then(function(res){
+                // console.log(res.data)
+                _this.roleList = res.data
+            }).catch(function(err){
+                console.log(err);
+            });
         },
         mounted(){
             this.reloadTable()
@@ -277,7 +362,7 @@
                     url: _this.$store.state.defaultHttp+'getPrivateUserAll.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.userList = res.data.map.success
                     _this.$store.state.userListnumber = res.data.count
                 }).catch(function(err){
@@ -298,6 +383,8 @@
                 this.searchList.deptid = data.deptid
                 // console.log(this.searchList)
                 this.clickdata = data
+                this.newform.second_id = data.deptid
+                this.newform.secondname = data.deptname
                 this.$options.methods.reloadTable.bind(this)(true);
             },
             selectInfo(val){
@@ -309,24 +396,35 @@
                         newArr.push(item.private_id)
                     }
                 });
-                console.log(newArr)
+                // console.log(newArr)
+                // var value = newArr.shift()
                 this.idArr.private_id = newArr;
+                console.log(this.idArr.private_id)
                 
             },
             //用户添加
             handleAdd(){
                 let _this = this
                 // console.log(this.clickdata.next)
+                this.newform.role_id = null
+                this.newform.private_phone = null
+                this.newform.private_password = null
+                this.newform.private_passwords = null
+                this.newform.private_employee = null
+                this.newform.private_state = null
+                this.newform.private_email = null
+                this.newform.private_QQ = null
+
                 if(!this.clickdata){
                     _this.$message({
-                        message:'请先选择部门，再添加角色',
+                        message:'请先选择部门，再添加用户',
                         type:'info'
                     })
                 }else if(this.clickdata && this.clickdata.next == ''){
                     this.dialogVisible = true
                 }else{
                     _this.$message({
-                        message:'该部门下还有部门，不可添加角色',
+                        message:'该部门下还有部门，不可添加用户',
                         type:'error'
                     })
                 }
@@ -334,30 +432,264 @@
             //用户添加提交按钮
             adduser(){
                 let _this = this;
-                alert('添加成功')
+                let qs = require('querystring')
+                let data = {}
+                data.second_id = this.newform.second_id
+                data.role_id = this.newform.role_id
+                data.private_phone = this.newform.private_phone
+                data.private_password = this.newform.private_password
+                data.private_employee = this.newform.private_employee
+                data.private_state = this.newform.private_state
+                data.private_email = this.newform.private_email
+                data.private_QQ = this.newform.private_QQ
+                console.log(data)
+                let arr = [this.newform]
+                let flag = false;
+                arr.forEach(item => {
+                    if(!item.private_state){
+                        _this.$message({
+                            message: "请选择用户状态",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.private_employee){
+                        _this.$message({
+                            message: "用户姓名不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.role_id){
+                        _this.$message({
+                            message: "用户角色不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.private_passwords !== item.private_password){
+                        _this.$message({
+                            message: "两次输入的密码不一致",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.private_passwords){
+                        _this.$message({
+                            message: "确认密码不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.private_password){
+                        _this.$message({
+                            message: "用户密码不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.private_phone){
+                        _this.$message({
+                            message: "用户手机号码不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                });
+                if(flag) return
+
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'insertPrivateUser.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data.code && res.data.code == 200){
+                        _this.$message({
+                            message:'添加用户成功',
+                            type:'success'
+                        })
+                        _this.dialogVisible = false
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        _this.$message({
+                            message:res.data.msg,
+                            type:'error'
+                        })
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                // alert('添加成功')
             },
             //用户修改
             handleEdit(index,row){
                 let _this = this
-                // console.log(this.clickdata.next)
-                if(!this.clickdata){
-                    _this.$message({
-                        message:'请先选择部门，再修改角色',
-                        type:'info'
-                    })
-                }else if(this.clickdata && this.clickdata.next == ''){
-                    this.dialogVisible2 = true
-                }else{
-                    _this.$message({
-                        message:'该部门下还有部门，不可修改角色',
-                        type:'error'
-                    })
-                }
+                console.log(row)
+                this.newform.private_id = row.private_id
+                this.newform.second_id = row.second_id
+                this.newform.secondname = row.deptname
+                this.newform.role_id = row.role_id
+                this.newform.private_phone = row.private_phone
+                this.newform.private_password = row.private_password
+                this.newform.private_passwords = row.private_password
+                this.newform.private_employee = row.private_employee
+                this.newform.private_state = row.private_state
+                this.newform.private_email = row.private_email
+                this.newform.private_QQ = row.private_QQ
+                this.dialogVisible2 = true
             },
             //用户修改提交按钮
             updateuser(){
                 let _this = this;
-                alert('修改成功')
+                let qs = require('querystring')
+                let data = {}
+                data.second_id = this.newform.second_id
+                data.private_id = this.newform.private_id
+                data.role_id = this.newform.role_id
+                data.private_phone = this.newform.private_phone
+                data.private_password = this.newform.private_password
+                data.private_employee = this.newform.private_employee
+                data.private_state = this.newform.private_state
+                data.private_email = this.newform.private_email
+                data.private_QQ = this.newform.private_QQ
+                console.log(data)
+                let arr = [this.newform]
+                let flag = false;
+                arr.forEach(item => {
+                    if(!item.private_state){
+                        _this.$message({
+                            message: "请选择用户状态",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.private_employee){
+                        _this.$message({
+                            message: "用户姓名不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.role_id){
+                        _this.$message({
+                            message: "用户角色不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.private_passwords !== item.private_password){
+                        _this.$message({
+                            message: "两次输入的密码不一致",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.private_passwords){
+                        _this.$message({
+                            message: "确认密码不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.private_password){
+                        _this.$message({
+                            message: "用户密码不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                });
+                if(flag) return
+                
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'updatePrivate.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data.code && res.data.code == 200){
+                        _this.$message({
+                            message:'修改用户成功',
+                            type:'success'
+                        })
+                        _this.dialogVisible2 = false
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        _this.$message({
+                            message:res.data.msg,
+                            type:'error'
+                        })
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            handlesynchros(){
+                let _this = this;
+                let qs =require('querystring')
+                let idArr = [];
+                idArr.privateId = this.idArr.private_id
+                console.log(idArr)
+                _this.$confirm('确认同步到云服务器吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'post',
+                        url:  _this.$store.state.defaultHttp+ 'tbPrivateToPublicUser.do?cId='+_this.$store.state.iscId,
+                        data:qs.stringify(idArr),
+                    }).then(function(res){
+                        console.log(res.data)
+                        if(res.data.code && res.data.code == 200) {
+                            _this.$message({
+                                message: '同步成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadTable.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                });
+            },
+            handlesynchro(index,row){
+                let _this = this;
+                let qs =require('querystring')
+                let idArr = [];
+                idArr.privateId = row.private_id
+                console.log(idArr)
+                _this.$confirm('确认同步 ['+ row.private_employee +'] 到云服务器吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'post',
+                        url:  _this.$store.state.defaultHttp+ 'tbPrivateToPublicUser.do?cId='+_this.$store.state.iscId,
+                        data:qs.stringify(idArr),
+                    }).then(function(res){
+                        console.log(res)
+                        if(res.data.code && res.data.code == 200) {
+                            _this.$message({
+                                message: '同步成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadTable.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                });
             },
             shownumber(){
                 this.showbianhao = !this.showbianhao
@@ -407,6 +739,7 @@
     .leftcontent{
         width: 30%;
         height: auto;
+        margin-top:30px;
         float: left;
         box-sizing: border-box;
     }
@@ -422,5 +755,10 @@
         height: 100%;
         float: left;
         box-sizing: border-box;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button{
+        -webkit-appearance: none !important;
+        margin: 0;
     }
 </style>
