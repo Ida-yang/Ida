@@ -140,7 +140,7 @@ const router =new Router({
         {
           path: '/user',
           component: resolve => require(['../components/index/page/user/user.vue'], resolve),
-          meta: { title: '用户',name:'user' ,requireAuth:true}
+          meta: { title: '用户管理',name:'user' ,requireAuth:true}
         },
         {
           path: '/useraddorupdate',
@@ -150,7 +150,7 @@ const router =new Router({
         {
           path: '/basicset',
           component: resolve => require(['../components/index/page/basicset/basicset.vue'], resolve),
-          meta: { title: '基础设置',name:'basicset' ,requireAuth:true}
+          meta: { title: '辅助资料',name:'basicset' ,requireAuth:true}
         },
       ]
     },

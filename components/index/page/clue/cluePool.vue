@@ -143,7 +143,7 @@
                 v-if="showzhuangtai"
                 header-align="center"
                 align="left"
-                min-width="80"
+                min-width="100"
                 label="状态"
                 sortable>
             </el-table-column>

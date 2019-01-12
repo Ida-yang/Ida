@@ -9,12 +9,12 @@
             <br>
             <el-radio-group v-model="searchList.state" style="margin:5px 0;">
                 <span class="nameList">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态：</span>
-                <el-radio v-for="item in stateData" :key="item.label" :label="item.state" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio v-for="item in stateData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.type" style="margin:5px 0;">
                 <span class="nameList">线索来源：</span>
-                <el-radio v-for="item in typeData" :key="item.label" :label="item.type" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio v-for="item in typeData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <span class="nameList">公司名称：</span>
@@ -241,16 +241,8 @@
                 pIdData:[
                     {pId:null,label:'0',value:'全部线索'},
                     {pId:this.$store.state.ispId,label:'1',value:'我的线索'}],
-                stateData:[
-                    {state:'',label:'0',value:'全部状态'},
-                    {state:'未联系',label:'1',value:'未联系'},
-                    {state:'无效线索',label:'2',value:'无效线索'},
-                    {state:'无需求线索',label:'3',value:'无需求线索'},
-                    {state:'电话错误',label:'4',value:'电话错误'}],
-                typeData:[
-                    {type:'',label:'0',value:'全部来源'},
-                    {type:'大数据转移',label:'1',value:'大数据转移'},
-                    {type:'手动新增',label:'2',value:'手动新增'}],
+                stateData:null,
+                typeData:null,
                 checklist:['联系人','公司名称','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','线索来源'],
                 showxingming:true,
                 showmingcheng:true,
@@ -268,6 +260,19 @@
                 formLabelWidth: '130px',
             }
         },
+        beforeCreate(){
+            let _this = this
+            axios({
+                method: 'get',
+                url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType.do?cId='+_this.$store.state.iscId,
+            }).then(function(res){
+                console.log(res.data)
+                _this.stateData = res.data.name1001
+                _this.typeData = res.data.name3001
+            }).catch(function(err){
+                console.log(err);
+            });
+        },
         mounted(){
             this.reloadTable()
         },
@@ -283,7 +288,8 @@
                 searchList.type = this.searchList.type
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                // console.log(searchList)
+                console.log(searchList)
+                
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerTwo/query.do?cId='+_this.$store.state.iscId,

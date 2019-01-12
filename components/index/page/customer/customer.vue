@@ -9,17 +9,17 @@
             <br>
             <el-radio-group v-model="searchList.keyType" style="margin-bottom:10px;">
                 <span class="nameList">客户级别：</span>
-                <el-radio v-for="item in labelData" :key="item.label" :label="item.lavels" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio v-for="item in labelData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.keyWord" style="margin-bottom:10px;">
                 <span class="nameList">客户来源：</span>
-                <el-radio v-for="item in typeData" :key="item.label" :label="item.type" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio v-for="item in typeData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.state" style="margin-bottom:10px;">
                 <span class="nameList">客户状态：</span>
-                <el-radio v-for="item in stateData" :key="item.label" :label="item.state" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio v-for="item in stateData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <span class="nameList">公司名称：</span>
@@ -162,6 +162,7 @@
                 v-if="showzhuangtai"
                 header-align="center"
                 align="left"
+                min-width="100"
                 label="状态"
                 sortable>
             </el-table-column>
@@ -247,23 +248,9 @@
                 pIdData:[
                     {pId:'',label:'0',value:'全部客户'},
                     {pId:this.$store.state.ispId,label:'1',value:'我的客户'}],
-                stateData:[
-                    {state:'',label:'0',value:'全部状态'},
-                    {state:'初步了解',label:'1',value:'初步了解'},
-                    {state:'拜访',label:'2',value:'拜访'},
-                    {state:'商务',label:'3',value:'商务'},
-                    {state:'合同',label:'4',value:'合同'},
-                    {state:'失败',label:'5',value:'失败'}],
-                labelData:[
-                    {lavels:'', label:'0', value:'全部级别' },
-                    {lavels:'A级客户',label:'1',value:'A级客户'},
-                    {lavels:'B级客户',label:'2',value:'B级客户'},
-                    {lavels:'C级客户',label:'3',value:'C级客户'}],
-                typeData:[
-                    {type:'',label:'0',value:'全部来源'},
-                    {type:'大数据转移',label:'1',value:'大数据转移'},
-                    {type:'手动新增',label:'2',value:'手动新增'}
-                ],
+                stateData:null,
+                labelData:null,
+                typeData:null,
                 checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','客户来源'],
                 showxingming:true,
                 showmingcheng:true,
@@ -281,6 +268,20 @@
                 formLabelWidth: '130px',
             }
         },
+        beforeCreate(){
+            let _this = this
+            axios({
+                method: 'get',
+                url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType.do?cId='+_this.$store.state.iscId,
+            }).then(function(res){
+                console.log(res.data)
+                _this.stateData = res.data.name2001
+                _this.typeData = res.data.name3001
+                _this.labelData = res.data.name4001
+            }).catch(function(err){
+                console.log(err);
+            });
+        },
         mounted(){
             this.reloadTable()
         },
@@ -297,7 +298,7 @@
                 searchList.keyWord = this.searchList.keyWord
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                // console.log(searchList)
+                console.log(searchList)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerpool/query.do?cId='+_this.$store.state.iscId,

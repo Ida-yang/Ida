@@ -25,7 +25,6 @@
                 </span>
             </el-tree>
         </div>
-        <div class="centercontent"></div>
         <div class="rightcontent">
             <div style="margin:0 0 15px 15px;">
                 <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
@@ -464,14 +463,17 @@
                         message:'请先选择部门，再添加角色',
                         type:'info'
                     })
-                }else if(this.clickdata && this.clickdata.next == ''){
+                // }else if(this.clickdata && this.clickdata.next == ''){
+                //     this.roleform.deptname = this.clickdata.deptname
+                //     this.dialogVisible3 = true
+                // }else{
+                //     _this.$message({
+                //         message:'该部门下还有部门，不可添加角色',
+                //         type:'error'
+                //     })
+                }else{
                     this.roleform.deptname = this.clickdata.deptname
                     this.dialogVisible3 = true
-                }else{
-                    _this.$message({
-                        message:'该部门下还有部门，不可添加角色',
-                        type:'error'
-                    })
                 }
             },
             addrole(){
@@ -539,10 +541,8 @@
                 data.id = this.roleform.id
                 data.name = this.roleform.name
                 data.deptid = this.roleform.deptid
-                let arr = Array.from(new Set(this.roleform.ids))
-                console.log(arr)
-                data.ids = arr
-                console.log(data)
+                data.ids = this.roleform.ids
+                console.log(data.ids)
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'role/saveOrUpdate.do?cId='+_this.$store.state.iscId,
@@ -612,6 +612,7 @@
                         this.roleform.ids.pop(el.id)
                     }
                 });
+                console.log(this.roleform.ids)
             },
             CheckAllcustomers(val) {
                 let data = this.customerole
@@ -710,8 +711,13 @@
                 this.checksomeset = checkedCount > 0 && checkedCount < this.setrole.length;
             },
             changevalue(e,val){
+                let arr = this.roleform.ids
                 if(e == false){
-                    this.roleform.ids.pop(val)
+                    arr.forEach((el,i) => {
+                        if(arr[i] == val){
+                            this.roleform.ids.splice(i,1)
+                        }
+                    });
                 }else{
                     this.roleform.ids.push(val)
                 }
@@ -728,16 +734,12 @@
     .leftcontent{
         width: 30%;
         height: auto;
-        margin-top: 20px;
         float: left;
         box-sizing: border-box;
+        overflow-y: scroll;
     }
-    .centercontent{
-        display: block;
-        width: 1%;
-        height: 100%;
-        float: left;
-        background-color: #f0f0f0;
+    .el-tree{
+        margin: 20px 0;
     }
     .rightcontent{
         width: 69%;

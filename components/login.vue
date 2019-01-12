@@ -73,7 +73,7 @@ export default {
                     { required: true, message: '请输入密码', trigger: 'blur' },
                 ],
             },
-            bgimg:'C:/a.jpg'
+            bgimg:'../assets/img/index.jpg'
         }
     },
     mounted() {

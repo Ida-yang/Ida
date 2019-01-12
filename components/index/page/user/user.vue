@@ -337,10 +337,10 @@
             let _this = this
             axios({
                 method: 'get',
-                url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
+                url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
             }).then(function(res){
-                // console.log(res.data)
-                _this.roleList = res.data
+                // console.log(res.data.map.success)
+                _this.datalist = res.data.map.success
             }).catch(function(err){
                 console.log(err);
             });
@@ -357,6 +357,9 @@
                 pageInfo.limit = this.limit
                 pageInfo.searchName = this.searchList.searchName
                 pageInfo.deptid = this.searchList.deptid
+                let data = {}
+                data.deptid = this.searchList.deptid
+
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'getPrivateUserAll.do?cId='+_this.$store.state.iscId,
@@ -369,11 +372,12 @@
                     console.log(err);
                 });
                 axios({
-                    method: 'get',
-                    url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
                 }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.datalist = res.data.map.success
+                    console.log(res.data)
+                    _this.roleList = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -420,13 +424,8 @@
                         message:'请先选择部门，再添加用户',
                         type:'info'
                     })
-                }else if(this.clickdata && this.clickdata.next == ''){
-                    this.dialogVisible = true
                 }else{
-                    _this.$message({
-                        message:'该部门下还有部门，不可添加用户',
-                        type:'error'
-                    })
+                    this.dialogVisible = true
                 }
             },
             //用户添加提交按钮
@@ -739,9 +738,11 @@
     .leftcontent{
         width: 30%;
         height: auto;
-        margin-top:30px;
         float: left;
         box-sizing: border-box;
+    }
+    .el-tree{
+        margin: 20px 0;
     }
     .centercontent{
         display: block;

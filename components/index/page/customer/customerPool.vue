@@ -139,20 +139,20 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="state"
+                prop="status"
                 v-if="showzhuangtai"
                 header-align="center"
                 align="left"
-                min-width="80"
+                min-width="100"
                 label="状态"
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="cues"
+                prop="source"
                 v-if="showlaiyuan"
                 header-align="center"
                 align="left"
-                label="线索来源"
+                label="客户来源"
                 min-width="110"
                 sortable>
             </el-table-column>
@@ -270,10 +270,10 @@
                 // console.log(searchList)
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'customerpool/querypool.do.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'customerpool/querypool.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res)
+                    console.log(res.data.map.success)
                     _this.$store.state.customerPoolList = res.data.map.success
                     _this.$store.state.customerPoolListnumber = res.data.count;
                 }).catch(function(err){

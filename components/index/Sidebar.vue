@@ -142,7 +142,7 @@
                 itemthree: [
                     {
                         icon: 'el-icon-new-gongyi',
-                        index: '99',
+                        index: '999',
                         title: '系统设置',
                         subs: [
                             {
@@ -155,7 +155,7 @@
                             }, 
                             {
                                 index: 'basicset',
-                                title: '基础设置'
+                                title: '辅助资料'
                             },
                             {
                                 index: 'suibian',

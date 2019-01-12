@@ -58,7 +58,7 @@
                             </el-form-item>
                             <el-form-item label="状态" style="width:300px;" prop="state">
                                 <el-select v-model="followform.state" placeholder="请选择" style="width:200px;">
-                                    <el-option v-for="item in stateList" :key="item.index" :label="item.state" :value="item.state"></el-option>
+                                    <el-option v-for="item in stateList" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
                             
@@ -80,7 +80,7 @@
                                 <div>
                                     <p>{{item.createTime}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
                                         &nbsp;&nbsp;&nbsp;<span>并约定下次联系时间：{{item.contactTime}}</span>
-                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.customerpool[0].state}} </span> 
+                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} </span> 
                                     </p>
                                     <p style="margin-top:15px;margin-bottom:15px;">{{item.followContent}}</p>
                                 </div>
@@ -225,11 +225,7 @@
                     {label:'QQ',value:'3'},
                     {label:'邮箱',value:'4'}
                 ],
-                stateList:[
-                    {state:'未联系',label:'1',value:'未联系'},
-                    {state:'无效线索',label:'2',value:'无效线索'},
-                    {state:'无需求线索',label:'3',value:'无需求线索'},
-                    {state:'电话错误',label:'4',value:'电话错误'},],
+                stateList:null,
                 searchList:{
                     keyword:null,
                 },
@@ -237,16 +233,6 @@
                     // name:'',
                 },
                 record:null,
-                // 获取row的key值
-                getRowKeys(row) {
-                    if(row.id) {
-                        return row.id;
-                    } else if(row.functionId) {
-                        return row.functionId;
-                    } else {
-                        return "";
-                    }
-                },
                 fastcontactList:null,
                 contactList:null,
                 activeName2: 'first',
@@ -270,6 +256,8 @@
                 // console.log(this.detailData)
                 let _this = this
                 let qs =require('querystring')
+                let data = {}
+                data.type = '线索状态'
                 let pageInfo = {}
                 pageInfo.page = this.page
                 pageInfo.limit = this.limit
@@ -287,9 +275,20 @@
                 }).catch(function(err){
                     console.log(err);
                 });
-                //加载快捷方式
+                //加载线索状态
                 axios({
                     method:'post',
+                    url:_this.$store.state.defaultHttp+'typeInfo/getTypeInfoGroupByType.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.stateList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                //加载快捷方式
+                axios({
+                    method:'get',
                     url:_this.$store.state.defaultHttp+'getNameSelected.do?cId='+_this.$store.state.iscId,
                 }).then(function(res){
                     // console.log(res.data)
@@ -311,20 +310,23 @@
                 });
                 //加载跟进记录
                 axios({
-                    method:'post',
+                    method:'get',
                     url:_this.$store.state.defaultHttp+'getFollowStaff.do?cId='+_this.$store.state.iscId+'&customertwoId='+this.detailData.id,
                 }).then(function(res){
                     console.log(res.data.map.success)
                     _this.record = res.data.map.success
+                    if(_this.record !== ''){
+                        _this.followform.state = _this.record[0].state
+                    }
                 }).catch(function(err){
                     console.log(err);
                 });
                 //加载线索详情
                 axios({
-                    method:'post',
+                    method:'get',
                     url:_this.$store.state.defaultHttp+'customerTwo/selectByPrimaryKey.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.cluedetail = res.data
                     // console.log(_this.cluedetail)
                 }).catch(function(err){

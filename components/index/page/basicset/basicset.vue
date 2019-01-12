@@ -1,6 +1,9 @@
 <template>
     <div class="contentall">
         <div class="leftcontent">
+            <ul class="namecontent">
+                <li v-for="item in nameList" :key="item.index" :value="item.name" @click="showTableval(item)">{{item.name}}</li>
+            </ul>
         </div>
         <div class="centercontent"></div>
         <div class="rightcontent">
@@ -21,7 +24,6 @@
             <el-table
                 :data="tableData"
                 :default-sort = "{order: 'descending'}"
-                ref="multipleTable"
                 border
                 stripe
                 style="width:100%;text-align:center"
@@ -39,7 +41,6 @@
                     v-if="showshunxu"
                     header-align="center"
                     align="left"
-                    min-width="150"
                     label="顺序"
                     sortable>
                 </el-table-column>
@@ -48,7 +49,7 @@
                     v-if="showmingcheng"
                     header-align="center"
                     align="left"
-                    min-width="90"
+                    min-width="120"
                     label="名称"
                     sortable>
                 </el-table-column>
@@ -81,17 +82,23 @@
             title="添加状态"
             :visible.sync="dialogVisible"
             width="40%">
-                <el-form ref="newform" :model="newform" label-width="80px" :rules="rules">
-                    <el-form-item prop="typeName" label="状态名称">
-                        <el-input v-model="newform.typeName" placeholder="请输入状态名称"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="notes" label="备注">
-                        <el-input type="number" v-model="newform.notes" placeholder="请输入状态备注"></el-input>
-                    </el-form-item>
+            <el-form ref="newform" :model="newform" label-width="80px" :rules="rules">
+                <el-form-item prop="type" label="状态类别">
+                    <el-input v-model="newform.type" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item prop="typeName" label="状态名称">
+                    <el-input v-model="newform.typeName" placeholder="请输入状态名称"></el-input>
+                </el-form-item>
+                <el-form-item prop="sort" label="排序编号">
+                    <el-input type="number" v-model="newform.sort" placeholder="请输入排序编号"></el-input>
+                </el-form-item>
+                <el-form-item prop="notes" label="备注">
+                    <el-input v-model="newform.notes" placeholder="请输入状态备注"></el-input>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="adduser()">确 定</el-button>
+                <el-button type="primary" @click="addbasicset()">确 定</el-button>
             </span>
         </el-dialog>
         <el-dialog
@@ -99,16 +106,22 @@
             :visible.sync="dialogVisible2"
             width="40%">
             <el-form ref="newform" :model="newform" :rules="rules" label-width="80px">
+                <el-form-item prop="type" label="状态类别">
+                    <el-input v-model="newform.type" :disabled="true"></el-input>
+                </el-form-item>
                 <el-form-item prop="typeName" label="状态名称">
                     <el-input v-model="newform.typeName" placeholder="请输入状态名称"></el-input>
                 </el-form-item>
+                <el-form-item prop="sort" label="排序编号">
+                    <el-input type="number" v-model="newform.sort" placeholder="请输入排序编号"></el-input>
+                </el-form-item>
                 <el-form-item prop="notes" label="备注">
-                    <el-input type="number" v-model="newform.notes" placeholder="请输入状态备注"></el-input>
+                    <el-input v-model="newform.notes" placeholder="请输入状态备注"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible2 = false">取 消</el-button>
-                <el-button type="primary" @click="updateuser()">确 定</el-button>
+                <el-button type="primary" @click="updatebasicset()">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -119,10 +132,7 @@
     import qs from 'qs'
 
     export default {
-        name:'user',
-        props:{
-            totalNum:Number,
-        },
+        name:'basicset',
         store,
         computed: {
             tableData(){
@@ -131,7 +141,17 @@
         },
         data(){
             return {
+                dataList:null,
+                nameList:[
+                    {index:1,name:'线索状态'},
+                    {index:2,name:'客户状态'},
+                    {index:3,name:'客户来源'},
+                    {index:4,name:'客户级别'}
+                ],
                 newform:{
+                    type:'线索状态',
+                    id:null,
+                    sort:null,
                     typrName:null,
                     notes:null,
                 },
@@ -146,6 +166,7 @@
                 dialogVisible2:false,
                 rules: {
                     typeName : [{ required: true, message: '状态名称不能为空', trigger: 'blur' },],
+                    sort : [{ required: true, message: '排序编号不能为空', trigger: 'blur' },],
                 },
             }
         },
@@ -155,27 +176,41 @@
         methods:{
             reloadTable(){
                 let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.type = this.newform.type
                 axios({
-                    method: 'get',
-                    url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType?cId='+_this.$store.state.iscId,
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoGroupByType.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
                 }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.$store.state.stateList = res.data.map.success
+                    console.log(res.data)
+                    _this.$store.state.stateList = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
+            },
+            //显示对应状态数表格数据
+            showTableval(val){
+                let _this = this
+                this.newform.type = val.name
+                _this.$options.methods.reloadTable.bind(_this)(true);
             },
             //状态添加
             handleAdd(){
                 let _this = this
                 this.newform.typeName = null
+                this.newform.sort = null
                 this.newform.notes = null
+                this.dialogVisible = true
             },
             //状态添加提交按钮
-            adduser(){
+            addbasicset(){
                 let _this = this;
                 let qs = require('querystring')
                 let data = {}
+                data.type = this.newform.type
+                data.sort = this.newform.sort
                 data.typeName = this.newform.typeName
                 data.notes = this.newform.notes
                 console.log(data)
@@ -189,12 +224,19 @@
                         });
                         flag = true;
                     }
+                    if(!item.sort){
+                        _this.$message({
+                            message: "排序编号不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
                 });
                 if(flag) return
 
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'insertPrivateUser.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'typeInfo/saveOrUpdate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
                     console.log(res)
@@ -219,17 +261,22 @@
             //状态修改
             handleEdit(index,row){
                 let _this = this
-                console.log(row)
+                // console.log(row.sort)
                 this.newform.id = row.id
+                this.newform.sort = row.sort
                 this.newform.typeName = row.typeName
                 this.newform.notes = row.notes
                 this.dialogVisible2 = true
+                console.log(this.newform)
             },
             //状态修改提交按钮
-            updateuser(){
+            updatebasicset(){
                 let _this = this;
                 let qs = require('querystring')
                 let data = {}
+                data.id = this.newform.id
+                data.type = this.newform.type
+                data.sort = this.newform.sort
                 data.typeName = this.newform.typeName
                 data.notes = this.newform.notes
                 console.log(data)
@@ -243,12 +290,19 @@
                         });
                         flag = true;
                     }
+                    if(!item.sort){
+                        _this.$message({
+                            message: "排序编号不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
                 });
                 if(flag) return
                 
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'updatePrivate.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'typeInfo/saveOrUpdate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
                     console.log(res)
@@ -273,7 +327,7 @@
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
-                idArr.privateId = row.id
+                idArr.id = row.id
                 console.log(idArr)
                 _this.$confirm('确认删除 ['+ row.typeName +'] 吗？', '提示', {
                     confirmButtonText: '确定',
@@ -281,7 +335,7 @@
                 }).then(({ value }) => {
                     axios({
                         method: 'post',
-                        url:  _this.$store.state.defaultHttp+ 'tbPrivateToPublicUser.do?cId='+_this.$store.state.iscId,
+                        url:  _this.$store.state.defaultHttp+ 'typeInfo/deleteTypeInfoById.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
                         console.log(res)
@@ -311,21 +365,6 @@
             showremark(){
                 this.showbeizhu = !this.showbeizhu
             },
-            showrole(){
-                this.showjuese = !this.showjuese
-            },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showemail(){
-                this.showyouxiang = !this.showyouxiang
-            },
-            showdepart(){
-                this.showbumen = !this.showbumen
-            },
-            showposition(){
-                this.showzhiwei = !this.showzhiwei
-            },
         }
     }
 </script>
@@ -337,9 +376,23 @@
     .leftcontent{
         width: 30%;
         height: auto;
-        margin-top:30px;
+        padding-top:30px;
         float: left;
         box-sizing: border-box;
+    }
+    .namecontent{
+        width: 100%;
+        list-style: none;
+        font-size: 14px; 
+    }
+    .namecontent li{
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 20px;
+    }
+    .namecontent li:hover{
+        background-color: #f7f7ff;
     }
     .centercontent{
         display: block;

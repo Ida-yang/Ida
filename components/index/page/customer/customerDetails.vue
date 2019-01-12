@@ -36,17 +36,17 @@
                             <el-form-item prop="followContent">
                                 <el-input type="textarea" placeholder="添加跟进内容" v-model="followform.followContent"></el-input>
                             </el-form-item>
-                            <el-form-item label="联系方式" style="width:300px;" prop="followType">
+                            <el-form-item label="联系方式" style="width:310px;" prop="followType">
                                 <el-select v-model="followform.followType" placeholder="请选择" style="width:200px;">
                                     <el-option v-for="item in followTypes" :key="item.value" :value="item.label" :label="item.label"></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="联系人" style="width:300px;" prop="contactsId">
+                            <el-form-item label="联系人" style="width:310px;" prop="contactsId">
                                 <el-select v-model="followform.contactsId" placeholder="请选择" style="width:200px;">
                                     <el-option v-for="item in contactList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="下次联系时间" style="width:300px;">
+                            <el-form-item label="下次联系时间" style="width:310px;">
                                 <el-date-picker
                                 v-model="followform.contactTime"
                                 type="datetime"
@@ -56,9 +56,9 @@
                                 placeholder="选择日期时间" style="width:200px;">
                                 </el-date-picker>
                             </el-form-item>
-                            <el-form-item label="状态" style="width:300px;margin-left:25px;" prop="state">
+                            <el-form-item label="状态" style="width:310px;" prop="state">
                                 <el-select v-model="followform.state" placeholder="请选择" style="width:200px;">
-                                    <el-option v-for="item in stateList" :key="item.index" :label="item.state" :value="item.state"></el-option>
+                                    <el-option v-for="item in stateList" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
                                 </el-select>
                             </el-form-item>
                             
@@ -360,12 +360,7 @@
                     {label:'QQ',value:'3'},
                     {label:'邮箱',value:'4'}
                 ],
-                stateList:[
-                    {state:'初步了解',label:'1',value:'初步了解'},
-                    {state:'拜访',label:'2',value:'拜访'},
-                    {state:'商务',label:'3',value:'商务'},
-                    {state:'合同',label:'4',value:'合同'},
-                    {state:'失败',label:'5',value:'失败'},],
+                stateList:null,
                 searchList:{
                     keyword:null,
                 },
@@ -373,16 +368,6 @@
                     pName:'',
                 },
                 record:null,
-                // 获取row的key值
-                getRowKeys(row) {
-                    if(row.id) {
-                        return row.id;
-                    } else if(row.functionId) {
-                        return row.functionId;
-                    } else {
-                        return "";
-                    }
-                },
                 fastcontactList:null,
                 contactList:null,
                 activeName2: 'first',
@@ -405,11 +390,25 @@
                 this.idArr.id = this.$store.state.detailsData.submitData.id
                 // console.log(this.detailData)
                 let _this = this
+                let data = {}
+                data.type = '客户状态'
                 let qs =require('querystring')
                 let pageInfo = {}
                 pageInfo.page = this.page
                 pageInfo.limit = this.limit
                 console.log(pageInfo);
+
+                //加载客户状态
+                axios({
+                    method:'post',
+                    url:_this.$store.state.defaultHttp+'typeInfo/getTypeInfoGroupByType.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.stateList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
                 //加载快捷方式
                 axios({
                     method:'post',
@@ -439,6 +438,9 @@
                 }).then(function(res){
                     console.log(res.data.map.success)
                     _this.record = res.data.map.success
+                    if(_this.record !== ''){
+                        _this.followform.state = _this.record[0].state
+                    }
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -628,7 +630,7 @@
                 data.contactTime = this.followform.contactTime
                 data.followContent = this.followform.followContent;
                 data.contactsId = this.followform.contactsId;
-                data.state = this.followform.state;
+                data.customerStateid = this.followform.state;
                 data.customerpool_id = this.detailData.id;
                 console.log(data)
 
