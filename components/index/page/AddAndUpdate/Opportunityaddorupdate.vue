@@ -1,4 +1,5 @@
 <template>
+    <!-- 商机新增修改 -->
     <div class="content">
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
@@ -129,47 +130,13 @@
     import bus from '../../bus';
     export default {
         name:'Opportunityaddorupdate',
-        computed:{  
-        },
-        props: {
-            // addOrUpdateData: {
-            //     title: "什么"
-            // },
-            // myForm: {
-            //     type: Object,
-            // }
-        },
         data(){
             return {
                 customerlist:null,
                 contactslist:null,
                 addOrUpdateData: {},
-                myForm: {
-                    opportunity_name:null,
-                    opportunity_number:null,
-                    opportunity_time:null,
-                    customerpool_id:null,
-                    contacts_id:null,
-                    opportunity_achievement:null,
-                    opportunity_deal:null,
-                    // bumen:null,
-                    // jigou:null,
-                    user_id:null,
-                    opportunity_remarks:null,
-                },
-                subData: {
-                    opportunity_name:null,
-                    opportunity_number:null,
-                    opportunity_time:null,
-                    customerpool_id:null,
-                    contacts_id:null,
-                    opportunity_achievement:null,
-                    opportunity_deal:null,
-                    // bumen:null,
-                    // jigou:null,
-                    user_id:null,
-                    opportunity_remarks:null,
-                },
+                myForm: {},
+                subData: {},
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
@@ -186,9 +153,9 @@
         mounted() {
             this.loadData();
             this.loadTable();
-            // this.restaurants = this.loadData();
         },
         methods:{
+            //获取客户下拉框数据
             loadTable(){
                 let _this = this
                 let qs = require('querystring')
@@ -256,7 +223,6 @@
             handleInput(val, key) {
                 this.myForm[key] = val;
                 // console.log(val)
-                // this.$emit('input', { ...this.myForm });
             },
             //提交或修改
             submit() {

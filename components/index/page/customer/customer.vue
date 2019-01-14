@@ -51,7 +51,6 @@
                 <el-checkbox class="checkone" @change="showleval()" label="级别"></el-checkbox>
                 <el-checkbox class="checkone" @change="showcues()" label="客户来源"></el-checkbox>
             </el-checkbox-group>
-            <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
         </div>

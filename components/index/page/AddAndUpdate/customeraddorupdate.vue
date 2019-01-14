@@ -1,4 +1,5 @@
 <template>
+    <!-- 客户新增修改 -->
     <div class="content">
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
@@ -231,6 +232,7 @@
             this.loadTable();
         },
         methods:{
+            //获取右边表格、客户来源和客户级别
             loadTable(){
                 let _this = this
                 let qs =require('querystring')
@@ -251,7 +253,7 @@
                     console.log(err);
                 });
                 axios({
-                    method: 'post',
+                    method: 'get',
                     url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType.do?cId='+_this.$store.state.iscId,
                 }).then(function(res){
                     console.log(res.data)

@@ -1,4 +1,5 @@
 <template>
+    <!-- 线索新增修改 -->
     <div class="content">
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
@@ -219,6 +220,7 @@
             this.loadTable();
         },
         methods:{
+            //获取右边表格和线索来源
             loadTable(){
                 let _this = this
                 let qs =require('querystring')

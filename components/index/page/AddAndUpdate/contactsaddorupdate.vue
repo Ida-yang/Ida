@@ -1,4 +1,5 @@
 <template>
+    <!-- 联系人新增修改 -->
     <div class="content">
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
@@ -193,16 +194,6 @@
     import bus from '../../bus';
     export default {
         name:'contactsaddOrUpdate',
-        computed:{  
-        },
-        props: {
-            // addOrUpdateData: {
-            //     title: "什么"
-            // },
-            // myForm: {
-            //     type: Object,
-            // }
-        },
         data(){
             return {
                 tableData:null,
@@ -237,6 +228,7 @@
             // this.restaurants = this.loadData();
         },
         methods:{
+            //获取右边表格
             loadTable(){
                 let _this = this
                 let qs =require('querystring')
@@ -268,8 +260,6 @@
                     createForm.forEach((item, index) => {
                         if(item.type && item.type == 'select') {
                             this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
-                            // let selectList = item.selectList;
-                            // this.addOrUpdateData.createForm[index].options = selectList;
                         } else if(item.type && item.type == 'radio') {
                             this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
                         } else if(item.type && item.type == "date") {
@@ -288,7 +278,6 @@
             handleInput(val, key) {
                 this.myForm[key] = val;
                 // console.log(val)
-                // this.$emit('input', { ...this.myForm });
             },
             handleoninput(val,key){
                 let _this = this

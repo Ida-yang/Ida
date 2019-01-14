@@ -9,7 +9,6 @@
                         <span>{{customerdetail[0].pName}}</span>
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="TocustomerPool()">转移至客户池</el-button>
-                        <!-- <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button> -->
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
@@ -541,35 +540,6 @@
                     console.log(err);
                 });
             },
-            customerSwitching(){
-                // let _this = this;
-                // let qs =require('querystring')
-                // let idArr = [];
-                // idArr.id = this.idArr.id
-                // idArr.shift()
-                // console.log(idArr)
-                // axios({
-                //     method: 'post',
-                //     url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
-                //     data:qs.stringify(idArr),
-                // }).then(function(res){
-                //     console.log(res)
-                //     if(res.data && res.data == 'success') {
-                //         _this.$message({
-                //             message: '转换成功',
-                //             type: 'success'
-                //         });
-                //     _this.closeTag();
-                //     } else {
-                //         _this.$message({
-                //             message: res.data,
-                //             type: 'error'
-                //         });
-                //     }
-                // }).catch(function(err){
-                //     console.log(err);
-                // });
-            },
             deletefollow(index){
                 let _this = this
                 let followData = {}
@@ -630,7 +600,7 @@
                 data.contactTime = this.followform.contactTime
                 data.followContent = this.followform.followContent;
                 data.contactsId = this.followform.contactsId;
-                data.customerStateid = this.followform.state;
+                data.follow_state = this.followform.state;
                 data.customerpool_id = this.detailData.id;
                 console.log(data)
 

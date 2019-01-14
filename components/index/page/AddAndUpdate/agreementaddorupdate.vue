@@ -1,4 +1,5 @@
 <template>
+    <!-- 合同新增修改 -->
     <div class="content">
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
@@ -127,6 +128,7 @@
                 },
             }
         },
+        //获取改用户的客户
         beforeCreate(){
             let _this = this
             axios({
@@ -180,6 +182,7 @@
                 this.customerId = val
                 this.loadOpp()
             },
+            //加载已选择客户下的商机
             loadOpp(){
                 let _this = this
                 let qs = require('querystring')
@@ -322,12 +325,6 @@
                 // console.log(row.address)
                 this.myForm.poolName = row.name
                 this.myForm.address = row.address
-                // this.addOrUpdateData.setForm.name = row.name
-                // this.addOrUpdateData.setForm.address = row.address
-                // this.$store.state.addOrUpdateData.setForm.poolName = row.name
-                // this.$store.state.addOrUpdateData.setForm.address = row.address
-                // this.$options.methods.loadData.bind(this)(true);
-                // console.log(this.myForm);
             },
         }
         

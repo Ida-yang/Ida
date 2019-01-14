@@ -72,8 +72,6 @@
                         <ul class="followrecord" v-for="(item,index) in record" :key="item.followId">
                             <li class="recordicon">
                                 <i class="el-icon-delete delico" @click="deletefollow(index)"></i>
-                                <!-- <div style="height:70px;width: 12px;border-right: 1px solid #c2c4c9;" class="verticalline"></div> -->
-                                <!-- <div id="verticalline"></div> -->
                             </li>
                             <li class="verticalline"></li>
                             <li class="recordcontent">
@@ -461,7 +459,7 @@
                 data.contactTime = this.followform.contactTime
                 data.followContent = this.followform.followContent;
                 data.contactsId = this.followform.contactsId;
-                data.state = this.followform.state;
+                data.follow_state = this.followform.state;
                 data.customertwo_id = this.detailData.id;
                 console.log(data)
 

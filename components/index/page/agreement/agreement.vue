@@ -1,5 +1,5 @@
 <template>
-    <!-- 客户搜索 -->
+    <!-- 合同页面 -->
     <div>
         <div class="searchList" style="width:100%;">
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
@@ -29,7 +29,6 @@
                 <el-checkbox class="checkone" @change="showAlready()" label="已回款金额"></el-checkbox>
                 <el-checkbox class="checkone" @change="showSurplus()" label="剩余款项金额"></el-checkbox>
             </el-checkbox-group>
-            <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
         </div>
@@ -279,6 +278,7 @@
         },
 
         methods: {
+            //加载所有合同
             reloadTable() {
                 let _this = this;
                 let qs =require('querystring')
@@ -300,6 +300,7 @@
                     console.log(err);
                 });
             },
+            //获取列表id
             selectInfo(val){
                 this.multipleSelection = val;
                 console.log(val)
@@ -457,33 +458,6 @@
                         message: '取消删除[' + row.contract_name + ']'
                     });       
                 });
-            },
-            Receivables(){
-                // let _this = this;
-                // let qs =require('querystring')
-                // let idArr = [];
-                // idArr.ids = this.idArr.ids
-                // axios({
-                //     method: 'post',
-                //     url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
-                //     data:qs.stringify(idArr),
-                // }).then(function(res){
-                //     console.log(res)
-                //     if(res.status && res.status == 200) {
-                //         _this.$message({
-                //             message: '转移成功',
-                //             type: 'success'
-                //         });
-                //         _this.$options.methods.reloadTable.bind(_this)(true);
-                //     } else {
-                //         _this.$message({
-                //             message: res.data,
-                //             type: 'error'
-                //         });
-                //     }
-                // }).catch(function(err){
-                //     console.log(err);
-                // });
             },
             shownumber(){
                 this.showbianhao = !this.showbianhao
