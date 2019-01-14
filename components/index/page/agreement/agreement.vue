@@ -356,22 +356,22 @@
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "添加线索";
                 addOrUpdateData.createForm = [
-                    {"label":"合同类型","inputModel":"contract_type","type":"select","prop":"contract_type","options":[
+                    {"label":"合同类型","inputModel":"contract_type","type":"select","options":[
                         {"okey":'0',"olabel":"销售合同","ovalue":"销售合同"},
                         {"okey":'1',"olabel":"采购合同","ovalue":"采购合同"},
                         {"okey":'2',"olabel":"服务合同","ovalue":"服务合同"},
                         {"okey":'3',"olabel":"代理合同","ovalue":"代理合同"},
                         {"okey":'4',"olabel":"其他","ovalue":"其他"},
                     ]},
-                    {"label":"合同编号","inputModel":"contract_number","prop":"contract_type",},
-                    {"label":"合同名称","inputModel":"contract_name","prop":"contract_name",},
-                    {"label":"客户","inputModel":"customerpool_id","prop":"customerpool_id","type":"select"},
-                    {"label":"对应商机","inputModel":"opportunity_id","prop":"opportunity_id","type":"select"},
-                    {"label":"合同金额","inputModel":"amount","prop":"amount","type":"number"},
-                    {"label":"开始时间","inputModel":"start_date","prop":"start_date","type":"date"},
-                    {"label":"结束时间","inputModel":"end_date","prop":"end_date","type":"date"},
-                    {"label":"客户签约人","inputModel":"signatories","prop":"signatories",},
-                    {"label":"我方签约人","inputModel":"our_signatories","prop":"our_signatories",},
+                    {"label":"合同编号","inputModel":"contract_number",},
+                    {"label":"合同名称","inputModel":"contract_name",},
+                    {"label":"客户","inputModel":"customerpool_id","type":"select"},
+                    {"label":"对应商机","inputModel":"opportunity_id","type":"select"},
+                    {"label":"合同金额","inputModel":"amount","type":"number"},
+                    {"label":"开始时间","inputModel":"start_date","type":"date"},
+                    {"label":"结束时间","inputModel":"end_date","type":"date"},
+                    {"label":"客户签约人","inputModel":"signatories",},
+                    {"label":"我方签约人","inputModel":"our_signatories",},
                     {"label":"备注","inputModel":"remarks"}];
                 addOrUpdateData.setForm = {
                     "contract_type": '',
@@ -394,16 +394,16 @@
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [
-                    {"label":"合同类型","inputModel":"contract_type","type":"select","prop":"contract_type",},
+                    {"label":"合同类型","inputModel":"contract_type","type":"select",},
                     {"label":"合同编号","inputModel":"contract_number","prop":"contract_number",},
-                    {"label":"合同名称","inputModel":"contract_name","prop":"contract_name",},
-                    {"label":"客户","inputModel":"customerpool_id","prop":"customerpool_id","type":"select"},
-                    {"label":"对应商机","inputModel":"opportunity_id","prop":"opportunity_id","type":"select"},
-                    {"label":"合同金额","inputModel":"amount","prop":"amount","type":"number"},
-                    {"label":"开始时间","inputModel":"start_date","prop":"start_date","type":"date"},
-                    {"label":"结束时间","inputModel":"end_date","prop":"end_date","type":"date"},
-                    {"label":"客户签约人","inputModel":"signatories","prop":"signatories",},
-                    {"label":"我方签约人","inputModel":"our_signatories","prop":"our_signatories",},
+                    {"label":"合同名称","inputModel":"contract_name",},
+                    {"label":"客户","inputModel":"customerpool_id","type":"select"},
+                    {"label":"对应商机","inputModel":"opportunity_id","type":"select"},
+                    {"label":"合同金额","inputModel":"amount","type":"number"},
+                    {"label":"开始时间","inputModel":"start_date","type":"date"},
+                    {"label":"结束时间","inputModel":"end_date","type":"date"},
+                    {"label":"客户签约人","inputModel":"signatories",},
+                    {"label":"我方签约人","inputModel":"our_signatories",},
                     {"label":"备注","inputModel":"remarks"}];
                 addOrUpdateData.setForm = {
                     "contract_type": row.contract_type,

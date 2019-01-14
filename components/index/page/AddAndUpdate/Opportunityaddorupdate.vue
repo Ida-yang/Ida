@@ -3,7 +3,7 @@
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
             <el-form-item
-                label-width="100px"
+                label-width="110px"
                 v-for="item in addOrUpdateData.createForm"
                 :label="item.label"
                 :key="item.inputModel"
@@ -14,8 +14,13 @@
                     :value="myForm[item.inputModel]"
                     @input="handleInput($event, item.inputModel)"
                     style="width:90%;" 
-                    auto-complete="off"
-                    @keyup.enter.native="submit">
+                    auto-complete="off">
+                </el-input>
+                <el-input 
+                    v-else-if="item.inputModel == 'user_id'"
+                    :disabled="true"
+                    :value="myForm[item.inputModel]"
+                    style="width:90%;">
                 </el-input>
                 <el-input 
                     v-else-if="item.type && item.type == 'number'"
@@ -84,14 +89,6 @@
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
                 </div>
-                <el-input 
-                    v-else-if="item.prop"
-                    prop="item.prop"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
             </el-form-item>
             <div style="margin-left:60px;">
                 <el-button class="searchbutton" @click="submit">立即提交</el-button>
@@ -106,12 +103,10 @@
         width: 98%;
     }
     h3 {
-        /* text-align: center; */
         margin: 20px 60px;
     }
     .myForm {
         width: 41%;;
-        /* padding: 20px; */
         float: left;
     }
     .line{
@@ -123,7 +118,6 @@
     .formlist{
         width: 57%;
         height: auto;
-        /* background-color: pink; */
         float: left;
     }
 </style>
@@ -182,7 +176,10 @@
                 rules: {
                     opportunity_number : [{ required: true, message: '商机编号不能为空', trigger: 'blur' },],
                     opportunity_name : [{ required: true, message: '商机名称不能为空', trigger: 'blur' },],
-                    // telephone : [{ required: true, message: '电话不能为空', trigger: 'blur' },],
+                    customerpool_id : [{ required: true, message: '关联客户不能为空', trigger: 'blur' },],
+                    contacts_id : [{ required: true, message: '决策人不能为空', trigger: 'blur' },],
+                    opportunity_achievement : [{ required: true, message: '预计成绩金额不能为空', trigger: 'blur' },],
+                    opportunity_deal : [{ required: true, message: '预计成交时间不能为空', trigger: 'blur' },],
                 },
             }
         },
@@ -274,27 +271,48 @@
                 createForm.forEach(item => {
                     subData[item.inputModel] = _this.myForm[item.inputModel];
                     console.log(_this.myForm)
-                    if(item.inputModel == "opportunity_number" && !subData[item.inputModel]) {//联系人名称不能为空
+                    if(item.inputModel == "opportunity_number" && !subData[item.inputModel]) {//商机编号不能为空
                         _this.$message({
                             message: "商机编号不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
-                    if(item.inputModel == "opportunity_name" && !subData[item.inputModel]) {//公司名称不能为空
+                    if(item.inputModel == "opportunity_name" && !subData[item.inputModel]) {//商机名称不能为空
                         _this.$message({
-                            message: "商机名称名称不能为空",
+                            message: "商机名称不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
-                    // if(item.inputModel == "telephone" && !subData[item.inputModel]) {//手机号码或电话号码至少一个不能为空
-                    //     _this.$message({
-                    //         message: "电话号码不能为空",
-                    //         type: 'error'
-                    //     });
-                    //     flag = true;
-                    // }
+                    if(item.inputModel == "customerpool_id" && !subData[item.inputModel]) {//关联客户不能为空
+                        _this.$message({
+                            message: "关联客户不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "contacts_id" && !subData[item.inputModel]) {//决策人不能为空
+                        _this.$message({
+                            message: "决策人不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "opportunity_achievement" && !subData[item.inputModel]) {//预计成绩金额不能为空
+                        _this.$message({
+                            message: "预计成绩金额不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(item.inputModel == "opportunity_deal" && !subData[item.inputModel]) {//预计成交时间不能为空
+                        _this.$message({
+                            message: "预计成交时间不能为空",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
                 });
                 if(flag) return;
                 // console.log(_this.myForm)

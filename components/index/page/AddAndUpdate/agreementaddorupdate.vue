@@ -33,12 +33,7 @@
                     @change="handleChange($event, item.inputModel)"
                     :placeholder="item.placeholder"
                     style="width:90%;">
-                    <el-option
-                        v-for="item in cusoptions"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
-                    </el-option>
+                    <el-option v-for="item in cusoptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select' && item.inputModel == 'opportunity_id'"
@@ -49,12 +44,7 @@
                     @change="handleInput($event, item.inputModel)"
                     :placeholder="item.placeholder"
                     style="width:90%;">
-                    <el-option
-                        v-for="item in oppoptions"
-                        :key="item.opportunity_id"
-                        :label="item.opportunity_name"
-                        :value="item.opportunity_id">
-                    </el-option>
+                    <el-option v-for="item in oppoptions" :key="item.opportunity_id" :label="item.opportunity_name" :value="item.opportunity_id"></el-option>
                 </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select'"
@@ -64,12 +54,7 @@
                     @change="handleInput($event, item.inputModel)"
                     :placeholder="item.placeholder"
                     style="width:90%;">
-                    <el-option
-                        v-for="o in item.options"
-                        :key="o.okey"
-                        :label="o.olabel"
-                        :value="o.ovalue">
-                    </el-option>
+                    <el-option v-for="o in item.options" :key="o.okey" :label="o.olabel" :value="o.ovalue"></el-option>
                 </el-select>
                 <el-date-picker
                     v-else-if="item.type && item.type == 'date'"
@@ -81,22 +66,10 @@
                     style="width:90%;" 
                     auto-complete="off">
                 </el-date-picker>
-                <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'sex'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
-                </div>
                 <div v-else-if="item.type && item.type == 'radio'">
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
                 </div>
-                <el-input 
-                    v-else-if="item.prop"
-                    prop="item.prop"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
             </el-form-item>
             <div style="margin-left:60px;">
                 <el-button class="searchbutton" @click="submit">立即提交</el-button>
@@ -130,45 +103,11 @@
     import bus from '../../bus';
     export default {
         name:'agreementaddOrUpdate',
-        computed:{  
-        },
-        props: {
-            // addOrUpdateData: {
-            //     title: "什么"
-            // },
-            // myForm: {
-            //     type: Object,
-            // }
-        },
         data(){
             return {
                 addOrUpdateData: {},
-                myForm: {
-                    contract_type:null,
-                    contract_number:null,
-                    contract_name:null,
-                    customerpool_id:null,
-                    opportunity_id:null,
-                    amount:null,
-                    start_date:null,
-                    end_date:null,
-                    signatories:null,
-                    our_signatories:null,
-                    remarks:null,
-                },
-                subData: {
-                    contract_type:null,
-                    contract_number:null,
-                    contract_name:null,
-                    customerpool_id:null,
-                    opportunity_id:null,
-                    amount:null,
-                    start_date:null,
-                    end_date:null,
-                    signatories:null,
-                    our_signatories:null,
-                    remarks:null,
-                },
+                myForm: {},
+                subData: {},
                 cusoptions:null,
                 oppoptions:null,
                 page: 1,//默认第一页

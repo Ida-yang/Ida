@@ -324,17 +324,17 @@
                 // addOrUpdateData.title = "添加线索";
                 addOrUpdateData.createForm = [
                     // {"label":"线索来源","inputModel":"cues","type":"radio"},
-                    {"label":"商机编号","inputModel":"opportunity_number","prop":"opportunity_number"},
-                    {"label":"商机名称","inputModel":"opportunity_name","prop":"opportunity_name","type":"require"},
-                    // {"label":"日期","inputModel":"opportunity_time","prop":"opportunity_time","type":"date"},
-                    {"label":"关联客户","inputModel":"customerpool_id","prop":"customerpool_id","type":"select"},
-                    {"label":"决策人","inputModel":"contacts_id","prop":"contacts_id","type":"select"},
-                    {"label":"预计成绩金额","inputModel":"opportunity_achievement","prop":"opportunity_achievement","type":"number"},
-                    {"label":"预计成交时间","inputModel":"opportunity_deal","prop":"opportunity_deal","type":"date"},
+                    {"label":"商机编号","inputModel":"opportunity_number",},
+                    {"label":"商机名称","inputModel":"opportunity_name"},
+                    // {"label":"日期","inputModel":"opportunity_time","type":"date"},
+                    {"label":"关联客户","inputModel":"customerpool_id","type":"select"},
+                    {"label":"决策人","inputModel":"contacts_id","type":"select"},
+                    {"label":"预计成绩金额","inputModel":"opportunity_achievement","type":"number"},
+                    {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
                     // {"label":"部门","inputModel":"bumen","prop":"bumen"},
                     // {"label":"机构","inputModel":"jigou","prop":"jigou"},
-                    {"label":"用户","inputModel":"user_id","prop":"user_id"},
-                    {"label":"备注","inputModel":"opportunity_remarks","prop":"opportunity_remarks"}];
+                    {"label":"用户","inputModel":"user_id"},
+                    {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
                     // "cues": '',
                     "opportunity_number": '',
@@ -360,17 +360,17 @@
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [
                     // {"label":"线索来源","inputModel":"cues","type":"radio"},
-                    {"label":"商机编号","inputModel":"opportunity_number","prop":"opportunity_number"},
-                    {"label":"商机名称","inputModel":"opportunity_name","prop":"opportunity_name","type":"require"},
-                    // {"label":"日期","inputModel":"opportunity_time","prop":"opportunity_time","type":"date"},
-                    {"label":"关联客户","inputModel":"customerpool_id","prop":"customerpool_id"},
-                    {"label":"决策人","inputModel":"contacts_id","prop":"contacts_id"},
-                    {"label":"预计成绩金额","inputModel":"opportunity_achievement","prop":"opportunity_achievement","type":"number"},
-                    {"label":"预计成交时间","inputModel":"opportunity_deal","prop":"opportunity_deal","type":"date"},
+                    {"label":"商机编号","inputModel":"opportunity_number",},
+                    {"label":"商机名称","inputModel":"opportunity_name"},
+                    // {"label":"日期","inputModel":"opportunity_time","type":"date"},
+                    {"label":"关联客户","inputModel":"customerpool_id",},
+                    {"label":"决策人","inputModel":"contacts_id",},
+                    {"label":"预计成绩金额","inputModel":"opportunity_achievement","type":"number"},
+                    {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
                     // {"label":"部门","inputModel":"bumen","prop":"bumen"},
                     // {"label":"机构","inputModel":"jigou","prop":"jigou"},
-                    {"label":"用户","inputModel":"user_id","prop":"user_id"},
-                    {"label":"备注","inputModel":"opportunity_remarks","prop":"opportunity_remarks"}];
+                    {"label":"用户","inputModel":"user_id"},
+                    {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
                     // "cues": row.cues,
                     "opportunity_number": row.opportunity_number,

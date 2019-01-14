@@ -9,16 +9,19 @@
             <br>
             <el-radio-group v-model="searchList.keyType" style="margin-bottom:10px;">
                 <span class="nameList">客户级别：</span>
+                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部客户级别</el-radio>
                 <el-radio v-for="item in labelData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.keyWord" style="margin-bottom:10px;">
                 <span class="nameList">客户来源：</span>
+                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部客户来源</el-radio>
                 <el-radio v-for="item in typeData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.state" style="margin-bottom:10px;">
                 <span class="nameList">客户状态：</span>
+                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部客户状态</el-radio>
                 <el-radio v-for="item in stateData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
@@ -28,10 +31,8 @@
             <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
         </div>
         <div class="entry">
-            <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
             <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
             <el-button class="btn info-btn" size="mini" @click="TocustomerPool()">转移至客户池</el-button>
-            <!-- <el-button class="btn info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button> -->
             <el-popover
             placement="bottom"
             width="100"
@@ -47,6 +48,7 @@
                 <el-checkbox class="checkone" @change="shownexttime()" label="下次跟进时间"></el-checkbox>
                 <el-checkbox class="checkone" @change="showcharge()" label="负责人"></el-checkbox>
                 <el-checkbox class="checkone" @change="showstate()" label="状态"></el-checkbox>
+                <el-checkbox class="checkone" @change="showleval()" label="级别"></el-checkbox>
                 <el-checkbox class="checkone" @change="showcues()" label="客户来源"></el-checkbox>
             </el-checkbox-group>
             <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
@@ -167,6 +169,15 @@
                 sortable>
             </el-table-column>
             <el-table-column
+                prop="levels"
+                v-if="showjibie"
+                header-align="center"
+                align="left"
+                min-width="100"
+                label="级别"
+                sortable>
+            </el-table-column>
+            <el-table-column
                 prop="source"
                 v-if="showlaiyuan"
                 header-align="center"
@@ -246,12 +257,15 @@
                     id:null,
                 },
                 pIdData:[
-                    {pId:'',label:'0',value:'全部客户'},
-                    {pId:this.$store.state.ispId,label:'1',value:'我的客户'}],
+                    {pId:null,label:'0',value:'全部客户'},
+                    {pId:this.$store.state.ispId,label:'1',value:'我的客户'},
+                    {pId:null,label:'2',value:'本组'},
+                    {pId:null,label:'3',value:'本机构'},],
                 stateData:null,
                 labelData:null,
                 typeData:null,
-                checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','客户来源'],
+                nullvalue:null,
+                checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','级别','客户来源'],
                 showxingming:true,
                 showmingcheng:true,
                 showdianhua:true,
@@ -262,6 +276,7 @@
                 showgengshi:true,
                 showfuze:true,
                 showzhuangtai:true,
+                showjibie:true,
                 showlaiyuan:true,
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
@@ -274,7 +289,7 @@
                 method: 'get',
                 url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType.do?cId='+_this.$store.state.iscId,
             }).then(function(res){
-                console.log(res.data)
+                // console.log(res.data)
                 _this.stateData = res.data.name2001
                 _this.typeData = res.data.name3001
                 _this.labelData = res.data.name4001
@@ -293,12 +308,13 @@
                 let searchList = {}
                 searchList.searchName = this.searchList.searchName;
                 searchList.pId = this.searchList.pId
-                searchList.state = this.searchList.state
-                searchList.keyType = this.searchList.keyType
-                searchList.keyWord = this.searchList.keyWord
+                searchList.stateid = this.searchList.state //客户状态
+                searchList.levelsid = this.searchList.keyType //客户级别
+                searchList.customerStateid = this.searchList.keyWord //客户来源
                 searchList.page = this.page;
                 searchList.limit = this.limit;
                 console.log(searchList)
+
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerpool/query.do?cId='+_this.$store.state.iscId,
@@ -316,17 +332,12 @@
                 console.log(val)
                 let arr = val;
                 let newArr = [new Array()];
-                // console.log(arr)
                 arr.forEach((item) => {
                     if(item.id != 0){
-                        console.log(item.id)
                         newArr.push(item.id)
-                        // console.log(newArr)
                     }
                 });
-                // console.log(newArr)
                 this.idArr.id = newArr;
-                // console.log(this.idArr.id)
                 
             },
             openDetails(index,row){
@@ -337,24 +348,26 @@
             },
             handleAdd(){
                 let addOrUpdateData = {};
-                // addOrUpdateData.title = "添加线索";
+                // addOrUpdateData.title = "添加客户";
                 addOrUpdateData.createForm = [
-                    // {"label":"线索来源","inputModel":"cues","type":"radio"},
-                    {"label":"公司名称","inputModel":"poolName","prop":"poolName","type":"require"},
-                    {"label":"联系人","inputModel":"contactsName","prop":"contactsName"},
-                    {"label":"电话","inputModel":"telphone","prop":"telphone","type":"number"},
-                    {"label":"手机","inputModel":"phone","prop":"phone","type":"number"},
-                    {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
+                    {"label":"客户来源","inputModel":"customerStateid","type":"select"},
+                    {"label":"客户名称","inputModel":"poolName","type":"require"},
+                    {"label":"客户级别","inputModel":"levelsid","type":"select"},
+                    {"label":"联系人","inputModel":"contactsName"},
+                    {"label":"电话","inputModel":"telphone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
-                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
-                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
+                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
-                    // "cues": '',
+                    "customerStateid": '',
                     "poolName": '',
+                    "levelsid": '',
                     "contactsName": '',
                     "telphone": '',
                     "phone": '',
@@ -373,24 +386,26 @@
             handleEdit(index,row){
                 console.log(row)
                 let addOrUpdateData = {};
-                // addOrUpdateData.title = "修改线索";
+                // addOrUpdateData.title = "修改客户";
                 addOrUpdateData.createForm = [
-                    // {"label":"线索来源","inputModel":"cues","type":"radio"},
-                    {"label":"客户名称","inputModel":"poolName","prop":"poolName","type":"require"},
-                    {"label":"联系人","inputModel":"contactsName","prop":"contactsName"},
-                    {"label":"电话","inputModel":"telphone","prop":"telphone","type":"number"},
-                    {"label":"手机","inputModel":"phone","prop":"phone","type":"number"},
-                    {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
+                    {"label":"客户来源","inputModel":"customerStateid","type":"select"},
+                    {"label":"客户名称","inputModel":"poolName","type":"require"},
+                    {"label":"客户级别","inputModel":"levelsid","type":"select"},
+                    {"label":"联系人","inputModel":"contactsName"},
+                    {"label":"电话","inputModel":"telphone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
-                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
-                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
+                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
-                    // "cues": row.cues,
+                    "customerStateid": row.source,
                     "poolName": row.pName,
+                    "levelsid": row.levels,
                     "contactsName": row.contacts[0].coName,
                     "telphone": row.contacts[0].telephone,
                     "phone": row.contacts[0].phone,
@@ -462,8 +477,17 @@
                     console.log(err);
                 });
             },
+            showname(){
+                this.showmingcheng = !this.showmingcheng
+            },
             showcontactsname(){
                 this.showxingming = !this.showxingming
+            },
+            showtel(){
+                this.showdianhua = !this.showdianhua
+            },
+            showphone(){
+                this.showshouji = !this.showshouji
             },
             showtencent(){
                 this.showqq = !this.showqq
@@ -483,20 +507,11 @@
             showstate(){
                 this.showzhuangtai = !this.showzhuangtai
             },
+            showleval(){
+                this.showjibie = !this.showjibie
+            },
             showcues(){
                 this.showlaiyuan = !this.showlaiyuan
-            },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showtel(){
-                this.showdianhua = !this.showdianhua
-            },
-            showopera(){
-                this.showjingying = !this.showjingying
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

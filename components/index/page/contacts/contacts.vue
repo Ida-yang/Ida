@@ -70,11 +70,6 @@
                 align="left"
                 min-width="150"
                 sortable>
-                <!-- <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)">
-                        {{scope.row.poolname}}
-                    </div>
-                </template> -->
             </el-table-column>
             <el-table-column label="电话"
                 prop="telephone"
@@ -128,13 +123,6 @@
                 header-align="center"
                 align="left"
                 min-width="100"
-                sortable>
-            </el-table-column>
-            <el-table-column label="状态"
-                prop="state"
-                v-if="showzhuangtai"
-                header-align="center"
-                align="left"
                 sortable>
             </el-table-column>
             <el-table-column label="操作"
@@ -276,17 +264,17 @@
             handleAdd(){
                 let addOrUpdateData = {};
                 addOrUpdateData.createForm = [
-                    {"label":"联系人","inputModel":"name","prop":"name"},
+                    {"label":"联系人","inputModel":"name"},
                     {"label":"公司名称","inputModel":"poolName","type":"require"},
-                    {"label":"电话","inputModel":"telephone","prop":"telephone","type":"number"},
+                    {"label":"电话","inputModel":"telephone","type":"number"},
                     {"label":"手机","inputModel":"phone","type":"number"},
                     {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
-                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
-                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
+                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
@@ -311,17 +299,17 @@
                 console.log(row)
                 let addOrUpdateData = {};
                 addOrUpdateData.createForm = [
-                    {"label":"联系人","inputModel":"name","prop":"name"},
+                    {"label":"联系人","inputModel":"name"},
                     {"label":"客户名称","inputModel":"poolName","type":"require"},
-                    {"label":"电话","inputModel":"telephone","prop":"telephone","type":"number"},
+                    {"label":"电话","inputModel":"telephone","type":"number"},
                     {"label":"手机","inputModel":"phone","type":"number"},
                     {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
-                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
-                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
+                    {"label":"省/市/区","inputModel":"country","type":"select"},
+                    {"label":"","inputModel":"city","type":"select",},
+                    {"label":"","inputModel":"area","type":"select"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {

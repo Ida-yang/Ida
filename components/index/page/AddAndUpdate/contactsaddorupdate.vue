@@ -3,6 +3,7 @@
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
             <el-form-item
+                class="formitemcont"
                 label-width="100px"
                 v-for="item in addOrUpdateData.createForm"
                 :label="item.label"
@@ -37,39 +38,26 @@
                     v-model="myForm[item.inputModel]"
                     @change="choseProvince"
                     :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in Provinces"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
+                    style="width:28%;">
+                    <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
                 </el-select>
                 <el-select
+                    class="cityseat"
                     v-else-if="item.inputModel == 'city'"
                     v-model="myForm[item.inputModel]"
                     @change="choseCity"
                     :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in shi1"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
+                    style="width:28%;">
+                    <el-option v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
                 </el-select>
                 <el-select
+                    class="areaseat"
                     v-else-if="item.inputModel == 'area'"
                     v-model="myForm[item.inputModel]"
                     @change="choseBlock"
                     :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in qu1"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
+                    style="width:28%;">
+                    <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
                 </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select'"
@@ -79,12 +67,7 @@
                     @select="handleInput($event, item.inputModel)"
                     :placeholder="item.placeholder"
                     style="width:30px;">
-                    <el-option
-                        v-for="o in item.options"
-                        :key="o[item.okey]"
-                        :label="o[item.olabel]"
-                        :value="o[item.ovalue]">
-                    </el-option>
+                    <el-option v-for="o in item.options" :key="o[item.okey]" :label="o[item.olabel]" :value="o[item.ovalue]"></el-option>
                 </el-select>
                 <el-date-picker
                     v-else-if="item.type && item.type == 'date'"
@@ -97,26 +80,10 @@
                     style="width:90%;" 
                     auto-complete="off">
                 </el-date-picker>
-                <!-- <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'cues'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="0">大数据</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="1">手动新增</el-radio>
-                </div> -->
                 <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'sex'">
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
                 </div>
-                <div v-else-if="item.type && item.type == 'radio'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
-                </div>
-                <el-input 
-                    v-else-if="item.prop"
-                    prop="item.prop"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
             </el-form-item>
             <div style="margin-left:60px;">
                 <el-button class="searchbutton" @click="submit">立即提交</el-button>
@@ -193,6 +160,9 @@
         /* padding: 20px; */
         float: left;
     }
+    .formitemcont:nth-child(11),.formitemcont:nth-child(10){
+        margin: 0;
+    }
     .line{
         float: left;
         height: 95%;
@@ -205,12 +175,20 @@
         /* background-color: pink; */
         float: left;
     }
+    .cityseat{
+        position: absolute;
+        top:-62px;
+        left:30%;
+    }
+    .areaseat{
+        position: absolute;
+        top:-62px;
+        left:60%;
+    }
 </style>
 
 <script>
     import store from '../../../../store/store'
-    import {pca,pcaa} from 'area-data'
-    import {mapState} from 'vuex'
     import axios from 'axios'
     import bus from '../../bus';
     export default {
@@ -231,43 +209,14 @@
                 addOrUpdateData: {},
                 myForm: {
                     poolName:null,
-                    address:null,
-                    country:null,
-                    city:null,
-                    area:null,
-                    name:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    birthday:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
-                },
-                subData: {
-                    poolName:null,
-                    address:null,
-                    country:null,
-                    city:null,
-                    area:null,
-                    name:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    birthday:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
-                },
+                    address:null,},
+                subData: {},
                 mapJson:'../../../../dist/static/map.json',
-                Provinces:'',
-                country: '',
-                city: '',
-                shi1: [],
-                area: '',
-                qu1: [],
-                Citys:'',
-                block:'',
+                Provinces:[],
+                cityList: [],
+                areaList: [],
+                Citys:[],
+                block:[],
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
@@ -443,15 +392,8 @@
             },
             //获取table的索引和行数据，当该行被点击时，将公司名称地址填充到表单（会刷新当前页面，之前填写的信息会被覆盖）
             getRow(index,row){
-                // console.log(row.address)
                 this.myForm.poolName = row.name
                 this.myForm.address = row.address
-                // this.addOrUpdateData.setForm.name = row.name
-                // this.addOrUpdateData.setForm.address = row.address
-                // this.$store.state.addOrUpdateData.setForm.poolName = row.name
-                // this.$store.state.addOrUpdateData.setForm.address = row.address
-                // this.$options.methods.loadData.bind(this)(true);
-                // console.log(this.myForm);
             },
             
             // 加载china地点数据，三级
@@ -461,9 +403,6 @@
                     console.log(res)
                 if (res.status==200) {
                     var data = res.data
-                    that.Provinces = []
-                    that.Citys = []
-                    that.block = []
                     // 省市区数据分类
                     for (var item in data) {
                     if (item.match(/0000$/)) {//省
@@ -495,18 +434,16 @@
                     console.log(res.status)
                 }
                 }).catch(function(error){
-                    console.log(typeof+ error)
+                    console.log(error)
                 })
             },
             // 选省
             choseProvince(e) {
                 for (var index2 in this.Provinces) {
                 if (e === this.Provinces[index2].value) {
-                    this.shi1 = this.Provinces[index2].children
-                    this.city = this.Provinces[index2].children[0].value
-                    this.qu1 =this.Provinces[index2].children[0].children
-                    this.area = this.Provinces[index2].children[0].children[0].value
-                    this.E = this.qu1[0].id
+                    this.cityList = this.Provinces[index2].children
+                    this.areaList =this.Provinces[index2].children[0].children
+                    this.E = this.areaList[0].id
                 }
                 }console.log(this.myForm.country)
             },
@@ -514,9 +451,8 @@
             choseCity(e) {
                 for (var index3 in this.Citys) {
                 if (e === this.Citys[index3].value) {
-                    this.qu1 = this.Citys[index3].children
-                    this.area = this.Citys[index3].children[0].value
-                    this.E = this.qu1[0].id
+                    this.areaList = this.Citys[index3].children
+                    this.E = this.areaList[0].id
                     // console.log(this.E)
                 }
                 }console.log(this.myForm.city)

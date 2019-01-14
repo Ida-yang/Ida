@@ -3,17 +3,19 @@
     <div>
         <div class="searchList" style="width:100%;">
             <el-radio-group v-model="searchList.pId" style="margin:5px 0;">
-                <span class="nameList">分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;类：</span>
+                <span class="nameList">线索分类：</span>
                 <el-radio v-for="item in pIdData" :key="item.label" :label="item.pId" style="width:110px;" @change="search()">{{item.value}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.state" style="margin:5px 0;">
-                <span class="nameList">状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态：</span>
+                <span class="nameList">线索状态：</span>
+                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部线索状态</el-radio>
                 <el-radio v-for="item in stateData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.type" style="margin:5px 0;">
                 <span class="nameList">线索来源：</span>
+                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部线索来源</el-radio>
                 <el-radio v-for="item in typeData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
             <br>
@@ -240,9 +242,12 @@
                 },
                 pIdData:[
                     {pId:null,label:'0',value:'全部线索'},
-                    {pId:this.$store.state.ispId,label:'1',value:'我的线索'}],
+                    {pId:this.$store.state.ispId,label:'1',value:'我的线索'},
+                    {pId:null,label:'2',value:'本组'},
+                    {pId:null,label:'3',value:'本机构'},],
                 stateData:null,
                 typeData:null,
+                nullvalue:null,
                 checklist:['联系人','公司名称','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','线索来源'],
                 showxingming:true,
                 showmingcheng:true,
@@ -284,8 +289,8 @@
                 let searchList = {}
                 searchList.searchName = this.searchList.searchName;
                 searchList.pId = this.searchList.pId
-                searchList.state = this.searchList.state
-                searchList.type = this.searchList.type
+                searchList.stateid = this.searchList.state
+                searchList.cuesid = this.searchList.type
                 searchList.page = this.page;
                 searchList.limit = this.limit;
                 console.log(searchList)
@@ -331,21 +336,21 @@
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "添加线索";
                 addOrUpdateData.createForm = [
-                    // {"label":"线索来源","inputModel":"cues","type":"radio"},
-                    {"label":"公司名称","inputModel":"poolName","prop":"poolName","type":"require"},
-                    {"label":"联系人","inputModel":"contactsName","prop":"contactsName"},
-                    {"label":"电话","inputModel":"telphone","prop":"telphone","type":"number"},
-                    {"label":"手机","inputModel":"phone","prop":"phone","type":"number"},
-                    {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
+                    {"label":"线索来源","inputModel":"cuesid","type":"select"},
+                    {"label":"公司名称","inputModel":"poolName","type":"require"},
+                    {"label":"联系人","inputModel":"contactsName",},
+                    {"label":"电话","inputModel":"telphone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
-                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
-                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
+                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
-                    // "cues": '',
+                    "cuesid": '',
                     "poolName": '',
                     "contactsName": '',
                     "telphone": '',
@@ -383,21 +388,21 @@
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [
-                    // {"label":"线索来源","inputModel":"cues","type":"radio"},
-                    {"label":"客户名称","inputModel":"poolName","prop":"poolName","type":"require"},
-                    {"label":"联系人","inputModel":"contactsName","prop":"contactsName"},
-                    {"label":"电话","inputModel":"telphone","prop":"telphone","type":"number"},
-                    {"label":"手机","inputModel":"phone","prop":"phone","type":"number"},
-                    {"label":"QQ","inputModel":"qq","prop":"qq","type":"number"},
+                    {"label":"线索来源","inputModel":"cuesid","type":"select"},
+                    {"label":"客户名称","inputModel":"poolName","type":"require"},
+                    {"label":"联系人","inputModel":"contactsName",},
+                    {"label":"电话","inputModel":"telphone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省","inputModel":"country","type":"select","prop":"country"},
-                    {"label":"市","inputModel":"city","type":"select","prop":"city"},
-                    {"label":"区","inputModel":"area","type":"select","prop":"area"},
+                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
-                    // "cues": row.cues,
+                    "cuesid": row.cues,
                     "poolName": row.name,
                     "contactsName": row.contacts[0].coName,
                     "telphone": row.contacts[0].telephone,
@@ -492,6 +497,15 @@
             showcontactsname(){
                 this.showxingming = !this.showxingming
             },
+            showname(){
+                this.showmingcheng = !this.showmingcheng
+            },
+            showtel(){
+                this.showdianhua = !this.showdianhua
+            },
+            showphone(){
+                this.showshouji = !this.showshouji
+            },
             showtencent(){
                 this.showqq = !this.showqq
             },
@@ -512,18 +526,6 @@
             },
             showcues(){
                 this.showlaiyuan = !this.showlaiyuan
-            },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showtel(){
-                this.showdianhua = !this.showdianhua
-            },
-            showopera(){
-                this.showjingying = !this.showjingying
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

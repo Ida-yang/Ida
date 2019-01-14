@@ -3,6 +3,7 @@
         <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
             <!-- <h3>{{addOrUpdateData.title}}</h3> -->
             <el-form-item
+                class="formitemclue"
                 label-width="100px"
                 v-for="item in addOrUpdateData.createForm"
                 :label="item.label"
@@ -33,79 +34,43 @@
                     auto-complete="off">
                 </el-input>
                 <el-select 
+                    v-else-if="item.inputModel == 'cuesid'"
+                    v-model="myForm[item.inputModel]"
+                    @change="handleInput($event, item.inputModel)"
+                    :placeholder="item.placeholder"
+                    style="width:90%;">
+                    <el-option v-for="o in cuesList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
+                </el-select>
+                <el-select 
                     v-else-if="item.inputModel == 'country'"
                     v-model="myForm[item.inputModel]"
                     @change="choseProvince"
                     :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in Provinces"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
+                    style="width:28%;">
+                    <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
                 </el-select>
                 <el-select
+                    class="cityseat"
                     v-else-if="item.inputModel == 'city'"
                     v-model="myForm[item.inputModel]"
                     @change="choseCity"
                     :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in shi1"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
+                    style="width:28%;">
+                    <el-option v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
                 </el-select>
                 <el-select
+                    class="areaseat"
                     v-else-if="item.inputModel == 'area'"
                     v-model="myForm[item.inputModel]"
                     @change="choseBlock"
                     :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option
-                        v-for="o in qu1"
-                        :key="o.id"
-                        :label="o.value"
-                        :value="o.value">
-                    </el-option>
+                    style="width:28%;">
+                    <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
                 </el-select>
-                <el-select 
-                    v-else-if="item.type && item.type == 'select'"
-                    :multiple="item.multiple"
-                    :collapse-tags="item.multiple"
-                    v-model="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    :placeholder="item.placeholder"
-                    style="width:30px;">
-                    <el-option
-                        v-for="o in item.options"
-                        :key="o[item.okey]"
-                        :label="o[item.olabel]"
-                        :value="o[item.ovalue]">
-                    </el-option>
-                </el-select>
-                <!-- <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'cues'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="0">大数据</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="1">手动新增</el-radio>
-                </div> -->
-                <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'sex'">
+                <div v-else-if="item.inputModel == 'sex'">
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
                     <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
                 </div>
-                <div v-else-if="item.type && item.type == 'radio'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="是">是</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="否">否</el-radio>
-                </div>
-                <!-- <el-input 
-                    v-else-if="item.prop"
-                    prop="item.prop"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input> -->
             </el-form-item>
             <div style="margin-left:60px;">
                 <el-button class="searchbutton" @click="submit">立即提交</el-button>
@@ -120,20 +85,18 @@
                 border
                 stripe
                 :default-sort = "{order: 'ascending'}"
-                max-height="580"
-                style="text-align:center">
+                max-height="580">
                 <el-table-column
                     header-align="center"
                     align="center"
                     width="35">
                     <template slot-scope="scope">
                         <el-button style="width:15px;height:15px;padding:0;border-radius:50%;" @click="getRow(scope.$index,scope.row)">&nbsp;</el-button>
-                        <!-- <el-radio :label="scope.row.id" @change.native="getRow(scope.$index,scope.row)"></el-radio> -->
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="80"
                     label="公司名称"
@@ -141,7 +104,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="address"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="130"
                     label="公司地址"
@@ -149,7 +112,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="representative"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="40"
                     label="法人"
@@ -175,13 +138,14 @@
         width: 98%;
     }
     h3 {
-        /* text-align: center; */
         margin: 20px 60px;
     }
     .myForm {
         width: 41%;;
-        /* padding: 20px; */
         float: left;
+    }
+    .formitemclue:nth-child(11),.formitemclue:nth-child(10){
+        margin: 0;
     }
     .line{
         float: left;
@@ -192,40 +156,32 @@
     .formlist{
         width: 57%;
         height: auto;
-        /* background-color: pink; */
         float: left;
     }
-    
+    .cityseat{
+        position: absolute;
+        top:-62px;
+        left:30%;
+    }
+    .areaseat{
+        position: absolute;
+        top:-62px;
+        left:60%;
+    }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button{
         -webkit-appearance: none !important;
         margin: 0;
     }
-    /* .require.el-input::after {
-        position: absolute;
-        right: -15px;
-        content: "*";
-        color: #ee5722;
-    } */
 </style>
 
 <script>
     import store from '../../../../store/store'
-    import {pca,pcaa} from 'area-data'
-    import {mapState} from 'vuex'
     import axios from 'axios'
     import bus from '../../bus';
     export default {
         name:'clueaddOrUpdate',
         computed:{  
-        },
-        props: {
-            // addOrUpdateData: {
-            //     title: "什么"
-            // },
-            // myForm: {
-            //     type: Object,
-            // }
         },
         data(){
             return {
@@ -234,40 +190,15 @@
                 myForm: {
                     poolName:null,
                     address:null,
-                    country:null,
-                    city:null,
-                    area:null,
-                    contactsName:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
                 },
-                subData: {
-                    poolName:null,
-                    address:null,
-                    country:null,
-                    city:null,
-                    area:null,
-                    contactsName:null,
-                    telphone:null,
-                    phone:null,
-                    qq:null,
-                    sex:null,
-                    identity:null,
-                    remark:null,
-                },
+                subData: {},
                 mapJson:'../../../../dist/static/map.json',
-                Provinces:'',
-                country: '',
-                city: '',
-                shi1: [],
-                area: '',
-                qu1: [],
-                Citys:'',
-                block:'',
+                cuesList:null,
+                Provinces:[],
+                Citys:[],
+                block:[],
+                cityList: [],
+                areaList: [],
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
@@ -275,10 +206,8 @@
                 rules: {
                     poolName : [{ required: true, message: '公司名称不能为空', trigger: 'blur' },],
                     contactsName : [{ required: true, message: '联系人名称不能为空', trigger: 'blur' },],
-                    // telphone : [{ required: true, message: '电话不能为空', trigger: 'blur' },{ type: 'number', message: '电话仅能输入数字', trigger: 'blur' },],
                     telphone : [{ required: true, message: '电话不能为空', trigger: 'blur' },],
-                    // phone : [{ type: 'number', message: '手机仅能输入数字', trigger: 'blur' },],
-                    // qq : [{ type: 'number', message: 'QQ仅能输入数字', trigger: 'blur' },],
+                    cuesid : [{ required: true, message: '线索来源不能为空', trigger: 'blur' },],
                 },
             }
         },
@@ -288,7 +217,6 @@
         mounted() {
             this.loadData();
             this.loadTable();
-            // this.restaurants = this.loadData();
         },
         methods:{
             loadTable(){
@@ -298,6 +226,8 @@
                 pageInfo.page = this.page;
                 pageInfo.limit = this.limit;
                 // console.log(pageInfo)
+                let data = {}
+                data.type = '客户来源'
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerOne/query.do',
@@ -306,6 +236,16 @@
                     // console.log(res.data.rows)
                     _this.tableData = res.data.rows
                     _this.tableNumber = res.data.total;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoGroupByType.do?cId='+_this.$store.state.iscId,
+                    data: qs.stringify(data),
+                }).then(function(res){
+                    // console.log(res.data.rows)
+                    _this.cuesList = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -322,8 +262,6 @@
                     createForm.forEach((item, index) => {
                         if(item.type && item.type == 'select') {
                             this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
-                            // let selectList = item.selectList;
-                            // this.addOrUpdateData.createForm[index].options = selectList;
                         } else if(item.type && item.type == 'radio') {
                             this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
                         } else {
@@ -340,7 +278,6 @@
             handleInput(val, key) {
                 this.myForm[key] = val;
                 // console.log(val)
-                // this.$emit('input', { ...this.myForm });
             },
             handleoninput(val,key){
                 let _this = this
@@ -399,6 +336,13 @@
                         });
                         flag = true;
                     }
+                    if(item.inputModel == "cuesid" && !subData[item.inputModel]) {//线索来源不能为空
+                        _this.$message({
+                            message: "请选择线索来源",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
                 });
                 if(flag) return;
                 // console.log(_this.myForm)
@@ -443,84 +387,70 @@
                     this.$router.push('/welcome');
                 }
             },
-            //获取table的索引和行数据，当该行被点击时，将公司名称地址填充到表单（会刷新当前页面，之前填写的信息会被覆盖）
+            //获取table的索引和行数据，当该行被点击时，将公司名称地址填充到表单
             getRow(index,row){
-                // console.log(row.address)
                 this.myForm.poolName = row.name
                 this.myForm.address = row.address
-                // this.addOrUpdateData.setForm.name = row.name
-                // this.addOrUpdateData.setForm.address = row.address
-                // this.$store.state.addOrUpdateData.setForm.poolName = row.name
-                // this.$store.state.addOrUpdateData.setForm.address = row.address
-                // this.$options.methods.loadData.bind(this)(true);
-                // console.log(this.myForm);
             },
 
             // 加载china地点数据，三级
             getCityData(){
-                var that = this
+                var _this = this
                 axios.get(this.mapJson).then(function(res){
                     console.log(res)
-                if (res.status==200) {
-                    var data = res.data
-                    that.Provinces = []
-                    that.Citys = []
-                    that.block = []
-                    // 省市区数据分类
-                    for (var item in data) {
-                    if (item.match(/0000$/)) {//省
-                        that.Provinces.push({id: item, value: data[item], children: []})
-                    } else if (item.match(/00$/)) {//市
-                        that.Citys.push({id: item, value: data[item], children: []})
-                    } else {//区
-                        that.block.push({id: item, value: data[item]})
-                    }
-                    }
-                    // 分类市级
-                    for (var index in that.Provinces) {
-                    for (var index1 in that.Citys) {
-                        if (that.Provinces[index].id.slice(0, 2) === that.Citys[index1].id.slice(0, 2)) {
-                        that.Provinces[index].children.push(that.Citys[index1])
+                    if (res.status==200) {
+                        var data = res.data
+                        // 省市区数据分类
+                        for (var item in data) {
+                            if (item.match(/0000$/)) {//省
+                                _this.Provinces.push({id: item, value: data[item], children: []})
+                            } else if (item.match(/00$/)) {//市
+                                _this.Citys.push({id: item, value: data[item], children: []})
+                            } else {//区
+                                _this.block.push({id: item, value: data[item]})
+                            }
                         }
-                    }
-                    }
-                    // 分类区级
-                    for(var item1 in that.Citys) {
-                    for(var item2 in that.block) {
-                        if (that.block[item2].id.slice(0, 4) === that.Citys[item1].id.slice(0, 4)) {
-                        that.Citys[item1].children.push(that.block[item2])
+                        // 分类市级
+                        for (var index in _this.Provinces) {
+                            for (var index1 in _this.Citys) {
+                                if (_this.Provinces[index].id.slice(0, 2) === _this.Citys[index1].id.slice(0, 2)) {
+                                _this.Provinces[index].children.push(_this.Citys[index1])
+                                }
+                            }
                         }
+                        // 分类区级
+                        for(var item1 in _this.Citys) {
+                            for(var item2 in _this.block) {
+                                if (_this.block[item2].id.slice(0, 4) === _this.Citys[item1].id.slice(0, 4)) {
+                                _this.Citys[item1].children.push(_this.block[item2])
+                                }
+                            }
+                        }
+                    }else{
+                        console.log(res.status)
                     }
-                    }
-                }
-                else{
-                    console.log(res.status)
-                }
                 }).catch(function(error){
-                    console.log(typeof+ error)
+                    console.log(error)
                 })
             },
             // 选省
             choseProvince(e) {
                 for (var index2 in this.Provinces) {
-                if (e === this.Provinces[index2].value) {
-                    this.shi1 = this.Provinces[index2].children
-                    this.city = this.Provinces[index2].children[0].value
-                    this.qu1 =this.Provinces[index2].children[0].children
-                    this.area = this.Provinces[index2].children[0].children[0].value
-                    this.E = this.qu1[0].id
-                }
+                    if (e === this.Provinces[index2].value) {
+                        this.cityList = this.Provinces[index2].children
+                        this.areaList =this.Provinces[index2].children[0].children
+                        this.E = this.areaList[0].id
+                    }
                 }console.log(this.myForm.country)
             },
             // 选市
             choseCity(e) {
                 for (var index3 in this.Citys) {
-                if (e === this.Citys[index3].value) {
-                    this.qu1 = this.Citys[index3].children
-                    this.area = this.Citys[index3].children[0].value
-                    this.E = this.qu1[0].id
-                    // console.log(this.E)
-                }
+                    if (e === this.Citys[index3].value) {
+                        this.areaList = this.Citys[index3].children
+                        this.E = this.areaList[0].id
+                        // console.log(this.E)
+                    }
                 }console.log(this.myForm.city)
             },
             // 选区
