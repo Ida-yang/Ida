@@ -40,7 +40,7 @@
             ref="multipleTable"
             border
             stripe
-            :default-sort = "{prop:'opportunity_time',order: 'descending'}"
+            :default-sort = "{prop:'opportunity_id',order: 'descending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >
@@ -50,7 +50,8 @@
             align="center"
             type="selection"
             width="45"
-            scope.row.id
+            scope.row.opportunity_id
+            prop="opportunity_id"
             @selection-change="selectInfo">
             </el-table-column>
             <el-table-column

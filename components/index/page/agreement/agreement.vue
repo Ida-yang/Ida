@@ -34,7 +34,7 @@
         </div>
         <el-table
             :data="tableData"
-            :default-sort = "{prop:'contract_number',order: 'descending'}"
+            :default-sort = "{prop:'contract_id',order: 'descending'}"
             ref="multipleTable"
             border
             stripe
@@ -48,6 +48,7 @@
             type="selection"
             width="45"
             scope.row.contract_id
+            prop="contract_id"
             @selection-change="selectInfo">
             </el-table-column>
             <el-table-column
@@ -384,7 +385,7 @@
                     "start_date": '',
                     "end_date": '',
                     "signatories": '',
-                    "our_signatories": '',
+                    "our_signatories": this.$store.state.user,
                     "remarks": ''};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'insertContract.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;

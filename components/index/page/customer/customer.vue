@@ -2,9 +2,9 @@
     <!-- 客户搜索 -->
     <div>
         <div class="searchList" style="width:100%;">
-            <el-radio-group v-model="searchList.pId" style="margin-bottom:10px;">
+            <el-radio-group v-model="searchList.label" style="margin-bottom:10px;">
                 <span class="nameList">客户分类：</span>
-                <el-radio v-for="item in pIdData" :key="item.label" :label="item.pId" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" style="width:110px;" @change="search()">{{item.value}}</el-radio>
             </el-radio-group>
             <br>
             <el-radio-group v-model="searchList.keyType" style="margin-bottom:10px;">
@@ -59,7 +59,7 @@
             ref="multipleTable"
             border
             stripe
-            :default-sort = "{prop:'follow[0].createTime',order: 'descending'}"
+            :default-sort = "{prop:'id',order: 'descending'}"
             style="width:100%;text-align:center"
             @selection-change="selectInfo"
             >
@@ -70,6 +70,7 @@
             type="selection"
             width="45"
             scope.row.id
+            prop="id"
             @selection-change="selectInfo">
             </el-table-column>
             <el-table-column
@@ -238,14 +239,14 @@
             return {
                 searchList:{
                     searchName:null,
-                    pId:null,
+                    label:null,
                     keyType:null,
                     state:null,
                     keyWord:null,
                 },
                 searchListNew:{
                     searchName:null,
-                    pId:null,
+                    label:null,
                     keyType:null,
                     state:null,
                     keyWord:null,
@@ -256,10 +257,10 @@
                     id:null,
                 },
                 pIdData:[
-                    {pId:null,label:'0',value:'全部客户'},
-                    {pId:this.$store.state.ispId,label:'1',value:'我的客户'},
-                    {pId:null,label:'2',value:'本组'},
-                    {pId:null,label:'3',value:'本机构'},],
+                    {label:'0',value:'全部客户'},
+                    {label:'1',value:'我的客户'},
+                    {label:'2',value:'本组'},
+                    {label:'3',value:'本机构'},],
                 stateData:null,
                 labelData:null,
                 typeData:null,
@@ -306,7 +307,13 @@
                 let qs =require('querystring')
                 let searchList = {}
                 searchList.searchName = this.searchList.searchName;
-                searchList.pId = this.searchList.pId
+                if(this.searchList.label == 1 ){
+                    searchList.pId = _this.$store.state.ispId
+                }else if(this.searchList.label == 2){
+                    searchList.secondid = _this.$store.state.deptid
+                }else if(this.searchList.label == 3){
+                    searchList.deptid = _this.$store.state.insid
+                }
                 searchList.stateid = this.searchList.state //客户状态
                 searchList.levelsid = this.searchList.keyType //客户级别
                 searchList.customerStateid = this.searchList.keyWord //客户来源

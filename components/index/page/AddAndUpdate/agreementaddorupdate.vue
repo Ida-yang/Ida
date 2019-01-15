@@ -107,7 +107,10 @@
         data(){
             return {
                 addOrUpdateData: {},
-                myForm: {},
+                myForm: {
+                    start_date:null,
+                    end_date:null,
+                },
                 subData: {},
                 cusoptions:null,
                 oppoptions:null,
@@ -128,7 +131,7 @@
                 },
             }
         },
-        //获取改用户的客户
+        //获取该用户的客户
         beforeCreate(){
             let _this = this
             axios({
@@ -278,6 +281,8 @@
                     }
                 });
                 if(flag) return;
+                subData.secondid = this.$store.state.deptid
+                subData.deptid = this.$store.state.insid
                 // console.log(_this.myForm)
                 console.log(subData)
 

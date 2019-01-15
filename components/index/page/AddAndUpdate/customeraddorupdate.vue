@@ -173,12 +173,12 @@
     }
     .cityseat{
         position: absolute;
-        top:-62px;
+        top:-52px;
         left:30%;
     }
     .areaseat{
         position: absolute;
-        top:-62px;
+        top:-52px;
         left:60%;
     }
     input::-webkit-outer-spin-button,
@@ -365,6 +365,8 @@
                     }
                 });
                 if(flag) return;
+                subData.secondid = this.$store.state.deptid
+                subData.deptid = this.$store.state.insid
                 // console.log(_this.myForm)
                 console.log(subData)
 

@@ -387,6 +387,7 @@
                 this.searchList.deptid = data.deptid
                 // console.log(this.searchList)
                 this.clickdata = data
+                // console.log(this.clickdata)
                 this.newform.second_id = data.deptid
                 this.newform.secondname = data.deptname
                 this.$options.methods.reloadTable.bind(this)(true);

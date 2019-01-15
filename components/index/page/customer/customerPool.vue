@@ -1,5 +1,5 @@
 <template>
-    <!-- 线索池 -->
+    <!-- 客户池 -->
     <div>
         <div class="searchList" style="width:100%;">
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
@@ -374,9 +374,10 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.ids = this.idArr.id
+                idArr.pId = _this.$store.state.ispId
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerpool/receivepool.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    url:  _this.$store.state.defaultHttp+ 'customerpool/receivepool.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     // console.log(res)

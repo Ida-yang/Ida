@@ -282,6 +282,8 @@
                 });
                 if(flag) return;
                 // console.log(_this.myForm)
+                subData.secondid = this.$store.state.deptid
+                subData.deptid = this.$store.state.insid
                 subData.user_id = _this.$store.state.ispId
                 console.log(subData)
 

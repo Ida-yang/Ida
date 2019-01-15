@@ -395,7 +395,7 @@
                 let pageInfo = {}
                 pageInfo.page = this.page
                 pageInfo.limit = this.limit
-                console.log(pageInfo);
+                // console.log(pageInfo);
 
                 //加载客户状态
                 axios({
@@ -403,7 +403,7 @@
                     url:_this.$store.state.defaultHttp+'typeInfo/getTypeInfoGroupByType.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.stateList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -435,7 +435,7 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'customerpool/getFollowStaffAndpool.do?cId='+_this.$store.state.iscId+'&customerpool_id='+this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.record = res.data.map.success
                     if(_this.record !== ''){
                         _this.followform.state = _this.record[0].state

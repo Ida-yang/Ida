@@ -44,6 +44,9 @@ body,
     overflow: hidden;
     overflow-x: hidden; overflow-y: auto; 
 }
+.myForm > .el-form-item{
+    margin-bottom: 12px;
+}
 .searchList{
     width: 240px;
     margin: 5px 5px 5px 0px;

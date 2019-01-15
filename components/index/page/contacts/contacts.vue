@@ -38,7 +38,7 @@
         <el-table
             :data="tableData"
             ref="multipleTable"
-            :default-sort= "{prop:'name',order: 'descending'}"
+            :default-sort= "{prop:'csId',order: 'descending'}"
             border
             stripe
             style="width:100%;text-align:center"
@@ -51,6 +51,7 @@
             type="selection"
             width="45"
             scope.row.csId
+            prop="csId"
             @selection-change="selectInfo">
             </el-table-column>
             <el-table-column label="联系人"

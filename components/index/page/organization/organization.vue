@@ -297,7 +297,7 @@
                     url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(searchInfo)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.roleList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -309,7 +309,7 @@
                     method: 'get',
                     url: _this.$store.state.defaultHttp+'resource/getResources.do',
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.cluerole = res.data.name1
                     _this.customerole = res.data.name2
                     _this.contactrole = res.data.name3
@@ -321,12 +321,9 @@
                 });
             },
             handleNodeClick(data){
-                // console.log(data)
                 this.searchList.deptid = data.deptid
                 this.searchList.parentid = data.parentid
-                // console.log(this.searchList)
                 this.clickdata = data
-                // console.log(this.clickdata)
                 this.roleform.deptid = data.deptid
                 this.$options.methods.reloadData.bind(this)(true);
             },
@@ -457,20 +454,11 @@
                 let _this = this
                 this.roleform.name = ''
                 this.roleform.ids = []
-                // console.log(this.clickdata.next)
                 if(!this.clickdata){
                     _this.$message({
                         message:'请先选择部门，再添加角色',
                         type:'info'
                     })
-                // }else if(this.clickdata && this.clickdata.next == ''){
-                //     this.roleform.deptname = this.clickdata.deptname
-                //     this.dialogVisible3 = true
-                // }else{
-                //     _this.$message({
-                //         message:'该部门下还有部门，不可添加角色',
-                //         type:'error'
-                //     })
                 }else{
                     this.roleform.deptname = this.clickdata.deptname
                     this.dialogVisible3 = true

@@ -4,7 +4,7 @@
     <el-row class="logincontent">
         <el-col :span="14" class="content-l">
             <div>
-                <img :src="bgimg" height="50%" width="60%" alt="元旦快乐" title="元旦快乐" style="margin:25% 20%;">
+                <img src="../assets/img/index.png" height="50%" width="60%" alt="元旦快乐" title="元旦快乐" style="margin:25% 20%;">
             </div>
         </el-col>
         <!-- <el-col :span="10" :offset="8" class="grid-content content-r systemLogin"> -->
@@ -73,7 +73,6 @@ export default {
                     { required: true, message: '请输入密码', trigger: 'blur' },
                 ],
             },
-            bgimg:'../assets/img/index.jpg'
         }
     },
     mounted() {
@@ -105,16 +104,20 @@ export default {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(function(res){
+                console.log(res.data.map.success)
                 if(res.data.msg && res.data.code == 200) {
                     _this.$message({
                       message: '登录成功',
                       type: 'success'
                     })
-                _this.$store.commit('iscId',res.data.map.success.cId)
-                _this.$store.commit('ispId',res.data.map.success.pId)
-                _this.$store.commit('user',res.data.map.success.name)
+                let userData = res.data.map.success
+                _this.$store.commit('iscId',userData.cId)
+                _this.$store.commit('ispId',userData.pId)
+                _this.$store.commit('user',userData.name)
+                _this.$store.commit('deptid',userData.second_id)
+                _this.$store.commit('roleid',userData.roleid)
+                _this.$store.commit('insid',userData.private_deptid)
                 _this.$router.push({path:'/index'})
-                console.log(res)
                 }else {
                     _this.$message({
                         message: res.data.msg,

@@ -14,6 +14,9 @@ const state = {
   iscId:'',
   ispId:'',
   user:'',
+  deptid:'',
+  roleid:'',
+  insid:'',
 
   //标签页
   tagsList:[],
@@ -101,6 +104,18 @@ const mutations = {
   user(state,msg){
     state.user = msg;
     localStorage.setItem('user',msg);
+  },
+  deptid(state,msg){
+    state.deptid = msg;
+    localStorage.setItem('deptid',msg);
+  },
+  roleid(state,msg){
+    state.roleid = msg;
+    localStorage.setItem('roleid',msg);
+  },
+  insid(state,msg){
+    state.insid = msg;
+    localStorage.setItem('insid',msg);
   }
 
 }
