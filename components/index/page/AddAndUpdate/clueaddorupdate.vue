@@ -180,6 +180,7 @@
     import store from '../../../../store/store'
     import axios from 'axios'
     import bus from '../../bus';
+    
     export default {
         name:'clueaddOrUpdate',
         computed:{  
@@ -193,8 +194,8 @@
                     address:null,
                 },
                 subData: {},
-                mapJson:'../../../../dist/static/map.json',
                 cuesList:null,
+                mapJson:'../../../../dist/static/map.json',
                 Provinces:[],
                 Citys:[],
                 block:[],

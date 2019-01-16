@@ -1,6 +1,6 @@
 <template>
     <div class="contentall">
-        <div class="leftcontent">
+        <div class="roleleftcontent">
             <el-tree
                 node-key="deptid"
                 highlight-current
@@ -12,7 +12,7 @@
             </el-tree>
         </div>
         <div class="centercontent"></div>
-        <div class="rightcontent">
+        <div class="rolerightcontent">
             <div class="searchList" style="width:100%;">
                 <el-input v-model="searchList.searchName" placeholder="用户名称" style="width:300px;"></el-input>
                 &nbsp;&nbsp;
@@ -41,7 +41,7 @@
             </div>
             <el-table
                 :data="tableData"
-                :default-sort = "{prop:'private_number',order: 'descending'}"
+                :default-sort = "{prop:'private_id',order: 'descending'}"
                 ref="multipleTable"
                 border
                 stripe
@@ -55,6 +55,7 @@
                     type="selection"
                     width="45"
                     scope.row.private_id
+                    prop="private_id"
                     @selection-change="selectInfo"
                     sortable>
                 </el-table-column>
@@ -62,7 +63,7 @@
                     prop="private_number"
                     fixed
                     v-if="showbianhao"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="150"
                     label="编号"
@@ -72,7 +73,7 @@
                     prop="private_employee"
                     fixed
                     v-if="showmingcheng"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="90"
                     label="用户"
@@ -86,7 +87,7 @@
                 <el-table-column
                     prop="private_username"
                     v-if="showzhanghao"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="120"
                     label="登录账号"
@@ -95,16 +96,16 @@
                 <el-table-column
                     prop="name"
                     v-if="showjuese"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="100"
-                    label="角色"
+                    label="职位"
                     sortable>
                 </el-table-column>
                 <el-table-column
                     prop="private_phone"
                     v-if="showshouji"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="120"
                     label="手机号"
@@ -113,7 +114,7 @@
                 <el-table-column
                     prop="private_email"
                     v-if="showyouxiang"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="130"
                     label="邮箱"
@@ -123,25 +124,25 @@
                     prop="deptname"
                     show-overflow-tooltip
                     v-if="showbumen"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="100"
                     label="部门"
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="private_name"
+                    prop="parentname"
                     v-if="showzhiwei"
-                    header-align="center"
+                    header-align="left"
                     align="left"
-                    min-width="80"
-                    label="职位"
+                    min-width="180"
+                    label="机构"
                     sortable>
                 </el-table-column>
                 <el-table-column label="操作"
                     fixed="right"
                     width="140"
-                    header-align="center"
+                    header-align="left"
                     align="center">
                     <template slot-scope="scope">
                         <el-button
@@ -736,8 +737,8 @@
         background-color: #ffffff;
         height: 100%;
     }
-    .leftcontent{
-        width: 30%;
+    .roleleftcontent{
+        width: 20%;
         height: auto;
         float: left;
         box-sizing: border-box;
@@ -752,8 +753,8 @@
         float: left;
         background-color: #f0f0f0;
     }
-    .rightcontent{
-        width: 69%;
+    .rolerightcontent{
+        width: 79%;
         height: 100%;
         float: left;
         box-sizing: border-box;

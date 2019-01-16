@@ -56,7 +56,7 @@
             ref="multipleTable"
             border
             stripe
-            style="width:100%;text-align:center"
+            style="width:100%;"
             @selection-change="selectInfo"
             >
             <el-table-column
@@ -74,7 +74,7 @@
                 prop="contacts[0].coName"
                 fixed
                 v-if="showxingming"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 label="联系人"
@@ -84,7 +84,7 @@
                 prop="name"
                 fixed
                 v-if="showmingcheng"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="150"
                 label="公司名称"
@@ -98,7 +98,7 @@
             <el-table-column
                 prop="contacts[0].telephone"
                 v-if="showdianhua"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="电话"
                 sortable>
@@ -106,7 +106,7 @@
             <el-table-column
                 prop="contacts[0].phone"
                 v-if="showshouji"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="手机"
                 sortable>
@@ -114,7 +114,7 @@
             <el-table-column
                 prop="contacts[0].qq"
                 v-if="showqq"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="QQ"
                 sortable>
@@ -122,7 +122,7 @@
             <el-table-column
                 prop="follow[0].createTime"
                 v-if="showgenshi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="最新跟进时间"
@@ -132,7 +132,7 @@
                 prop="follow[0].followContent"
                 show-overflow-tooltip
                 v-if="showgenlu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="最新跟进记录"
@@ -141,7 +141,7 @@
             <el-table-column
                 prop="follow[0].contactTime"
                 v-if="showgengshi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="140"
                 label="下次联系时间"
@@ -150,7 +150,7 @@
             <el-table-column
                 prop="privateUser[0].private_employee"
                 v-if="showfuze"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 label="负责人"
@@ -159,7 +159,7 @@
             <el-table-column
                 prop="state"
                 v-if="showzhuangtai"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="状态"
                 sortable>
@@ -167,7 +167,7 @@
             <el-table-column
                 prop="cues"
                 v-if="showlaiyuan"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="线索来源"
@@ -176,7 +176,7 @@
             <el-table-column label="操作"
                 fixed="right"
                 width="80"
-                header-align="center"
+                header-align="left"
                 align="center">
                 <template slot-scope="scope">
                     <el-button
@@ -300,14 +300,14 @@
                 searchList.cuesid = this.searchList.type
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
                 
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerTwo/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.clueList = res.data.map.success
                     _this.$store.state.clueListnumber = res.data.count;
                 }).catch(function(err){

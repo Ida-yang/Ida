@@ -58,7 +58,7 @@
                 prop="opportunity_number"
                 fixed
                 v-if="showbianhao"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="商机编号"
@@ -68,7 +68,7 @@
                 prop="opportunity_name"
                 fixed
                 v-if="showmingcheng"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="120"
                 label="商机名称"
@@ -82,7 +82,7 @@
             <el-table-column
                 prop="opportunity_time"
                 v-if="showriqi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="120"
                 label="日期"
@@ -91,7 +91,7 @@
             <el-table-column
                 prop="customerpool[0].name"
                 v-if="showkehu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="180"
                 label="关联客户"
@@ -100,7 +100,7 @@
             <el-table-column
                 prop="contacts[0].coName"
                 v-if="showren"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="90"
                 label="决策人"
@@ -109,7 +109,7 @@
             <el-table-column
                 prop="opportunityProgress[0].progress_name"
                 v-if="showjindu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="商机进度"
@@ -119,7 +119,7 @@
                 prop="opportunityProgress[0].progress_probability"
                 show-overflow-tooltip
                 v-if="showjilv"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="成功几率"
@@ -128,7 +128,7 @@
             <el-table-column
                 prop="opportunity_achievement"
                 v-if="showjine"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="140"
                 label="预计成绩金额"
@@ -142,7 +142,7 @@
             <el-table-column
                 prop="opportunity_deal"
                 v-if="showshijian"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="140"
                 label="预计成交时间"
@@ -151,7 +151,7 @@
             <el-table-column
                 prop="state"
                 v-if="showbumen"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="80"
                 label="部门"
@@ -160,7 +160,7 @@
             <el-table-column
                 prop="cues"
                 v-if="showjigou"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="80"
                 label="机构"
@@ -169,7 +169,7 @@
             <el-table-column
                 prop="contacts[0].user_id"
                 v-if="showyonghu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="80"
                 label="用户"
@@ -178,7 +178,7 @@
             <el-table-column
                 prop="opportunity_remarks"
                 v-if="showbeizhu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="80"
                 label="备注"
@@ -187,7 +187,7 @@
             <el-table-column label="操作"
                 fixed="right"
                 width="150"
-                header-align="center"
+                header-align="left"
                 align="center">
                 <template slot-scope="scope">
                     <el-button
@@ -334,7 +334,7 @@
                     {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
                     // {"label":"部门","inputModel":"bumen","prop":"bumen"},
                     // {"label":"机构","inputModel":"jigou","prop":"jigou"},
-                    {"label":"用户","inputModel":"user_id"},
+                    {"label":"用户","inputModel":"user_id","disabled":true},
                     {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
                     // "cues": '',
@@ -370,7 +370,7 @@
                     {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
                     // {"label":"部门","inputModel":"bumen","prop":"bumen"},
                     // {"label":"机构","inputModel":"jigou","prop":"jigou"},
-                    {"label":"用户","inputModel":"user_id"},
+                    {"label":"用户","inputModel":"user_id","disabled":true},
                     {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
                     // "cues": row.cues,

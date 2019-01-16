@@ -111,7 +111,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="80"
                     label="公司名称"
@@ -119,7 +119,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="address"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="130"
                     label="公司地址"
@@ -127,7 +127,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="representative"
-                    header-align="center"
+                    header-align="left"
                     align="left"
                     min-width="40"
                     label="法人"

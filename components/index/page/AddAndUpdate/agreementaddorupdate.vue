@@ -16,6 +16,7 @@
                     @input="handleInput($event, item.inputModel)"
                     style="width:90%;" 
                     auto-complete="off"
+                    :disabled="item.disabled"
                     @keyup.enter.native="submit">
                 </el-input>
                 <el-input 
@@ -27,7 +28,7 @@
                     auto-complete="off">
                 </el-input>
                 <el-select 
-                    v-else-if="item.type && item.type == 'select' && item.inputModel == 'customerpool_id'"
+                    v-else-if="item.inputModel == 'customerpool_id'"
                     :multiple="item.multiple"
                     :collapse-tags="item.multiple"
                     v-model="myForm[item.inputModel]"
@@ -37,7 +38,7 @@
                     <el-option v-for="item in cusoptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
                 <el-select 
-                    v-else-if="item.type && item.type == 'select' && item.inputModel == 'opportunity_id'"
+                    v-else-if="item.inputModel == 'opportunity_id'"
                     filterable
                     :multiple="item.multiple"
                     :collapse-tags="item.multiple"
@@ -46,6 +47,17 @@
                     :placeholder="item.placeholder"
                     style="width:90%;">
                     <el-option v-for="item in oppoptions" :key="item.opportunity_id" :label="item.opportunity_name" :value="item.opportunity_id"></el-option>
+                </el-select>
+                <el-select 
+                    v-else-if="item.inputModel == 'signatories'"
+                    filterable
+                    :multiple="item.multiple"
+                    :collapse-tags="item.multiple"
+                    v-model="myForm[item.inputModel]"
+                    @change="handleInput($event, item.inputModel)"
+                    :placeholder="item.placeholder"
+                    style="width:90%;">
+                    <el-option v-for="item in contactslist" :key="item.id" :label="item.name" :value="item.name"></el-option>
                 </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select'"
@@ -114,6 +126,7 @@
                 subData: {},
                 cusoptions:null,
                 oppoptions:null,
+                contactslist:null,
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
@@ -185,7 +198,7 @@
                 this.customerId = val
                 this.loadOpp()
             },
-            //加载已选择客户下的商机
+            //加载已选择客户下的商机和联系人（客户决策人）
             loadOpp(){
                 let _this = this
                 let qs = require('querystring')
@@ -196,10 +209,20 @@
                     url: _this.$store.state.defaultHttp+'opportunity/getOpportunityAll.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.oppoptions = res.data
                 }).catch(function(err){
                     console.log(err)
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'getPoolContactsName.do?cId='+_this.$store.state.iscId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    console.log(res.data.map.success)
+                    _this.contactslist = res.data.map.success
+                }).catch(function(err){
+                    console.log(err);
                 });
             },
             //提交或修改

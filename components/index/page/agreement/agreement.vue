@@ -55,7 +55,7 @@
                 prop="contract_number"
                 fixed
                 v-if="showbianhao"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="合同编号"
@@ -65,7 +65,7 @@
                 prop="contract_name"
                 fixed
                 v-if="showmingcheng"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="150"
                 label="合同名称"
@@ -79,7 +79,7 @@
             <el-table-column
                 prop="contract_type"
                 v-if="showleixing"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="合同类型"
@@ -88,7 +88,7 @@
             <el-table-column
                 prop="poolName"
                 v-if="showkehu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="180"
                 label="对应客户"
@@ -97,7 +97,7 @@
             <el-table-column
                 prop="opportunity_id"
                 v-if="showshangji"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="商机"
                 sortable>
@@ -105,7 +105,7 @@
             <el-table-column
                 prop="amount"
                 v-if="showjine"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="合同金额"
@@ -119,7 +119,7 @@
             <el-table-column
                 prop="start_date"
                 v-if="showkaishi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="合同开始日期"
@@ -129,7 +129,7 @@
                 prop="end_date"
                 show-overflow-tooltip
                 v-if="showdaoqi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="合同到期日期"
@@ -138,7 +138,7 @@
             <el-table-column
                 prop="signatories"
                 v-if="showkeqian"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="客户签约人"
@@ -147,7 +147,7 @@
             <el-table-column
                 prop="our_signatories"
                 v-if="showwoqian"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="我方签约人"
@@ -156,7 +156,7 @@
             <el-table-column
                 prop="remarks"
                 v-if="showbeizhu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="备注"
                 sortable>
@@ -164,7 +164,7 @@
             <el-table-column
                 prop="already"
                 v-if="showyihui"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="已回款金额"
@@ -178,7 +178,7 @@
             <el-table-column
                 prop="surplus"
                 v-if="showshengyu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="剩余款项金额"
@@ -192,7 +192,7 @@
             <el-table-column label="操作"
                 fixed="right"
                 width="150"
-                header-align="center"
+                header-align="left"
                 align="center">
                 <template slot-scope="scope">
                     <el-button
@@ -372,8 +372,8 @@
                     {"label":"合同金额","inputModel":"amount","type":"number"},
                     {"label":"开始时间","inputModel":"start_date","type":"date"},
                     {"label":"结束时间","inputModel":"end_date","type":"date"},
-                    {"label":"客户签约人","inputModel":"signatories",},
-                    {"label":"我方签约人","inputModel":"our_signatories",},
+                    {"label":"客户签约人","inputModel":"signatories","type":"select"},
+                    {"label":"我方签约人","inputModel":"our_signatories","disabled":true},
                     {"label":"备注","inputModel":"remarks"}];
                 addOrUpdateData.setForm = {
                     "contract_type": '',
@@ -404,8 +404,8 @@
                     {"label":"合同金额","inputModel":"amount","type":"number"},
                     {"label":"开始时间","inputModel":"start_date","type":"date"},
                     {"label":"结束时间","inputModel":"end_date","type":"date"},
-                    {"label":"客户签约人","inputModel":"signatories",},
-                    {"label":"我方签约人","inputModel":"our_signatories",},
+                    {"label":"客户签约人","inputModel":"signatories","type":"select"},
+                    {"label":"我方签约人","inputModel":"our_signatories","disabled":true},
                     {"label":"备注","inputModel":"remarks"}];
                 addOrUpdateData.setForm = {
                     "contract_type": row.contract_type,

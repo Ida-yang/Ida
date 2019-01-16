@@ -12,6 +12,8 @@ import vuex from 'vuex'
 import store from './store/store';
 import VueResource from 'vue-resource';
 
+// import echarts from 'echarts'
+
 import base from './base';
 
 import VueAreaLinkage from 'vue-area-linkage';
@@ -24,6 +26,8 @@ Vue.use(VueAreaLinkage)
 Vue.use(VueResource);
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
+
+// Vue.prototype.$echarts = echarts 
 
 var lastTime = new Date().getTime();//最后操作时间 
 var currentTime = new Date().getTime();//当前时间

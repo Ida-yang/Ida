@@ -60,7 +60,7 @@
             border
             stripe
             :default-sort = "{prop:'id',order: 'descending'}"
-            style="width:100%;text-align:center"
+            style="width:100%;"
             @selection-change="selectInfo"
             >
             <el-table-column
@@ -77,7 +77,7 @@
                 prop="pName"
                 fixed
                 v-if="showmingcheng"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="150"
                 label="公司名称"
@@ -92,7 +92,7 @@
                 prop="contacts[0].coName"
                 fixed
                 v-if="showxingming"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 label="联系人"
@@ -101,7 +101,7 @@
             <el-table-column
                 prop="contacts[0].telephone"
                 v-if="showdianhua"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="电话"
                 sortable>
@@ -109,7 +109,7 @@
             <el-table-column
                 prop="contacts[0].phone"
                 v-if="showshouji"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="手机"
                 sortable>
@@ -117,7 +117,7 @@
             <el-table-column
                 prop="contacts[0].qq"
                 v-if="showqq"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="QQ"
                 sortable>
@@ -125,7 +125,7 @@
             <el-table-column
                 prop="follow[0].createTime"
                 v-if="showgenshi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="最新跟进时间"
@@ -135,7 +135,7 @@
                 prop="follow[0].followContent"
                 show-overflow-tooltip
                 v-if="showgenlu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 label="最新跟进记录"
@@ -144,7 +144,7 @@
             <el-table-column
                 prop="follow[0].contactTime"
                 v-if="showgengshi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="140"
                 label="下次联系时间"
@@ -153,7 +153,7 @@
             <el-table-column
                 prop="privateUser[0].private_employee"
                 v-if="showfuze"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 label="负责人"
@@ -162,7 +162,7 @@
             <el-table-column
                 prop="status"
                 v-if="showzhuangtai"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 label="状态"
@@ -171,7 +171,7 @@
             <el-table-column
                 prop="levels"
                 v-if="showjibie"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 label="级别"
@@ -180,7 +180,7 @@
             <el-table-column
                 prop="source"
                 v-if="showlaiyuan"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="110"
                 label="客户来源"
@@ -189,7 +189,7 @@
             <el-table-column label="操作"
                 fixed="right"
                 width="80"
-                header-align="center"
+                header-align="left"
                 align="center">
                 <template slot-scope="scope">
                     <el-button

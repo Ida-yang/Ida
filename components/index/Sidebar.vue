@@ -214,7 +214,7 @@
         left: 0;
         top: 0;
         bottom: 0px;
-        border-right: 1px solid #ffff00;
+        /* border-right: 1px solid #ffff00; */
         /* overflow-y: scroll; */
     }
     .sidebar::-webkit-scrollbar{

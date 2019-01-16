@@ -41,7 +41,7 @@
             :default-sort= "{prop:'csId',order: 'descending'}"
             border
             stripe
-            style="width:100%;text-align:center"
+            style="width:100%;"
             @selection-change="selectInfo"
             >
             <el-table-column
@@ -58,7 +58,7 @@
                 prop="name"
                 fixed
                 v-if="showxingming"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 sortable>
@@ -67,7 +67,7 @@
                 prop="poolname"
                 fixed
                 v-if="showmingcheng"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="150"
                 sortable>
@@ -75,28 +75,28 @@
             <el-table-column label="电话"
                 prop="telephone"
                 v-if="showdianhua"
-                header-align="center"
+                header-align="left"
                 align="left"
                 sortable>
             </el-table-column>
             <el-table-column label="手机"
                 prop="phone"
                 v-if="showshouji"
-                header-align="center"
+                header-align="left"
                 align="left"
                 sortable>
             </el-table-column>
             <el-table-column label="QQ"
                 prop="qq"
                 v-if="showqq"
-                header-align="center"
+                header-align="left"
                 align="left"
                 sortable>
             </el-table-column>
             <el-table-column label="最新跟进时间"
                 prop="follow[0].createTime"
                 v-if="showgenshi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 sortable>
@@ -105,7 +105,7 @@
                 prop="follow[0].followContent"
                 show-overflow-tooltip
                 v-if="showgenlu"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="130"
                 sortable>
@@ -113,7 +113,7 @@
             <el-table-column label="下次联系时间"
                 prop="follow[0].contactTime"
                 v-if="showgengshi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="140"
                 sortable>
@@ -121,7 +121,7 @@
             <el-table-column label="负责人"
                 prop="private_employee"
                 v-if="showfuze"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 sortable>
@@ -129,7 +129,7 @@
             <el-table-column label="操作"
                 fixed="right"
                 width="150"
-                header-align="center"
+                header-align="left"
                 align="center">
                 <template slot-scope="scope">
                     <el-button
@@ -292,7 +292,7 @@
                     "identity": '',
                     "address": '',
                     "remark": ''};
-                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'insertContacts.do?cId='+this.$store.state.iscId,
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'insertContacts.do?cId='+this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/contactsaddorupdate' });
             },

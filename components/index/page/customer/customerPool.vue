@@ -54,7 +54,7 @@
             >
             <el-table-column
             fixed
-            header-align="center"
+            header-align="left"
             align="center"
             type="selection"
             width="45"
@@ -65,7 +65,7 @@
                 prop="name"
                 fixed
                 v-if="showmingcheng"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="180"
                 label="公司名称"
@@ -77,7 +77,7 @@
             <el-table-column
                 prop="contacts[0].coName"
                 v-if="showxingming"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="联系人"
                 min-width="100"
@@ -86,7 +86,7 @@
             <el-table-column
                 prop="contacts[0].telephone"
                 v-if="showdianhua"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="电话"
                 width="100"
@@ -95,7 +95,7 @@
             <el-table-column
                 prop="contacts[0].phone"
                 v-if="showshouji"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="手机"
                 width="100"
@@ -104,7 +104,7 @@
             <el-table-column
                 prop="contacts[0].qq"
                 v-if="showqq"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="QQ"
                 min-width="80"
@@ -113,7 +113,7 @@
             <el-table-column
                 prop="follow[0].createTime"
                 v-if="showgenshi"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="最新跟进时间"
                 min-width="130"
@@ -123,7 +123,7 @@
                 prop="follow[0].followContent"
                 v-if="showgenlu"
                 show-overflow-tooltip
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="最新跟进记录"
                 min-width="130"
@@ -132,7 +132,7 @@
             <el-table-column
                 prop="privateUser[0].private_employee"
                 v-if="showfuze"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="前负责人"
                 min-width="110"
@@ -141,7 +141,7 @@
             <el-table-column
                 prop="status"
                 v-if="showzhuangtai"
-                header-align="center"
+                header-align="left"
                 align="left"
                 min-width="100"
                 label="状态"
@@ -150,7 +150,7 @@
             <el-table-column
                 prop="source"
                 v-if="showlaiyuan"
-                header-align="center"
+                header-align="left"
                 align="left"
                 label="客户来源"
                 min-width="110"
@@ -160,7 +160,7 @@
                 label="操作"
                 fixed="right"
                 width="150"
-                header-align="center"
+                header-align="left"
                 align="center">
                 <template slot-scope="scope">
                     <el-button
@@ -315,7 +315,7 @@
                         data:qs.stringify(idArr),
                     }).then(function(res){
                         console.log(res)
-                        if(res.status && res.status == 200) {
+                        if(res.data.success && res.data.success == 'true') {
                             _this.$message({
                                 message: '删除成功',
                                 type: 'success'

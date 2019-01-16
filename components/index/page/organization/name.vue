@@ -1,97 +1,168 @@
 <template>
-  <el-tree 
-    node-key="deptid"
-    highlight-current
-    :data="datalist" 
-    :props="defaultProps"
-    :expand-on-click-node="false"
-    default-expand-all>
-    <span class="custom-tree-node" slot-scope="{ node, data }">
-      <span>{{ data.deptname }}</span>
-      <span>
-        <el-button
-          type="text"
-          size="mini"
-          @click="append(data)">
-          添加
-        </el-button>
-        <el-button
-          type="text"
-          size="mini"
-          @click="remove(node, data)">
-          删除
-        </el-button>
-      </span>
-    </span>
-  </el-tree>
-  <!--
-* highlight-current ：为了点击时节点高亮
-* expand-on-click-node : 只能箭头控制树形的展开收缩
-* render-content : 节点渲染方式
-* default-expanded-keys ：默认展开节点
--->
+    <div class="innerspace">
+        <div class="head">
+            <ul>
+                <li><p>总线索</p><p>1000</p></li>
+                <li><p>今日新增线索</p><p>100</p></li>
+                <li><p>今日更新线索</p><p>100</p></li>
+            </ul>
+            <ul>
+                <li><p>总客户</p><p>1000</p></li>
+                <li><p>今日新增客户</p><p>100</p></li>
+                <li><p>今日更新客户</p><p>100</p></li>
+            </ul>
+            <ul>
+                <li><p>总商机</p><p>1000</p></li>
+                <li><p>今日新增商机</p><p>100</p></li>
+                <li><p>今日推荐商机</p><p>100</p></li>
+            </ul>
+            <ul>
+                <li><p>总合同</p><p>1000</p></li>
+                <li><p>今日新增合同</p><p>100</p></li>
+            </ul>
+        </div>
+        <div class="middle">
+            <div class="middlebody">
+                <div id="chart1" :style="{width: '400px', height: '400px'}"></div>
+            </div>
+            <div class="middlebody">
+                <div id="chart2" :style="{width: '400px', height: '400px'}"></div>
+            </div>
+        </div>
+        <div class="foot"></div>
+    </div>
 </template>
 
 <script>
-  import axios from 'axios'
-  import qs from 'qs'
+    let echarts = require('echarts/lib/echarts')
+    require('echarts/lib/chart/bar')
+    require('echarts/lib/chart/funnel')
+    require('echarts/lib/component/tooltip')
+    require('echarts/lib/component/title')
 
-  let deptid = 1000;
-
-  export default {
-    data(){
-      return{
-        datalist:[],
-        defaultProps:{
-          children:'next',
-          label:'deptname'
+    export default {
+        name:'suibian',
+        data(){
+            return {
+                msg:"自动搜索"
+            }
         },
-        // deptData:JSON.parse(JSON.stringify(this.datalist)),
-      }
-    },
-    mounted(){
-      this.loadData()
-    },
-    methods:{
-      loadData(){
-        let _this = this
-        axios({
-          method: 'get',
-          url: _this.$store.state.defaultHttp+'dept/getDeptNodeTree.do?cId='+_this.$store.state.iscId,
-        }).then(function(res){
-          console.log(res.data.map.success)
-          let data = res.data.map.success
-          _this.datalist = data
-          console.log(_this.datalist)
-        }).catch(function(err){
-          console.log(err);
-        });
-      },
-      append(data) {
-        const newChild = { deptid: deptid++, deptname: 'testtest', next: [] };
-        if (!data.next) {
-          this.$set(data, 'next', []);
-        }
-        data.next.push(newChild);
-      },
-
-      remove(node, data) {
-        const parent = node.parent;
-        const next = parent.data.next || parent.data;
-        const index = next.findIndex(d => d.deptid === data.deptid);
-        next.splice(index, 1);
-      },
+        mounted(){
+            this.drawLine();
+        },
+        methods:{
+            drawLine(){
+                // 基于准备好的dom，初始化echarts实例
+                let chart1 = echarts.init(document.getElementById('chart1'))
+                let chart2 = echarts.init(document.getElementById('chart2'))
+                // 绘制图表
+                chart1.setOption({
+                    title : { text: 'ECharts 漏斗图' },
+                    tooltip : {},
+                    // toolbox: {
+                    //     show : true,
+                    //     feature : {
+                    //         mark : {show: true},
+                    //         dataView : {show: true, readOnly: false},
+                    //         restore : {show: true},
+                    //         saveAsImage : {show: true}
+                    //     }
+                    // },
+                    legend: {
+                        data : ['展现','点击','访问','咨询','订单']
+                    },
+                    calculable : true,
+                    series : [
+                        {
+                            name:'ECharts 漏斗图',
+                            type:'funnel',
+                            // width: '40%',
+                            data:[
+                                {value:60, name:'访问'},
+                                {value:40, name:'咨询'},
+                                {value:20, name:'订单'},
+                                {value:80, name:'点击'},
+                                {value:100, name:'展现'}
+                            ]
+                        }
+                    ]
+                });
+                chart2.setOption({
+                    title: { text: 'ECharts 柱状图' },
+                    tooltip: {},
+                    xAxis: {
+                        data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '销量',
+                        type: 'bar',
+                        data: [5, 20, 36, 10, 10, 20]
+                    }]
+                });
+            }
+        },
     }
-  }
 </script>
-
 <style>
-  .custom-tree-node {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    padding-right: 8px;
-  }
+    .innerspace{
+        width: 100%;
+        height: auto;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    .head{
+        width: 100%;
+        height: 100px;
+        background-color: #ac4d4d;
+        display: flex;
+        display: -webkit-flex; /* Safari */
+        justify-content: center;   /*水平居中*/
+        align-items: center;
+    }
+    .head ul{
+        height: 100%;
+        flex: 1;
+        text-align: center;
+        list-style: none;
+        display: flex;
+        display: -webkit-flex; /* Safari */
+        justify-content: center;   /*水平居中*/
+        align-items: center;
+    }
+    .head ul:not(:last-child){
+        border-right: 10px solid #f0f0f0;
+    }
+    .head ul li{
+        /* width: 50%;
+        height: 50px;
+        float: left; */
+        font-size: 14px;
+        flex: 1;
+        text-align: center;
+        line-height: 24px;
+    }
+    .middle{
+        width: 100%;
+        height: 400px;
+        background-color: #aca64d;
+        margin: 10px 0;
+        display: flex;
+        display: -webkit-flex; /* Safari */
+        justify-content: center;   /*水平居中*/
+        align-items: center;
+    }
+    .middle .middlebody{
+        flex: 1;
+        padding: 10px;
+    }
+    .middle .middlebody:first-child{
+        border-right: 10px solid #f0f0f0;
+    }
+    .foot{
+        width: 100%;
+        height: 300px;
+        background-color: #4da6ac;
+    }
 </style>

@@ -15,13 +15,8 @@
                     :value="myForm[item.inputModel]"
                     @input="handleInput($event, item.inputModel)"
                     style="width:90%;" 
+                    :disabled="item.disabled"
                     auto-complete="off">
-                </el-input>
-                <el-input 
-                    v-else-if="item.inputModel == 'user_id'"
-                    :disabled="true"
-                    :value="myForm[item.inputModel]"
-                    style="width:90%;">
                 </el-input>
                 <el-input 
                     v-else-if="item.type && item.type == 'number'"

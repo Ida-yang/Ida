@@ -1,12 +1,12 @@
 <template>
     <div class="contentall">
-        <div class="leftcontent">
+        <div class="setleftcontent">
             <ul class="namecontent">
                 <li v-for="item in nameList" :key="item.index" :value="item.name" @click="showTableval(item)">{{item.name}}</li>
             </ul>
         </div>
         <div class="centercontent"></div>
-        <div class="rightcontent">
+        <div class="setrightcontent">
             <div class="entry">
                 <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
                 <el-popover
@@ -373,7 +373,7 @@
         background-color: #ffffff;
         height: 100%;
     }
-    .leftcontent{
+    .setleftcontent{
         width: 30%;
         height: auto;
         padding-top:30px;
@@ -381,7 +381,7 @@
         box-sizing: border-box;
     }
     .namecontent{
-        width: 100%;
+        width: 90%;
         list-style: none;
         font-size: 14px; 
     }
@@ -401,7 +401,7 @@
         float: left;
         background-color: #f0f0f0;
     }
-    .rightcontent{
+    .setrightcontent{
         width: 69%;
         height: 100%;
         float: left;
