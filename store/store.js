@@ -21,6 +21,9 @@ const state = {
   //标签页
   tagsList:[],
 
+  //首页列表
+  welcomeData:null,
+
   //添加或修改列表数据
   addOrUpdateData:null,
   //跳转详情页列表

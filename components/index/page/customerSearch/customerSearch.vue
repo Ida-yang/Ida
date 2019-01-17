@@ -282,8 +282,8 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="page"
-            :page-sizes="[10, 30, 50, 100]"
-            :page-size="10"
+            :page-sizes="[15, 30, 50, 100]"
+            :page-size="15"
             layout="total, sizes, prev, pager, next, jumper"
             :total="tableNumber">
             </el-pagination>
@@ -368,12 +368,10 @@
                     area:null,
                 },
                 page:1,//默认第一页
-                limit:10,//默认10条
+                limit:15,//默认10条
                 idArr:{
                     id:null,
                 },
-
-                // showcheck:[{index:0,label:'公司名称'},{index:1,label:'公司地址'},{index:2,label:'注册资金'},{index:3,label:'法人'},{index:4,label:'成立日期'},{index:5,label:'手机'},{index:6,label:'固话'},{index:7,label:'邮箱'},{index:8,label:'网站'},{index:9,label:'行业'},{index:10,label:'企业规模'},],
                 checklist:['公司名称','公司地址','注册资金','法人','成立日期','手机','电话','邮箱','网站','行业','企业规模',],
                 // checklist:[],
                 showmingcheng:true,
@@ -622,6 +620,8 @@
             },
             reset(){
                 this.searchList = Object.assign({}, this.searchListNew);
+                this.page = 1;
+                this.limit = 15;
                 this.$options.methods.reloadTable.bind(this)(true);
             },
 

@@ -29,11 +29,72 @@
                 <div id="chart2" :style="{width: '400px', height: '400px'}"></div>
             </div>
         </div>
-        <div class="foot"></div>
+        <div class="foot">
+            <el-table
+            :data="tableData"
+            ref="multipleTable"
+            border
+            stripe
+            :default-sort = "{order: 'descending'}"
+            style="width:100%;text-align:center"
+            >
+            <el-table-column
+            fixed
+            header-align="center"
+            align="center"
+            type="index"
+            width="45">
+            </el-table-column>
+            <el-table-column
+                prop="opportunity_name"
+                header-align="left"
+                align="left"
+                min-width="120"
+                label="项目名"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="opportunity_time"
+                header-align="left"
+                align="left"
+                min-width="120"
+                label="开始日期"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="opportunity_deal"
+                header-align="left"
+                align="left"
+                min-width="180"
+                label="截止日期"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="opportunity_number"
+                header-align="left"
+                align="left"
+                min-width="90"
+                label="状态"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="private_employee"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="分配"
+                sortable>
+            </el-table-column>
+        </el-table>
+        </div>
     </div>
 </template>
 
 <script>
+    
+    import store from '../../../../store/store'
+    import axios from 'axios'
+    import qs from 'qs'
     let echarts = require('echarts/lib/echarts')
     require('echarts/lib/chart/bar')
     require('echarts/lib/chart/funnel')
@@ -42,39 +103,54 @@
 
     export default {
         name:'suibian',
+        store,
+        computed:{
+            tableData(){
+                return store.state.welcomeData
+            }
+        },
         data(){
             return {
                 msg:"自动搜索"
             }
         },
         mounted(){
+            this.loadData()
             this.drawLine();
         },
         methods:{
+            loadData(){
+                let _this = this;
+                let qs =require('querystring')
+                let searchList = {}
+                searchList.limit = 10;
+                // console.log(searchList)
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'opportunity/query.do?cId='+_this.$store.state.iscId,
+                    data: qs.stringify(searchList),
+                }).then(function(res){
+                    console.log(res.data.map.success)
+                    _this.$store.state.welcomeData = res.data.map.success
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
             drawLine(){
                 // 基于准备好的dom，初始化echarts实例
                 let chart1 = echarts.init(document.getElementById('chart1'))
                 let chart2 = echarts.init(document.getElementById('chart2'))
                 // 绘制图表
                 chart1.setOption({
-                    title : { text: 'ECharts 漏斗图' },
+                    title : { text: '销售漏斗' },
                     tooltip : {},
-                    // toolbox: {
-                    //     show : true,
-                    //     feature : {
-                    //         mark : {show: true},
-                    //         dataView : {show: true, readOnly: false},
-                    //         restore : {show: true},
-                    //         saveAsImage : {show: true}
-                    //     }
-                    // },
                     legend: {
                         data : ['展现','点击','访问','咨询','订单']
                     },
                     calculable : true,
                     series : [
                         {
-                            name:'ECharts 漏斗图',
+                            name:'销售漏斗',
                             type:'funnel',
                             // width: '40%',
                             data:[
@@ -88,16 +164,16 @@
                     ]
                 });
                 chart2.setOption({
-                    title: { text: 'ECharts 柱状图' },
+                    title: { text: '销售排行' },
                     tooltip: {},
                     xAxis: {
-                        data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                        data: ["张三", "李四", "王五", "赵六"]
                     },
                     yAxis: {},
                     series: [{
-                        name: '销量',
+                        name: '销售排行',
                         type: 'bar',
-                        data: [5, 20, 36, 10, 10, 20]
+                        data: [5, 20, 36, 10]
                     }]
                 });
             }
@@ -115,7 +191,7 @@
     .head{
         width: 100%;
         height: 100px;
-        background-color: #ac4d4d;
+        background-color: #ffffff;
         display: flex;
         display: -webkit-flex; /* Safari */
         justify-content: center;   /*水平居中*/
@@ -146,7 +222,7 @@
     .middle{
         width: 100%;
         height: 400px;
-        background-color: #aca64d;
+        background-color: #ffffff;
         margin: 10px 0;
         display: flex;
         display: -webkit-flex; /* Safari */
@@ -162,7 +238,7 @@
     }
     .foot{
         width: 100%;
-        height: 300px;
-        background-color: #4da6ac;
+        height: auto;
+        background-color: #ffffff;
     }
 </style>

@@ -149,7 +149,7 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="state"
+                prop="deptname"
                 v-if="showbumen"
                 header-align="left"
                 align="left"
@@ -158,16 +158,16 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="cues"
+                prop="parentname"
                 v-if="showjigou"
                 header-align="left"
                 align="left"
-                min-width="80"
+                min-width="200"
                 label="机构"
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="contacts[0].user_id"
+                prop="private_employee"
                 v-if="showyonghu"
                 header-align="left"
                 align="left"

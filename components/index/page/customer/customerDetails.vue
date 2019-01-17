@@ -86,81 +86,81 @@
                     </el-tab-pane>
                     <el-tab-pane label="联系人" name="second">
                         <el-table
-                        :data="customerDetails"
-                        border
-                        stripe
-                        style="width: 100%">
+                            :data="customerDetails"
+                            border
+                            stripe
+                            style="width: 100%">
                             <el-table-column
-                            prop="name"
-                            header-align="center"
-                            label="名称">
+                                prop="name"
+                                header-align="left"
+                                label="名称">
                             </el-table-column>
                             <el-table-column
-                            prop="phone"
-                            header-align="center"
-                            label="手机">
+                                prop="phone"
+                                header-align="left"
+                                label="手机">
                             </el-table-column>
                             <el-table-column
-                            prop="telephone"
-                            header-align="center"
-                            label="固话">
+                                prop="telephone"
+                                header-align="left"
+                                label="固话">
                             </el-table-column>
                             <el-table-column
-                            prop="email"
-                            header-align="center"
-                            label="邮箱">
+                                prop="email"
+                                header-align="left"
+                                label="邮箱">
                             </el-table-column>
                             <el-table-column
-                            prop="qq"
-                            header-align="center"
-                            label="QQ">
+                                prop="qq"
+                                header-align="left"
+                                label="QQ">
                             </el-table-column>
                             <el-table-column
-                            prop="wechat"
-                            header-align="center"
-                            label="微信">
+                                prop="wechat"
+                                header-align="left"
+                                label="微信">
                             </el-table-column>
                             <el-table-column
-                            prop="address"
-                            header-align="center"
-                            label="地址">
+                                prop="address"
+                                header-align="left"
+                                label="地址">
                             </el-table-column>
                             <el-table-column
-                            prop="identity"
-                            header-align="center"
-                            label="职务">
+                                prop="identity"
+                                header-align="left"
+                                label="职务">
                             </el-table-column>
                             <el-table-column
-                            prop="sex"
-                            header-align="center"
-                            label="性别">
+                                prop="sex"
+                                header-align="left"
+                                label="性别">
                             </el-table-column>
                             <el-table-column
-                            prop="status"
-                            header-align="center"
-                            label="是否在职">
+                                prop="status"
+                                header-align="left"
+                                label="是否在职">
                             </el-table-column>
                             <el-table-column
-                            prop="remark"
-                            header-align="center"
-                            label="备注">
+                                prop="remark"
+                                header-align="left"
+                                label="备注">
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="商机管理" name="third">
                         <el-table
-                        :data="opportunityDetails"
-                        border
-                        stripe
-                        style="width: 100%">
+                            :data="opportunityDetails"
+                            border
+                            stripe
+                            style="width: 100%">
                             <el-table-column
                             prop="opportunity_name"
-                            header-align="center"
+                            header-align="left"
                             label="商机名称">
                             </el-table-column>
                             <el-table-column
                             prop="opportunity_achievement"
-                            header-align="center"
+                            header-align="left"
                             label="商机金额">
                             <template slot-scope="scope">
                                 <div>
@@ -169,105 +169,105 @@
                             </template>
                             </el-table-column>
                             <el-table-column
-                            prop="opportunity_deal"
-                            header-align="center"
-                            label="预计签单时间">
+                                prop="opportunity_deal"
+                                header-align="left"
+                                label="预计签单时间">
                             </el-table-column>
                             <el-table-column
-                            prop="opportunityProgress[0].progress_name"
-                            header-align="center"
-                            label="商机阶段">
+                                prop="opportunityProgress[0].progress_name"
+                                header-align="left"
+                                label="商机阶段">
                             </el-table-column>
                             <el-table-column
-                            prop="opportunityProgress[0].progress_probability"
-                            header-align="center"
-                            label="预计成功率">
+                                prop="opportunityProgress[0].progress_probability"
+                                header-align="left"
+                                label="预计成功率">
                             </el-table-column>
                             <el-table-column
-                            prop="opportunity_time"
-                            header-align="center"
-                            label="商机新建时间">
+                                prop="opportunity_time"
+                                header-align="left"
+                                label="商机新建时间">
                             </el-table-column>
                             <!-- <el-table-column
-                            prop="address"
-                            header-align="center"
-                            label="耗时天数">
-                            </el-table-column> -->
+                                prop="address"
+                                header-align="left"
+                                label="耗时天数">
+                                </el-table-column> -->
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="合同管理" name="fouth">
                         <el-table
-                        :data="agreementDetails"
-                        border
-                        stripe
-                        style="width: 100%">
+                            :data="agreementDetails"
+                            border
+                            stripe
+                            style="width: 100%">
                             <el-table-column
-                            prop="contract_number"
-                            header-align="center"
-                            label="合同代码">
+                                prop="contract_number"
+                                header-align="left"
+                                label="合同代码">
                             </el-table-column>
                             <el-table-column
-                            prop="contract_name"
-                            header-align="center"
-                            label="合同名称">
+                                prop="contract_name"
+                                header-align="left"
+                                label="合同名称">
                             </el-table-column>
                             <el-table-column
-                            prop="contract_type"
-                            header-align="center"
-                            label="合同类型">
+                                prop="contract_type"
+                                header-align="left"
+                                label="合同类型">
                             </el-table-column>
                             <el-table-column
-                            prop="amount"
-                            header-align="center"
-                            label="合同金额">
-                            <template slot-scope="scope">
-                                <div>
-                                    {{scope.row.amount | rounding}}
-                                </div>
-                            </template>
+                                prop="amount"
+                                header-align="left"
+                                label="合同金额">
+                                <template slot-scope="scope">
+                                    <div>
+                                        {{scope.row.amount | rounding}}
+                                    </div>
+                                </template>
                             </el-table-column>
                             <el-table-column
-                            prop="signatories"
-                            header-align="center"
-                            label="签约人">
+                                prop="signatories"
+                                header-align="left"
+                                label="签约人">
                             </el-table-column>
                             <el-table-column
-                            prop="start_date"
-                            header-align="center"
-                            label="合同开始时间">
+                                prop="start_date"
+                                header-align="left"
+                                label="合同开始时间">
                             </el-table-column>
                             <el-table-column
-                            prop="end_date"
-                            header-align="center"
-                            label="合同到期时间">
+                                prop="end_date"
+                                header-align="left"
+                                label="合同到期时间">
                             </el-table-column>
                             <el-table-column
-                            prop="due_time"
-                            header-align="center"
-                            label="剩余天数">
+                                prop="due_time"
+                                header-align="left"
+                                label="剩余天数">
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="开票资料" name="fifth">
                         <el-table
-                        :data="InvoiceDetails"
-                        border
-                        stripe
-                        style="width: 100%">
+                            :data="InvoiceDetails"
+                            border
+                            stripe
+                            style="width: 100%">
                             <el-table-column
-                            prop="name"
-                            header-align="center"
-                            label="公司名称">
+                                prop="name"
+                                header-align="left"
+                                label="公司名称">
                             </el-table-column>
                             <el-table-column
-                            prop="creditCode"
-                            header-align="center"
-                            label="税务登记号">
+                                prop="creditCode"
+                                header-align="left"
+                                label="税务登记号">
                             </el-table-column>
                             <el-table-column
-                            prop="address"
-                            header-align="center"
-                            label="税务地址">
+                                prop="address"
+                                header-align="left"
+                                label="税务地址">
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
@@ -448,7 +448,7 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'customerpool/getPoolById.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.customerdetail = res.data.map.success
                     // console.log(_this.customerdetail)
                 }).catch(function(err){

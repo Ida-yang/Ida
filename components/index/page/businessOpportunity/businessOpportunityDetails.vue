@@ -19,7 +19,7 @@
                             <li>微信：<span>{{opportunitydetail[0].contacts[0].wechat}}</span></li>
                             <li>地址：<span>{{opportunitydetail[0].customerpool[0].address}}</span></li>
                             <li>性别：<span>{{opportunitydetail[0].contacts[0].sex}}</span></li>
-                            <li>职务：<span>{{opportunitydetail[0].contacts[0].dentity}}</span></li>
+                            <li>职务：<span>{{opportunitydetail[0].contacts[0].identity}}</span></li>
                             <li>备注：<span>{{opportunitydetail[0].customerpool[0].remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
@@ -32,9 +32,10 @@
                     <div slot="header" class="clearfix">
                         <span>{{opportunitydetail[0].opportunity_name}}</span>
                         <el-button class="info-btn" size="mini" style="float:right;margin-left:10px;" @click="nextStep()" v-if="shownext">下一步</el-button>
-                        <el-button class="info-btn" size="mini" style="float:right;margin-left:100px;" @click="endStep()">失败关闭</el-button>
+                        <el-button class="info-btn" size="mini" style="float:right;margin-left:100px;" @click="endStep()" v-if="shownext">失败关闭</el-button>
+                        <span style="line-height:20px;float:right;margin-right:10px;font-size:14px;" v-if="showfail">该商机已关闭</span>
                     </div>
-                    <el-steps :active="active" finish-status="success" align-center style="padding:10px;">
+                    <el-steps :active="active" finish-status="success" :process-status="isprocess" align-center style="padding:10px;">
                         <el-step v-for="item in stepList" :key="item.step_id" :title="item.step_name" :description="item.step_probability"></el-step>
                     </el-steps>
                 </el-card>
@@ -47,8 +48,8 @@
                     <div class="text item" style="min-height:150px;">
                         <ul>
                             <li>创建人：<span>{{opportunitydetail[0].privateUser[0].private_employee}}</span></li>
-                            <li>部门：<span>{{opportunitydetail[0].opportunity_id}}</span></li>
-                            <li>机构：<span>{{opportunitydetail[0].opportunity_id}}</span></li>
+                            <li>部门：<span>{{opportunitydetail[0].deptname}}</span></li>
+                            <li>机构：<span>{{opportunitydetail[0].parentname}}</span></li>
                             <li>决策人：<span>{{opportunitydetail[0].contacts[0].coName}}</span></li>
                             <li>创建时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li>
                             <!-- <li>签约时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li> -->
@@ -147,6 +148,8 @@
                 dialogVisible:false,
                 addstep:null,
                 shownext:true,
+                showfail:false,
+                isprocess:'process'
             }
         },
         mounted(){
@@ -181,7 +184,11 @@
                             // console.log(addStep[i].progress_name)
                             // console.log(i)
                             if(addStep[i].progress_name == '失败关闭'){
-                                _this.active = i+6
+                                // _this.active = i+6
+                                _this.active = i
+                                _this.shownext = !_this.shownext
+                                _this.showfail = !_this.showfail
+                                _this.isprocess = 'error'
                             }else{
                                 _this.active = i+1
                             }
@@ -299,8 +306,10 @@
                                 message: '关闭成功',
                                 type: 'success'
                             });
-                            _this.active += 6
+                            // _this.active += 0
+                            _this.isprocess = 'error'
                             _this.shownext = !_this.shownext
+                            _this.showfail = !_this.showfail
                         // _this.$options.methods.reloadTable.bind(_this)(true);
                         } else {
                             _this.$message({

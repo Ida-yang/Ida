@@ -110,7 +110,6 @@
 
 <script>
     import store from '../../../../store/store'
-    import {pca,pcaa} from 'area-data'
     import {mapState} from 'vuex'
     import axios from 'axios'
     import bus from '../../bus';

@@ -366,7 +366,7 @@
                     url: _this.$store.state.defaultHttp+'getPrivateUserAll.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.userList = res.data.map.success
                     _this.$store.state.userListnumber = res.data.count
                 }).catch(function(err){
@@ -377,7 +377,7 @@
                     url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.roleList = res.data
                 }).catch(function(err){
                     console.log(err);

@@ -282,6 +282,8 @@
                         }
                     });
                     // console.log(this.myForm);
+                    this.myForm.levelsid = this.addOrUpdateData.setForm.levels
+                    this.myForm.customerStateid = this.addOrUpdateData.setForm.customerState
                     this.$emit('input', this.myForm);
                 }
             },

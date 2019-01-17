@@ -292,7 +292,7 @@
                     "identity": '',
                     "address": '',
                     "remark": ''};
-                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'insertContacts.do?cId='+this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'insertContacts.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/contactsaddorupdate' });
             },

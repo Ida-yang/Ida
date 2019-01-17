@@ -4,6 +4,7 @@
         <div class="searchList" style="width:100%;">
             <el-radio-group v-model="searchList.label" style="margin:5px 0;">
                 <span class="nameList">线索分类：</span>
+                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部线索</el-radio>
                 <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" style="width:110px;" @change="search()">{{item.value}}</el-radio>
             </el-radio-group>
             <br>
@@ -242,7 +243,6 @@
                     id:null,
                 },
                 pIdData:[
-                    {label:'0',value:'全部线索'},
                     {label:'1',value:'我的线索'},
                     {label:'2',value:'本组'},
                     {label:'3',value:'本机构'},],
