@@ -191,6 +191,22 @@ a {
     margin: 5px 0 0 20px;;
 }
 
+.text ul{
+    width: 100%;
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-wrap: wrap;
+    align-content: flex-start;
+    margin-left: 20px;
+    list-style: none;
+}
+.text ul li{
+    flex: 0 0 33%;
+    /* height: 30px; */
+    font-size: 14px;
+    line-height: 30px;
+}
+
 .mgb20 {
     margin-bottom: 20px;
 }

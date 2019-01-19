@@ -35,34 +35,34 @@ var timeOut = 3 * 60 * 60 * 1000; //设置超时时间： 3小时
 
    
   // http response 拦截器
-  axios.interceptors.response.use(
-  response => {
-    if(response.data && response.data.code && response.data.code == 1005) {
-      // Message({
-      //   message: response.data.message,
-      //   type: 'error'
-      // });
-      Message.error(response.data.message);
-      setTimeout(() => {
-        router.push({ path: '/login' });
-      }, 1000);
-    }
-    return response;
-  },
-  error => {
+  // axios.interceptors.response.use(
+  // response => {
+  //   if(response.data && response.data.code && response.data.code == 1005) {
+  //     // Message({
+  //     //   message: response.data.message,
+  //     //   type: 'error'
+  //     // });
+  //     Message.error(response.data.message);
+  //     setTimeout(() => {
+  //       router.push({ path: '/login' });
+  //     }, 1000);
+  //   }
+  //   return response;
+  // },
+  // error => {
    
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-        this.$store.commit('del_token');
-          router.replace({
-          path: '/login',
-          query: {redirect: router.currentRoute.fullPath}//登录成功后跳入浏览的当前页面
-        })
-    }
-  }
-  return Promise.reject(error.response.data)
-  });
+  //   if (error.response) {
+  //     switch (error.response.status) {
+  //       case 401:
+  //       this.$store.commit('del_token');
+  //         router.replace({
+  //         path: '/login',
+  //         query: {redirect: router.currentRoute.fullPath}//登录成功后跳入浏览的当前页面
+  //       })
+  //   }
+  // }
+  // return Promise.reject(error.response.data)
+  // });
 new Vue({
   el: '#app',
   router,

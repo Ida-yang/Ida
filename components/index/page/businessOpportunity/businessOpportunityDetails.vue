@@ -2,7 +2,7 @@
     <!-- 商机详情页 -->
     <el-row class="content1" :gutter="10">
         <!-- <p>商机详情页</p> -->
-        <el-col :span="18">
+        <el-col :span="18" style="padding-left:0;padding-right:20px;">
             <div class="top">
                 <el-card class="box-card" v-model="opportunitydetail">
                     <div slot="header" class="clearfix">
@@ -417,18 +417,6 @@
     }
     .el-card__body{
         padding: 0;
-    }
-    .text ul{
-        padding-left: 30px;
-        list-style: none;
-    }
-    .text ul li{
-        float: left;
-        font-size: 14px;
-        margin: 5px;
-    }
-    .text ul li:not(:last-child){
-        width: 31.5%;
     }
     .oppinput{
         width:50%;

@@ -315,7 +315,7 @@
                         data:qs.stringify(idArr),
                     }).then(function(res){
                         console.log(res)
-                        if(res.data.success && res.data.success == 'true') {
+                        if(res.data.success && res.data.success == true) {
                             _this.$message({
                                 message: '删除成功',
                                 type: 'success'
@@ -347,7 +347,7 @@
                         data:qs.stringify(idArr),
                     }).then(function(res){
                         console.log(res)
-                        if(res.status && res.status == 200) {
+                        if(res.data.success && res.data.success == true) {
                             _this.$message({
                                 message: '删除成功',
                                 type: 'success'

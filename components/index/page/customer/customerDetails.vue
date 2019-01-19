@@ -686,16 +686,4 @@
     .el-card__body{
         padding: 0;
     }
-    .text ul{
-        padding-left: 30px;
-        list-style: none;
-    }
-    .text ul li{
-        float: left;
-        font-size: 14px;
-        margin: 5px;
-    }
-    .text ul li:not(:last-child){
-        width: 31.5%;
-    }
 </style>

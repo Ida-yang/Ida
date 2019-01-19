@@ -527,6 +527,8 @@
             handleEdit(index,row){
                 let _this = this
                 console.log(row)
+                let data = {}
+                data.deptid = row.second_id
                 this.newform.private_id = row.private_id
                 this.newform.second_id = row.second_id
                 this.newform.secondname = row.deptname
@@ -539,6 +541,16 @@
                 this.newform.private_email = row.private_email
                 this.newform.private_QQ = row.private_QQ
                 this.dialogVisible2 = true
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.roleList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             //用户修改提交按钮
             updateuser(){

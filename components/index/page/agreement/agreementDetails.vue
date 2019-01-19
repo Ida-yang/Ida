@@ -2,7 +2,7 @@
     <!-- 合同详情页 -->
     <el-row class="content1" :gutter="10">
         <!-- <p>合同详情页</p> -->
-        <el-col :span="18">
+        <el-col :span="18" style="padding-left:0;padding-right:20px;">
             <div class="top">
                 <el-card class="box-card" v-model="agreementdetail">
                     <div slot="header" class="clearfix">
@@ -30,19 +30,21 @@
             <div class="bottom">
                 <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
                     <el-tab-pane label="跟进记录" name="first">
-                        <el-form class="agreementform" ref="agreementform" :model="agreementform">
-                            <el-form-item prop="agreementContent">
-                                <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                                </el-upload>
-                            </el-form-item>
-                        </el-form>
+                        <div class="uploadBOX">
+                            <div class="imgbox" v-for="item in fileList" :key="item.id" @click="showImg($event,item)">
+                            <!-- <div class="imgbox" v-for="item in fileList" :key="item.id"> -->
+                                <img :src="item.imgURL" alt="图片">
+                            </div>
+                            <div class="filebox">
+                                <span class="upload">
+                                    <input type="file" name="file" @change="tirggerFile($event)"/>
+                                </span>
+                            </div>
+                            <el-dialog :visible.sync="dialogVisible">
+                                <img width="100%" :src="dialogImageUrl" alt="">
+                                <!-- <img src="/upload/staticImg/bg.jpg" width="100%" alt="图片"> -->
+                            </el-dialog>
+                        </div>
                         <div class="text" v-show="thisshow" style="height:150px;">
                             <ul>
                                 <li>创建人：<span>{{agreementdetail.private_employee}}</span></li>
@@ -133,11 +135,17 @@
                 idArr:{
                     id:null,
                 },
-                imageUrl: '',
+                dataList:null,
+                fileList:null,
+                imgid:null,
+                imgurl:null,
+                dialogImageUrl:null,
+                dialogVisible:false
             }
         },
         mounted(){
             this.loadData();
+            this.loadIMG()
         },
         methods: {
             loadData() {
@@ -175,6 +183,68 @@
                     console.log(err);
                 });
             },
+            loadIMG(){
+                let _this = this
+                _this.fileList = []
+                let qs = require('querystring')
+                let data = {}
+                data.typetid = this.detailData.id
+                data.type = '合同'
+                data.pId = this.$store.state.ispId
+                data.cId = this.$store.state.iscId
+                // console.log(data)
+
+                axios({
+                    method:'post',
+                    url:_this.$store.state.defaultHttp+'imgInfo/getImgInfoByTypeid.do',
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.dataList = res.data
+                    let arr = _this.dataList
+                    arr.forEach(el => {
+                        // console.log(el.id)
+                        _this.imgid = el.id
+                        _this.imgurl = '/upload/'+_this.$store.state.iscId+'/'+el.name
+                        _this.fileList.push({id:_this.imgid,imgURL:_this.imgurl})
+                    });
+                    // console.log(_this.fileList)
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            tirggerFile (event) {
+                let _this = this;
+                let file = event.target.files[0]
+                let param = new FormData() // 创建form对象
+                param.append('file', file, file.name) // 通过append向form对象添加数据
+                console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+                let config = {
+                    headers: {'Content-Type': 'multipart/form-data'}
+                }
+                // 添加请求头
+                axios.post('http://crm.yunzoe.com/yzcrm/contractUpload.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId+'&contractid='+this.detailData.id, param, config)
+                .then(res => {
+                    console.log(res)
+                    if (res.data == 'success') {
+                        _this.$message({
+                            message:'上传成功',
+                            type:'success'
+                        })
+                        _this.$options.methods.loadIMG.bind(_this)(true);
+                    }else{
+                        _this.$message({
+                            message: res.data,
+                            type: 'error'
+                        })
+                    }
+                })
+            },
+            showImg(e,val){
+                this.dialogImageUrl = val.imgURL
+                this.dialogVisible = true
+                console.log(this.dialogImageUrl)
+            },
             retract(){
                 this.thisshow = !this.thisshow
             },
@@ -208,21 +278,6 @@
                 }).catch(function(err){
                     console.log(err);
                 });
-            },
-            handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
-                if(!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if(!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
             },
             closeTag() {
                 let tagsList = this.$store.state.tagsList;
@@ -280,49 +335,94 @@
     .el-card__body{
         padding: 0;
     }
-    .text ul{
-        padding-left: 30px;
-        list-style: none;
-    }
-    .text ul li{
-        float: left;
-        font-size: 14px;
-        margin: 5px;
-    }
-    .text ul li:not(:last-child){
-        width: 31.5%;
-    }
     .agreementform{
         height: auto;
         min-height: 200px;
         margin-bottom: 30px;
         position: relative;
+        /* background-color: #90b49c; */
     }
     .agreementform > .el-form-item:not(:first-child){
         float: left;
         margin-bottom: 5px;
     }
-    .avatar-uploader .el-upload {
-        width: 100%;
-        height: 300px;
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
+    .fileinput{
+        width: 100px;
+        height: 100px;
+        background-color: #ffffff;
+        border: 1px dashed #409EFF;
+    }
+    .fileinputnone{
+        background-color: transparent;
+    }
+    .fileinputnone input{
+        height: 100px;
+        right: 0;
+        top:30px;
+        opacity: 0;
         cursor: pointer;
-        position: relative;
-        overflow: auto;
     }
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
+    .fileinputnone .el-input__inner{
+        background-color: transparent;
+        padding: 0;
+        height: 100px !important;
+        color: transparent;
     }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        height: 290px;
-        line-height: 290px;
-        text-align: center;
+    .uploadBOX{
+        display: flex;
+        display: -webkit-flex; /* Safari */
+        flex-wrap: wrap;
+        align-content: flex-start;
+	    margin-top: 20px;
     }
-    .avatar {
-        width: 100%;
-        display: block;
+    .imgbox{
+        flex: 0 0 100px;
+	    margin-left: 10px;
+        margin-bottom: 10px;
+        /* width: 100px;
+        height: 100px; */
     }
+    .imgbox img{
+        width: 100px;
+        height: 100px;
+    }
+    .filebox{
+        width: 100px;
+        height: 100px;
+        /* background-color: rgb(78, 121, 96); */
+    }
+	.upload {
+	    width: 100px;;
+	    height: 100px;
+	    display: inline-block;
+	    border-radius: 5px;
+	    position: relative;
+	    margin-left: 10px;
+	    background: rgb(255, 255, 255) url('../../../../assets/img/plus.png') center center no-repeat;
+	    background-size: 100px 100px;
+        border: 1px dashed #d9d9d9;
+	}
+	.upload input{
+	    position: relative;
+	    width: 100px;
+	    height: 100px;
+	    top: 0;
+	    left: 0;
+	    opacity: 0;
+	}
+	.filebox img{
+	    width: 100px;
+	    height: 100px;
+	    line-height: 100px;
+	    /* display: block; */
+	    float: left;
+        border-radius: 4px;
+	}
+	.upload i {
+	    position: absolute;
+	    bottom: 0;
+	    left: 100px;
+	    color: rgb(83, 76, 76);
+	    font-size: 24px;
+	}
 </style>

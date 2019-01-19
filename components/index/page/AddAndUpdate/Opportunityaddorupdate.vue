@@ -203,13 +203,13 @@
                 let qs = require('querystring')
                 let data = {}
                 data.customerpool_id = item
-                console.log(data)
+                // console.log(data)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'getPoolContactsName.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.contactslist = res.data.map.success
                 }).catch(function(err){
                     console.log(err);
@@ -231,7 +231,7 @@
                 let flag = false;
                 createForm.forEach(item => {
                     subData[item.inputModel] = _this.myForm[item.inputModel];
-                    console.log(_this.myForm)
+                    // console.log(_this.myForm)
                     if(item.inputModel == "opportunity_number" && !subData[item.inputModel]) {//商机编号不能为空
                         _this.$message({
                             message: "商机编号不能为空",
