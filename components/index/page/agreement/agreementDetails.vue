@@ -31,9 +31,9 @@
                 <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
                     <el-tab-pane label="跟进记录" name="first">
                         <div class="uploadBOX">
-                            <div class="imgbox" v-for="item in fileList" :key="item.id" @click="showImg($event,item)">
-                            <!-- <div class="imgbox" v-for="item in fileList" :key="item.id"> -->
-                                <img :src="item.imgURL" alt="图片">
+                            <div class="imgbox" v-for="item in fileList" :key="item.id" @mouseenter="mouseenterdiv(item)" @mouseleave="mouseleavediv(item)">
+                                <img :src="item.imgURL" alt="图片" @click="showImg($event,item)">
+                                <i class="el-icon-circle-close-outline imgdel" v-if="imgshow" @click="delImg($event,item)"></i>
                             </div>
                             <div class="filebox">
                                 <span class="upload">
@@ -140,7 +140,8 @@
                 imgid:null,
                 imgurl:null,
                 dialogImageUrl:null,
-                dialogVisible:false
+                dialogVisible:false,
+                imgshow:false
             }
         },
         mounted(){
@@ -244,6 +245,50 @@
                 this.dialogImageUrl = val.imgURL
                 this.dialogVisible = true
                 console.log(this.dialogImageUrl)
+            },
+            delImg(e,val){
+                // console.log(val.id)
+                let _this = this;
+                let qs = require('querystring')
+                let idArr = [];
+                idArr.id = val.id
+                _this.$confirm('是否确认删除该图片？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'imgInfo/delImgInfoById.do?cId='+_this.$store.state.iscId,
+                        data:qs.stringify(idArr),
+                    }).then(function(res){
+                        console.log(res)
+                        if(res.data.code && res.data.code == '200') {
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.loadIMG.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消删除'
+                    });       
+                });
+            },
+            mouseenterdiv(val){
+                this.imgshow = true
+            },
+            mouseleavediv(val){
+                this.imgshow = false
             },
             retract(){
                 this.thisshow = !this.thisshow

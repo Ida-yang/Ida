@@ -105,7 +105,7 @@ export default {
             // console.log(this.dialogImageUrl)
         },
         delImg(e,val){
-            console.log(val.id)
+            // console.log(val.id)
             let _this = this;
             let qs = require('querystring')
             let idArr = [];
@@ -120,18 +120,18 @@ export default {
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     console.log(res)
-                    // if(res.data.success && res.data.success == true) {
-                    //     _this.$message({
-                    //         message: '删除成功',
-                    //         type: 'success'
-                    //     });
-                    //     _this.$options.methods.reloadTable.bind(_this)(true);
-                    // } else {
-                    //     _this.$message({
-                    //         message: res.data.msg,
-                    //         type: 'error'
-                    //     });
-                    // }
+                    if(res.data.code && res.data.code == '200') {
+                        _this.$message({
+                            message: '删除成功',
+                            type: 'success'
+                        });
+                        _this.$options.methods.loadData.bind(_this)(true);
+                    } else {
+                        _this.$message({
+                            message: res.data.msg,
+                            type: 'error'
+                        });
+                    }
                 }).catch(function(err){
                     console.log(err);
                 })
