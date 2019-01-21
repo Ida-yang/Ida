@@ -87,6 +87,11 @@ const state = {
   //用户列表总数
   userListnumber:0,
 
+  //活动列表
+  activityList:[],
+  //活动列表总数
+  activityListnumber:0,
+
   //状态列表
   stateList:[],
 

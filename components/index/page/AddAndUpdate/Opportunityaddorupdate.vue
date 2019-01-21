@@ -125,6 +125,7 @@
     import bus from '../../bus';
     export default {
         name:'Opportunityaddorupdate',
+        store,
         data(){
             return {
                 customerlist:null,
@@ -160,10 +161,10 @@
                 // console.log(data)
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'rightPoolName.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.customerlist = res.data.map.success
                 }).catch(function(err){
                     console.log(err);

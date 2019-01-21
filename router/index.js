@@ -23,6 +23,10 @@ const router =new Router({
       component: resolve => require(['../components/Login.vue'], resolve)
     },
     {
+      path: '/activity',
+      component: resolve => require(['../components/activity.vue'], resolve)
+    },
+    {
       path:'/index',
       component:resolve => require(['../components/index/index.vue'], resolve),
       meta: { title: '首页' ,requireAuth:true},
@@ -151,6 +155,11 @@ const router =new Router({
           path: '/basicset',
           component: resolve => require(['../components/index/page/basicset/basicset.vue'], resolve),
           meta: { title: '辅助资料',name:'basicset' ,requireAuth:true}
+        },
+        {
+          path: '/socialMarketing',
+          component: resolve => require(['../components/index/page/socialMarketing/socialMarketing.vue'], resolve),
+          meta: { title: '社交营销',name:'socialMarketing' ,requireAuth:true}
         },
       ]
     },

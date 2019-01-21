@@ -49,7 +49,7 @@
                 </template>
             </template>
             <span class="title">设置</span>
-            <template v-for="item in itemthree">
+            <template v-for="item in itemlast">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
                         <template slot="title">
@@ -81,7 +81,7 @@
                 show:true,
                 itemone: [
                     {
-                        icon: 'el-icon-new-gongyi',
+                        icon: 'el-icon-new-homepage_fill',
                         index: '1',
                         title: '首页',
                     },
@@ -103,7 +103,7 @@
                 ],
                 itemtwo: [
                     {
-                        icon: 'el-icon-new-ziliao',
+                        icon: 'el-icon-new-mn_yonghuziliao',
                         index: '3',
                         title: '销售支持',
                         subs: [
@@ -137,11 +137,26 @@
                             },
                         ]
                     },
+                    {
+                        icon: 'el-icon-new-quanxianguanli',
+                        index: '4',
+                        title: '营销',
+                        subs: [
+                            {
+                                index: 'socialMarketing',
+                                title: '社交营销',
+                            },
+                            {
+                                index: 'activity',
+                                title: '活动页面',
+                            },
+                        ]
+                    },
                 ],
                 
-                itemthree: [
+                itemlast: [
                     {
-                        icon: 'el-icon-new-gongyi',
+                        icon: 'el-icon-new-shezhi',
                         index: '999',
                         title: '系统设置',
                         subs: [
@@ -198,15 +213,6 @@
         font-family: "楷体";
         color: #ffffff;
     }
-    .el-menu-item {
-        height: 40px !important;
-        line-height: 40px !important;
-    }
-    .el-submenu__title {
-        height: 40px !important;
-        line-height: 40px !important;
-        background-color: #fff;
-    }
     .sidebar{
         height: 100%;
         display: block;
@@ -229,7 +235,7 @@
     .title{
         color: #ffffff;
         font-size: 10px;
-        padding: 10px 0 10px 15px;
+        padding-left: 15px;
     }
     /* .sidebar > ul >li:nth-child(1){
         font-size: 10px;

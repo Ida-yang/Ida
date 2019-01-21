@@ -13,15 +13,15 @@
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
-                            <li>姓名：<span>{{cluedetail.contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{cluedetail.phone}}</span></li>
-                            <li>电话：<span>{{cluedetail.telephone}}</span></li>
-                            <li>邮箱：<span>{{cluedetail.email}}</span></li>
-                            <li>QQ：<span>{{cluedetail.qq}}</span></li>
-                            <li>微信：<span>{{cluedetail.wechat}}</span></li>
+                            <li>姓名：<span>{{contacts.coName}}</span></li>
+                            <li>手机：<span>{{contacts.phone}}</span></li>
+                            <li>电话：<span>{{contacts.telephone}}</span></li>
+                            <li>邮箱：<span>{{contacts.email}}</span></li>
+                            <li>QQ：<span>{{contacts.qq}}</span></li>
+                            <li>微信：<span>{{contacts.wechat}}</span></li>
                             <li>地址：<span>{{cluedetail.address}}</span></li>
-                            <li>职务：<span>{{cluedetail.contacts[0].identity}}</span></li>
-                            <li>性别：<span>{{cluedetail.contacts[0].sex}}</span></li>
+                            <li>职务：<span>{{contacts.identity}}</span></li>
+                            <li>性别：<span>{{contacts.sex}}</span></li>
                             <li>备注：<span>{{cluedetail.remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
@@ -76,9 +76,9 @@
                             <li class="verticalline"></li>
                             <li class="recordcontent">
                                 <div>
-                                    <p>{{item.createTime}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
+                                    <p>{{item.private_employee}}&nbsp;&nbsp;&nbsp;{{item.createTime}}&nbsp;&nbsp;&nbsp;{{item.followType}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
                                         &nbsp;&nbsp;&nbsp;<span>并约定下次联系时间：{{item.contactTime}}</span>
-                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} </span> 
+                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} &nbsp;&nbsp;&nbsp;{{item.inputType}}</span> 
                                     </p>
                                     <p style="margin-top:15px;margin-bottom:15px;">{{item.followContent}}</p>
                                 </div>
@@ -230,6 +230,7 @@
                 cluedetail:{
                     // name:'',
                 },
+                contacts:{},
                 record:null,
                 fastcontactList:null,
                 contactList:null,
@@ -313,9 +314,9 @@
                 }).then(function(res){
                     console.log(res.data.map.success)
                     _this.record = res.data.map.success
-                    if(_this.record !== ''){
-                        _this.followform.state = _this.record[0].state
-                    }
+                    // if(_this.record !== ''){
+                    //     _this.followform.state = _this.record[0].state
+                    // }
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -324,8 +325,9 @@
                     method:'get',
                     url:_this.$store.state.defaultHttp+'customerTwo/selectByPrimaryKey.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    // console.log(res.data)
+                    console.log(res.data)
                     _this.cluedetail = res.data
+                    _this.contacts = res.data.contacts[0]
                     // console.log(_this.cluedetail)
                 }).catch(function(err){
                     console.log(err);
@@ -465,7 +467,7 @@
 
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'addFollow.do?cId='+_this.$store.state.iscId,
+                    url:  _this.$store.state.defaultHttp+ 'addFollow.do?cId='+_this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                     data:qs.stringify(data,this),
                 }).then(function(res){
                     // console.log(res)

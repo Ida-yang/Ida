@@ -4,23 +4,23 @@
         <!-- <p>商机详情页</p> -->
         <el-col :span="18" style="padding-left:0;padding-right:20px;">
             <div class="top">
-                <el-card class="box-card" v-model="opportunitydetail">
+                <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>{{opportunitydetail[0].customerpool[0].name}}</span>
+                        <span>{{customerpool.name}}</span>
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
-                            <li>姓名：<span>{{opportunitydetail[0].contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{opportunitydetail[0].contacts[0].phone}}</span></li>
-                            <li>电话：<span>{{opportunitydetail[0].contacts[0].telephone}}</span></li>
-                            <li>邮箱：<span>{{opportunitydetail[0].contacts[0].email}}</span></li>
-                            <li>QQ：<span>{{opportunitydetail[0].contacts[0].qq}}</span></li>
-                            <li>微信：<span>{{opportunitydetail[0].contacts[0].wechat}}</span></li>
-                            <li>地址：<span>{{opportunitydetail[0].customerpool[0].address}}</span></li>
-                            <li>性别：<span>{{opportunitydetail[0].contacts[0].sex}}</span></li>
-                            <li>职务：<span>{{opportunitydetail[0].contacts[0].identity}}</span></li>
-                            <li>备注：<span>{{opportunitydetail[0].customerpool[0].remark}}</span></li>
+                            <li>姓名：<span>{{contacts.coName}}</span></li>
+                            <li>手机：<span>{{contacts.phone}}</span></li>
+                            <li>电话：<span>{{contacts.telephone}}</span></li>
+                            <li>邮箱：<span>{{contacts.email}}</span></li>
+                            <li>QQ：<span>{{contacts.qq}}</span></li>
+                            <li>微信：<span>{{contacts.wechat}}</span></li>
+                            <li>地址：<span>{{customerpool.address}}</span></li>
+                            <li>性别：<span>{{contacts.sex}}</span></li>
+                            <li>职务：<span>{{contacts.identity}}</span></li>
+                            <li>备注：<span>{{customerpool.remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>
@@ -28,9 +28,9 @@
                 </el-card>
             </div>
             <div class="bottom1">
-                <el-card class="box-card" v-model="opportunitydetail">
+                <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>{{opportunitydetail[0].opportunity_name}}</span>
+                        <span>{{opportunitydetail.opportunity_name}}</span>
                         <el-button class="info-btn" size="mini" style="float:right;margin-left:10px;" @click="nextStep()" v-if="shownext">下一步</el-button>
                         <el-button class="info-btn" size="mini" style="float:right;margin-left:100px;" @click="endStep()" v-if="shownext">失败关闭</el-button>
                         <span style="line-height:20px;float:right;margin-right:10px;font-size:14px;" v-if="showfail">该商机已关闭</span>
@@ -41,23 +41,23 @@
                 </el-card>
             </div>
             <div class="bottom2">
-                <el-card class="box-card" v-model="opportunitydetail">
+                <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>基本信息</span>
                     </div>
                     <div class="text item" style="min-height:150px;">
                         <ul>
-                            <li>创建人：<span>{{opportunitydetail[0].privateUser[0].private_employee}}</span></li>
-                            <li>部门：<span>{{opportunitydetail[0].deptname}}</span></li>
-                            <li>机构：<span>{{opportunitydetail[0].parentname}}</span></li>
-                            <li>决策人：<span>{{opportunitydetail[0].contacts[0].coName}}</span></li>
-                            <li>创建时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li>
-                            <!-- <li>签约时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li> -->
-                            <!-- <li>失败时间：<span>{{opportunitydetail[0].opportunity_time}}</span></li> -->
-                            <li>预计成交金额：<span>{{opportunitydetail[0].opportunity_achievement}}</span></li>
-                            <li>预计成交时间：<span>{{opportunitydetail[0].opportunity_deal}}</span></li>
-                            <!-- <li>预计成交几率：<span>{{opportunitydetail[0].opportunityProgress.progress_probability}}</span></li> -->
-                            <li>备注：<span>{{opportunitydetail[0].opportunity_remarks}}</span></li>
+                            <li>创建人：<span>{{privateUser.private_employee}}</span></li>
+                            <li>部门：<span>{{opportunitydetail.deptname}}</span></li>
+                            <li>机构：<span>{{opportunitydetail.parentname}}</span></li>
+                            <li>决策人：<span>{{contacts.coName}}</span></li>
+                            <li>创建时间：<span>{{opportunitydetail.opportunity_time}}</span></li>
+                            <!-- <li>签约时间：<span>{{opportunitydetail.opportunity_time}}</span></li> -->
+                            <!-- <li>失败时间：<span>{{opportunitydetail.opportunity_time}}</span></li> -->
+                            <li>预计成交金额：<span>{{opportunitydetail.opportunity_achievement}}</span></li>
+                            <li>预计成交时间：<span>{{opportunitydetail.opportunity_deal}}</span></li>
+                            <!-- <li>预计成交几率：<span>{{opportunitydetail.opportunityProgress.progress_probability}}</span></li> -->
+                            <li>备注：<span>{{opportunitydetail.opportunity_remarks}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>
@@ -129,7 +129,10 @@
                 searchList:{
                     keyword:null,
                 },
-                opportunitydetail:null,
+                opportunitydetail:{},
+                contacts:{},
+                customerpool:{},
+                privateUser:{},
                 tableData: null,
                 tableNumber:null,
                 page:1,
@@ -172,9 +175,12 @@
                     url:_this.$store.state.defaultHttp+'opportunity/getopportunityById.do?cId='+_this.$store.state.iscId+'&opportunity_id='+_this.detailData.id,
                 }).then(function(res){
                     console.log(res.data.map.success)
-                    _this.opportunitydetail = res.data.map.success
-                    _this.stepList = _this.opportunitydetail[0].addstep
-                    _this.addstep = _this.opportunitydetail[0].opportunityProgress
+                    _this.opportunitydetail = res.data.map.success[0]
+                    _this.contacts = res.data.map.success[0].contacts[0]
+                    _this.privateUser = res.data.map.success[0].privateUser[0]
+                    _this.customerpool = res.data.map.success[0].customerpool[0]
+                    _this.stepList = _this.opportunitydetail.addstep
+                    _this.addstep = _this.opportunitydetail.opportunityProgress
                     // console.log(_this.addstep)
                     let addStep = _this.addstep
                     if(addStep == ''){

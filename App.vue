@@ -82,6 +82,15 @@ body {
 a {
     text-decoration: none
 }
+    .el-menu-item,.el-submenu__title {
+        height: 50px !important;
+        line-height: 50px !important;
+    }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0;
+}
 
 .content-box {
     position: absolute;

@@ -4,24 +4,24 @@
         <!-- <p>客户详情页</p> -->
         <el-col :span="18">
             <div class="top">
-                <el-card class="box-card" v-model="customerdetail">
+                <el-card class="box-card">
                     <div slot="header" class="clearfix">
-                        <span>{{customerdetail[0].pName}}</span>
+                        <span>{{customerdetail.pName}}</span>
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="TocustomerPool()">转移至客户池</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
-                            <li>姓名：<span>{{customerdetail[0].contacts[0].coName}}</span></li>
-                            <li>手机：<span>{{customerdetail[0].contacts[0].phone}}</span></li>
-                            <li>电话：<span>{{customerdetail[0].contacts[0].telephone}}</span></li>
-                            <li>邮箱：<span>{{customerdetail[0].contacts[0].email}}</span></li>
-                            <li>QQ：<span>{{customerdetail[0].contacts[0].qq}}</span></li>
-                            <li>微信：<span>{{customerdetail[0].contacts[0].wechat}}</span></li>
-                            <li>地址：<span>{{customerdetail[0].address}}</span></li>
-                            <li>职务：<span>{{customerdetail[0].contacts[0].identity}}</span></li>
-                            <li>性别：<span>{{customerdetail[0].contacts[0].sex}}</span></li>
-                            <li>备注：<span>{{customerdetail[0].remark}}</span></li>
+                            <li>姓名：<span>{{contacts.coName}}</span></li>
+                            <li>手机：<span>{{contacts.phone}}</span></li>
+                            <li>电话：<span>{{contacts.telephone}}</span></li>
+                            <li>邮箱：<span>{{contacts.email}}</span></li>
+                            <li>QQ：<span>{{contacts.qq}}</span></li>
+                            <li>微信：<span>{{contacts.wechat}}</span></li>
+                            <li>地址：<span>{{customerdetail.address}}</span></li>
+                            <li>职务：<span>{{contacts.identity}}</span></li>
+                            <li>性别：<span>{{contacts.sex}}</span></li>
+                            <li>备注：<span>{{customerdetail.remark}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>
@@ -75,9 +75,9 @@
                             <li class="verticalline"></li>
                             <li class="recordcontent">
                                 <div>
-                                    <p>{{item.createTime}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
+                                    <p>{{item.private_employee}}&nbsp;&nbsp;&nbsp;{{item.createTime}}&nbsp;&nbsp;&nbsp;{{item.followType}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
                                         &nbsp;&nbsp;&nbsp;<span>并约定下次联系时间：{{item.contactTime}}</span>
-                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}}</span>
+                                        &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} &nbsp;&nbsp;&nbsp;{{item.inputType}}</span>
                                     </p>
                                     <p style="margin-top:15px;margin-bottom:15px;">{{item.followContent}}</p>
                                 </div>
@@ -85,6 +85,9 @@
                         </ul>
                     </el-tab-pane>
                     <el-tab-pane label="联系人" name="second">
+                        <!-- <div class="entry">
+                            <el-button class="btn info-btn" size="mini" @click="Addcontact()">新增</el-button>
+                        </div> -->
                         <el-table
                             :data="customerDetails"
                             border
@@ -148,6 +151,9 @@
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="商机管理" name="third">
+                        <!-- <div class="entry">
+                            <el-button class="btn info-btn" size="mini" @click="Addopportunity()">新增</el-button>
+                        </div> -->
                         <el-table
                             :data="opportunityDetails"
                             border
@@ -196,6 +202,9 @@
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="合同管理" name="fouth">
+                        <!-- <div class="entry">
+                            <el-button class="btn info-btn" size="mini" @click="Addagreement()">新增</el-button>
+                        </div> -->
                         <el-table
                             :data="agreementDetails"
                             border
@@ -363,9 +372,8 @@
                 searchList:{
                     keyword:null,
                 },
-                customerdetail:{
-                    pName:'',
-                },
+                customerdetail:{},
+                contacts:{},
                 record:null,
                 fastcontactList:null,
                 contactList:null,
@@ -433,13 +441,13 @@
                 //加载跟进记录
                 axios({
                     method:'post',
-                    url:_this.$store.state.defaultHttp+'customerpool/getFollowStaffAndpool.do?cId='+_this.$store.state.iscId+'&customerpool_id='+this.detailData.id,
+                    url:_this.$store.state.defaultHttp+'customerpool/getFollowStaffAndpool.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId+'&customerpool_id='+_this.detailData.id,
                 }).then(function(res){
                     // console.log(res.data.map.success)
                     _this.record = res.data.map.success
-                    if(_this.record !== ''){
-                        _this.followform.state = _this.record[0].state
-                    }
+                    // if(_this.record !== ''){
+                    //     _this.followform.state = _this.record[0].state
+                    // }
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -448,8 +456,9 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'customerpool/getPoolById.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.customerdetail = res.data.map.success
+                    console.log(res.data.map.success)
+                    _this.customerdetail = res.data.map.success[0]
+                    _this.contacts = res.data.map.success[0].contacts[0]
                     // console.log(_this.customerdetail)
                 }).catch(function(err){
                     console.log(err);
@@ -512,6 +521,43 @@
                 // this.detailData.id = row.id
                 this.$options.methods.loadData.bind(this)(true);
             },
+            Addcontact(){
+                console.log(this.customerdetail.pName)
+                let addOrUpdateData = {};
+                addOrUpdateData.createForm = [
+                    {"label":"联系人","inputModel":"name"},
+                    {"label":"公司名称","inputModel":"poolName","type":"require"},
+                    {"label":"电话","inputModel":"telephone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
+                    {"label":"性别","inputModel":"sex","type":"radio"},
+                    {"label":"生日","inputModel":"birthday","type":"date"},
+                    {"label":"职务","inputModel":"identity"},
+                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
+                    {"label":"地址","inputModel":"address"},
+                    {"label":"备注","inputModel":"remark"}];
+                addOrUpdateData.setForm = {
+                    "name": '',
+                    "poolName": this.customerdetail.pName,
+                    "telephone": '',
+                    "phone": '',
+                    "country":'',
+                    "city":'',
+                    "area":'',
+                    "qq": '',
+                    "sex": '',
+                    "birthday":'',
+                    "identity": '',
+                    "address": this.customerdetail.address,
+                    "remark": ''};
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'insertContacts.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
+                this.$store.state.addOrUpdateData = addOrUpdateData;
+                this.$router.push({ path: '/contactsaddorupdate' });
+            },
+            Addopportunity(){},
+            Addagreement(){},
             TocustomerPool(){
                 let _this = this;
                 let qs =require('querystring')
