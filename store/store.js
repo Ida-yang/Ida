@@ -11,12 +11,12 @@ const state = {
   //作者
   author:'Ida',
   //登录
-  iscId:'',
-  ispId:'',
-  user:'',
-  deptid:'',
-  roleid:'',
-  insid:'',
+  iscId:'', //cId
+  ispId:'', //pId
+  user:'', //用户名
+  deptid:'', //部门ID
+  roleid:'', //角色ID
+  insid:'', //机构ID
 
   //标签页
   tagsList:[],

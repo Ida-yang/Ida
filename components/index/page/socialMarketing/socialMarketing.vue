@@ -69,7 +69,6 @@
                 </el-table-column>
                 <el-table-column
                     prop="private_employee"
-                    fixed
                     v-if="showfuzeren"
                     header-align="left"
                     align="left"
@@ -96,13 +95,18 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="url"
+                    prop="codeURL"
                     v-if="showwangzhi"
                     header-align="left"
                     align="left"
                     min-width="160"
                     label="网址"
                     sortable>
+                    <template slot-scope="scope">
+                        <a :href="scope.row.codeURL">
+                            {{scope.row.codeURL}}
+                        </a>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="typeName"
@@ -122,15 +126,32 @@
                     label="备注"
                     sortable>
                 </el-table-column>
-                <el-table-column label="操作"
+                <el-table-column 
+                    label="二维码"
                     fixed="right"
-                    width="140"
-                    header-align="left"
+                    width="120"
+                    header-align="center"
+                    align="center">
+                    <template slot-scope="scope">
+                        <el-popover
+                            placement="right"
+                            width="200"
+                            trigger="hover">
+                            <img :src="scope.row.qrcode" alt="图片" width="200" height="200">
+                            <img slot="reference" :src="scope.row.qrcode" alt="图片" width="50" height="50">
+                        </el-popover>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作"
+                    width="80"
+                    fixed="right"
+                    header-align="center"
                     align="center">
                     <template slot-scope="scope">
                         <el-button
                         size="mini"
-                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        type="danger"
+                        @click="handledelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -251,6 +272,9 @@
                 showlaiyuan:true,
                 showbeizhu:true,
 
+                qrcode:null,
+                codeURL:null,
+
                 page:1,
                 limit:20,
                 dialogVisible:false,
@@ -294,9 +318,17 @@
                     url: _this.$store.state.defaultHttp+'activity/getActivity.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.activityList = res.data.map.success
                     _this.$store.state.activityListnumber = res.data.count
+                    let arr = _this.$store.state.activityList
+                    arr.forEach(el => {
+                        // console.log(el)
+                        el.qrcode = '/weChat/'+_this.$store.state.iscId+'/'+el.url
+                        el.codeURL = 'http://crm.yunzoe.com/#/activity?c='+_this.$store.state.iscId+'&p='+_this.$store.state.ispId+'&n='+el.name
+                    });
+                    console.log(arr)
+                    // console.log(_this.codeURL)
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -332,6 +364,45 @@
                 this.idArr.id = newArr;
                 console.log(this.idArr.id)
                 
+            },
+            handleshow(row){
+                console.log(row)
+            },
+            handleURL(row){
+                console.log(row)
+            },
+            handledelete(index,row){
+                let _this = this;
+                let qs =require('querystring')
+                let idArr = {};
+                idArr.id = row.id
+                console.log(idArr)
+                _this.$confirm('是否确认删除'+row.name+'吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'post',
+                        url:  _this.$store.state.defaultHttp+ 'activity/delActivity.do?cId='+_this.$store.state.iscId,
+                        data:qs.stringify(idArr),
+                    }).then(function(res){
+                        console.log(res)
+                        if(res.data.code && res.data.code == 200) {
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadTable.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                });
             },
             //活动添加
             handleAdd(){
@@ -403,71 +474,6 @@
                     console.log(err);
                 });
                 // alert('添加成功')
-            },
-            //活动修改
-            handleEdit(index,row){
-                let _this = this
-                console.log(row)
-                this.newform.id = row.id
-                this.newform.secondid = row.secondid
-                this.newform.resourceid = row.resourceid
-                this.newform.name = row.name
-                this.newform.remarks = row.remarks
-                this.dialogVisible2 = true
-                console.log(this.newform)
-            },
-            //活动修改提交按钮
-            updateuser(){
-                let _this = this;
-                let qs = require('querystring')
-                let data = {}
-                data.resourceid = this.newform.resourceid
-                data.name = this.newform.name
-                data.remarks = this.newform.remarks
-                data.secondid = this.newform.secondid
-                console.log(data)
-                let arr = [this.newform]
-                let flag = false;
-                arr.forEach(item => {
-                    if(!item.name){
-                        _this.$message({
-                            message: "活动名称不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.resourceid){
-                        _this.$message({
-                            message: "来源不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                });
-                if(flag) return
-                
-                axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'updatePrivate.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(data)
-                }).then(function(res){
-                    console.log(res)
-                    if(res.data.code && res.data.code == 200){
-                        _this.$message({
-                            message:'修改活动成功',
-                            type:'success'
-                        })
-                        _this.dialogVisible2 = false
-                        _this.$options.methods.reloadTable.bind(_this)(true);
-                    }else{
-                        _this.$message({
-                            message:res.data.msg,
-                            type:'error'
-                        })
-                    }
-                }).catch(function(err){
-                    console.log(err);
-                });
             },
             showname(){
                 this.showhuodong = !this.showhuodong

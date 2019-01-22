@@ -652,7 +652,7 @@
 
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'addFollow.do?cId='+_this.$store.state.iscId,
+                    url:  _this.$store.state.defaultHttp+ 'addFollow.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data,this),
                 }).then(function(res){
                     // console.log(res)

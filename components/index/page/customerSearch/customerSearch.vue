@@ -487,6 +487,7 @@
                 });
             },
             reloadTable() {
+                console.log(this.$store.state)
                 let _this = this;
                 let qs =require('querystring')
                 let searchList = {}
@@ -516,7 +517,7 @@
                     url: _this.$store.state.defaultHttp+'customerOne/query.do',
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.$store.state.customerList = res.data.rows
                     _this.$store.state.customerListnumber = res.data.total;
                 }).catch(function(err){
@@ -551,11 +552,14 @@
                 // console.log(this.idArr)
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(idArr.id)
+                idArr.secondid = this.$store.state.deptid
+                idArr.deptid = this.$store.state.insid
+                console.log(idArr)
                 _this.Loading = true
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerOne/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
+                    // url:  _this.$store.state.defaultHttp+ 'customerOne/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId+'&secondid='+_this.$store.state.deptid+'&deptid='+_this.$store.state.insid,
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     console.log(res)

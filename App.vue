@@ -317,16 +317,16 @@ input::-webkit-inner-spin-button{
 .el-button--primary{
     color:#ffffff;
     background-color:#ff5722;
-    border-color:#ff5722
+    border-color:#e64d1f
 }
 .el-button--primary:focus,.el-button--primary:hover{
     background:#ff5722;
-    border-color:#ff5722;
+    border-color:#e64d1f;
     color:#ffffff
 }
 .el-button--primary.is-active,.el-button--primary:active{
     background:#ff511c;
-    border-color:#ff511c;
+    border-color:#e64d1f;
     color:#ffffff
 }
     .followform{

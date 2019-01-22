@@ -1,20 +1,25 @@
 <template>
     <div class="htmlbody">
-        <el-form class="myform" ref="newform" :model="newform" label-width="80px" :rules="rules">
-            <el-form-item prop="pname" label="公司名称">
-                <el-input v-model="newform.pname" placeholder="请输入公司名称" style="width:90%;"></el-input>
+        <div class="entryform">{{title}}</div>
+        <el-form class="formcontent" ref="newform" :model="newform" :rules="rules">
+            <el-form-item prop="poolName">
+                <span class="itemlabel">公司名称:</span>
+                <el-input class="forminput" v-model="newform.poolName"></el-input>
             </el-form-item>
-            <el-form-item prop="name" label="姓名">
-                <el-input v-model="newform.name" placeholder="请输入活动名称" style="width:90%;"></el-input>
+            <el-form-item prop="contactsName">
+                <span class="itemlabel">姓名:</span>
+                <el-input class="forminput" v-model="newform.contactsName"></el-input>
             </el-form-item>
-            <el-form-item prop="phone" label="手机">
-                <el-input v-model="newform.phone" placeholder="请输入活动备注" style="width:90%;"></el-input>
+            <el-form-item prop="phone">
+                <span class="itemlabel">手机:</span>
+                <el-input class="forminput" v-model="newform.phone"></el-input>
             </el-form-item>
-            <el-form-item prop="QQ" label="QQ">
-                <el-input v-model="newform.QQ" placeholder="请输入活动备注" style="width:90%;"></el-input>
+            <el-form-item prop="qq">
+                <span class="itemlabel">qq:</span>
+                <el-input class="forminput" v-model="newform.qq"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button class="activitybtn" size="mini" type="primary" @click="addactivity()">确 定</el-button>
+                <el-button class="activitybtn" type="primary" @click="addactivity()">提 交</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -26,46 +31,167 @@
     import qs from 'qs'
 
     export default {
-        name:'activity',
+        contactsName:'activity',
         store,
         data(){
             return{
                 newform:{
-                    pname:null,
-                    name:null,
+                    poolName:null,
+                    contactsName:null,
                     phone:null,
-                    QQ:null,
+                    qq:null,
                 },
-                rules:{}
+                rules:{
+                    poolName:[{require:true,message: '请填写公司名称', trigger: 'blur'}],
+                    contactsName:[{require:true,message: '请填写姓名', trigger: 'blur'}],
+                    phone:[{require:true,message: '请填写手机号码', trigger: 'blur'}],
+                },
+                url:null,
+                title:null,
+                cId:null,
+                pId:null,
             }
         },
+        mounted(){
+            console.log(window.location.href)
+            this.url = window.location.href
+            this.getSearchString()
+        },
         methods:{
-            addactivity(){},
+            addactivity(){
+                console.log(this.newform)
+                let _this = this;
+                let qs = require('querystring')
+                let data = {}
+                data.poolName = this.newform.poolName
+                data.contactsName = this.newform.contactsName
+                data.phone = this.newform.phone
+                data.qq = this.newform.qq
+                console.log(data)
+                let arr = [this.newform]
+                let flag = false;
+                arr.forEach(item => {
+                    if(!item.poolName){
+                        _this.$message({
+                            message: "请填写公司名称",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.contactsName){
+                        _this.$message({
+                            message: "请填写姓名",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                    if(!item.phone){
+                        _this.$message({
+                            message: "请填写手机号码",
+                            type: 'error'
+                        });
+                        flag = true;
+                    }
+                });
+                if(flag) return
+
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'customerTwo/addActivityClue.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(data)
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data.code && res.data.code == 200){
+                        _this.$message({
+                            message:'已提交',
+                            type:'success'
+                        })
+                        _this.newform = null
+                    }else{
+                        _this.$message({
+                            message:res.data.msg,
+                            type:'error'
+                        })
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            //key(需要检错的键） url（传入的需要分割的url地址）
+            getSearchString() {
+            // 获取URL中?之后的字符
+                var str = this.url;
+                str = str.substring(33,str.length);
+                console.log(str)
+                // 以&分隔字符串，获得类似name=xiaoli这样的元素数组
+                var arr = str.split("&");
+                console.log(arr)
+                var obj = new Object();
+
+                // 将每一个数组元素以=分隔并赋给obj对象 
+                for(var i = 0; i < arr.length; i++) {
+                    var tmp_arr = arr[i].split("=");
+                    obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
+                }
+                console.log(obj)
+                this.title = obj.n
+                this.cId = obj.c
+                this.pId = obj.p
+                console.log(this.title)
+                console.log(this.cId)
+                console.log(this.pId)
+            }
         },
     }
 </script>
 
 <style>
     @media screen and (max-width: 500px) {
-        .myform{
-            width: 80% !important;
+        .formcontent{
+            width: 100%;
+            padding: 20px 5%;
+            /* background-color: rgb(131, 114, 114); */
+        }
+        .forminput{
+            width: 90% !important;
+        }
+        .activitybtn{
+            width: 90%;
+            margin-top: 20px;
+        }
+    }
+    @media screen and (min-width: 500px) {
+        .formcontent{
+            width: 50%;
+            padding: 20px 25%;
+        }
+        .forminput{
+            width: 100%;
+        }
+        .activitybtn{
+            width: 100%;
+            margin-top: 20px;
         }
     }
     .htmlbody{
         width: 100%;
-        background-color: rgb(229, 235, 196)
+        height: 100%;
+        padding-top: 20px;
     }
-    .myform{
-        width: 50%;
-        height: 350px;
-        margin: 10px auto;
-        padding: 20px 10px;
-        /* border: 1px solid #b4b4b4; */
-        border-radius: 5px;
+    .entryform{
+        text-align: center;
+        color: #ff5722;
+        font-weight: bold;
+        font-size: 24px;
+        padding-top: 10px;
     }
-    .activitybtn{
-        position: absolute;
-        right: 20%;
+    .formcontent .el-form-item{
+        margin-bottom: 10px;
+    }
+    .itemlabel{
+        display: block;
+        line-height: 30px;
+        color: rgb(63, 63, 63);
     }
 </style>
 
