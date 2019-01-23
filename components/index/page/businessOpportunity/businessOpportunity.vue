@@ -1,5 +1,5 @@
 <template>
-    <!-- 线索 -->
+    <!-- 商机 -->
     <div>
         <div class="searchList" style="width:100%;">
             <span class="nameList">公司名称：</span>
@@ -10,8 +10,6 @@
         <div class="entry">
             <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
             <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button>
-            <!-- <el-button class="btn info-btn" size="mini" @click="cluePool()">转移至线索池</el-button> -->
-            <!-- <el-button class="btn info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button> -->
             <el-popover
             placement="bottom"
             width="100"
@@ -31,7 +29,6 @@
                 <el-checkbox class="checkone" @change="showuser()" label="用户"></el-checkbox>
                 <el-checkbox class="checkone" @change="showremark()" label="备注"></el-checkbox>
             </el-checkbox-group>
-            <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
         </div>
@@ -322,33 +319,25 @@
             },
             handleAdd(){
                 let addOrUpdateData = {};
-                // addOrUpdateData.title = "添加线索";
+                // addOrUpdateData.title = "添加商机";
                 addOrUpdateData.createForm = [
-                    // {"label":"线索来源","inputModel":"cues","type":"radio"},
                     {"label":"商机编号","inputModel":"opportunity_number",},
                     {"label":"商机名称","inputModel":"opportunity_name"},
-                    // {"label":"日期","inputModel":"opportunity_time","type":"date"},
                     {"label":"关联客户","inputModel":"customerpool_id","type":"select"},
                     {"label":"决策人","inputModel":"contacts_id","type":"select"},
                     {"label":"预计成绩金额","inputModel":"opportunity_achievement","type":"number"},
                     {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
-                    // {"label":"部门","inputModel":"bumen","prop":"bumen"},
-                    // {"label":"机构","inputModel":"jigou","prop":"jigou"},
                     {"label":"用户","inputModel":"user_id","disabled":true},
                     {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
-                    // "cues": '',
                     "opportunity_number": '',
                     "opportunity_name": '',
-                    // "opportunity_time": '',
                     "customerpool_id": '',
                     "customerpool_name": '',
                     "contacts_id": '',
                     "contacts_name": '',
                     "opportunity_achievement":'',
                     "opportunity_deal":'',
-                    // "bumen":'',
-                    // "jigou": '',
                     "user_id":this.$store.state.user,
                     "opportunity_remarks": ''};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'opportunity/saveOrUpdate.do?cId='+this.$store.state.iscId,
@@ -358,33 +347,25 @@
             handleEdit(index,row){
                 console.log(row)
                 let addOrUpdateData = {};
-                // addOrUpdateData.title = "修改线索";
+                // addOrUpdateData.title = "修改商机";
                 addOrUpdateData.createForm = [
-                    // {"label":"线索来源","inputModel":"cues","type":"radio"},
                     {"label":"商机编号","inputModel":"opportunity_number",},
                     {"label":"商机名称","inputModel":"opportunity_name"},
-                    // {"label":"日期","inputModel":"opportunity_time","type":"date"},
                     {"label":"关联客户","inputModel":"customerpool_id",},
                     {"label":"决策人","inputModel":"contacts_id",},
                     {"label":"预计成绩金额","inputModel":"opportunity_achievement","type":"number"},
                     {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
-                    // {"label":"部门","inputModel":"bumen","prop":"bumen"},
-                    // {"label":"机构","inputModel":"jigou","prop":"jigou"},
                     {"label":"用户","inputModel":"user_id","disabled":true},
                     {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
-                    // "cues": row.cues,
                     "opportunity_number": row.opportunity_number,
                     "opportunity_name": row.opportunity_name,
-                    // "opportunity_time": row.opportunity_time,
                     "customerpool_id": row.customerpool[0].name,
                     "customerpool_name": row.customerpool[0].id,
                     "contacts_id": row.contacts[0].coName,
                     "contacts_name": row.contacts[0].id,
                     "opportunity_achievement":row.opportunity_achievement,
                     "opportunity_deal":row.opportunity_deal,
-                    // "bumen":'',
-                    // "jigou": '',
                     "user_id":this.$store.state.user,
                     "opportunity_remarks": row.opportunity_remarks};
                 addOrUpdateData.submitData = {"id":row.opportunity_id};

@@ -1,4 +1,5 @@
 <template>
+    <!-- 基础设置页面 -->
     <div class="contentall">
         <div class="setleftcontent">
             <ul class="namecontent">

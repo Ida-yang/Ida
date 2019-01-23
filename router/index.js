@@ -161,6 +161,16 @@ const router =new Router({
           component: resolve => require(['../components/index/page/socialMarketing/socialMarketing.vue'], resolve),
           meta: { title: '社交营销',name:'socialMarketing' ,requireAuth:true}
         },
+        {
+          path: '/programme',
+          component: resolve => require(['../components/index/page/programme/programme.vue'], resolve),
+          meta: { title: '方案/目标',name:'programme' ,requireAuth:true}
+        },
+        {
+          path: '/programmeDetails',
+          component: resolve => require(['../components/index/page/programme/programmeDetails.vue'], resolve),
+          meta: { title: '方案/目标',name:'programmeDetails' ,requireAuth:true}
+        },
       ]
     },
         

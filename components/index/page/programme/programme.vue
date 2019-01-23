@@ -1,5 +1,5 @@
 <template>
-    <!-- 用户 -->
+    <!-- 方案 -->
     <div class="contentall">
         <div class="roleleftcontent">
             <el-tree
@@ -15,26 +15,25 @@
         <div class="centercontent"></div>
         <div class="rolerightcontent">
             <div class="searchList" style="width:100%;">
-                <el-input v-model="searchList.searchName" placeholder="用户名称" style="width:300px;"></el-input>
+                <el-input v-model="searchList.searchName" placeholder="方案名称" style="width:300px;"></el-input>
                 &nbsp;&nbsp;
                 <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
             </div>
             <div class="entry">
-                <el-button class="btn" size="mini" @click="handlesynchros()">同步</el-button>
+                <el-button class="btn" size="mini" @click="handledeletes()">删除</el-button>
                 <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
                 <el-popover
                 placement="bottom"
                 width="100"
                 trigger="click">
                 <el-checkbox-group class="checklist" v-model="checklist">
-                    <el-checkbox class="checkone" @change="shownumber()" label="编号"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showname()" label="用户"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showaccount()" label="登录账号"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showrole()" label="角色"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showphone()" label="手机号"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showemail()" label="邮箱"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showdepart()" label="部门"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showposition()" label="职位"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showname()" label="方案名称"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showyear()" label="年份"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showuser()" label="负责人"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showdept()" label="部门"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showins()" label="机构"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showtime()" label="创建时间"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showstate()" label="状态"></el-checkbox>
                 </el-checkbox-group>
                 <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
                 <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
@@ -63,81 +62,67 @@
                 <el-table-column
                     prop="private_number"
                     fixed
-                    v-if="showbianhao"
+                    v-if="showmingcheng"
                     header-align="left"
                     align="left"
                     min-width="150"
-                    label="编号"
+                    label="方案名称"
                     sortable>
                 </el-table-column>
                 <el-table-column
                     prop="private_employee"
                     fixed
-                    v-if="showmingcheng"
+                    v-if="shownianfen"
                     header-align="left"
                     align="left"
                     min-width="90"
-                    label="用户"
-                    sortable>
-                    <!-- <template slot-scope="scope">
-                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
-                            {{scope.row.private_employee}}
-                        </div>
-                    </template> -->
-                </el-table-column>
-                <el-table-column
-                    prop="private_username"
-                    v-if="showzhanghao"
-                    header-align="left"
-                    align="left"
-                    min-width="120"
-                    label="登录账号"
+                    label="年份"
                     sortable>
                 </el-table-column>
                 <el-table-column
                     prop="name"
-                    v-if="showjuese"
+                    v-if="showfuzeren"
                     header-align="left"
                     align="left"
                     min-width="100"
-                    label="职位"
+                    label="负责人"
                     sortable>
                 </el-table-column>
                 <el-table-column
                     prop="private_phone"
-                    v-if="showshouji"
+                    v-if="showbumen"
                     header-align="left"
                     align="left"
                     min-width="120"
-                    label="手机号"
+                    label="部门"
                     sortable>
                 </el-table-column>
                 <el-table-column
                     prop="private_email"
-                    v-if="showyouxiang"
+                    v-if="showjigou"
                     header-align="left"
                     align="left"
                     min-width="130"
-                    label="邮箱"
+                    label="机构"
                     sortable>
                 </el-table-column>
                 <el-table-column
                     prop="deptname"
                     show-overflow-tooltip
-                    v-if="showbumen"
+                    v-if="showshijian"
                     header-align="left"
                     align="left"
                     min-width="100"
-                    label="部门"
+                    label="创建时间"
                     sortable>
                 </el-table-column>
                 <el-table-column
                     prop="parentname"
-                    v-if="showzhiwei"
+                    v-if="showzhuangtai"
                     header-align="left"
                     align="left"
                     min-width="180"
-                    label="机构"
+                    label="状态"
                     sortable>
                 </el-table-column>
                 <el-table-column label="操作"
@@ -152,7 +137,7 @@
                         <el-button
                         size="mini"
                         type="danger"
-                        @click="handlesynchro(scope.$index, scope.row)">同步</el-button>
+                        @click="handledelete(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -169,7 +154,7 @@
             </div>
         </div>
         <el-dialog
-            title="添加用户"
+            title="添加方案"
             :visible.sync="dialogVisible"
             width="40%">
                 <el-form ref="newform" :model="newform" label-width="80px" :rules="rules">
@@ -177,40 +162,40 @@
                         <el-input v-model="newform.secondname" :disabled="true"></el-input>
                     </el-form-item>
                     <el-form-item prop="private_phone" label="手机号码">
-                        <el-input type="number" v-model="newform.private_phone" placeholder="请输入用户手机号码"></el-input>
+                        <el-input type="number" v-model="newform.private_phone" placeholder="请输入方案手机号码"></el-input>
                     </el-form-item>
                     <el-form-item prop="private_password" label="密码">
-                        <el-input type="password" v-model="newform.private_password" placeholder="请输入用户密码"></el-input>
+                        <el-input type="password" v-model="newform.private_password" placeholder="请输入方案密码"></el-input>
                     </el-form-item>
                     <el-form-item prop="private_passwords" label="确认密码">
-                        <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入用户密码"></el-input>
+                        <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入方案密码"></el-input>
                     </el-form-item>
                     <el-form-item prop="role_id" label="角色">
-                        <el-select v-model="newform.role_id" placeholder="请选择用户角色">
+                        <el-select v-model="newform.role_id" placeholder="请选择方案角色">
                             <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop="private_employee" label="用户名称">
-                        <el-input v-model="newform.private_employee" placeholder="请输入用户名称"></el-input>
+                    <el-form-item prop="private_employee" label="方案名称">
+                        <el-input v-model="newform.private_employee" placeholder="请输入方案名称"></el-input>
                     </el-form-item>
-                    <el-form-item prop="private_state" label="用户状态">
+                    <el-form-item prop="private_state" label="方案状态">
                         <el-radio v-model="newform.private_state" label="启用">启用</el-radio>
                         <el-radio v-model="newform.private_state" label="禁止">禁止</el-radio>
                     </el-form-item>
                     <el-form-item prop="private_email" label="邮箱">
-                        <el-input type="email" v-model="newform.private_email" placeholder="请输入用户邮箱"></el-input>
+                        <el-input type="email" v-model="newform.private_email" placeholder="请输入方案邮箱"></el-input>
                     </el-form-item>
                     <el-form-item prop="private_QQ" label="QQ">
-                        <el-input type="number" v-model="newform.private_QQ" placeholder="请输入用户QQ"></el-input>
+                        <el-input type="number" v-model="newform.private_QQ" placeholder="请输入方案QQ"></el-input>
                     </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="adduser()">确 定</el-button>
+                <el-button type="primary" @click="addprogramme()">确 定</el-button>
             </span>
         </el-dialog>
         <el-dialog
-            title="修改用户"
+            title="修改方案"
             :visible.sync="dialogVisible2"
             width="40%">
             <el-form ref="newform" :model="newform" :rules="rules" label-width="80px">
@@ -218,36 +203,36 @@
                     <el-input v-model="newform.secondname" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item prop="private_phone" label="手机号码">
-                    <el-input type="number" v-model="newform.private_phone" :disabled="true" placeholder="请输入用户手机号码"></el-input>
+                    <el-input type="number" v-model="newform.private_phone" :disabled="true" placeholder="请输入方案手机号码"></el-input>
                 </el-form-item>
                 <el-form-item prop="private_password" label="密码">
-                    <el-input type="password" v-model="newform.private_password" placeholder="请输入用户密码"></el-input>
+                    <el-input type="password" v-model="newform.private_password" placeholder="请输入方案密码"></el-input>
                 </el-form-item>
                 <el-form-item prop="private_passwords" label="确认密码">
-                    <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入用户密码"></el-input>
+                    <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入方案密码"></el-input>
                 </el-form-item>
                 <el-form-item prop="role_id" label="角色">
-                    <el-select v-model="newform.role_id" placeholder="请选择用户角色">
+                    <el-select v-model="newform.role_id" placeholder="请选择方案角色">
                         <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="private_employee" label="用户名称">
-                    <el-input v-model="newform.private_employee" placeholder="请输入用户名称"></el-input>
+                <el-form-item prop="private_employee" label="方案名称">
+                    <el-input v-model="newform.private_employee" placeholder="请输入方案名称"></el-input>
                 </el-form-item>
-                <el-form-item prop="private_state" label="用户状态">
+                <el-form-item prop="private_state" label="方案状态">
                     <el-radio v-model="newform.private_state" label="启用">启用</el-radio>
                     <el-radio v-model="newform.private_state" label="禁止">禁止</el-radio>
                 </el-form-item>
                 <el-form-item prop="private_email" label="邮箱">
-                    <el-input type="email" v-model="newform.private_email" placeholder="请输入用户邮箱"></el-input>
+                    <el-input type="email" v-model="newform.private_email" placeholder="请输入方案邮箱"></el-input>
                 </el-form-item>
                 <el-form-item prop="private_QQ" label="QQ">
-                    <el-input type="number" v-model="newform.private_QQ" placeholder="请输入用户QQ"></el-input>
+                    <el-input type="number" v-model="newform.private_QQ" placeholder="请输入方案QQ"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible2 = false">取 消</el-button>
-                <el-button type="primary" @click="updateuser()">确 定</el-button>
+                <el-button type="primary" @click="updateprogramme()">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -258,17 +243,17 @@
     import qs from 'qs'
 
     export default {
-        name:'user',
+        name:'programme',
         props:{
             totalNum:Number,
         },
         store,
         computed: {
             tableData(){
-                return store.state.userList;
+                return store.state.programmeList;
             },
             tableNumber(){
-               return store.state.userListnumber;     
+               return store.state.programmeListnumber;     
             },
         },
         data(){
@@ -304,20 +289,19 @@
                     searchName:null,
                     deptid:null,
                 },
-                checklist:['编号','用户','登录账号','角色','手机号','邮箱','部门','职位'],
+                checklist:['方案名称','年份','负责人','部门','机构','创建时间','状态'],
                 idArr:{
                     private_id:null,
                 },
                 roleList:null,
                 clickdata:null,
-                showbianhao:true,
                 showmingcheng:true,
-                showzhanghao:true,
-                showjuese:true,
-                showshouji:true,
-                showyouxiang:true,
+                shownianfen:true,
+                showfuzeren:true,
                 showbumen:true,
-                showzhiwei:true,
+                showjigou:true,
+                showshijian:true,
+                showzhuangtai:true,
                 showfuze:true,
                 showzhuangtai:true,
                 showlaiyuan:true,
@@ -326,12 +310,12 @@
                 dialogVisible:false,
                 dialogVisible2:false,
                 rules: {
-                    role_id : [{ required: true, message: '用户角色不能为空', trigger: 'blur' },],
-                    private_employee : [{ required: true, message: '用户名称不能为空', trigger: 'blur' },],
+                    role_id : [{ required: true, message: '方案角色不能为空', trigger: 'blur' },],
+                    private_employee : [{ required: true, message: '方案名称不能为空', trigger: 'blur' },],
                     private_phone : [{ required: true, max: 11, min: 11, message: '请输入11位手机号码', trigger: 'blur' }],
                     private_password : [{ required: true, message: '密码不能为空', trigger: 'blur' },],
                     private_passwords : [{ required: true, validator: validatePass, trigger: 'blur' },],
-                    private_state : [{ required: true, message: '请选择用户状态', trigger: 'blur' },],
+                    private_state : [{ required: true, message: '请选择方案状态', trigger: 'blur' },],
                 },
             }
         },
@@ -368,8 +352,8 @@
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
                     console.log(res.data.map.success)
-                    _this.$store.state.userList = res.data.map.success
-                    _this.$store.state.userListnumber = res.data.count
+                    _this.$store.state.programmeList = res.data.map.success
+                    _this.$store.state.programmeListnumber = res.data.count
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -409,7 +393,7 @@
                 console.log(this.idArr.private_id)
                 
             },
-            //用户添加
+            //方案添加
             handleAdd(){
                 let _this = this
                 // console.log(this.clickdata.next)
@@ -424,15 +408,20 @@
 
                 if(!this.clickdata){
                     _this.$message({
-                        message:'请先选择部门，再添加用户',
+                        message:'请先选择部门，再添加方案',
                         type:'info'
                     })
-                }else{
+                }else if(this.clickdata.next == ''){
                     this.dialogVisible = true
+                }else{
+                    _this.$message({
+                        message:'该部门下还有子部门，请选择子部门',
+                        type:'error'
+                    })
                 }
             },
-            //用户添加提交按钮
-            adduser(){
+            //方案添加提交按钮
+            addprogramme(){
                 let _this = this;
                 let qs = require('querystring')
                 let data = {}
@@ -450,21 +439,21 @@
                 arr.forEach(item => {
                     if(!item.private_state){
                         _this.$message({
-                            message: "请选择用户状态",
+                            message: "请选择方案状态",
                             type: 'error'
                         });
                         flag = true;
                     }
                     if(!item.private_employee){
                         _this.$message({
-                            message: "用户姓名不能为空",
+                            message: "方案姓名不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
                     if(!item.role_id){
                         _this.$message({
-                            message: "用户角色不能为空",
+                            message: "方案角色不能为空",
                             type: 'error'
                         });
                         flag = true;
@@ -485,14 +474,14 @@
                     }
                     if(!item.private_password){
                         _this.$message({
-                            message: "用户密码不能为空",
+                            message: "方案密码不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
                     if(!item.private_phone){
                         _this.$message({
-                            message: "用户手机号码不能为空",
+                            message: "方案手机号码不能为空",
                             type: 'error'
                         });
                         flag = true;
@@ -508,7 +497,7 @@
                     console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
-                            message:'添加用户成功',
+                            message:'添加方案成功',
                             type:'success'
                         })
                         _this.dialogVisible = false
@@ -524,7 +513,7 @@
                 });
                 // alert('添加成功')
             },
-            //用户修改
+            //方案修改
             handleEdit(index,row){
                 let _this = this
                 console.log(row)
@@ -553,8 +542,8 @@
                     console.log(err);
                 });
             },
-            //用户修改提交按钮
-            updateuser(){
+            //方案修改提交按钮
+            updateprogramme(){
                 let _this = this;
                 let qs = require('querystring')
                 let data = {}
@@ -573,21 +562,21 @@
                 arr.forEach(item => {
                     if(!item.private_state){
                         _this.$message({
-                            message: "请选择用户状态",
+                            message: "请选择方案状态",
                             type: 'error'
                         });
                         flag = true;
                     }
                     if(!item.private_employee){
                         _this.$message({
-                            message: "用户姓名不能为空",
+                            message: "方案姓名不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
                     if(!item.role_id){
                         _this.$message({
-                            message: "用户角色不能为空",
+                            message: "方案角色不能为空",
                             type: 'error'
                         });
                         flag = true;
@@ -608,7 +597,7 @@
                     }
                     if(!item.private_password){
                         _this.$message({
-                            message: "用户密码不能为空",
+                            message: "方案密码不能为空",
                             type: 'error'
                         });
                         flag = true;
@@ -624,7 +613,7 @@
                     console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
-                            message:'修改用户成功',
+                            message:'修改方案成功',
                             type:'success'
                         })
                         _this.dialogVisible2 = false
@@ -639,13 +628,13 @@
                     console.log(err);
                 });
             },
-            handlesynchros(){
+            handledeletes(){
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.privateId = this.idArr.private_id
                 console.log(idArr)
-                _this.$confirm('确认同步到云服务器吗？', '提示', {
+                _this.$confirm('确认删除到云服务器吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
@@ -657,7 +646,7 @@
                         console.log(res.data)
                         if(res.data.code && res.data.code == 200) {
                             _this.$message({
-                                message: '同步成功',
+                                message: '删除成功',
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
@@ -672,13 +661,13 @@
                     });
                 });
             },
-            handlesynchro(index,row){
+            handledelete(index,row){
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.privateId = row.private_id
                 console.log(idArr)
-                _this.$confirm('确认同步 ['+ row.private_employee +'] 到云服务器吗？', '提示', {
+                _this.$confirm('确认删除 ['+ row.private_employee +'] 吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
@@ -690,7 +679,7 @@
                         console.log(res)
                         if(res.data.code && res.data.code == 200) {
                             _this.$message({
-                                message: '同步成功',
+                                message: '删除成功',
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
@@ -705,29 +694,26 @@
                     });
                 });
             },
-            shownumber(){
-                this.showbianhao = !this.showbianhao
-            },
             showname(){
                 this.showmingcheng = !this.showmingcheng
             },
-            showaccount(){
-                this.showzhanghao = !this.showzhanghao
+            showyear(){
+                this.shownianfen = !this.shownianfen
             },
-            showrole(){
-                this.showjuese = !this.showjuese
+            showuser(){
+                this.showfuzeren = !this.showfuzeren
             },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showemail(){
-                this.showyouxiang = !this.showyouxiang
-            },
-            showdepart(){
+            showdept(){
                 this.showbumen = !this.showbumen
             },
-            showposition(){
-                this.showzhiwei = !this.showzhiwei
+            showins(){
+                this.showjigou = !this.showjigou
+            },
+            showtime(){
+                this.showshijian = !this.showshijian
+            },
+            showstate(){
+                this.showzhuangtai = !this.showzhuangtai
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

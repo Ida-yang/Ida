@@ -1,7 +1,6 @@
 <template>
     <!-- 合同详情页 -->
     <el-row class="content1" :gutter="10">
-        <!-- <p>合同详情页</p> -->
         <el-col :span="18" style="padding-left:0;padding-right:20px;">
             <div class="top">
                 <el-card class="box-card" v-model="agreementdetail">

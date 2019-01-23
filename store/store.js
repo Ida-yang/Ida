@@ -95,6 +95,11 @@ const state = {
   //状态列表
   stateList:[],
 
+  //方案列表
+  programmeList:[],
+  //方案列表总数
+  programmeListnumber:0,
+
 }
 /*配置全局函数*/
 const mutations = {

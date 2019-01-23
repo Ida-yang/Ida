@@ -152,6 +152,17 @@
                             },
                         ]
                     },
+                    {
+                        icon: 'el-icon-new-cangkumingcheng',
+                        index: '5',
+                        title: '方案',
+                        subs: [
+                            {
+                                index: 'programme',
+                                title: '方案/目标',
+                            },
+                        ]
+                    },
                 ],
                 
                 itemlast: [
@@ -233,14 +244,11 @@
         height:100%;
     }
     .title{
+        display: inline-block;
+        height: 40px;
         color: #ffffff;
         font-size: 10px;
-        padding-left: 15px;
+        padding-left: 18px;
+        line-height: 40px;
     }
-    /* .sidebar > ul >li:nth-child(1){
-        font-size: 10px;
-    }
-    .sidebar > ul > li:nth-child(3){
-        font-size: 10px;
-    } */
 </style>

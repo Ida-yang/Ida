@@ -83,8 +83,8 @@ a {
     text-decoration: none
 }
     .el-menu-item,.el-submenu__title {
-        height: 50px !important;
-        line-height: 50px !important;
+        height: 40px !important;
+        line-height: 40px !important;
     }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{

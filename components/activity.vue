@@ -1,4 +1,5 @@
 <template>
+    <!-- 社会营销活动 -->
     <div class="htmlbody">
         <div class="entryform">{{title}}</div>
         <el-form class="formcontent" ref="newform" :model="newform" :rules="rules">
@@ -53,8 +54,8 @@
             }
         },
         mounted(){
-            console.log(window.location.href)
-            this.url = window.location.href
+            console.log(window.location.hash)
+            this.url = window.location.hash
             this.getSearchString()
         },
         methods:{
@@ -97,7 +98,7 @@
 
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'customerTwo/addActivityClue.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'customerTwo/addActivityClue.do?cId='+_this.cId+'&pId='+_this.pId,
                     data:qs.stringify(data)
                 }).then(function(res){
                     console.log(res)
@@ -121,11 +122,11 @@
             getSearchString() {
             // 获取URL中?之后的字符
                 var str = this.url;
-                str = str.substring(33,str.length);
+                str = str.substring(11,str.length);
                 console.log(str)
                 // 以&分隔字符串，获得类似name=xiaoli这样的元素数组
                 var arr = str.split("&");
-                console.log(arr)
+                // console.log(arr)
                 var obj = new Object();
 
                 // 将每一个数组元素以=分隔并赋给obj对象 
@@ -133,7 +134,7 @@
                     var tmp_arr = arr[i].split("=");
                     obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
                 }
-                console.log(obj)
+                // console.log(obj)
                 this.title = obj.n
                 this.cId = obj.c
                 this.pId = obj.p
