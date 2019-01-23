@@ -1,84 +1,125 @@
 <template>
     <!-- 线索新增修改 -->
     <div class="content">
-        <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
-            <!-- <h3>{{addOrUpdateData.title}}</h3> -->
-            <el-form-item
-                class="formitemclue"
-                label-width="100px"
-                v-for="item in addOrUpdateData.createForm"
-                :label="item.label"
-                :key="item.inputModel"
-                :prop="item.inputModel">
+        <el-tabs class="formtabs" v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="主要数据" name="first">
+                <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
+                    <!-- <h3>{{addOrUpdateData.title}}</h3> -->
+                    <el-form-item
+                        class="formitemclue"
+                        label-width="100px"
+                        v-for="item in addOrUpdateData.createForm"
+                        :label="item.label"
+                        :key="item.inputModel"
+                        :prop="item.inputModel">
 
-                <el-input 
-                    v-if="!item.type || item.type == 'input'"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off"
-                    @keyup.enter.native="submit">
-                </el-input>
-                <el-input 
-                    v-else-if="item.type && item.type == 'number'"
-                    type="number"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
-                <el-input 
-                    v-else-if="item.type && item.type == 'require' && item.inputModel == 'poolName'"
-                    :value="myForm[item.inputModel]"
-                    @input="handleoninput($event, item.inputModel)"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
-                <el-select 
-                    v-else-if="item.inputModel == 'cuesid'"
-                    v-model="myForm[item.inputModel]"
-                    @change="handleInput($event, item.inputModel)"
-                    :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option v-for="o in cuesList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
-                </el-select>
-                <el-select 
-                    v-else-if="item.inputModel == 'country'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseProvince"
-                    :placeholder="item.placeholder"
-                    style="width:28%;">
-                    <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
-                </el-select>
-                <el-select
-                    class="cityseat"
-                    v-else-if="item.inputModel == 'city'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseCity"
-                    :placeholder="item.placeholder"
-                    style="width:28%;">
-                    <el-option v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
-                </el-select>
-                <el-select
-                    class="areaseat"
-                    v-else-if="item.inputModel == 'area'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseBlock"
-                    :placeholder="item.placeholder"
-                    style="width:28%;">
-                    <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
-                </el-select>
-                <div v-else-if="item.inputModel == 'sex'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
-                </div>
-            </el-form-item>
-            <div style="margin-left:60px;">
-                <el-button class="searchbutton" @click="submit">立即提交</el-button>
-                &nbsp;&nbsp;
-                <el-button @click="closeTag">取消</el-button>
-            </div>
-        </el-form>
+                        <el-input 
+                            v-if="!item.type || item.type == 'input'"
+                            :value="myForm[item.inputModel]"
+                            @input="handleInput($event, item.inputModel)"
+                            style="width:90%;" 
+                            auto-complete="off"
+                            @keyup.enter.native="submit">
+                        </el-input>
+                        <el-input 
+                            v-else-if="item.type && item.type == 'number'"
+                            type="number"
+                            :value="myForm[item.inputModel]"
+                            @input="handleInput($event, item.inputModel)"
+                            style="width:90%;" 
+                            auto-complete="off">
+                        </el-input>
+                        <el-input 
+                            v-else-if="item.type && item.type == 'require' && item.inputModel == 'poolName'"
+                            :value="myForm[item.inputModel]"
+                            @input="handleoninput($event, item.inputModel)"
+                            style="width:90%;" 
+                            auto-complete="off">
+                        </el-input>
+                        <el-select 
+                            v-else-if="item.inputModel == 'cuesid'"
+                            v-model="myForm[item.inputModel]"
+                            @change="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in cuesList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
+                        </el-select>
+                        <el-select 
+                            v-else-if="item.inputModel == 'country'"
+                            v-model="myForm[item.inputModel]"
+                            @change="choseProvince"
+                            :placeholder="item.placeholder"
+                            style="width:28%;">
+                            <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                        </el-select>
+                        <el-select
+                            class="cityseat"
+                            v-else-if="item.inputModel == 'city'"
+                            v-model="myForm[item.inputModel]"
+                            @change="choseCity"
+                            :placeholder="item.placeholder"
+                            style="width:28%;">
+                            <el-option v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                        </el-select>
+                        <el-select
+                            class="areaseat"
+                            v-else-if="item.inputModel == 'area'"
+                            v-model="myForm[item.inputModel]"
+                            @change="choseBlock"
+                            :placeholder="item.placeholder"
+                            style="width:28%;">
+                            <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                        </el-select>
+                        <div v-else-if="item.inputModel == 'sex'">
+                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
+                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
+                        </div>
+                    </el-form-item>
+                    <div style="margin-left:60px;">
+                        <el-button class="searchbutton" @click="submit">立即提交</el-button>
+                        &nbsp;&nbsp;
+                        <el-button @click="closeTag">取消</el-button>
+                    </div>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="辅助资料" name="second">
+                <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
+                    <!-- <h3>{{addOrUpdateData.title}}</h3> -->
+                    <el-form-item
+                        class="formitemclue"
+                        label-width="130px"
+                        v-for="item in addOrUpdateData.assistForm"
+                        :label="item.label"
+                        :key="item.inputModel"
+                        :prop="item.inputModel">
+
+                        <el-input 
+                            v-if="!item.type || item.type == 'input'"
+                            :value="myForm[item.inputModel]"
+                            @input="handleInput($event, item.inputModel)"
+                            style="width:90%;" 
+                            auto-complete="off"
+                            @keyup.enter.native="submit">
+                        </el-input>
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in item.options" :key="o[item.okey]" :label="o[item.olabel]" :value="o[item.ovalue]"></el-option>
+                        </el-select>
+                        <div v-else-if="item.inputModel == 'sex'">
+                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
+                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
+                        </div>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+        </el-tabs>
+        
         <div class="line"></div>
         <div class="formlist">
             <el-table
@@ -138,12 +179,12 @@
     .content {
         width: 98%;
     }
-    h3 {
-        margin: 20px 60px;
+    .formtabs{
+        width: 41%;
+        float: left;
     }
     .myForm {
-        width: 41%;;
-        float: left;
+        width: 100%;
     }
     .formitemclue:nth-child(11),.formitemclue:nth-child(10){
         margin: 0;
@@ -182,6 +223,7 @@
         },
         data(){
             return {
+                activeName: 'first',
                 tableData:null,
                 addOrUpdateData: {},
                 myForm: {
@@ -255,9 +297,19 @@
 
                 // 设置默认值
                 let createForm = this.addOrUpdateData.createForm;
+                let assistForm = this.addOrUpdateData.assistForm;
                 let setForm = this.addOrUpdateData.setForm;
                 if(setForm) {
                     createForm.forEach((item, index) => {
+                        if(item.type && item.type == 'select') {
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                        } else if(item.type && item.type == 'radio') {
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                        } else {
+                            this.myForm[item.inputModel] = setForm[item.inputModel];
+                        }
+                    });
+                    assistForm.forEach((item, index) => {
                         if(item.type && item.type == 'select') {
                             this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
                         } else if(item.type && item.type == 'radio') {
@@ -457,6 +509,10 @@
             choseBlock(e) {
                 this.E=e;
                 console.log(this.myForm.area)
+            },
+
+            handleClick(tab, event){
+                // console.log(tab, event)
             },
 
             handleSizeChange(val) {

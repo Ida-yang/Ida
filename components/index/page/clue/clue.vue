@@ -356,6 +356,24 @@
                     {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
+                addOrUpdateData.assistForm = [
+                    {"label":"法人代表","inputModel":"representative"},
+                    {"label":"登记机关","inputModel":"registrationAuthority"},
+                    {"label":"统一社会信用代码","inputModel":"creditCode"},
+                    {"label":"注册号","inputModel":"registrationNumber"},
+                    {"label":"组织机构代码","inputModel":"organizationCode"},
+                    {"label":"注册资金","inputModel":"capital","type":"select"},
+                    {"label":"注册时间","inputModel":"date","type":"select"},
+                    {"label":"企业规模","inputModel":"scale","type":"select"},
+                    {"label":"融资状态","inputModel":"financing","type":"select"},
+                    // {"label":"修改时间","inputModel":"updateTime","type":"select"},
+                    {"label":"行业","inputModel":"industryType","type":"select"},
+                    {"label":"公司类型","inputModel":"companyType","type":"select"},
+                    // {"label":"省份","inputModel":"cuesid","type":"select"},
+                    {"label":"经营状态","inputModel":"operatingState","type":"select"},
+                    {"label":"资金范围","inputModel":"capitalType","type":"select"},
+                    {"label":"人数范围","inputModel":"enterpriseScale","type":"select"},
+                ]
                 addOrUpdateData.setForm = {
                     "cuesid": '',
                     "poolName": '',
@@ -369,7 +387,20 @@
                     "sex": '',
                     "identity": '',
                     "address": '',
-                    "remark": ''};
+                    "representative": '',
+                    "registrationAuthority": '',
+                    "creditCode": '',
+                    "registrationNumber": '',
+                    "organizationCode": '',
+                    "capital": '',
+                    "date": '',
+                    "scale": '',
+                    "financing": '',
+                    "industryType": '',
+                    "companyType": '',
+                    "operatingState": '',
+                    "capitalType": '',
+                    "enterpriseScale": ''};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/saveClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 axios({

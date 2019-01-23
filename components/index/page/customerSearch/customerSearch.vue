@@ -487,7 +487,7 @@
                 });
             },
             reloadTable() {
-                console.log(this.$store.state)
+                // console.log(this.$store.state)
                 let _this = this;
                 let qs =require('querystring')
                 let searchList = {}
@@ -517,7 +517,7 @@
                     url: _this.$store.state.defaultHttp+'customerOne/query.do',
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res.data)
+                    console.log(res.data.rows)
                     _this.$store.state.customerList = res.data.rows
                     _this.$store.state.customerListnumber = res.data.total;
                 }).catch(function(err){
@@ -633,7 +633,7 @@
             getCityData(){
                 var _this = this
                 axios.get(this.mapJson).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if (res.status==200) {
                         var data = res.data
                         // 省市区数据分类
