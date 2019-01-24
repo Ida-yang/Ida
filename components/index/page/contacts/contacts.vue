@@ -1,12 +1,13 @@
 <template>
     <!-- 联系人列表 -->
     <div>
-        <div class="searchList" style="width:100%;padding:10px 0 0 10px;">
-            <el-radio-group v-model="searchList.pId" style="margin:5px 0;">
-                <span class="nameList">联&nbsp;&nbsp;&nbsp;系&nbsp;&nbsp;&nbsp;人：</span>
+        <div class="radioList">
+            <el-radio-group v-model="searchList.pId">
+                <span class="nameList">联系人：</span>
                 <el-radio v-for="item in contactData" :key="item.label" :label="item.pId" @change="search()">{{item.value}}</el-radio>
             </el-radio-group>
-            <br>
+        </div>
+        <div class="searchList">
             <span class="nameList">联系人名称：</span>
             <el-input v-model="searchList.searchName" placeholder="联系人名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;

@@ -11,7 +11,7 @@
                         <el-button style="float:right;" class="info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
                     </div>
-                    <div class="text item" v-show="thisshow">
+                    <div class="text item">
                         <ul>
                             <li>姓名：<span>{{contacts.coName}}</span></li>
                             <li>手机：<span>{{contacts.phone}}</span></li>
@@ -24,11 +24,31 @@
                             <li>性别：<span>{{contacts.sex}}</span></li>
                             <li>备注：<span>{{cluedetail.remark}}</span></li>
                         </ul>
-                        <p>&nbsp;</p>
                     </div>
                     <div v-show="!thisshow"></div>
                 </el-card>
             </div>
+                <el-card class="box-card" v-model="cluedetail" v-show="thisshow" style="margin-top: 20px;">
+                    <div slot="header" class="clearfix">
+                        <span>辅助信息</span>
+                    </div>
+                    <div class="text item">
+                        <ul>
+                            <br>
+                            <li>姓名：<span>{{contacts.coName}}</span></li>
+                            <li>手机：<span>{{contacts.phone}}</span></li>
+                            <li>电话：<span>{{contacts.telephone}}</span></li>
+                            <li>邮箱：<span>{{contacts.email}}</span></li>
+                            <li>QQ：<span>{{contacts.qq}}</span></li>
+                            <li>微信：<span>{{contacts.wechat}}</span></li>
+                            <li>地址：<span>{{cluedetail.address}}</span></li>
+                            <li>职务：<span>{{contacts.identity}}</span></li>
+                            <li>性别：<span>{{contacts.sex}}</span></li>
+                            <li>备注：<span>{{cluedetail.remark}}</span></li>
+                        </ul>
+                    </div>
+                    <div v-show="!thisshow"></div>
+                </el-card>
             <div class="bottom">
                 <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
                     <el-tab-pane label="跟进记录" name="first">

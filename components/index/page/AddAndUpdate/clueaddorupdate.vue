@@ -3,7 +3,7 @@
     <div class="content">
         <el-tabs class="formtabs" v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="主要数据" name="first">
-                <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
+                <el-form :model="myForm" ref="myForm" class="clueForm" :rules="rules">
                     <!-- <h3>{{addOrUpdateData.title}}</h3> -->
                     <el-form-item
                         class="formitemclue"
@@ -83,10 +83,9 @@
                 </el-form>
             </el-tab-pane>
             <el-tab-pane label="辅助资料" name="second">
-                <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
+                <el-form :model="myForm" ref="myForm" class="auxForm" :rules="rules">
                     <!-- <h3>{{addOrUpdateData.title}}</h3> -->
                     <el-form-item
-                        class="formitemclue"
                         label-width="130px"
                         v-for="item in addOrUpdateData.assistForm"
                         :label="item.label"
@@ -101,20 +100,72 @@
                             auto-complete="off"
                             @keyup.enter.native="submit">
                         </el-input>
+                        <!-- 注册时间 -->
+                        <el-date-picker
+                            v-else-if="item.type && item.type == 'date'"
+                            v-model="myForm[item.inputModel]"
+                            type="date"
+                            @change="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                            style="width:90%;" 
+                            auto-complete="off">
+                        </el-date-picker>
+                        <!-- 企业规模 -->
                         <el-select 
-                            v-else-if="item.type && item.type == 'select'"
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'enterpriseScale'"
                             :multiple="item.multiple"
                             :collapse-tags="item.multiple"
                             v-model="myForm[item.inputModel]"
                             @select="handleInput($event, item.inputModel)"
                             :placeholder="item.placeholder"
                             style="width:90%;">
-                            <el-option v-for="o in item.options" :key="o[item.okey]" :label="o[item.olabel]" :value="o[item.ovalue]"></el-option>
+                            <el-option v-for="o in enterpriseScaleList" :key="o.id" :label="o.name" :value="o.name"></el-option>
                         </el-select>
-                        <div v-else-if="item.inputModel == 'sex'">
-                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
-                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
-                        </div>
+                        <!-- 融资状态 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'financingState'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in financingStateList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                        <!-- 行业 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'industryType'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in industryTypeList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                        <!-- 公司类型 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'companyType'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in companyTypeList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                        <!-- 经营状态 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'operatingState'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in operatingStateList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
@@ -127,7 +178,7 @@
                 border
                 stripe
                 :default-sort = "{order: 'ascending'}"
-                max-height="580">
+                max-height="680">
                 <el-table-column
                     header-align="center"
                     align="center"
@@ -161,7 +212,7 @@
                     sortable>
                 </el-table-column>
             </el-table>
-            <div class="block numberPage">
+            <!-- <div class="block numberPage">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -171,46 +222,10 @@
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="tableNumber">
                 </el-pagination>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
-<style>
-    .content {
-        width: 98%;
-    }
-    .formtabs{
-        width: 41%;
-        float: left;
-    }
-    .myForm {
-        width: 100%;
-    }
-    .formitemclue:nth-child(11),.formitemclue:nth-child(10){
-        margin: 0;
-    }
-    .line{
-        float: left;
-        height: 95%;
-        border-left: 1px solid #000;
-        margin-right: 5px;
-    }
-    .formlist{
-        width: 57%;
-        height: auto;
-        float: left;
-    }
-    .cityseat{
-        position: absolute;
-        top:-52px;
-        left:30%;
-    }
-    .areaseat{
-        position: absolute;
-        top:-52px;
-        left:60%;
-    }
-</style>
 
 <script>
     import store from '../../../../store/store'
@@ -230,6 +245,14 @@
                     poolName:null,
                     address:null,
                 },
+
+                industryTypeList:null, //行业
+                enterpriseScaleList:null, // 企业规模
+                companyTypeList:null, //企业类型
+                operatingStateList:null, //经营状态
+                financingStateList:null, //融资状态
+                listedList:null, //上市信息
+
                 subData: {},
                 cuesList:null,
                 mapJson:'../../../../dist/static/map.json',
@@ -249,6 +272,89 @@
                     cuesid : [{ required: true, message: '线索来源不能为空', trigger: 'blur' },],
                 },
             }
+        },
+        beforeCreate(){
+            let _this = this
+            let qs = require('querystring')
+
+            let industryTypeList = {} 
+            industryTypeList.comboType = 'IndustryType'
+            let enterpriseScaleList = {}   
+            enterpriseScaleList.comboType = 'EnterpriseScale'
+            let companyTypeList = {} 
+            companyTypeList.comboType = 'CompanyType'
+            let operatingStateList = {} 
+            operatingStateList.comboType = 'OperatingState'
+            let financingStateList = {} 
+            financingStateList.comboType = 'FinancingState'
+            let listedList = {} 
+            listedList.comboType = 'Listed'
+            //行业
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(industryTypeList,),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.industryTypeList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //企业规模
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(enterpriseScaleList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.enterpriseScaleList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //企业类型
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(companyTypeList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.companyTypeList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //经营状态
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(operatingStateList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.operatingStateList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //融资状态
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(financingStateList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.financingStateList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //上市信息
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(listedList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.listedList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
         },
         created(){
             this.getCityData()
@@ -314,6 +420,8 @@
                             this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
                         } else if(item.type && item.type == 'radio') {
                             this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                        } else if(item.type && item.type == 'date'){
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
                         } else {
                             this.myForm[item.inputModel] = setForm[item.inputModel];
                         }
@@ -332,7 +440,7 @@
             handleoninput(val,key){
                 let _this = this
                 this.myForm[key] = val
-                console.log(this.myForm[key])
+                // console.log(this.myForm[key])
                 let qs =require('querystring')
                 let pageInfo = {}
                 pageInfo.page = this.page;
@@ -361,6 +469,7 @@
                     subData.csId = _this.addOrUpdateData.submitData.csId;
                 }
                 let createForm = _this.addOrUpdateData.createForm;
+                let assistForm = _this.addOrUpdateData.assistForm;
                 let flag = false;
                 createForm.forEach(item => {
                     subData[item.inputModel] = _this.myForm[item.inputModel];
@@ -393,6 +502,10 @@
                         });
                         flag = true;
                     }
+                });
+                assistForm.forEach(item => {
+                    subData[item.inputModel] = _this.myForm[item.inputModel];
+                    // console.log(_this.myForm)
                 });
                 if(flag) return;
                 subData.secondid = this.$store.state.deptid
@@ -442,14 +555,26 @@
             //获取table的索引和行数据，当该行被点击时，将公司名称地址填充到表单
             getRow(index,row){
                 this.myForm.poolName = row.name
-                this.myForm.address = row.address
+                this.myForm.address = row.address 
+                this.myForm.representative = row.representative  //法人代表  
+                this.myForm.registrationAuthority = row.registrationAuthority  //登记机关
+                this.myForm.registrationNumber = row.registrationNumber  //注册号
+                this.myForm.organizationCode = row.organizationCode  //组织机构代码
+                this.myForm.date = row.date  //注册时间
+                this.myForm.industryType = row.industryName  //行业
+                this.myForm.companyType = row.company  //公司类型
+                this.myForm.operatingState = row.ostate  // 经营状态
+                this.myForm.capital = row.capital  //注册资金
+                this.myForm.financingState = row.financing  //是否融资
+                this.myForm.enterpriseScale = row.enterpriseScaleName  //企业规模
+                this.myForm.creditCode = row.creditCode  //统一社会信用代码
             },
 
             // 加载china地点数据，三级
             getCityData(){
                 var _this = this
                 axios.get(this.mapJson).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if (res.status==200) {
                         var data = res.data
                         // 省市区数据分类
@@ -493,7 +618,8 @@
                         this.areaList =this.Provinces[index2].children[0].children
                         this.E = this.areaList[0].id
                     }
-                }console.log(this.myForm.country)
+                }
+                // console.log(this.myForm.country)
             },
             // 选市
             choseCity(e) {
@@ -503,12 +629,13 @@
                         this.E = this.areaList[0].id
                         // console.log(this.E)
                     }
-                }console.log(this.myForm.city)
+                }
+                // console.log(this.myForm.city)
             },
             // 选区
             choseBlock(e) {
                 this.E=e;
-                console.log(this.myForm.area)
+                // console.log(this.myForm.area)
             },
 
             handleClick(tab, event){
@@ -529,3 +656,43 @@
         
     }
 </script>
+
+<style>
+    .content {
+        width: 98%;
+    }
+    .formtabs{
+        width: 41%;
+        float: left;
+    }
+    .clueForm {
+        width: 100%;
+    }
+    .auxForm{
+        width: 100%;
+    }
+    .formitemclue:nth-child(11),.formitemclue:nth-child(10){
+        margin: 0;
+    }
+    .line{
+        float: left;
+        height: 95%;
+        border-left: 1px solid #000;
+        margin-right: 5px;
+    }
+    .formlist{
+        width: 57%;
+        height: auto;
+        float: left;
+    }
+    .cityseat{
+        position: absolute;
+        top:-52px;
+        left:30%;
+    }
+    .areaseat{
+        position: absolute;
+        top:-52px;
+        left:60%;
+    }
+</style>

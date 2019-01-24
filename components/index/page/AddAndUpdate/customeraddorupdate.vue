@@ -1,95 +1,186 @@
 <template>
     <!-- 客户新增修改 -->
     <div class="content">
-        <el-form :model="myForm" ref="myForm" class="myForm" :rules="rules">
-            <!-- <h3>{{addOrUpdateData.title}}</h3> -->
-            <el-form-item
-                class="formitemcus"
-                label-width="100px"
-                v-for="item in addOrUpdateData.createForm"
-                :label="item.label"
-                :key="item.inputModel"
-                :prop="item.inputModel">
+        <el-tabs class="formtabs" v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="主要数据" name="first">
+                <el-form :model="myForm" ref="myForm" class="clueForm" :rules="rules">
+                    <!-- <h3>{{addOrUpdateData.title}}</h3> -->
+                    <el-form-item
+                        class="formitemcus"
+                        label-width="100px"
+                        v-for="item in addOrUpdateData.createForm"
+                        :label="item.label"
+                        :key="item.inputModel"
+                        :prop="item.inputModel">
 
-                <el-input 
-                    v-if="!item.type || item.type == 'input'"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    :placeholder="item.placeholder"
-                    style="width:90%;" 
-                    auto-complete="off"
-                    @keyup.enter.native="submit">
-                </el-input>
-                <el-input 
-                    v-else-if="item.type && item.type == 'number'"
-                    type="number"
-                    :value="myForm[item.inputModel]"
-                    @input="handleInput($event, item.inputModel)"
-                    :placeholder="item.placeholder"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
-                <el-input 
-                    v-else-if="item.type && item.type == 'require' && item.inputModel == 'poolName'"
-                    :value="myForm[item.inputModel]"
-                    @input="handleoninput($event, item.inputModel)"
-                    :placeholder="item.placeholder"
-                    style="width:90%;" 
-                    auto-complete="off">
-                </el-input>
-                <el-select 
-                    v-else-if="item.inputModel == 'customerStateid'"
-                    v-model="myForm[item.inputModel]"
-                    @change="handleInput($event, item.inputModel)"
-                    :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option v-for="o in cuesList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
-                </el-select>
-                <el-select 
-                    v-else-if="item.inputModel == 'levelsid'"
-                    v-model="myForm[item.inputModel]"
-                    @change="handleInput($event, item.inputModel)"
-                    :placeholder="item.placeholder"
-                    style="width:90%;">
-                    <el-option v-for="o in levelList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
-                </el-select>
-                <el-select 
-                    v-else-if="item.inputModel == 'country'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseProvince"
-                    :placeholder="item.placeholder"
-                    style="width:28%;">
-                    <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
-                </el-select>
-                <el-select
-                    class="cityseat"
-                    v-else-if="item.inputModel == 'city'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseCity"
-                    :placeholder="item.placeholder"
-                    style="width:28%;">
-                    <el-option  v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
-                </el-select>
-                <el-select
-                    class="areaseat"
-                    v-else-if="item.inputModel == 'area'"
-                    v-model="myForm[item.inputModel]"
-                    @change="choseBlock"
-                    :placeholder="item.placeholder"
-                    style="width:28%;">
-                    <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
-                </el-select>
-                <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'sex'">
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
-                    <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
-                </div>
-            </el-form-item>
-            <div style="margin-left:60px;">
-                <el-button class="searchbutton" @click="submit">立即提交</el-button>
-                &nbsp;&nbsp;
-                <el-button @click="closeTag">取消</el-button>
-            </div>
-        </el-form>
+                        <el-input 
+                            v-if="!item.type || item.type == 'input'"
+                            :value="myForm[item.inputModel]"
+                            @input="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;" 
+                            auto-complete="off"
+                            @keyup.enter.native="submit">
+                        </el-input>
+                        <el-input 
+                            v-else-if="item.type && item.type == 'number'"
+                            type="number"
+                            :value="myForm[item.inputModel]"
+                            @input="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;" 
+                            auto-complete="off">
+                        </el-input>
+                        <el-input 
+                            v-else-if="item.type && item.type == 'require' && item.inputModel == 'poolName'"
+                            :value="myForm[item.inputModel]"
+                            @input="handleoninput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;" 
+                            auto-complete="off">
+                        </el-input>
+                        <el-select 
+                            v-else-if="item.inputModel == 'customerStateid'"
+                            v-model="myForm[item.inputModel]"
+                            @change="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in cuesList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
+                        </el-select>
+                        <el-select 
+                            v-else-if="item.inputModel == 'levelsid'"
+                            v-model="myForm[item.inputModel]"
+                            @change="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in levelList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
+                        </el-select>
+                        <el-select 
+                            v-else-if="item.inputModel == 'country'"
+                            v-model="myForm[item.inputModel]"
+                            @change="choseProvince"
+                            :placeholder="item.placeholder"
+                            style="width:28%;">
+                            <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                        </el-select>
+                        <el-select
+                            class="cityseat"
+                            v-else-if="item.inputModel == 'city'"
+                            v-model="myForm[item.inputModel]"
+                            @change="choseCity"
+                            :placeholder="item.placeholder"
+                            style="width:28%;">
+                            <el-option  v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                        </el-select>
+                        <el-select
+                            class="areaseat"
+                            v-else-if="item.inputModel == 'area'"
+                            v-model="myForm[item.inputModel]"
+                            @change="choseBlock"
+                            :placeholder="item.placeholder"
+                            style="width:28%;">
+                            <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                        </el-select>
+                        <div v-else-if="item.type && item.type == 'radio' && item.inputModel == 'sex'">
+                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
+                            <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="女">女</el-radio>
+                        </div>
+                    </el-form-item>
+                    <div style="margin-left:60px;">
+                        <el-button class="searchbutton" @click="submit">立即提交</el-button>
+                        &nbsp;&nbsp;
+                        <el-button @click="closeTag">取消</el-button>
+                    </div>
+                </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="辅助资料" name="second">
+                <el-form :model="myForm" ref="myForm" class="auxForm" :rules="rules">
+                    <!-- <h3>{{addOrUpdateData.title}}</h3> -->
+                    <el-form-item
+                        label-width="130px"
+                        v-for="item in addOrUpdateData.assistForm"
+                        :label="item.label"
+                        :key="item.inputModel"
+                        :prop="item.inputModel">
+
+                        <el-input 
+                            v-if="!item.type || item.type == 'input'"
+                            :value="myForm[item.inputModel]"
+                            @input="handleInput($event, item.inputModel)"
+                            style="width:90%;" 
+                            auto-complete="off"
+                            @keyup.enter.native="submit">
+                        </el-input>
+                        <!-- 注册时间 -->
+                        <el-date-picker
+                            v-else-if="item.type && item.type == 'date'"
+                            v-model="myForm[item.inputModel]"
+                            type="date"
+                            @change="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            format="yyyy-MM-dd" value-format="yyyy-MM-dd"
+                            style="width:90%;" 
+                            auto-complete="off">
+                        </el-date-picker>
+                        <!-- 企业规模 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'enterpriseScale'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in enterpriseScaleList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                        <!-- 融资状态 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'financingState'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in financingStateList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                        <!-- 行业 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'industryType'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in industryTypeList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                        <!-- 公司类型 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'companyType'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in companyTypeList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                        <!-- 经营状态 -->
+                        <el-select 
+                            v-else-if="item.type && item.type == 'select' && item.inputModel == 'operatingState'"
+                            :multiple="item.multiple"
+                            :collapse-tags="item.multiple"
+                            v-model="myForm[item.inputModel]"
+                            @select="handleInput($event, item.inputModel)"
+                            :placeholder="item.placeholder"
+                            style="width:90%;">
+                            <el-option v-for="o in operatingStateList" :key="o.id" :label="o.name" :value="o.name"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+            </el-tab-pane>
+        </el-tabs>
         <div class="line"></div>
         <div class="formlist">
             <el-table
@@ -97,7 +188,7 @@
                 border
                 stripe
                 :default-sort = "{order: 'ascending'}"
-                max-height="580"
+                max-height="680"
                 style="text-align:center">
                 <el-table-column
                     header-align="center"
@@ -132,7 +223,7 @@
                     sortable>
                 </el-table-column>
             </el-table>
-            <div class="block numberPage">
+            <!-- <div class="block numberPage">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -142,46 +233,10 @@
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="tableNumber">
                 </el-pagination>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
-<style>
-    .content {
-        width: 98%;
-    }
-    h3 {
-        margin: 20px 60px;
-    }
-    .myForm {
-        width: 41%;;
-        float: left;
-    }
-    .formitemcus:nth-child(11),.formitemcus:nth-child(12){
-        margin: 0;
-    }
-    .line{
-        float: left;
-        height: 95%;
-        border-left: 1px solid #000;
-        margin-right: 5px;
-    }
-    .formlist{
-        width: 57%;
-        height: auto;
-        float: left;
-    }
-    .cityseat{
-        position: absolute;
-        top:-52px;
-        left:30%;
-    }
-    .areaseat{
-        position: absolute;
-        top:-52px;
-        left:60%;
-    }
-</style>
 
 <script>
     import store from '../../../../store/store'
@@ -191,12 +246,21 @@
         name:'customeraddOrUpdate',
         data(){
             return {
+                activeName: 'first',
                 tableData:null,
                 addOrUpdateData: {},
                 myForm: {
                     poolName:null,
                     address:null,
                 },
+                
+                industryTypeList:null, //行业
+                enterpriseScaleList:null, // 企业规模
+                companyTypeList:null, //企业类型
+                operatingStateList:null, //经营状态
+                financingStateList:null, //融资状态
+                listedList:null, //上市信息
+
                 cuesList:null,
                 levelList:null,
                 subData: {},
@@ -218,6 +282,89 @@
                     customerStateid : [{ required: true, message: '请选择客户来源', trigger: 'blur' },],
                 },
             }
+        },
+        beforeCreate(){
+            let _this = this
+            let qs = require('querystring')
+
+            let industryTypeList = {} 
+            industryTypeList.comboType = 'IndustryType'
+            let enterpriseScaleList = {}   
+            enterpriseScaleList.comboType = 'EnterpriseScale'
+            let companyTypeList = {} 
+            companyTypeList.comboType = 'CompanyType'
+            let operatingStateList = {} 
+            operatingStateList.comboType = 'OperatingState'
+            let financingStateList = {} 
+            financingStateList.comboType = 'FinancingState'
+            let listedList = {} 
+            listedList.comboType = 'Listed'
+            //行业
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(industryTypeList,),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.industryTypeList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //企业规模
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(enterpriseScaleList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.enterpriseScaleList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //企业类型
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(companyTypeList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.companyTypeList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //经营状态
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(operatingStateList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.operatingStateList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //融资状态
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(financingStateList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.financingStateList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
+            //上市信息
+            axios({
+                method: 'post',
+                url: _this.$store.state.defaultHttp+'search/find.do',
+                data: qs.stringify(listedList),
+            }).then(function(res){
+                // console.log(res.data)
+                _this.listedList=res.data;
+            }).catch(function(err){
+                console.log(err);
+            });
         },
         created(){
             this.getCityData()
@@ -251,7 +398,7 @@
                     method: 'get',
                     url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType.do?cId='+_this.$store.state.iscId,
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.cuesList = res.data.name3001
                     _this.levelList = res.data.name4001
                 }).catch(function(err){
@@ -265,6 +412,7 @@
 
                 // 设置默认值
                 let createForm = this.addOrUpdateData.createForm;
+                let assistForm = this.addOrUpdateData.assistForm;
                 let setForm = this.addOrUpdateData.setForm;
                 if(setForm) {
                     createForm.forEach((item, index) => {
@@ -276,9 +424,20 @@
                             this.myForm[item.inputModel] = setForm[item.inputModel];
                         }
                     });
+                    assistForm.forEach((item, index) => {
+                        if(item.type && item.type == 'select') {
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                        } else if(item.type && item.type == 'radio') {
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                        } else if(item.type && item.type == 'date'){
+                            this.$set(this.myForm, item.inputModel, setForm[item.inputModel]);
+                        } else {
+                            this.myForm[item.inputModel] = setForm[item.inputModel];
+                        }
+                    });
                     // console.log(this.myForm);
                     this.myForm.levelsid = this.addOrUpdateData.setForm.levels
-                    this.myForm.customerStateid = this.addOrUpdateData.setForm.customerState
+                    // this.myForm.customerStateid = this.addOrUpdateData.setForm.customerState
                     this.$emit('input', this.myForm);
                 }
             },
@@ -292,7 +451,7 @@
             handleoninput(val,key){
                 let _this = this
                 this.myForm[key] = val
-                console.log(this.myForm[key])
+                // console.log(this.myForm[key])
                 let qs =require('querystring')
                 let pageInfo = {}
                 pageInfo.page = this.page;
@@ -410,6 +569,18 @@
             getRow(index,row){
                 this.myForm.poolName = row.name
                 this.myForm.address = row.address
+                this.myForm.representative = row.representative  //法人代表  
+                this.myForm.registrationAuthority = row.registrationAuthority  //登记机关
+                this.myForm.registrationNumber = row.registrationNumber  //注册号
+                this.myForm.organizationCode = row.organizationCode  //组织机构代码
+                this.myForm.date = row.date  //注册时间
+                this.myForm.industryType = row.industryName  //行业
+                this.myForm.companyType = row.company  //公司类型
+                this.myForm.operatingState = row.ostate  // 经营状态
+                this.myForm.capital = row.capital  //注册资金
+                this.myForm.financingState = row.financing  //是否融资
+                this.myForm.enterpriseScale = row.enterpriseScaleName  //企业规模
+                this.myForm.creditCode = row.creditCode  //统一社会信用代码
             },
             
             // 加载china地点数据，三级
@@ -478,6 +649,11 @@
                 this.E=e;
                 console.log(this.myForm.area)
             },
+
+            handleClick(tab, event){
+                // console.log(tab, event)
+            },
+
             handleSizeChange(val) {
                 let _this = this;
                 _this.limit = val;
@@ -492,3 +668,43 @@
         
     }
 </script>
+
+<style>
+    .content {
+        width: 98%;
+    }
+    .formtabs{
+        width: 41%;
+        float: left;
+    }
+    .clueForm {
+        width: 100%;
+    }
+    .auxForm{
+        width: 100%;
+    }
+    .formitemcus:nth-child(11),.formitemcus:nth-child(12){
+        margin: 0;
+    }
+    .line{
+        float: left;
+        height: 95%;
+        border-left: 1px solid #000;
+        margin-right: 5px;
+    }
+    .formlist{
+        width: 57%;
+        height: auto;
+        float: left;
+    }
+    .cityseat{
+        position: absolute;
+        top:-52px;
+        left:30%;
+    }
+    .areaseat{
+        position: absolute;
+        top:-52px;
+        left:60%;
+    }
+</style>

@@ -1,32 +1,30 @@
 <template>
     <!-- 线索 -->
     <div>
-        <div class="searchList" style="width:100%;">
-            <el-radio-group v-model="searchList.label" style="margin:5px 0;">
+        <div class="radioList">
+            <el-radio-group v-model="searchList.label">
                 <span class="nameList">线索分类：</span>
-                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部线索</el-radio>
-                <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio :label="nullvalue" @change="search()">全部线索</el-radio>
+                <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" @change="search()">{{item.value}}</el-radio>
             </el-radio-group>
-            <br>
-            <el-radio-group v-model="searchList.state" style="margin:5px 0;">
+            <el-radio-group v-model="searchList.state">
                 <span class="nameList">线索状态：</span>
-                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部线索状态</el-radio>
-                <el-radio v-for="item in stateData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
+                <el-radio :label="nullvalue" @change="search()">全部线索状态</el-radio>
+                <el-radio v-for="item in stateData" :key="item.id" :label="item.id" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
-            <br>
-            <el-radio-group v-model="searchList.type" style="margin:5px 0;">
+            <el-radio-group v-model="searchList.type">
                 <span class="nameList">线索来源：</span>
-                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部线索来源</el-radio>
-                <el-radio v-for="item in typeData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
+                <el-radio :label="nullvalue" @change="search()">全部线索来源</el-radio>
+                <el-radio v-for="item in typeData" :key="item.id" :label="item.id" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
-            <br>
+        </div>
+        <div class="searchList">
             <span class="nameList">公司名称：</span>
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;
             <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
         </div>
         <div class="entry">
-            <!-- <el-button class="btn" size="mini" @click="handleDeletes()">删除</el-button> -->
             <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
             <el-button class="btn info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
             <el-button class="btn info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
@@ -87,7 +85,7 @@
                 v-if="showmingcheng"
                 header-align="left"
                 align="left"
-                min-width="150"
+                min-width="180"
                 label="公司名称"
                 sortable>
                 <template slot-scope="scope">
@@ -102,6 +100,7 @@
                 header-align="left"
                 align="left"
                 label="电话"
+                min-width="95"
                 sortable>
             </el-table-column>
             <el-table-column
@@ -109,6 +108,7 @@
                 v-if="showshouji"
                 header-align="left"
                 align="left"
+                min-width="95"
                 label="手机"
                 sortable>
             </el-table-column>
@@ -118,6 +118,7 @@
                 header-align="left"
                 align="left"
                 label="QQ"
+                min-width="95"
                 sortable>
             </el-table-column>
             <el-table-column
@@ -183,10 +184,6 @@
                     <el-button
                     size="mini"
                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <!-- <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -272,7 +269,7 @@
                 method: 'get',
                 url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType.do?cId='+_this.$store.state.iscId,
             }).then(function(res){
-                console.log(res.data)
+                // console.log(res.data)
                 _this.stateData = res.data.name1001
                 _this.typeData = res.data.name3001
             }).catch(function(err){
@@ -284,6 +281,7 @@
         },
 
         methods: {
+            //获取/查询线索列表
             reloadTable() {
                 let _this = this;
                 let qs =require('querystring')
@@ -327,7 +325,7 @@
                         // console.log(newArr)
                     }
                 });
-                console.log(newArr)
+                // console.log(newArr)
                 this.idArr.id = newArr;
                 
             },
@@ -362,18 +360,13 @@
                     {"label":"统一社会信用代码","inputModel":"creditCode"},
                     {"label":"注册号","inputModel":"registrationNumber"},
                     {"label":"组织机构代码","inputModel":"organizationCode"},
-                    {"label":"注册资金","inputModel":"capital","type":"select"},
-                    {"label":"注册时间","inputModel":"date","type":"select"},
-                    {"label":"企业规模","inputModel":"scale","type":"select"},
-                    {"label":"融资状态","inputModel":"financing","type":"select"},
-                    // {"label":"修改时间","inputModel":"updateTime","type":"select"},
+                    {"label":"注册资金","inputModel":"capital",},
+                    {"label":"注册时间","inputModel":"registerTime","type":"date"},
+                    {"label":"企业规模","inputModel":"enterpriseScale","type":"select"},
+                    {"label":"融资状态","inputModel":"financingState","type":"select"},
                     {"label":"行业","inputModel":"industryType","type":"select"},
                     {"label":"公司类型","inputModel":"companyType","type":"select"},
-                    // {"label":"省份","inputModel":"cuesid","type":"select"},
-                    {"label":"经营状态","inputModel":"operatingState","type":"select"},
-                    {"label":"资金范围","inputModel":"capitalType","type":"select"},
-                    {"label":"人数范围","inputModel":"enterpriseScale","type":"select"},
-                ]
+                    {"label":"经营状态","inputModel":"operatingState","type":"select"},]
                 addOrUpdateData.setForm = {
                     "cuesid": '',
                     "poolName": '',
@@ -387,20 +380,19 @@
                     "sex": '',
                     "identity": '',
                     "address": '',
+                    "remark":'',
                     "representative": '',
                     "registrationAuthority": '',
                     "creditCode": '',
                     "registrationNumber": '',
                     "organizationCode": '',
                     "capital": '',
-                    "date": '',
-                    "scale": '',
-                    "financing": '',
+                    "registerTime": '',
+                    "enterpriseScale": '',
+                    "financingState": '',
                     "industryType": '',
                     "companyType": '',
-                    "operatingState": '',
-                    "capitalType": '',
-                    "enterpriseScale": ''};
+                    "operatingState": ''};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/saveClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 axios({
@@ -439,8 +431,21 @@
                     {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
+                addOrUpdateData.assistForm = [
+                    {"label":"法人代表","inputModel":"representative"},
+                    {"label":"登记机关","inputModel":"registrationAuthority"},
+                    {"label":"统一社会信用代码","inputModel":"creditCode"},
+                    {"label":"注册号","inputModel":"registrationNumber"},
+                    {"label":"组织机构代码","inputModel":"organizationCode"},
+                    {"label":"注册资金","inputModel":"capital"},
+                    {"label":"注册时间","inputModel":"registerTime","type":"date"},
+                    {"label":"企业规模","inputModel":"enterpriseScale","type":"select"},
+                    {"label":"融资状态","inputModel":"financingState","type":"select"},
+                    {"label":"行业","inputModel":"industryType","type":"select"},
+                    {"label":"公司类型","inputModel":"companyType","type":"select"},
+                    {"label":"经营状态","inputModel":"operatingState","type":"select"},]
                 addOrUpdateData.setForm = {
-                    "cuesid": row.cues,
+                    "cuesid": row.cuesid,
                     "poolName": row.name,
                     "contactsName": row.contacts[0].coName,
                     "telphone": row.contacts[0].telephone,
@@ -452,9 +457,21 @@
                     "sex": row.contacts[0].sex,
                     "identity": row.contacts[0].identity,
                     "address": row.address,
-                    "remark": row.remark};
+                    "remark": row.remark,
+                    "representative": row.representative,
+                    "registrationAuthority": row.registrationAuthority,
+                    "creditCode": row.creditCode,
+                    "registrationNumber": row.registrationNumber,
+                    "organizationCode": row.organizationCode,
+                    "capital": row.capital,
+                    "registerTime": row.date,
+                    "enterpriseScale": row.enterpriseScale,
+                    "financingState": row.financingState,
+                    "industryType": row.industryType,
+                    "companyType": row.companyType,
+                    "operatingState": row.operatingState};
                 addOrUpdateData.submitData = {"id": row.id,'csId':row.contacts[0].csId};
-                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/updateClue.do?cId='+this.$store.state.iscId,
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/updateClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 axios({

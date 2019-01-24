@@ -2,7 +2,6 @@
     <!-- 商机 -->
     <div>
         <div class="searchList" style="width:100%;">
-            <span class="nameList">公司名称：</span>
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;
             <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>

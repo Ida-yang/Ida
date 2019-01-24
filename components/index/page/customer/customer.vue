@@ -1,31 +1,29 @@
 <template>
     <!-- 客户 -->
     <div>
-        <div class="searchList" style="width:100%;">
-            <el-radio-group v-model="searchList.label" style="margin-bottom:10px;">
+        <div class="radioList">
+            <el-radio-group v-model="searchList.label">
                 <span class="nameList">客户分类：</span>
-                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部客户</el-radio>
-                <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" style="width:110px;" @change="search()">{{item.value}}</el-radio>
+                <el-radio :label="nullvalue" @change="search()">全部客户</el-radio>
+                <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" @change="search()">{{item.value}}</el-radio>
             </el-radio-group>
-            <br>
-            <el-radio-group v-model="searchList.keyType" style="margin-bottom:10px;">
+            <el-radio-group v-model="searchList.keyType">
                 <span class="nameList">客户级别：</span>
-                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部级别</el-radio>
-                <el-radio v-for="item in labelData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
+                <el-radio :label="nullvalue" @change="search()">全部级别</el-radio>
+                <el-radio v-for="item in labelData" :key="item.id" :label="item.id" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
-            <br>
-            <el-radio-group v-model="searchList.keyWord" style="margin-bottom:10px;">
+            <el-radio-group v-model="searchList.keyWord">
                 <span class="nameList">客户来源：</span>
-                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部来源</el-radio>
-                <el-radio v-for="item in typeData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
+                <el-radio :label="nullvalue" @change="search()">全部来源</el-radio>
+                <el-radio v-for="item in typeData" :key="item.id" :label="item.id" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
-            <br>
-            <el-radio-group v-model="searchList.state" style="margin-bottom:10px;">
+            <el-radio-group v-model="searchList.state">
                 <span class="nameList">客户状态：</span>
-                <el-radio :label="nullvalue" style="width:110px;" @change="search()">全部状态</el-radio>
-                <el-radio v-for="item in stateData" :key="item.id" :label="item.id" style="width:110px;" @change="search()">{{item.typeName}}</el-radio>
+                <el-radio :label="nullvalue" @change="search()">全部状态</el-radio>
+                <el-radio v-for="item in stateData" :key="item.id" :label="item.id" @change="search()">{{item.typeName}}</el-radio>
             </el-radio-group>
-            <br>
+        </div>
+        <div class="searchList">
             <span class="nameList">公司名称：</span>
             <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
             &nbsp;&nbsp;
@@ -370,6 +368,19 @@
                     {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
+                addOrUpdateData.assistForm = [
+                    {"label":"法人代表","inputModel":"representative"},
+                    {"label":"登记机关","inputModel":"registrationAuthority"},
+                    {"label":"统一社会信用代码","inputModel":"creditCode"},
+                    {"label":"注册号","inputModel":"registrationNumber"},
+                    {"label":"组织机构代码","inputModel":"organizationCode"},
+                    {"label":"注册资金","inputModel":"capital"},
+                    {"label":"注册时间","inputModel":"registerTime","type":"date"},
+                    {"label":"企业规模","inputModel":"enterpriseScale","type":"select"},
+                    {"label":"融资状态","inputModel":"financingState","type":"select"},
+                    {"label":"行业","inputModel":"industryType","type":"select"},
+                    {"label":"公司类型","inputModel":"companyType","type":"select"},
+                    {"label":"经营状态","inputModel":"operatingState","type":"select"},]
                 addOrUpdateData.setForm = {
                     "customerStateid": '',
                     "poolName": '',
@@ -384,7 +395,19 @@
                     "sex": '',
                     "identity": '',
                     "address": '',
-                    "remark": ''};
+                    "remark": '',
+                    "representative": '',
+                    "registrationAuthority": '',
+                    "creditCode": '',
+                    "registrationNumber": '',
+                    "organizationCode": '',
+                    "capital": '',
+                    "registerTime": '',
+                    "enterpriseScale": '',
+                    "financingState": '',
+                    "industryType": '',
+                    "companyType": '',
+                    "operatingState": ''};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerpool/savePool.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/customeraddorupdate' });
@@ -408,9 +431,22 @@
                     {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
+                addOrUpdateData.assistForm = [
+                    {"label":"法人代表","inputModel":"representative"},
+                    {"label":"登记机关","inputModel":"registrationAuthority"},
+                    {"label":"统一社会信用代码","inputModel":"creditCode"},
+                    {"label":"注册号","inputModel":"registrationNumber"},
+                    {"label":"组织机构代码","inputModel":"organizationCode"},
+                    {"label":"注册资金","inputModel":"capital",},
+                    {"label":"注册时间","inputModel":"registerTime","type":"date"},
+                    {"label":"企业规模","inputModel":"enterpriseScale","type":"select"},
+                    {"label":"融资状态","inputModel":"financingState","type":"select"},
+                    {"label":"行业","inputModel":"industryType","type":"select"},
+                    {"label":"公司类型","inputModel":"companyType","type":"select"},
+                    {"label":"经营状态","inputModel":"operatingState","type":"select"},]
                 addOrUpdateData.setForm = {
-                    "customerStateid": row.source,
-                    "customerState":row.sourceid,
+                    "customerStateid": row.sourceid,
+                    // "customerState":row.sourceid,
                     "poolName": row.pName,
                     "levelsid": row.levels,
                     "levels": row.levelsid,
@@ -424,9 +460,21 @@
                     "sex": row.contacts[0].sex,
                     "identity": row.contacts[0].identity,
                     "address": row.address,
-                    "remark": row.remark};
+                    "remark": row.remark,
+                    "representative": row.representative,
+                    "registrationAuthority": row.registrationAuthority,
+                    "creditCode": row.creditCode,
+                    "registrationNumber": row.registrationNumber,
+                    "organizationCode": row.organizationCode,
+                    "capital": row.capital,
+                    "registerTime": row.date,
+                    "enterpriseScale": row.enterpriseScale,
+                    "financingState": row.financingState,
+                    "industryType": row.industryType,
+                    "companyType": row.companyType,
+                    "operatingState": row.operatingState};
                 addOrUpdateData.submitData = {"id": row.id,'csId':row.contacts[0].csId};
-                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerpool/updatepool.do?cId='+this.$store.state.iscId,
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerpool/updatepool.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
                 console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/customeraddorupdate' });

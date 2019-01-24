@@ -409,9 +409,6 @@
             loadData(){
                 let _this = this
                 let qs =require('querystring')
-                let pageInfo = {}
-                pageInfo.page = this.page;
-                pageInfo.limit = this.limit;
                 // console.log(pageInfo)
                 let industryTypeList = {} 
                 industryTypeList.comboType = 'IndustryType'
@@ -425,6 +422,8 @@
                 financingStateList.comboType = 'FinancingState'
                 let listedList = {} 
                 listedList.comboType = 'Listed'
+
+                //行业
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'search/find.do',
@@ -435,6 +434,7 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+                //企业规模
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'search/find.do',
@@ -445,6 +445,7 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+                //企业类型
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'search/find.do',
@@ -455,6 +456,7 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+                //经营状态
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'search/find.do',
@@ -465,6 +467,7 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+                //融资状态
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'search/find.do',
@@ -475,6 +478,7 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+                //上市信息
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'search/find.do',
@@ -486,29 +490,30 @@
                     console.log(err);
                 });
             },
+            //获取/查询大数据列表
             reloadTable() {
                 // console.log(this.$store.state)
                 let _this = this;
                 let qs =require('querystring')
                 let searchList = {}
-                searchList.keyword = this.searchList.keyword;
-                searchList.industryType = this.searchList.industryType;
-                searchList.MinDate = this.searchList.MinDate;
-                searchList.MaxDate = this.searchList.MaxDate;
-                searchList.capital = this.searchList.capital;
-                searchList.EnterpriseScale = this.searchList.enterpriseScale;
-                searchList.companyType = this.searchList.companyType;
-                searchList.operatingState = this.searchList.operatingState;
-                searchList.financingState = this.searchList.financingState;
-                searchList.listed = this.searchList.listed;
-                searchList.phone = this.searchList.phone;
-                searchList.telephone = this.searchList.telephone;
-                searchList.email = this.searchList.email;
-                searchList.website = this.searchList.website;
-                searchList.AddressKeyword = this.searchList.AddressKeyword;
-                searchList.country_id = this.searchList.country;
-                searchList.city_id = this.searchList.city;
-                searchList.area_id = this.searchList.area;
+                searchList.keyword = this.searchList.keyword; //公司名称
+                searchList.industryType = this.searchList.industryType; //行业
+                searchList.MinDate = this.searchList.MinDate; //开始日期
+                searchList.MaxDate = this.searchList.MaxDate; //结束日期
+                searchList.capital = this.searchList.capital; //注册资金
+                searchList.EnterpriseScale = this.searchList.enterpriseScale; //企业规模
+                searchList.companyType = this.searchList.companyType; //企业类型
+                searchList.operatingState = this.searchList.operatingState; //经营状态
+                searchList.financingState = this.searchList.financingState; //融资状态
+                searchList.listed = this.searchList.listed; //上市信息
+                searchList.phone = this.searchList.phone; //手机号码
+                searchList.telephone = this.searchList.telephone; //固定电话
+                searchList.email = this.searchList.email; //公司邮箱
+                searchList.website = this.searchList.website; //公司网站
+                searchList.AddressKeyword = this.searchList.AddressKeyword; //地址
+                searchList.country_id = this.searchList.country; //省
+                searchList.city_id = this.searchList.city; //市
+                searchList.area_id = this.searchList.area; //区
                 searchList.page = this.page;
                 searchList.limit = this.limit;
                 console.log(searchList)
@@ -559,7 +564,6 @@
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerOne/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
-                    // url:  _this.$store.state.defaultHttp+ 'customerOne/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId+'&secondid='+_this.$store.state.deptid+'&deptid='+_this.$store.state.insid,
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     console.log(res)
@@ -730,7 +734,7 @@
     }
     .searchList{
         flex: 0 0 31%;
-        margin: 8px;
+        /* margin: 8px; */
     }
     .searchList1{
         width: 100%;

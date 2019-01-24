@@ -44,17 +44,39 @@ body,
     overflow: hidden;
     overflow-x: hidden; overflow-y: auto; 
 }
-.myForm > .el-form-item{
+.myForm > .el-form-item,.clueForm > .el-form-item,.auxForm > .el-form-item{
     margin-bottom: 12px;
 }
 .searchList{
-    width: 240px;
-    margin: 5px 5px 5px 0px;
+    width: 100%;
+    margin: 8px;
     float: left;
 }
-.searchList .el-radio__inner{
+.searchList .el-radio__inner,.radioList .el-radio__input{
+    display: none !important;
     border:none !important;
     width: 0;
+}
+.radioList{
+    margin-left: 8px;
+}
+.radioList{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+}
+.radioList > .el-radio-group{
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+.radioList > .el-radio-group > .el-radio{
+    flex: 0 0 10%;
+    line-height: 30px;
 }
 .nameList{
     display: inline-block;
@@ -63,7 +85,7 @@ body,
     padding-right: 30px;
     font-size: 14px;
     color: #242424;
-    line-height: 14px;
+    line-height: 30px;
 }
 .el-table th {
     background: #eef1f6 
