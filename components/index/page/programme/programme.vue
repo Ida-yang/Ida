@@ -14,11 +14,16 @@
         </div>
         <div class="centercontent"></div>
         <div class="rolerightcontent">
-            <div class="searchList" style="width:100%;">
-                <el-input v-model="searchList.searchName" placeholder="方案名称" style="width:300px;"></el-input>
-                &nbsp;&nbsp;
-                <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
+            <br>
+            <div class="radioList">
+                <el-radio-group v-model="searchList.state">
+                    <span class="nameList">方案状态：</span>
+                    <el-radio :label="nullvalue" @change="search()">全部状态</el-radio>
+                    <el-radio label="启用" @change="search()">启用</el-radio>
+                    <el-radio label="禁止" @change="search()">禁止</el-radio>
+                </el-radio-group>
             </div>
+            <br>
             <div class="entry">
                 <el-button class="btn" size="mini" @click="handledeletes()">删除</el-button>
                 <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
@@ -41,7 +46,7 @@
             </div>
             <el-table
                 :data="tableData"
-                :default-sort = "{prop:'private_id',order: 'descending'}"
+                :default-sort = "{prop:'createTime',order: 'descending'}"
                 ref="multipleTable"
                 border
                 stripe
@@ -54,13 +59,13 @@
                     align="center"
                     type="selection"
                     width="45"
-                    scope.row.private_id
-                    prop="private_id"
+                    scope.row.id
+                    prop="id"
                     @selection-change="selectInfo"
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="private_number"
+                    prop="projectName"
                     fixed
                     v-if="showmingcheng"
                     header-align="left"
@@ -68,10 +73,14 @@
                     min-width="150"
                     label="方案名称"
                     sortable>
+                    <template slot-scope="scope">
+                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                            {{scope.row.projectName}}
+                        </div>
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="private_employee"
-                    fixed
+                    prop="time"
                     v-if="shownianfen"
                     header-align="left"
                     align="left"
@@ -80,7 +89,7 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="name"
+                    prop="private_employee"
                     v-if="showfuzeren"
                     header-align="left"
                     align="left"
@@ -89,7 +98,7 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="private_phone"
+                    prop="deptname"
                     v-if="showbumen"
                     header-align="left"
                     align="left"
@@ -98,7 +107,7 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="private_email"
+                    prop="parentname"
                     v-if="showjigou"
                     header-align="left"
                     align="left"
@@ -107,21 +116,20 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="deptname"
-                    show-overflow-tooltip
+                    prop="createTime"
                     v-if="showshijian"
                     header-align="left"
                     align="left"
-                    min-width="100"
+                    min-width="110"
                     label="创建时间"
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="parentname"
+                    prop="state"
                     v-if="showzhuangtai"
                     header-align="left"
                     align="left"
-                    min-width="180"
+                    min-width="80"
                     label="状态"
                     sortable>
                 </el-table-column>
@@ -156,38 +164,26 @@
         <el-dialog
             title="添加方案"
             :visible.sync="dialogVisible"
-            width="40%">
-                <el-form ref="newform" :model="newform" label-width="80px" :rules="rules">
-                    <el-form-item prop="second_id" label="所属部门">
-                        <el-input v-model="newform.secondname" :disabled="true"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="private_phone" label="手机号码">
-                        <el-input type="number" v-model="newform.private_phone" placeholder="请输入方案手机号码"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="private_password" label="密码">
-                        <el-input type="password" v-model="newform.private_password" placeholder="请输入方案密码"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="private_passwords" label="确认密码">
-                        <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入方案密码"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="role_id" label="角色">
-                        <el-select v-model="newform.role_id" placeholder="请选择方案角色">
-                            <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item prop="private_employee" label="方案名称">
-                        <el-input v-model="newform.private_employee" placeholder="请输入方案名称"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="private_state" label="方案状态">
-                        <el-radio v-model="newform.private_state" label="启用">启用</el-radio>
-                        <el-radio v-model="newform.private_state" label="禁止">禁止</el-radio>
-                    </el-form-item>
-                    <el-form-item prop="private_email" label="邮箱">
-                        <el-input type="email" v-model="newform.private_email" placeholder="请输入方案邮箱"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="private_QQ" label="QQ">
-                        <el-input type="number" v-model="newform.private_QQ" placeholder="请输入方案QQ"></el-input>
-                    </el-form-item>
+            width="40%"
+            class="dialogform">
+            <el-form ref="newform" :model="newform" label-width="80px" :rules="rules">
+                <el-form-item prop="second_id" label="所属部门">
+                    <el-input v-model="newform.secondname" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item prop="projectName" label="方案名称">
+                    <el-input v-model="newform.projectName" placeholder="请输入方案名称"></el-input>
+                </el-form-item>
+                <el-form-item prop="time" label="年份">
+                    <el-date-picker format="yyyy" value-format="yyyy" v-model="newform.time" type="year" placeholder="选择年份">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item prop="private_employee" label="负责人">
+                    <el-input v-model="newform.private_employee" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item prop="state" label="方案状态">
+                    <el-radio v-model="newform.state" label="启用">启用</el-radio>
+                    <el-radio v-model="newform.state" label="禁用">禁用</el-radio>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -197,37 +193,25 @@
         <el-dialog
             title="修改方案"
             :visible.sync="dialogVisible2"
-            width="40%">
+            width="40%"
+            class="dialogform">
             <el-form ref="newform" :model="newform" :rules="rules" label-width="80px">
                 <el-form-item prop="second_id" label="所属部门">
                     <el-input v-model="newform.secondname" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item prop="private_phone" label="手机号码">
-                    <el-input type="number" v-model="newform.private_phone" :disabled="true" placeholder="请输入方案手机号码"></el-input>
+                <el-form-item prop="projectName" label="方案名称">
+                    <el-input v-model="newform.projectName" placeholder="请输入方案名称"></el-input>
                 </el-form-item>
-                <el-form-item prop="private_password" label="密码">
-                    <el-input type="password" v-model="newform.private_password" placeholder="请输入方案密码"></el-input>
+                <el-form-item prop="time" label="年份">
+                    <el-date-picker format="yyyy" value-format="yyyy" v-model="newform.time" type="year" placeholder="选择年份" style="width:100%;">
+                    </el-date-picker>
                 </el-form-item>
-                <el-form-item prop="private_passwords" label="确认密码">
-                    <el-input type="password" v-model="newform.private_passwords" placeholder="请再次输入方案密码"></el-input>
+                <el-form-item prop="private_employee" label="负责人">
+                    <el-input v-model="newform.private_employee" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item prop="role_id" label="角色">
-                    <el-select v-model="newform.role_id" placeholder="请选择方案角色">
-                        <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item prop="private_employee" label="方案名称">
-                    <el-input v-model="newform.private_employee" placeholder="请输入方案名称"></el-input>
-                </el-form-item>
-                <el-form-item prop="private_state" label="方案状态">
-                    <el-radio v-model="newform.private_state" label="启用">启用</el-radio>
-                    <el-radio v-model="newform.private_state" label="禁止">禁止</el-radio>
-                </el-form-item>
-                <el-form-item prop="private_email" label="邮箱">
-                    <el-input type="email" v-model="newform.private_email" placeholder="请输入方案邮箱"></el-input>
-                </el-form-item>
-                <el-form-item prop="private_QQ" label="QQ">
-                    <el-input type="number" v-model="newform.private_QQ" placeholder="请输入方案QQ"></el-input>
+                <el-form-item prop="state" label="方案状态">
+                    <el-radio v-model="newform.state" label="启用">启用</el-radio>
+                    <el-radio v-model="newform.state" label="禁用">禁用</el-radio>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -260,7 +244,7 @@
             const validatePass = (rule, value, callback) => {
                 if (value === '') {
                 callback(new Error('请再次输入密码'));
-                } else if (value !== this.newform.private_password) {
+                } else if (value !== this.newform.state) {
                 callback(new Error('两次输入密码不一致!'));
                 } else {
                 callback();
@@ -273,25 +257,23 @@
                     children:'next',
                 },
                 newform:{
+                    // deptid:null,
                     second_id:null,
                     secondname:null,
-                    private_id:null,
-                    role_id:null,
-                    private_phone:null,
-                    private_password:null,
-                    private_passwords:null,
+                    id:null,
+                    projectName:null,
+                    time:null,
+                    state:'启用',
                     private_employee:null,
-                    private_state:'启用',
-                    private_email:null,
-                    private_QQ:null,
+                    createTime:null,
                 },
                 searchList:{
-                    searchName:null,
+                    state:null,
                     deptid:null,
                 },
                 checklist:['方案名称','年份','负责人','部门','机构','创建时间','状态'],
                 idArr:{
-                    private_id:null,
+                    id:null,
                 },
                 roleList:null,
                 clickdata:null,
@@ -310,15 +292,13 @@
                 dialogVisible:false,
                 dialogVisible2:false,
                 rules: {
-                    role_id : [{ required: true, message: '方案角色不能为空', trigger: 'blur' },],
-                    private_employee : [{ required: true, message: '方案名称不能为空', trigger: 'blur' },],
-                    private_phone : [{ required: true, max: 11, min: 11, message: '请输入11位手机号码', trigger: 'blur' }],
-                    private_password : [{ required: true, message: '密码不能为空', trigger: 'blur' },],
-                    private_passwords : [{ required: true, validator: validatePass, trigger: 'blur' },],
-                    private_state : [{ required: true, message: '请选择方案状态', trigger: 'blur' },],
+                    projectName : [{ required: true, message: '方案名称不能为空', trigger: 'blur' },],
+                    time : [{ required: true, message: '请选择年份', trigger: 'blur' }],
                 },
+                nullvalue:null,
             }
         },
+        //获取机构部门树型结构
         beforeCreate(){
             let _this = this
             axios({
@@ -341,41 +321,32 @@
                 let pageInfo = {}
                 pageInfo.page = this.page
                 pageInfo.limit = this.limit
-                pageInfo.searchName = this.searchList.searchName
+                pageInfo.state = this.searchList.state
                 pageInfo.deptid = this.searchList.deptid
-                let data = {}
-                data.deptid = this.searchList.deptid
+                console.log(pageInfo)
 
+                //获取所有方案
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'getPrivateUserAll.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'project/getProject.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.programmeList = res.data.map.success
                     _this.$store.state.programmeListnumber = res.data.count
                 }).catch(function(err){
                     console.log(err);
                 });
-                axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(data)
-                }).then(function(res){
-                    // console.log(res.data)
-                    _this.roleList = res.data
-                }).catch(function(err){
-                    console.log(err);
-                });
             },
             handleNodeClick(data){
-                // console.log(data)
+                console.log(data)
                 this.searchList.deptid = data.deptid
                 // console.log(this.searchList)
                 this.clickdata = data
                 // console.log(this.clickdata)
                 this.newform.second_id = data.deptid
                 this.newform.secondname = data.deptname
+                // this.newform.deptid = data.parentid
                 this.$options.methods.reloadTable.bind(this)(true);
             },
             selectInfo(val){
@@ -383,35 +354,29 @@
                 let arr = val;
                 let newArr = [new Array()];
                 arr.forEach((item) => {
-                    if(item.private_id != 0){
-                        newArr.push(item.private_id)
+                    if(item.id != 0){
+                        newArr.push(item.id)
                     }
                 });
-                // console.log(newArr)
-                // var value = newArr.shift()
-                this.idArr.private_id = newArr;
-                console.log(this.idArr.private_id)
+                this.idArr.id = newArr;
+                console.log(this.idArr.id)
                 
             },
             //方案添加
             handleAdd(){
                 let _this = this
                 // console.log(this.clickdata.next)
-                this.newform.role_id = null
-                this.newform.private_phone = null
-                this.newform.private_password = null
-                this.newform.private_passwords = null
-                this.newform.private_employee = null
-                this.newform.private_state = null
-                this.newform.private_email = null
-                this.newform.private_QQ = null
 
                 if(!this.clickdata){
                     _this.$message({
                         message:'请先选择部门，再添加方案',
                         type:'info'
                     })
-                }else if(this.clickdata.next == ''){
+                    }else if(this.clickdata.next == ''){
+                    this.newform.projectName = null
+                    this.newform.time = null
+                    this.newform.private_employee = this.$store.state.user
+                    // this.newform.state = '启用'
                     this.dialogVisible = true
                 }else{
                     _this.$message({
@@ -425,63 +390,25 @@
                 let _this = this;
                 let qs = require('querystring')
                 let data = {}
-                data.second_id = this.newform.second_id
-                data.role_id = this.newform.role_id
-                data.private_phone = this.newform.private_phone
-                data.private_password = this.newform.private_password
-                data.private_employee = this.newform.private_employee
-                data.private_state = this.newform.private_state
-                data.private_email = this.newform.private_email
-                data.private_QQ = this.newform.private_QQ
+                // data.deptid = this.newform.deptid
+                data.secondid = this.newform.second_id
+                data.projectName = this.newform.projectName
+                data.time = this.newform.time+'-01-01'
+                data.state = this.newform.state
                 console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
-                    if(!item.private_state){
+                    if(!item.projectName){
                         _this.$message({
-                            message: "请选择方案状态",
+                            message: "方案名称不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
-                    if(!item.private_employee){
+                    if(!item.time){
                         _this.$message({
-                            message: "方案姓名不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.role_id){
-                        _this.$message({
-                            message: "方案角色不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(item.private_passwords !== item.private_password){
-                        _this.$message({
-                            message: "两次输入的密码不一致",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.private_passwords){
-                        _this.$message({
-                            message: "确认密码不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.private_password){
-                        _this.$message({
-                            message: "方案密码不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.private_phone){
-                        _this.$message({
-                            message: "方案手机号码不能为空",
+                            message: "年份不能为空",
                             type: 'error'
                         });
                         flag = true;
@@ -491,7 +418,7 @@
 
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'insertPrivateUser.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'project/insertProject.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data)
                 }).then(function(res){
                     console.log(res)
@@ -518,86 +445,43 @@
                 let _this = this
                 console.log(row)
                 let data = {}
-                data.deptid = row.second_id
-                this.newform.private_id = row.private_id
-                this.newform.second_id = row.second_id
+                this.newform.id = row.id
+                this.newform.secondid = row.second_id
                 this.newform.secondname = row.deptname
-                this.newform.role_id = row.role_id
-                this.newform.private_phone = row.private_phone
-                this.newform.private_password = row.private_password
-                this.newform.private_passwords = row.private_password
+                this.newform.deptid = row.deptid
+                this.newform.projectName = row.projectName
+                this.newform.time = row.time+'-01-01'
+                this.newform.state = row.state
                 this.newform.private_employee = row.private_employee
-                this.newform.private_state = row.private_state
-                this.newform.private_email = row.private_email
-                this.newform.private_QQ = row.private_QQ
+                this.newform.createTime = row.createTime
                 this.dialogVisible2 = true
-                axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(data)
-                }).then(function(res){
-                    // console.log(res.data)
-                    _this.roleList = res.data
-                }).catch(function(err){
-                    console.log(err);
-                });
             },
             //方案修改提交按钮
             updateprogramme(){
                 let _this = this;
                 let qs = require('querystring')
                 let data = {}
+                data.id = this.newform.id
+                data.deptid = this.newform.deptid
                 data.second_id = this.newform.second_id
-                data.private_id = this.newform.private_id
-                data.role_id = this.newform.role_id
-                data.private_phone = this.newform.private_phone
-                data.private_password = this.newform.private_password
-                data.private_employee = this.newform.private_employee
-                data.private_state = this.newform.private_state
-                data.private_email = this.newform.private_email
-                data.private_QQ = this.newform.private_QQ
+                data.projectName = this.newform.projectName
+                data.time = this.newform.time
+                data.state = this.newform.state
+                data.createTime = this.newform.createTime
                 console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
-                    if(!item.private_state){
+                    if(!item.projectName){
                         _this.$message({
-                            message: "请选择方案状态",
+                            message: "方案名称不能为空",
                             type: 'error'
                         });
                         flag = true;
                     }
-                    if(!item.private_employee){
+                    if(!item.time){
                         _this.$message({
-                            message: "方案姓名不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.role_id){
-                        _this.$message({
-                            message: "方案角色不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(item.private_passwords !== item.private_password){
-                        _this.$message({
-                            message: "两次输入的密码不一致",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.private_passwords){
-                        _this.$message({
-                            message: "确认密码不能为空",
-                            type: 'error'
-                        });
-                        flag = true;
-                    }
-                    if(!item.private_password){
-                        _this.$message({
-                            message: "方案密码不能为空",
+                            message: "年份不能为空",
                             type: 'error'
                         });
                         flag = true;
@@ -607,7 +491,7 @@
                 
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'updatePrivate.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'project/updateProject.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data)
                 }).then(function(res){
                     console.log(res)
@@ -628,19 +512,27 @@
                     console.log(err);
                 });
             },
+            openDetails(index,row){
+                let detailsData = {};
+                detailsData.submitData = {"id": row.id};
+                // console.log(detailsData)
+                this.$store.state.detailsData = detailsData;
+                this.$router.push({ path: '/programmeDetails' });
+            },
             handledeletes(){
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
-                idArr.privateId = this.idArr.private_id
+                idArr.id = this.idArr.id
+                idArr.shift(0)
                 console.log(idArr)
-                _this.$confirm('确认删除到云服务器吗？', '提示', {
+                _this.$confirm('确认删除吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                     axios({
                         method: 'post',
-                        url:  _this.$store.state.defaultHttp+ 'tbPrivateToPublicUser.do?cId='+_this.$store.state.iscId,
+                        url:  _this.$store.state.defaultHttp+ 'project/deleteProject.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
                         console.log(res.data)
@@ -665,15 +557,15 @@
                 let _this = this;
                 let qs =require('querystring')
                 let idArr = [];
-                idArr.privateId = row.private_id
+                idArr.id = row.id
                 console.log(idArr)
-                _this.$confirm('确认删除 ['+ row.private_employee +'] 吗？', '提示', {
+                _this.$confirm('确认删除 ['+ row.projectName +'] 吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                     axios({
                         method: 'post',
-                        url:  _this.$store.state.defaultHttp+ 'tbPrivateToPublicUser.do?cId='+_this.$store.state.iscId,
+                        url:  _this.$store.state.defaultHttp+ 'project/deleteProject.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
                         console.log(res)
@@ -757,5 +649,11 @@
         height: 100%;
         float: left;
         box-sizing: border-box;
+    }
+    .dialogform .el-form-item{
+        width: 90%;
+    }
+    .dialogform .el-form-item .el-input{
+        width: 100%;
     }
 </style>

@@ -111,6 +111,16 @@
                             auto-complete="off"
                             @keyup.enter.native="submit">
                         </el-input>
+                        <!-- 注册资金 -->
+                        <el-input 
+                            v-else-if="item.inputModel == 'capital'"
+                            type="number"
+                            :value="myForm[item.inputModel]"
+                            @input="handleoninput($event, item.inputModel)"
+                            style="width:90%;" 
+                            auto-complete="off">
+                            <span slot="suffix" style="margin-right:20px">万元</span>
+                        </el-input>
                         <!-- 注册时间 -->
                         <el-date-picker
                             v-else-if="item.type && item.type == 'date'"
@@ -480,7 +490,11 @@
                     subData.csId = _this.addOrUpdateData.submitData.csId;
                 }
                 let createForm = _this.addOrUpdateData.createForm;
+                let assistForm = _this.addOrUpdateData.assistForm;
                 let flag = false;
+                assistForm.forEach(item => {
+                    subData[item.inputModel] = _this.myForm[item.inputModel]
+                });
                 createForm.forEach(item => {
                     subData[item.inputModel] = _this.myForm[item.inputModel];
                     // console.log(_this.myForm)

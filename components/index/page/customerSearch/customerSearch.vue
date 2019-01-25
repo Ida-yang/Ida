@@ -53,7 +53,7 @@
             </div>
             <div class="searchList">
                 <span class="searchtitle">行业：</span>
-                <el-select v-model="searchList.industryType" placeholder="行业" clearable class="filter-item">
+                <el-select v-model="searchList.industryType" placeholder="行业" clearable class="filter-item" @change="showdetailindstry">
                     <el-option v-for="item in industryTypeList" :key="item.id" :label="item.name" :value="item.id"/>
                 </el-select>
             </div>
@@ -138,7 +138,6 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <!-- <el-checkbox class="checkone" @change="showList()" v-for="item in showcheck" :label="item.label" :key="item.index"></el-checkbox> -->
                 <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
                 <el-checkbox class="checkone" @change="showaddr()" label="公司地址"></el-checkbox>
                 <el-checkbox class="checkone" @change="showcap()" label="注册资金"></el-checkbox>
@@ -585,8 +584,8 @@
                     console.log(err);
                 });
             },
-            showList(){
-                
+            showdetailindstry(val){
+                console.log(val)
             },
             showname(){
                 this.showmingcheng = !this.showmingcheng

@@ -395,7 +395,7 @@
 <style>
     .content1{
         background-color: #f7f7f7;
-        min-height: 100%;
+        height: auto;
     }
     .number{
         padding: 0;

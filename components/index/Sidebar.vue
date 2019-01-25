@@ -146,21 +146,6 @@
                                 index: 'socialMarketing',
                                 title: '社交营销',
                             },
-                            {
-                                index: 'activity',
-                                title: '活动页面',
-                            },
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-new-cangkumingcheng',
-                        index: '5',
-                        title: '方案',
-                        subs: [
-                            {
-                                index: 'programme',
-                                title: '方案/目标',
-                            },
                         ]
                     },
                 ],
@@ -182,6 +167,10 @@
                             {
                                 index: 'basicset',
                                 title: '辅助资料'
+                            },
+                            {
+                                index: 'programme',
+                                title: '方案/目标',
                             },
                             {
                                 index: 'suibian',

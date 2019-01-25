@@ -1,7 +1,7 @@
 <template>
     <!-- 客户详情页 -->
     <el-row class="content1" :gutter="10">
-        <el-col :span="18">
+        <el-col :span="18" style="padding-left:0;padding-right:20px;">
             <div class="top">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
@@ -9,7 +9,7 @@
                         <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="TocustomerPool()">转移至客户池</el-button>
                     </div>
-                    <div class="text item" v-show="thisshow">
+                    <div class="text item">
                         <ul>
                             <li>姓名：<span>{{contacts.coName}}</span></li>
                             <li>手机：<span>{{contacts.phone}}</span></li>
@@ -24,7 +24,31 @@
                         </ul>
                         <p>&nbsp;</p>
                     </div>
-                    <div v-show="!thisshow"></div>
+                </el-card>
+            </div>
+            <div class="middle">
+                <el-card class="box-card" v-model="customerdetail" v-show="!thisshow">
+                    <div slot="header" class="clearfix">
+                        <span>辅助信息</span>
+                    </div>
+                    <div class="text item">
+                        <ul>
+                            <br>
+                            <li>法人代表：<span>{{customerdetail.representative}}</span></li>
+                            <li>行业：<span>{{customerdetail.industryType}}</span></li>
+                            <li>社会信用代码：<span>{{customerdetail.creditCode}}</span></li>
+                            <li>公司类型：<span>{{customerdetail.companyType}}</span></li>
+                            <li>企业规模：<span>{{customerdetail.enterpriseScale}}</span></li>
+                            <li>注册号：<span>{{customerdetail.registrationNumber}}</span></li>
+                            <li>融资状态：<span>{{customerdetail.financingState}}</span></li>
+                            <li>营业状态：<span>{{customerdetail.operatingState}}</span></li>
+                            <li>组织机构代码：<span>{{customerdetail.organizationCode}}</span></li>
+                            <li>注册资金：<span>{{customerdetail.capital}}</span></li>
+                            <li>登记机关：<span>{{customerdetail.registrationAuthority}}</span></li>
+                            <li>成立时间：<span>{{customerdetail.date}}</span></li>
+                        </ul>
+                        <p>&nbsp;</p>
+                    </div>
                 </el-card>
             </div>
             <div class="bottom">
@@ -74,7 +98,7 @@
                             <li class="verticalline"></li>
                             <li class="recordcontent">
                                 <div>
-                                    <p>{{item.private_employee}}&nbsp;&nbsp;&nbsp;{{item.createTime}}&nbsp;&nbsp;&nbsp;{{item.followType}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
+                                    <p>{{item.private_employee}}&nbsp;&nbsp;于{{item.createTime}}&nbsp;&nbsp;通过{{item.followType}}更新了一条记录&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
                                         &nbsp;&nbsp;&nbsp;<span>并约定下次联系时间：{{item.contactTime}}</span>
                                         &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} &nbsp;&nbsp;&nbsp;{{item.inputType}}</span>
                                     </p>
@@ -708,7 +732,7 @@
 <style>
     .content1{
         background-color: #f7f7f7;
-        min-height: 100%;
+        height: auto;
     }
     .number{
         padding: 0;
@@ -721,6 +745,11 @@
     .top{
         height: auto;
         background-color: #fff;
+    }
+    .middle{
+        height: auto;
+        background-color: #fff;
+        margin-top: 20px;
     }
     .bottom{
         height: 100%;

@@ -360,7 +360,6 @@
                 addOrUpdateData.createForm = [
                     {"label":"合同类型","inputModel":"contract_type","type":"select","options":[
                         {"okey":'0',"olabel":"销售合同","ovalue":"销售合同"},
-                        {"okey":'1',"olabel":"采购合同","ovalue":"采购合同"},
                         {"okey":'2',"olabel":"服务合同","ovalue":"服务合同"},
                         {"okey":'3',"olabel":"代理合同","ovalue":"代理合同"},
                         {"okey":'4',"olabel":"其他","ovalue":"其他"},
@@ -396,7 +395,12 @@
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [
-                    {"label":"合同类型","inputModel":"contract_type","type":"select",},
+                    {"label":"合同类型","inputModel":"contract_type","type":"select","options":[
+                        {"okey":'0',"olabel":"销售合同","ovalue":"销售合同"},
+                        {"okey":'2',"olabel":"服务合同","ovalue":"服务合同"},
+                        {"okey":'3',"olabel":"代理合同","ovalue":"代理合同"},
+                        {"okey":'4',"olabel":"其他","ovalue":"其他"},
+                    ]},
                     {"label":"合同编号","inputModel":"contract_number","prop":"contract_number",},
                     {"label":"合同名称","inputModel":"contract_name",},
                     {"label":"客户","inputModel":"customerpool_id","type":"select"},

@@ -2,7 +2,7 @@
     <!-- 线索详情页 -->
     <el-row class="content1" :gutter="10">
         <!-- <p>线索详情页</p> -->
-        <el-col :span="18">
+        <el-col :span="18" style="padding-left:0;padding-right:20px;">
             <div class="top">
                 <el-card class="box-card" v-model="cluedetail">
                     <div slot="header" class="clearfix">
@@ -25,30 +25,34 @@
                             <li>备注：<span>{{cluedetail.remark}}</span></li>
                         </ul>
                     </div>
-                    <div v-show="!thisshow"></div>
+                    <!-- <div v-show="!thisshow"></div> -->
                 </el-card>
             </div>
-                <el-card class="box-card" v-model="cluedetail" v-show="thisshow" style="margin-top: 20px;">
+            <div class="middle">
+                <el-card class="box-card" v-model="cluedetail" v-show="thisshow">
                     <div slot="header" class="clearfix">
                         <span>辅助信息</span>
                     </div>
                     <div class="text item">
                         <ul>
                             <br>
-                            <li>姓名：<span>{{contacts.coName}}</span></li>
-                            <li>手机：<span>{{contacts.phone}}</span></li>
-                            <li>电话：<span>{{contacts.telephone}}</span></li>
-                            <li>邮箱：<span>{{contacts.email}}</span></li>
-                            <li>QQ：<span>{{contacts.qq}}</span></li>
-                            <li>微信：<span>{{contacts.wechat}}</span></li>
-                            <li>地址：<span>{{cluedetail.address}}</span></li>
-                            <li>职务：<span>{{contacts.identity}}</span></li>
-                            <li>性别：<span>{{contacts.sex}}</span></li>
-                            <li>备注：<span>{{cluedetail.remark}}</span></li>
+                            <li>法人代表：<span>{{cluedetail.representative}}</span></li>
+                            <li>登记机关：<span>{{cluedetail.registrationAuthority}}</span></li>
+                            <li>统一社会信用代码：<span>{{cluedetail.creditCode}}</span></li>
+                            <li>注册号：<span>{{cluedetail.registrationNumber}}</span></li>
+                            <li>组织机构代码：<span>{{cluedetail.organizationCode}}</span></li>
+                            <li>注册资金：<span>{{cluedetail.capital}}</span></li>
+                            <li>注册时间：<span>{{cluedetail.date}}</span></li>
+                            <li>行业：<span>{{cluedetail.industryType}}</span></li>
+                            <li>公司类型：<span>{{cluedetail.companyType}}</span></li>
+                            <li>企业规模：<span>{{cluedetail.enterpriseScale}}</span></li>
+                            <li>融资状态：<span>{{cluedetail.financingState}}</span></li>
+                            <li>营业状态：<span>{{cluedetail.operatingState}}</span></li>
                         </ul>
+                        <p>&nbsp;</p>
                     </div>
-                    <div v-show="!thisshow"></div>
                 </el-card>
+            </div>
             <div class="bottom">
                 <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
                     <el-tab-pane label="跟进记录" name="first">
@@ -96,7 +100,7 @@
                             <li class="verticalline"></li>
                             <li class="recordcontent">
                                 <div>
-                                    <p>{{item.private_employee}}&nbsp;&nbsp;&nbsp;{{item.createTime}}&nbsp;&nbsp;&nbsp;{{item.followType}}&nbsp;&nbsp;&nbsp;更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
+                                    <p>{{item.private_employee}}于{{item.createTime}}&nbsp;&nbsp;&nbsp;通过{{item.followType}}更新了一条记录&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客户联系人为：&nbsp;{{item.contacts[0].name}}
                                         &nbsp;&nbsp;&nbsp;<span>并约定下次联系时间：{{item.contactTime}}</span>
                                         &nbsp;&nbsp;&nbsp;<span>状态为：{{item.state}} &nbsp;&nbsp;&nbsp;{{item.inputType}}</span> 
                                     </p>
@@ -332,7 +336,7 @@
                     method:'get',
                     url:_this.$store.state.defaultHttp+'getFollowStaff.do?cId='+_this.$store.state.iscId+'&customertwoId='+this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.record = res.data.map.success
                     // if(_this.record !== ''){
                     //     _this.followform.state = _this.record[0].state
@@ -544,7 +548,7 @@
 <style>
     .content1{
         background-color: #f7f7f7;
-        height: 100%;
+        height: auto;
     }
     .number{
         padding: 0;
@@ -557,6 +561,11 @@
     .top{
         height: auto;
         background-color: #fff;
+    }
+    .middle{
+        height: auto;
+        background-color: #fff;
+        margin-top: 20px;
     }
     .bottom{
         height: 100%;
