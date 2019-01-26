@@ -2,7 +2,7 @@
     <!-- 线索详情页 -->
     <el-row class="content1" :gutter="10">
         <!-- <p>线索详情页</p> -->
-        <el-col :span="18" style="padding-left:0;padding-right:20px;">
+        <el-col :span="18">
             <div class="top">
                 <el-card class="box-card" v-model="cluedetail">
                     <div slot="header" class="clearfix">
@@ -37,17 +37,17 @@
                         <ul>
                             <br>
                             <li>法人代表：<span>{{cluedetail.representative}}</span></li>
-                            <li>登记机关：<span>{{cluedetail.registrationAuthority}}</span></li>
-                            <li>统一社会信用代码：<span>{{cluedetail.creditCode}}</span></li>
-                            <li>注册号：<span>{{cluedetail.registrationNumber}}</span></li>
-                            <li>组织机构代码：<span>{{cluedetail.organizationCode}}</span></li>
-                            <li>注册资金：<span>{{cluedetail.capital}}</span></li>
-                            <li>注册时间：<span>{{cluedetail.date}}</span></li>
                             <li>行业：<span>{{cluedetail.industryType}}</span></li>
+                            <li>社会信用代码：<span>{{cluedetail.creditCode}}</span></li>
                             <li>公司类型：<span>{{cluedetail.companyType}}</span></li>
                             <li>企业规模：<span>{{cluedetail.enterpriseScale}}</span></li>
+                            <li>注册号：<span>{{cluedetail.registrationNumber}}</span></li>
                             <li>融资状态：<span>{{cluedetail.financingState}}</span></li>
                             <li>营业状态：<span>{{cluedetail.operatingState}}</span></li>
+                            <li>组织机构代码：<span>{{cluedetail.organizationCode}}</span></li>
+                            <li>注册资金：<span>{{cluedetail.capital}}</span></li>
+                            <li>登记机关：<span>{{cluedetail.registrationAuthority}}</span></li>
+                            <li>成立时间：<span>{{cluedetail.date}}</span></li>
                         </ul>
                         <p>&nbsp;</p>
                     </div>

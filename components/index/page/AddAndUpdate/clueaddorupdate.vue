@@ -45,30 +45,30 @@
                             <el-option v-for="o in cuesList" :key="o.id" :label="o.typeName" :value="o.id"></el-option>
                         </el-select>
                         <el-select 
-                            v-else-if="item.inputModel == 'country'"
+                            v-else-if="item.inputModel == 'countryid'"
                             v-model="myForm[item.inputModel]"
                             @change="choseProvince"
                             :placeholder="item.placeholder"
                             style="width:28%;">
-                            <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                            <el-option v-for="o in Provinces" :key="o.id" :label="o.name" :value="o.id"></el-option>
                         </el-select>
                         <el-select
                             class="cityseat"
-                            v-else-if="item.inputModel == 'city'"
+                            v-else-if="item.inputModel == 'cityid'"
                             v-model="myForm[item.inputModel]"
                             @change="choseCity"
                             :placeholder="item.placeholder"
                             style="width:28%;">
-                            <el-option v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                            <el-option v-for="o in cityList" :key="o.id" :label="o.name" :value="o.id"></el-option>
                         </el-select>
                         <el-select
                             class="areaseat"
-                            v-else-if="item.inputModel == 'area'"
+                            v-else-if="item.inputModel == 'areaid'"
                             v-model="myForm[item.inputModel]"
                             @change="choseBlock"
                             :placeholder="item.placeholder"
                             style="width:28%;">
-                            <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                            <el-option v-for="o in areaList" :key="o.id" :label="o.name" :value="o.id"></el-option>
                         </el-select>
                         <div v-else-if="item.inputModel == 'sex'">
                             <el-radio v-model="myForm[item.inputModel]" @input="handleInput($event, item.inputModel)" label="男">男</el-radio>
@@ -271,6 +271,10 @@
                 block:[],
                 cityList: [],
                 areaList: [],
+                countryid:null,
+                cityid:null,
+                areaid:null,
+
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
@@ -299,6 +303,7 @@
             financingStateList.comboType = 'FinancingState'
             let listedList = {} 
             listedList.comboType = 'Listed'
+
             //行业
             axios({
                 method: 'post',
@@ -366,14 +371,60 @@
                 console.log(err);
             });
         },
-        created(){
-            this.getCityData()
-        },
+        // created(){
+        //     this.getCityData()
+        // },
         mounted() {
             this.loadData();
             this.loadTable();
+            this.loadCountry()
         },
         methods:{
+            loadCountry(){
+                let _this = this
+                let qs =require('querystring')
+                let country = {}
+                if(this.cityid){
+                    country.id = this.cityid
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                        data: qs.stringify(country),
+                    }).then(function(res){
+                        // console.log(res.data)
+                        _this.areaList=res.data;
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                }
+                if(this.countryid){
+                    country.id = this.countryid
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                        data: qs.stringify(country),
+                    }).then(function(res){
+                        // console.log(res.data)
+                        _this.cityList=res.data;
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                }
+                country.id = ''
+
+                //省/市/区
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                    data: qs.stringify(country),
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.Provinces=res.data;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
+            },
             //获取右边表格和线索来源
             loadTable(){
                 let _this = this
@@ -384,6 +435,8 @@
                 // console.log(pageInfo)
                 let data = {}
                 data.type = '客户来源'
+                
+                
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerOne/query.do',
@@ -409,6 +462,9 @@
             //加载或重载页面
             loadData() {
                 this.addOrUpdateData = this.$store.state.addOrUpdateData;
+                this.countryid = this.addOrUpdateData.setForm.country
+                this.cityid = this.addOrUpdateData.setForm.city
+                this.areaid = this.addOrUpdateData.setForm.area
                 // console.log(this.addOrUpdateData)
 
                 // 设置默认值
@@ -436,7 +492,10 @@
                             this.myForm[item.inputModel] = setForm[item.inputModel];
                         }
                     });
-                    // console.log(this.myForm);
+                    this.myForm.countryid = this.addOrUpdateData.setForm.country
+                    this.myForm.cityid = this.addOrUpdateData.setForm.city
+                    this.myForm.areaid = this.addOrUpdateData.setForm.area
+                    console.log(this.myForm);
                     this.$emit('input', this.myForm);
                 }
             },
@@ -622,30 +681,23 @@
             },
             // 选省
             choseProvince(e) {
-                for (var index2 in this.Provinces) {
-                    if (e === this.Provinces[index2].value) {
-                        this.cityList = this.Provinces[index2].children
-                        this.areaList =this.Provinces[index2].children[0].children
-                        this.E = this.areaList[0].id
-                    }
-                }
-                // console.log(this.myForm.country)
+                let _this = this
+                this.myForm.cityid = ''
+                this.myForm.areaid = ''
+                this.countryid = e
+                _this.$options.methods.loadCountry.bind(_this)(true);
             },
             // 选市
             choseCity(e) {
-                for (var index3 in this.Citys) {
-                    if (e === this.Citys[index3].value) {
-                        this.areaList = this.Citys[index3].children
-                        this.E = this.areaList[0].id
-                        // console.log(this.E)
-                    }
-                }
-                // console.log(this.myForm.city)
+                let _this = this
+                this.myForm.areaid = ''
+                this.cityid = e
+                _this.$options.methods.loadCountry.bind(_this)(true);
             },
             // 选区
             choseBlock(e) {
                 this.E=e;
-                // console.log(this.myForm.area)
+                this.areaid = e
             },
 
             handleClick(tab, event){

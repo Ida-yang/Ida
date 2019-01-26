@@ -2,7 +2,7 @@
     <!-- 商机详情页 -->
     <el-row class="content1" :gutter="10">
         <!-- <p>商机详情页</p> -->
-        <el-col :span="18" style="padding-left:0;padding-right:20px;">
+        <el-col :span="18">
             <div class="top">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
@@ -628,9 +628,7 @@
 
 <style>
     .content1{
-        background-color: #f7f7f7;
         height: auto;
-        /* min-height: 100%; */
     }
     .number{
         padding: 0;

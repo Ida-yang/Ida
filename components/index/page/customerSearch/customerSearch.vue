@@ -34,21 +34,21 @@
                     @change="choseProvince"
                     placeholder="请选择省"
                     class="countryitem">
-                    <el-option v-for="item in Provinces" :key="item.id" :label="item.value" :value="item.value"></el-option>
+                    <el-option v-for="item in Provinces" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
                 <el-select
                     v-model="searchList.city"
                     @change="choseCity"
                     placeholder="请选择市"
                     class="countryitem">
-                    <el-option v-for="item in cityList" :key="item.id" :label="item.value" :value="item.value"></el-option>
+                    <el-option v-for="item in cityList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
                 <el-select
                     v-model="searchList.area"
                     @change="choseBlock"
                     placeholder="请选择区"
                     class="countryitem">
-                    <el-option v-for="item in areaList" :key="item.id" :label="item.value" :value="item.value"></el-option>
+                    <el-option v-for="item in areaList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </div>
             <div class="searchList">
@@ -149,6 +149,11 @@
                 <el-checkbox class="checkone" @change="showweb()" label="网站"></el-checkbox>
                 <el-checkbox class="checkone" @change="showindustry()" label="行业"></el-checkbox>
                 <el-checkbox class="checkone" @change="showScale()" label="企业规模"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcountry()" label="省/市/区"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcompany()" label="企业类型"></el-checkbox>
+                <el-checkbox class="checkone" @change="showostate()" label="经营状态"></el-checkbox>
+                <el-checkbox class="checkone" @change="showfinance()" label="融资状态"></el-checkbox>
+                <el-checkbox class="checkone" @change="showlisted()" label="上市信息"></el-checkbox>
             </el-checkbox-group>
             <!-- <el-button slot="reference" class="info-btn" type="mini">筛选列表</el-button> -->
             <el-button slot="reference" class="info-btn screen" icon="el-icon-more-outline" type="mini"></el-button>
@@ -160,7 +165,6 @@
             border
             stripe
             v-loading.fullscreen.lock="Loading"
-            :default-sort = "{order: 'ascending'}"
             style="text-align:center"
             @selection-change="selectInfo">
             <el-table-column
@@ -207,6 +211,7 @@
             </el-table-column>
             <el-table-column
                 prop="representative"
+                show-overflow-tooltip
                 v-if="showfaren"
                 header-align="left"
                 align="left"
@@ -275,6 +280,51 @@
                 width="110"
                 sortable>
             </el-table-column>
+            <el-table-column
+                v-if="showquyu"
+                header-align="left"
+                align="left"
+                label="省/市/区"
+                width="110"
+                sortable>
+                <template slot-scope="scope">{{scope.row.countryId}}/{{scope.row.city}}/{{scope.row.area}}</template>
+            </el-table-column>
+            <el-table-column
+                prop="company"
+                v-if="showleixing"
+                header-align="left"
+                align="left"
+                label="企业类型"
+                width="110"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="ostate"
+                v-if="showjingying"
+                header-align="left"
+                align="left"
+                label="经营状态"
+                width="110"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="financing"
+                v-if="showrongzi"
+                header-align="left"
+                align="left"
+                label="融资状态"
+                width="110"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="listed"
+                v-if="showshangshi"
+                header-align="left"
+                align="left"
+                label="上市信息"
+                width="110"
+                sortable>
+            </el-table-column>
         </el-table>
         <div class="block numberPage">
             <el-pagination
@@ -312,16 +362,13 @@
         },
         data(){
             return {
-                industryTypeList:[{
-                    id:null,
-                    name:null
-                }],
+                industryTypeList:[],
                 capitalList:[{id:1,name:'100以内'},{id:2,name:'100-500万'},{id:3,name:'500-1000万'},{id:4,name:'1000-3000万'},{id:5,name:'3000-5000万'},{id:6,name:'5000万以上'}],
-                enterpriseScaleList:[{id:null,name:null}],
-                companyTypeList:[{id:null,name:null}],
-                operatingStateList:[{id:null,name:null}],
-                financingStateList:[{id:null,name:null}],
-                listedList:[{id:null,name:null}],
+                enterpriseScaleList:[],
+                companyTypeList:[],
+                operatingStateList:[],
+                financingStateList:[],
+                listedList:[],
                 phoneList:[{id:'0',name:'全部'},{id:'1',name:'有'},{id:'2',name:'无'}],
                 telephoneList:[{id:'0',name:'全部'},{id:'1',name:'有'},{id:'2',name:'无'}],
                 emailList:[{id:'0',name:'全部'},{id:'1',name:'有'},{id:'2',name:'无'}],
@@ -371,7 +418,7 @@
                 idArr:{
                     id:null,
                 },
-                checklist:['公司名称','公司地址','注册资金','法人','成立日期','手机','电话','邮箱','网站','行业','企业规模',],
+                checklist:['公司名称','公司地址','注册资金','法人','成立日期','手机','电话','邮箱','网站','行业','企业规模','省/市/区','企业类型','经营状态','融资状态','上市信息',],
                 // checklist:[],
                 showmingcheng:true,
                 showdizhi:true,
@@ -384,6 +431,11 @@
                 showwangzhan:true,
                 showhangye:true,
                 showguimo:true,
+                showquyu:true,
+                showleixing:true,
+                showjingying:true,
+                showrongzi:true,
+                showshangshi:true,
 
                 show:true,
                 text:true,
@@ -401,7 +453,7 @@
         mounted(){
             this.loadData()
             this.reloadTable()
-            this.getCityData()
+            // this.getCityData()
         },
 
         methods: {
@@ -421,12 +473,25 @@
                 financingStateList.comboType = 'FinancingState'
                 let listedList = {} 
                 listedList.comboType = 'Listed'
+                let data = {}
+                data.id = ''
 
+                //省/市/区
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                    data: qs.stringify(data),
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.Provinces=res.data;
+                }).catch(function(err){
+                    console.log(err);
+                });
                 //行业
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'search/find.do',
-                    data: qs.stringify(industryTypeList,),
+                    data: qs.stringify(industryTypeList),
                 }).then(function(res){
                     // console.log(res.data)
                     _this.industryTypeList=res.data;
@@ -515,7 +580,7 @@
                 searchList.area_id = this.searchList.area; //区
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerOne/query.do',
@@ -620,6 +685,21 @@
             showScale(){
                 this.showguimo = !this.showguimo
             },
+            showcountry(){
+                this.showquyu = !this.showquyu
+            },
+            showcompany(){
+                this.showleixing = !this.showleixing
+            },
+            showostate(){
+                this.showjingying = !this.showjingying
+            },
+            showfinance(){
+                this.showrongzi = !this.showrongzi
+            },
+            showlisted(){
+                this.showshangshi = !this.showshangshi
+            },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);
                 // this.searchList.code = null;
@@ -632,70 +712,51 @@
                 this.$options.methods.reloadTable.bind(this)(true);
             },
 
-            // 加载china地点数据，三级
-            getCityData(){
-                var _this = this
-                axios.get(this.mapJson).then(function(res){
-                    // console.log(res)
-                    if (res.status==200) {
-                        var data = res.data
-                        // 省市区数据分类
-                        for (var item in data) {
-                            if (item.match(/0000$/)) {//省
-                                _this.Provinces.push({id: item, value: data[item], children: []})
-                            } else if (item.match(/00$/)) {//市
-                                _this.Citys.push({id: item, value: data[item], children: []})
-                            } else {//区
-                                _this.block.push({id: item, value: data[item]})
-                            }
-                        }
-                        // 分类市级
-                        for (var index in _this.Provinces) {
-                            for (var index1 in _this.Citys) {
-                                if (_this.Provinces[index].id.slice(0, 2) === _this.Citys[index1].id.slice(0, 2)) {
-                                _this.Provinces[index].children.push(_this.Citys[index1])
-                                }
-                            }
-                        }
-                        // 分类区级
-                        for(var item1 in _this.Citys) {
-                            for(var item2 in _this.block) {
-                                if (_this.block[item2].id.slice(0, 4) === _this.Citys[item1].id.slice(0, 4)) {
-                                _this.Citys[item1].children.push(_this.block[item2])
-                                }
-                            }
-                        }
-                    }else{
-                        console.log(res.status)
-                    }
-                }).catch(function(error){
-                    console.log(error)
-                })
-            },
             // 选省
             choseProvince(e) {
-                var _this = this
-                for (var index2 in this.Provinces) {
-                    if (e === this.Provinces[index2].value) {
-                        _this.cityList = _this.Provinces[index2].children
-                        _this.areaList =_this.Provinces[index2].children[0].children
-                        _this.E = _this.areaList[0].id
-                    }
-                }
+                let _this = this
+                this.searchList.city = ''
+                this.searchList.area = ''
+                let qs =require('querystring')
+                let data = {}
+                data.id = e
+
+                //省/市/区
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                    data: qs.stringify(data),
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.cityList=res.data;
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             // 选市
             choseCity(e) {
-                var _this = this
-                for (var index3 in this.Citys) {
-                    if (e === this.Citys[index3].value) {
-                        _this.areaList = _this.Citys[index3].children
-                        _this.E = _this.areaList[0].id
-                        // console.log(this.E)
-                    }
-                }
+                console.log(e)
+                let _this = this
+                this.searchList.area = ''
+                let qs =require('querystring')
+                let data = {}
+                data.id = e
+
+                //省/市/区
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                    data: qs.stringify(data),
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.areaList=res.data;
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             // 选区
             choseBlock(e) {
+                console.log(e)
                 this.E=e;
             },
 

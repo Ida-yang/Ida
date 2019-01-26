@@ -1,7 +1,7 @@
 <template>
     <!-- 客户详情页 -->
     <el-row class="content1" :gutter="10">
-        <el-col :span="18" style="padding-left:0;padding-right:20px;">
+        <el-col :span="18">
             <div class="top">
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">

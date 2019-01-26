@@ -49,6 +49,18 @@
                 <el-checkbox class="checkone" @change="showstate()" label="状态"></el-checkbox>
                 <el-checkbox class="checkone" @change="showleval()" label="级别"></el-checkbox>
                 <el-checkbox class="checkone" @change="showcues()" label="客户来源"></el-checkbox>
+                <el-checkbox class="checkone" @change="showrepresent()" label="法人代表"></el-checkbox>
+                <el-checkbox class="checkone" @change="showAuthority()" label="登记机关"></el-checkbox>
+                <el-checkbox class="checkone" @change="showCode()" label="社会信用代码"></el-checkbox>
+                <el-checkbox class="checkone" @change="showregistration()" label="注册号"></el-checkbox>
+                <el-checkbox class="checkone" @change="showorganiza()" label="组织机构代码"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcapital()" label="注册资金"></el-checkbox>
+                <el-checkbox class="checkone" @change="showregisterTime()" label="成立时间"></el-checkbox>
+                <el-checkbox class="checkone" @change="showenterprise()" label="企业规模"></el-checkbox>
+                <el-checkbox class="checkone" @change="showfinance()" label="融资状态"></el-checkbox>
+                <el-checkbox class="checkone" @change="showindustry()" label="行业"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcompanyType()" label="公司类型"></el-checkbox>
+                <el-checkbox class="checkone" @change="showoperating()" label="营业状态"></el-checkbox>
             </el-checkbox-group>
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
@@ -102,6 +114,7 @@
                 v-if="showdianhua"
                 header-align="left"
                 align="left"
+                min-width="100"
                 label="电话"
                 sortable>
             </el-table-column>
@@ -110,6 +123,7 @@
                 v-if="showshouji"
                 header-align="left"
                 align="left"
+                min-width="100"
                 label="手机"
                 sortable>
             </el-table-column>
@@ -118,6 +132,7 @@
                 v-if="showqq"
                 header-align="left"
                 align="left"
+                min-width="90"
                 label="QQ"
                 sortable>
             </el-table-column>
@@ -183,6 +198,115 @@
                 align="left"
                 min-width="110"
                 label="客户来源"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="representative"
+                v-if="showdaibiao"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="法人代表"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="registrationAuthority"
+                v-if="showjiguan"
+                header-align="left"
+                align="left"
+                min-width="150"
+                label="登记机关"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="creditCode"
+                v-if="showdaima"
+                header-align="left"
+                align="left"
+                min-width="160"
+                label="社会信用代码"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="registrationNumber"
+                v-if="showzhucehao"
+                header-align="left"
+                align="left"
+                min-width="130"
+                label="注册号"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="organizationCode"
+                v-if="showzuzhidaima"
+                header-align="left"
+                align="left"
+                min-width="130"
+                label="组织机构代码"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="capital"
+                v-if="showzijin"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="注册资金"
+                sortable>
+                <template slot-scope="scope">{{scope.row.capital}} 万元</template>
+            </el-table-column>
+            <el-table-column
+                prop="date"
+                v-if="showchengli"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="成立时间"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="enterpriseScale"
+                v-if="showguimo"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="企业规模"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="financingState"
+                v-if="showrongzi"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="融资状态"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="industryType"
+                v-if="showhangye"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="行业"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="companyType"
+                v-if="showgonglei"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="公司类型"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="operatingState"
+                v-if="showyingtai"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="营业状态"
                 sortable>
             </el-table-column>
             <el-table-column label="操作"
@@ -263,7 +387,8 @@
                 labelData:null,
                 typeData:null,
                 nullvalue:null,
-                checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','级别','客户来源'],
+
+                checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','级别','客户来源','法人代表','登记机关','社会信用代码','注册号','组织机构代码','注册资金','成立时间','企业规模','融资状态','行业','公司类型','营业状态'],
                 showxingming:true,
                 showmingcheng:true,
                 showdianhua:true,
@@ -276,6 +401,19 @@
                 showzhuangtai:true,
                 showjibie:true,
                 showlaiyuan:true,
+                showdaibiao:true,
+                showjiguan:true,
+                showdaima:true,
+                showzhucehao:true,
+                showzuzhidaima:true,
+                showzijin:true,
+                showchengli:true,
+                showguimo:true,
+                showrongzi:true,
+                showhangye:true,
+                showgonglei:true,
+                showyingtai:true,
+
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
                 formLabelWidth: '130px',
@@ -363,9 +501,9 @@
                     {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
-                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
-                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
+                    {"label":"省/市/区","inputModel":"countryid","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"cityid","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"areaid","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.assistForm = [
@@ -388,9 +526,9 @@
                     "contactsName": '',
                     "telphone": '',
                     "phone": '',
-                    "country":'',
-                    "city":'',
-                    "area":'',
+                    "countryid":'',
+                    "cityid":'',
+                    "areaid":'',
                     "qq": '',
                     "sex": '',
                     "identity": '',
@@ -426,9 +564,9 @@
                     {"label":"QQ","inputModel":"qq","type":"number"},
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
-                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
-                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
+                    {"label":"省/市/区","inputModel":"countryid","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"cityid","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"areaid","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.assistForm = [
@@ -453,9 +591,12 @@
                     "contactsName": row.contacts[0].coName,
                     "telphone": row.contacts[0].telephone,
                     "phone": row.contacts[0].phone,
-                    "country":row.country,
-                    "city":row.city,
-                    "area":row.area,
+                    "countryid":row.country,
+                    "country":row.countryid,
+                    "cityid":row.city,
+                    "city":row.cityid,
+                    "areaid":row.area,
+                    "area":row.areaid,
                     "qq": row.contacts[0].qq,
                     "sex": row.contacts[0].sex,
                     "identity": row.contacts[0].identity,
@@ -568,6 +709,42 @@
             },
             showcues(){
                 this.showlaiyuan = !this.showlaiyuan
+            },
+            showrepresent(){
+                this.showdaibiao = !this.showdaibiao
+            },
+            showAuthority(){
+                this.showjiguan = !this.showjiguan
+            },
+            showCode(){
+                this.showdaima = !this.showdaima
+            },
+            showregistration(){
+                this.showzhucehao = !this.showzhucehao
+            },
+            showorganiza(){
+                this.showzuzhidaima = !this.showzuzhidaima
+            },
+            showcapital(){
+                this.showzijin = !this.showzijin
+            },
+            showregisterTime(){
+                this.showchengli = !this.showchengli
+            },
+            showenterprise(){
+                this.showguimo = !this.showguimo
+            },
+            showfinance(){
+                this.showrongzi = !this.showrongzi
+            },
+            showindustry(){
+                this.showhangye = !this.showhangye
+            },
+            showcompanyType(){
+                this.showgonglei = !this.showgonglei
+            },
+            showoperating(){
+                this.showyingtai = !this.showyingtai
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

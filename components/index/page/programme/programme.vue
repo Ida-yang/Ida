@@ -20,7 +20,7 @@
                     <span class="nameList">方案状态：</span>
                     <el-radio :label="nullvalue" @change="search()">全部状态</el-radio>
                     <el-radio label="启用" @change="search()">启用</el-radio>
-                    <el-radio label="禁止" @change="search()">禁止</el-radio>
+                    <el-radio label="禁止" @change="search()">禁用</el-radio>
                 </el-radio-group>
             </div>
             <br>
@@ -241,15 +241,6 @@
             },
         },
         data(){
-            const validatePass = (rule, value, callback) => {
-                if (value === '') {
-                callback(new Error('请再次输入密码'));
-                } else if (value !== this.newform.state) {
-                callback(new Error('两次输入密码不一致!'));
-                } else {
-                callback();
-                }
-            };
             return {
                 datalist:[],
                 defaultProps:{
@@ -257,7 +248,6 @@
                     children:'next',
                 },
                 newform:{
-                    // deptid:null,
                     second_id:null,
                     secondname:null,
                     id:null,
@@ -269,7 +259,7 @@
                 },
                 searchList:{
                     state:null,
-                    deptid:null,
+                    secondid:null,
                 },
                 checklist:['方案名称','年份','负责人','部门','机构','创建时间','状态'],
                 idArr:{
@@ -322,7 +312,7 @@
                 pageInfo.page = this.page
                 pageInfo.limit = this.limit
                 pageInfo.state = this.searchList.state
-                pageInfo.deptid = this.searchList.deptid
+                pageInfo.secondid = this.searchList.secondid
                 console.log(pageInfo)
 
                 //获取所有方案
@@ -340,7 +330,7 @@
             },
             handleNodeClick(data){
                 console.log(data)
-                this.searchList.deptid = data.deptid
+                this.searchList.secondid = data.deptid
                 // console.log(this.searchList)
                 this.clickdata = data
                 // console.log(this.clickdata)

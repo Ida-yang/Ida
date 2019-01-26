@@ -111,7 +111,7 @@
         },
         data(){
             return {
-                msg:"自动搜索"
+                msg:"首页"
             }
         },
         mounted(){
