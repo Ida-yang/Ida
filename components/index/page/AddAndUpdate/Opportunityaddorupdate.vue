@@ -146,7 +146,11 @@
                 },
             }
         },
-        mounted() {
+        mounted(){
+            this.loadData();
+            this.loadTable();
+        },
+        activated() {
             this.loadData();
             this.loadTable();
         },

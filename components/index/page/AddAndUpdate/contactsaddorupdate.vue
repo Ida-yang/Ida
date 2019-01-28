@@ -222,7 +222,11 @@
         created(){
             this.getCityData()
         },
-        mounted() {
+        mounted(){
+            this.loadData();
+            this.loadTable();
+        },
+        activated() {
             this.loadData();
             this.loadTable();
             // this.restaurants = this.loadData();

@@ -347,6 +347,9 @@
                 console.log(err);
             });
         },
+        activated(){
+            this.reloadTable()
+        },
         mounted(){
             this.reloadTable()
         },

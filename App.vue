@@ -157,7 +157,9 @@ input::-webkit-inner-spin-button{
 .el-button+.el-tooltip {
     margin-left: 10px;
 }
-
+.el-card{
+    width: 100%;
+}
 .el-table tr:hover {
     background: #f6faff;
 }

@@ -91,7 +91,7 @@
                 header-align="left"
                 align="left"
                 min-width="180"
-                label="对应客户"
+                label="公司名称"
                 sortable>
             </el-table-column>
             <el-table-column
@@ -99,7 +99,8 @@
                 v-if="showshangji"
                 header-align="left"
                 align="left"
-                label="商机"
+                min-width="120"
+                label="商机名称"
                 sortable>
             </el-table-column>
             <el-table-column
@@ -273,6 +274,9 @@
                 showshengyu:true,
                 formLabelWidth: '130px',
             }
+        },
+        activated(){
+            this.reloadTable()
         },
         mounted(){
             this.reloadTable()

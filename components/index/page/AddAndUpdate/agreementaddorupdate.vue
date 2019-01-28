@@ -151,7 +151,10 @@
                 console.log(err)
             });
         },
-        mounted() {
+        mounted(){
+            this.loadData();
+        },
+        activated() {
             this.loadData();
             // this.restaurants = this.loadData();
         },

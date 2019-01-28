@@ -219,6 +219,9 @@
                 formLabelWidth: '130px',
             }
         },
+        activated(){
+            this.reloadTable()
+        },
         mounted(){
             this.reloadTable()
         },

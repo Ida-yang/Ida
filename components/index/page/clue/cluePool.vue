@@ -242,6 +242,9 @@
                 visible2: false,
             }
         },
+        activated(){
+            this.reloadTable()
+        },
         mounted(){
             this.reloadTable()
         },

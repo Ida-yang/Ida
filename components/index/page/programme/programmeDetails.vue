@@ -354,6 +354,9 @@
                 showfail:false,
             }
         },
+        activated(){
+            this.loadData();
+        },
         mounted(){
             this.loadData();
         },

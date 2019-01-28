@@ -29,7 +29,7 @@
                 </el-card>
             </div>
             <div class="middle">
-                <el-card class="box-card" v-model="cluedetail" v-show="thisshow">
+                <el-card class="box-card" v-model="cluedetail" v-show="!thisshow">
                     <div slot="header" class="clearfix">
                         <span>辅助信息</span>
                     </div>
@@ -268,6 +268,9 @@
                     id:null,
                 },
             }
+        },
+        activated(){
+            this.loadData();
         },
         mounted(){
             this.loadData();

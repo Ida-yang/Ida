@@ -381,10 +381,12 @@
                 console.log(err);
             });
         },
-        // created(){
-        //     this.getCityData()
-        // },
-        mounted() {
+        mounted(){
+            this.loadData();
+            this.loadTable();
+            this.loadCountry()
+        },
+        activated() {
             this.loadData();
             this.loadTable();
             this.loadCountry()

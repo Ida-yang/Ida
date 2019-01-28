@@ -411,6 +411,9 @@
                 },
             }
         },
+        activated(){
+            this.loadData();
+        },
         mounted(){
             this.loadData();
         },

@@ -1,18 +1,324 @@
 <template>
-    <div class="uploadBOX">
-        <div class="imgbox" v-for="item in fileList" :key="item.id" @mouseenter="mouseenterdiv(item)" @mouseleave="mouseleavediv(item)">
-            <img :src="item.imgURL" alt="图片" @click="showImg($event,item)">
-            <i class="el-icon-circle-close-outline imgdel" v-if="imgshow" @click="delImg($event,item)"></i>
+    <!-- 线索 -->
+    <div>
+        <div class="radioList">
+            <el-radio-group v-model="searchList.label">
+                <span class="nameList">线索分类：</span>
+                <el-radio :label="nullvalue" @change="search()">全部线索</el-radio>
+                <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" @change="search()">{{item.value}}</el-radio>
+            </el-radio-group>
+            <el-radio-group v-model="searchList.state">
+                <span class="nameList">线索状态：</span>
+                <el-radio :label="nullvalue" @change="search()">全部线索状态</el-radio>
+                <el-radio v-for="item in stateData" :key="item.id" :label="item.id" @change="search()">{{item.typeName}}</el-radio>
+            </el-radio-group>
+            <el-radio-group v-model="searchList.type">
+                <span class="nameList">线索来源：</span>
+                <el-radio :label="nullvalue" @change="search()">全部线索来源</el-radio>
+                <el-radio v-for="item in typeData" :key="item.id" :label="item.id" @change="search()">{{item.typeName}}</el-radio>
+            </el-radio-group>
         </div>
-        <div class="filebox">
-            <span class="upload">
-                <input type="file" name="file" @change="tirggerFile($event)"/>
-            </span>
+        <div class="searchList">
+            <span class="nameList">公司名称：</span>
+            <el-input v-model="searchList.searchName" placeholder="公司名称" style="width:300px;"></el-input>
+            &nbsp;&nbsp;
+            <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
         </div>
-        <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="图片">
-            <!-- <img src="/upload/staticImg/bg.jpg" width="100%" alt="图片"> -->
-        </el-dialog>
+        <div class="entry">
+            <el-button class="btn info-btn" size="mini" @click="handleAdd()">新增</el-button>
+            <el-button class="btn info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
+            <el-button class="btn info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
+            <el-popover
+            placement="bottom"
+            width="100"
+            trigger="click">
+            <el-checkbox-group class="checklist" v-model="checklist">
+                <el-checkbox class="checkone" @change="showcontactsname()" label="联系人"></el-checkbox>
+                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
+                <el-checkbox class="checkone" @change="showtel()" label="电话"></el-checkbox>
+                <el-checkbox class="checkone" @change="showphone()" label="手机"></el-checkbox>
+                <el-checkbox class="checkone" @change="showtencent()" label="QQ"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcreatetime()" label="最新跟进时间"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcontent()" label="最新跟进记录"></el-checkbox>
+                <el-checkbox class="checkone" @change="shownexttime()" label="下次跟进时间"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcharge()" label="负责人"></el-checkbox>
+                <el-checkbox class="checkone" @change="showstate()" label="状态"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcues()" label="线索来源"></el-checkbox>
+                <el-checkbox class="checkone" @change="showrepresent()" label="法人代表"></el-checkbox>
+                <el-checkbox class="checkone" @change="showAuthority()" label="登记机关"></el-checkbox>
+                <el-checkbox class="checkone" @change="showCode()" label="社会信用代码"></el-checkbox>
+                <el-checkbox class="checkone" @change="showregistration()" label="注册号"></el-checkbox>
+                <el-checkbox class="checkone" @change="showorganiza()" label="组织机构代码"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcapital()" label="注册资金"></el-checkbox>
+                <el-checkbox class="checkone" @change="showregisterTime()" label="成立时间"></el-checkbox>
+                <el-checkbox class="checkone" @change="showenterprise()" label="企业规模"></el-checkbox>
+                <el-checkbox class="checkone" @change="showfinance()" label="融资状态"></el-checkbox>
+                <el-checkbox class="checkone" @change="showindustry()" label="行业"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcompanyType()" label="公司类型"></el-checkbox>
+                <el-checkbox class="checkone" @change="showoperating()" label="营业状态"></el-checkbox>
+            </el-checkbox-group>
+            <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
+            <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
+            </el-popover>
+        </div>
+        <el-table
+            :data="tableData"
+            :default-sort = "{prop:'id',order: 'descending'}"
+            ref="multipleTable"
+            border
+            stripe
+            style="width:100%;"
+            @selection-change="selectInfo"
+            >
+            <el-table-column
+                fixed
+                header-align="center"
+                align="center"
+                type="selection"
+                width="45"
+                scope.row.id
+                prop="id"
+                @selection-change="selectInfo"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="contacts[0].coName"
+                fixed
+                v-if="showxingming"
+                header-align="left"
+                align="left"
+                min-width="100"
+                label="联系人"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                fixed
+                v-if="showmingcheng"
+                header-align="left"
+                align="left"
+                min-width="180"
+                label="公司名称"
+                sortable>
+                <template slot-scope="scope">
+                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                        {{scope.row.name}}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="contacts[0].telephone"
+                v-if="showdianhua"
+                header-align="left"
+                align="left"
+                label="电话"
+                min-width="95"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="contacts[0].phone"
+                v-if="showshouji"
+                header-align="left"
+                align="left"
+                min-width="95"
+                label="手机"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="contacts[0].qq"
+                v-if="showqq"
+                header-align="left"
+                align="left"
+                label="QQ"
+                min-width="95"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="follow[0].createTime"
+                v-if="showgenshi"
+                header-align="left"
+                align="left"
+                min-width="130"
+                label="最新跟进时间"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="follow[0].followContent"
+                show-overflow-tooltip
+                v-if="showgenlu"
+                header-align="left"
+                align="left"
+                min-width="130"
+                label="最新跟进记录"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="follow[0].contactTime"
+                v-if="showgengshi"
+                header-align="left"
+                align="left"
+                min-width="140"
+                label="下次联系时间"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="privateUser[0].private_employee"
+                v-if="showfuze"
+                header-align="left"
+                align="left"
+                min-width="100"
+                label="负责人"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="state"
+                v-if="showzhuangtai"
+                header-align="left"
+                align="left"
+                label="状态"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="cues"
+                v-if="showlaiyuan"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="线索来源"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="representative"
+                v-if="showdaibiao"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="法人代表"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="registrationAuthority"
+                v-if="showjiguan"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="登记机关"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="creditCode"
+                v-if="showdaima"
+                header-align="left"
+                align="left"
+                min-width="150"
+                label="社会信用代码"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="registrationNumber"
+                v-if="showzhucehao"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="注册号"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="organizationCode"
+                v-if="showzuzhidaima"
+                header-align="left"
+                align="left"
+                min-width="130"
+                label="组织机构代码"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="capital"
+                v-if="showzijin"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="注册资金"
+                sortable>
+                <template slot-scope="scope">{{scope.row.capital}} 万元</template>
+            </el-table-column>
+            <el-table-column
+                prop="date"
+                v-if="showchengli"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="成立时间"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="enterpriseScale"
+                v-if="showguimo"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="企业规模"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="financingState"
+                v-if="showrongzi"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="融资状态"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="industryType"
+                v-if="showhangye"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="行业"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="companyType"
+                v-if="showgonglei"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="公司类型"
+                sortable>
+            </el-table-column>
+            <el-table-column
+                prop="operatingState"
+                v-if="showyingtai"
+                header-align="left"
+                align="left"
+                min-width="110"
+                label="营业状态"
+                sortable>
+            </el-table-column>
+            <el-table-column label="操作"
+                fixed="right"
+                width="80"
+                header-align="left"
+                align="center">
+                <template slot-scope="scope">
+                    <el-button
+                    size="mini"
+                    @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="block numberPage">
+            <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page"
+            :page-sizes="[20, 50, 100, 500]"
+            :page-size="20"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableNumber">
+            </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -20,200 +326,465 @@
     import store from '../../../../store/store'
     import axios from 'axios'
     import qs from 'qs'
-export default {
-    store,
-    data(){
-        return{
-            form:{
-                imgURL:null,
-            },
-            dataList:null,
-            fileList:null,
-            imgid:null,
-            imgurl:null,
-            dialogImageUrl:null,
-            dialogVisible:false,
-            imgshow:false
-        }
-    },
-    mounted(){
-        this.loadData()
-    },
-    methods:{
-        loadData(){
-            let _this = this
-            _this.fileList = []
-            let qs = require('querystring')
-            let data = {}
-            data.typetid = 37
-            data.type = '合同'
-            data.pId = this.$store.state.ispId
-            data.cId = this.$store.state.iscId
-            // console.log(data)
 
+    export default {
+        name:'clue',
+        props:{
+            totalNum:Number,
+        },
+        store,
+        computed: {
+            tableData(){
+                return store.state.clueList;
+            },
+            tableNumber(){
+               return store.state.clueListnumber;     
+            },
+        },
+        data(){
+            return {
+                searchList:{
+                    searchName:null,
+                    label:null,
+                    state:null,
+                    type:null,
+                },
+                searchListNew:{
+                    searchName:null,
+                    label:null,
+                    state:null,
+                    type:null,
+                },
+                page:1,//默认第一页
+                limit:20,//默认20条
+                idArr:{
+                    id:null,
+                },
+                pIdData:[
+                    {label:'1',value:'我的线索'},
+                    {label:'2',value:'本组'},
+                    {label:'3',value:'本机构'},],
+                stateData:null,
+                typeData:null,
+                nullvalue:null,
+
+                checklist:['联系人','公司名称','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','线索来源','法人代表','登记机关','社会信用代码','注册号','组织机构代码','注册资金','成立时间','企业规模','融资状态','行业','公司类型','营业状态'],
+                showxingming:true,
+                showmingcheng:true,
+                showdianhua:true,
+                showshouji:true,
+                showqq:true,
+                showgenshi:true,
+                showgenlu:true,
+                showgengshi:true,
+                showfuze:true,
+                showzhuangtai:true,
+                showlaiyuan:true,
+                showdaibiao:true,
+                showjiguan:true,
+                showdaima:true,
+                showzhucehao:true,
+                showzuzhidaima:true,
+                showzijin:true,
+                showchengli:true,
+                showguimo:true,
+                showrongzi:true,
+                showhangye:true,
+                showgonglei:true,
+                showyingtai:true,
+
+                dialogFormVisible:false,
+                dialogFormVisible1:false,
+                formLabelWidth: '130px',
+            }
+        },
+        beforeCreate(){
+            let _this = this
             axios({
-                method:'post',
-                url:_this.$store.state.defaultHttp+'imgInfo/getImgInfoByTypeid.do',
-                data:qs.stringify(data)
+                method: 'get',
+                url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoByType.do?cId='+_this.$store.state.iscId,
             }).then(function(res){
                 // console.log(res.data)
-                _this.dataList = res.data
-                let arr = _this.dataList
-                arr.forEach(el => {
-                    // console.log(el.id)
-                    _this.imgid = el.id
-                    _this.imgurl = '/upload/'+_this.$store.state.iscId+'/'+el.name
-                    _this.fileList.push({id:_this.imgid,imgURL:_this.imgurl})
-                });
-                // console.log(_this.fileList)
+                _this.stateData = res.data.name1001
+                _this.typeData = res.data.name3001
             }).catch(function(err){
                 console.log(err);
             });
         },
-        tirggerFile (event) {
-		    let _this = this;
-		    let file = event.target.files[0]
-		    let param = new FormData() // 创建form对象
-		    param.append('file', file, file.name) // 通过append向form对象添加数据
-		    console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
-		    let config = {
-		        headers: {'Content-Type': 'multipart/form-data'}
-		    }
-		    // 添加请求头
-		    axios.post('http://crm.yunzoe.com/yzcrm/contractUpload.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId+'&contractid=37', param, config)
-		    .then(res => {
-                console.log(res)
-		        if (res.data == 'success') {
-                    _this.$message({
-                        message:'上传成功',
-                        type:'success'
-                    })
-                    _this.$options.methods.loadData.bind(_this)(true);
-		        }else{
-                    _this.$message({
-                        message: res.data,
-                        type: 'error'
-                    })
+        mounted(){
+            this.reloadTable()
+        },
+
+        methods: {
+            //获取/查询线索列表
+            reloadTable() {
+                let _this = this;
+                let qs =require('querystring')
+                let searchList = {}
+                searchList.searchName = this.searchList.searchName;
+                if(this.searchList.label == 1 ){
+                    searchList.pId = _this.$store.state.ispId
+                }else if(this.searchList.label == 2){
+                    searchList.secondid = _this.$store.state.deptid
+                }else if(this.searchList.label == 3){
+                    searchList.deptid = _this.$store.state.insid
                 }
-            })
-        },
-        showImg(e,val){
-            // console.log(val)
-            // console.log(val.imgURL)
-            this.dialogImageUrl = val.imgURL
-            this.dialogVisible = true
-            // console.log(this.dialogImageUrl)
-        },
-        delImg(e,val){
-            // console.log(val.id)
-            let _this = this;
-            let qs = require('querystring')
-            let idArr = [];
-            idArr.id = val.id
-            _this.$confirm('是否确认删除该图片？', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-            }).then(({ value }) => {
+                searchList.stateid = this.searchList.state
+                searchList.cuesid = this.searchList.type
+                searchList.page = this.page;
+                searchList.limit = this.limit;
+                // console.log(searchList)
+                
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'imgInfo/delImgInfoById.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(idArr),
+                    url: _this.$store.state.defaultHttp+'customerTwo/query.do?cId='+_this.$store.state.iscId,
+                    data: qs.stringify(searchList),
+                }).then(function(res){
+                    console.log(res.data.map.success)
+                    _this.$store.state.clueList = res.data.map.success
+                    _this.$store.state.clueListnumber = res.data.count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            selectInfo(val){
+                this.multipleSelection = val;
+                // console.log(val)
+                let arr = val;
+                let newArr = [new Array()];
+                // console.log(arr)
+                arr.forEach((item) => {
+                    if(item.id != 0){
+                        // console.log(item.id)
+                        newArr.push(item.id)
+                        // console.log(newArr)
+                    }
+                });
+                // console.log(newArr)
+                this.idArr.id = newArr;
+                
+            },
+            openDetails(index,row){
+                let detailsData = {};
+                detailsData.submitData = {"id": row.id};
+                // console.log(detailsData)
+                this.$store.state.detailsData = detailsData;
+                this.$router.push({ path: '/clueDetails' });
+            },
+            handleAdd(){
+                let _this = this
+                let addOrUpdateData = {};
+                // addOrUpdateData.title = "添加线索";
+                addOrUpdateData.createForm = [
+                    {"label":"线索来源","inputModel":"cuesid","type":"select"},
+                    {"label":"公司名称","inputModel":"poolName","type":"require"},
+                    {"label":"联系人","inputModel":"contactsName",},
+                    {"label":"电话","inputModel":"telphone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
+                    {"label":"性别","inputModel":"sex","type":"radio"},
+                    {"label":"职务","inputModel":"identity"},
+                    {"label":"省/市/区","inputModel":"countryid","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"cityid","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"areaid","type":"select","placeholder":"请选择区"},
+                    {"label":"地址","inputModel":"address"},
+                    {"label":"备注","inputModel":"remark"}];
+                addOrUpdateData.assistForm = [
+                    {"label":"法人代表","inputModel":"representative"},
+                    {"label":"登记机关","inputModel":"registrationAuthority"},
+                    {"label":"统一社会信用代码","inputModel":"creditCode"},
+                    {"label":"注册号","inputModel":"registrationNumber"},
+                    {"label":"组织机构代码","inputModel":"organizationCode"},
+                    {"label":"注册资金","inputModel":"capital","type":"number"},
+                    {"label":"注册时间","inputModel":"registerTime","type":"date"},
+                    {"label":"企业规模","inputModel":"enterpriseScale","type":"select"},
+                    {"label":"融资状态","inputModel":"financingState","type":"select"},
+                    {"label":"行业","inputModel":"industryType","type":"select"},
+                    {"label":"公司类型","inputModel":"companyType","type":"select"},
+                    {"label":"经营状态","inputModel":"operatingState","type":"select"},]
+                addOrUpdateData.setForm = {
+                    "cuesid": '',
+                    "poolName": '',
+                    "contactsName": '',
+                    "telphone": '',
+                    "phone": '',
+                    "countryid":'',
+                    "cityid":'',
+                    "areaid":'',
+                    "qq": '',
+                    "sex": '',
+                    "identity": '',
+                    "address": '',
+                    "remark":'',
+                    "representative": '',
+                    "registrationAuthority": '',
+                    "creditCode": '',
+                    "registrationNumber": '',
+                    "organizationCode": '',
+                    "capital": '',
+                    "registerTime": '',
+                    "enterpriseScale": '',
+                    "financingState": '',
+                    "industryType": '',
+                    "companyType": '',
+                    "operatingState": ''};
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/saveClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
+                this.$store.state.addOrUpdateData = addOrUpdateData;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'clueJurisdiction/insertClue.do',
+                }).then(function(res){
+                    console.log(res.data.msg)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有新增线索的权限',
+                            type:'error'
+                        })
+                    }else{
+                        _this.$router.push({ path: '/clueaddorupdate' });
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            handleEdit(index,row){
+                console.log(row)
+                let _this = this
+                let addOrUpdateData = {};
+                // addOrUpdateData.title = "修改线索";
+                addOrUpdateData.createForm = [
+                    {"label":"线索来源","inputModel":"cuesid","type":"select"},
+                    {"label":"客户名称","inputModel":"poolName","type":"require"},
+                    {"label":"联系人","inputModel":"contactsName",},
+                    {"label":"电话","inputModel":"telphone","type":"number"},
+                    {"label":"手机","inputModel":"phone","type":"number"},
+                    {"label":"QQ","inputModel":"qq","type":"number"},
+                    {"label":"性别","inputModel":"sex","type":"radio"},
+                    {"label":"职务","inputModel":"identity"},
+                    {"label":"省/市/区","inputModel":"countryid","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"cityid","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"areaid","type":"select","placeholder":"请选择区"},
+                    {"label":"地址","inputModel":"address"},
+                    {"label":"备注","inputModel":"remark"}];
+                addOrUpdateData.assistForm = [
+                    {"label":"法人代表","inputModel":"representative"},
+                    {"label":"登记机关","inputModel":"registrationAuthority"},
+                    {"label":"统一社会信用代码","inputModel":"creditCode"},
+                    {"label":"注册号","inputModel":"registrationNumber"},
+                    {"label":"组织机构代码","inputModel":"organizationCode"},
+                    {"label":"注册资金","inputModel":"capital","type":"number"},
+                    {"label":"注册时间","inputModel":"registerTime","type":"date"},
+                    {"label":"企业规模","inputModel":"enterpriseScale","type":"select"},
+                    {"label":"融资状态","inputModel":"financingState","type":"select"},
+                    {"label":"行业","inputModel":"industryType","type":"select"},
+                    {"label":"公司类型","inputModel":"companyType","type":"select"},
+                    {"label":"经营状态","inputModel":"operatingState","type":"select"},]
+                addOrUpdateData.setForm = {
+                    "cuesid": row.cuesid,
+                    "poolName": row.name,
+                    "contactsName": row.contacts[0].coName,
+                    "telphone": row.contacts[0].telephone,
+                    "phone": row.contacts[0].phone,
+                    "countryid":row.country,
+                    "country":row.countryid,
+                    "cityid":row.city,
+                    "city":row.cityid,
+                    "areaid":row.area,
+                    "area":row.areaid,
+                    "qq": row.contacts[0].qq,
+                    "sex": row.contacts[0].sex,
+                    "identity": row.contacts[0].identity,
+                    "address": row.address,
+                    "remark": row.remark,
+                    "representative": row.representative,
+                    "registrationAuthority": row.registrationAuthority,
+                    "creditCode": row.creditCode,
+                    "registrationNumber": row.registrationNumber,
+                    "organizationCode": row.organizationCode,
+                    "capital": row.capital,
+                    "registerTime": row.date,
+                    "enterpriseScale": row.enterpriseScale,
+                    "financingState": row.financingState,
+                    "industryType": row.industryType,
+                    "companyType": row.companyType,
+                    "operatingState": row.operatingState};
+                addOrUpdateData.submitData = {"id": row.id,'csId':row.contacts[0].csId};
+                addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/updateClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
+                console.log(addOrUpdateData)
+                this.$store.state.addOrUpdateData = addOrUpdateData;
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'clueJurisdiction/updateClue.do',
                 }).then(function(res){
                     console.log(res)
-                    if(res.data.code && res.data.code == '200') {
+                    if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
-                            message: '删除成功',
+                            message:'对不起，您没有修改线索的权限',
+                            type:'error'
+                        })
+                    }else{
+                        _this.$router.push({ path: '/clueaddorupdate' });
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                // this.$router.push({ path: '/clueaddorupdate' });
+            },
+            cluePool(){
+                let _this = this;
+                let qs =require('querystring')
+                let idArr = [];
+                idArr.id = this.idArr.id
+                console.log(idArr)
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
+                    data:qs.stringify(idArr),
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.status && res.status == 200) {
+                        _this.$message({
+                            message: '转移成功',
                             type: 'success'
                         });
-                        _this.$options.methods.loadData.bind(_this)(true);
+                        _this.$options.methods.reloadTable.bind(_this)(true);
                     } else {
                         _this.$message({
-                            message: res.data.msg,
+                            message: res.data,
                             type: 'error'
                         });
                     }
                 }).catch(function(err){
                     console.log(err);
-                })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '取消删除'
-                });       
-            });
+                });
+            },
+            customerSwitching(){
+                let _this = this;
+                let qs =require('querystring')
+                let idArr = [];
+                idArr.id = this.idArr.id
+                idArr.id.shift()
+                // console.log(idArr.id)
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
+                    data:qs.stringify(idArr),
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.status && res.status == 200) {
+                        _this.$message({
+                            message: '转换成功',
+                            type: 'success'
+                        });
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    } else {
+                        _this.$message({
+                            message: res.data,
+                            type: 'error'
+                        });
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            showcontactsname(){
+                this.showxingming = !this.showxingming
+            },
+            showname(){
+                this.showmingcheng = !this.showmingcheng
+            },
+            showtel(){
+                this.showdianhua = !this.showdianhua
+            },
+            showphone(){
+                this.showshouji = !this.showshouji
+            },
+            showtencent(){
+                this.showqq = !this.showqq
+            },
+            showcreatetime(){
+                this.showgenshi = !this.showgenshi
+            },
+            showcontent(){
+                this.showgenlu = !this.showgenlu
+            },
+            shownexttime(){
+                this.showgengshi = !this.showgengshi
+            },
+            showcharge(){
+                this.showfuze = !this.showfuze
+            },
+            showstate(){
+                this.showzhuangtai = !this.showzhuangtai
+            },
+            showcues(){
+                this.showlaiyuan = !this.showlaiyuan
+            },
+            showrepresent(){
+                this.showdaibiao = !this.showdaibiao
+            },
+            showAuthority(){
+                this.showjiguan = !this.showjiguan
+            },
+            showCode(){
+                this.showdaima = !this.showdaima
+            },
+            showregistration(){
+                this.showzhucehao = !this.showzhucehao
+            },
+            showorganiza(){
+                this.showzuzhidaima = !this.showzuzhidaima
+            },
+            showcapital(){
+                this.showzijin = !this.showzijin
+            },
+            showregisterTime(){
+                this.showchengli = !this.showchengli
+            },
+            showenterprise(){
+                this.showguimo = !this.showguimo
+            },
+            showfinance(){
+                this.showrongzi = !this.showrongzi
+            },
+            showindustry(){
+                this.showhangye = !this.showhangye
+            },
+            showcompanyType(){
+                this.showgonglei = !this.showgonglei
+            },
+            showoperating(){
+                this.showyingtai = !this.showyingtai
+            },
+            search() {
+                this.$options.methods.reloadTable.bind(this)(true);
+            },
+            reset(){
+                this.searchList = Object.assign({}, this.searchListNew);
+                this.$options.methods.reloadTable.bind(this)(true);
+            },
+
+            handleSizeChange(val) {
+                let _this = this;
+                _this.limit = val;
+                _this.$options.methods.reloadTable.bind(_this)(false);
+            },
+            handleCurrentChange(val) {
+                let _this = this;
+                _this.page = val;
+                _this.$options.methods.reloadTable.bind(_this)(false);
+            },
         },
-        mouseenterdiv(val){
-            this.imgshow = true
-        },
-        mouseleavediv(val){
-            this.imgshow = false
-        }
-    },
-}
+    }
 </script>
 
 <style>
-    .uploadBOX{
-        display: flex;
-        display: -webkit-flex; /* Safari */
-        flex-wrap: wrap;
-        align-content: flex-start;
-	    margin-top: 20px;
+    .el-table td, .el-table th {
+        padding: 6px 0 !important;
+        line-height: 30px;
     }
-    .imgbox{
-        flex: 0 0 100px;
-	    margin-left: 10px;
-        /* width: 100px;
-        height: 100px; */
-        position: relative;
+    .el-row{
+        margin-bottom: 10px;
     }
-    .imgbox img{
-        width: 100px;
-        height: 100px;
-    }
-    .imgdel{
-        position: absolute;
-        right: 0;
-        top: 0;
-        font-size: 12px;
-    }
-    .filebox{
-        width: 100px;
-        height: 100px;
-        /* background-color: rgb(78, 121, 96); */
-    }
-	.upload {
-	    width: 100px;;
-	    height: 100px;
-	    display: inline-block;
-	    border-radius: 5px;
-	    position: relative;
-	    margin-left: 10px;
-	    background: rgb(255, 255, 255) url('../../../../assets/img/plus.png') center center no-repeat;
-	    background-size: 100px 100px;
-        border: 1px dashed #d9d9d9;
-	}
-	.upload input{
-	    position: relative;
-	    width: 100px;
-	    height: 100px;
-	    top: 0;
-	    left: 0;
-	    opacity: 0;
-	}
-	.filebox img{
-	    width: 100px;
-	    height: 100px;
-	    line-height: 100px;
-	    /* display: block; */
-	    float: left;
-        border-radius: 4px;
-	}
-	.upload i {
-	    position: absolute;
-	    bottom: 0;
-	    left: 100px;
-	    color: rgb(83, 76, 76);
-	    font-size: 24px;
-	}
+    
 </style>

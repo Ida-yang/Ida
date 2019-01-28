@@ -17,15 +17,15 @@
                 <el-checkbox class="checkone" @change="shownum()" label="商机编号"></el-checkbox>
                 <el-checkbox class="checkone" @change="showname()" label="商机名称"></el-checkbox>
                 <el-checkbox class="checkone" @change="showdate()" label="日期"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcustomer()" label="关联客户"></el-checkbox>
-                <el-checkbox class="checkone" @change="showpeople()" label="决策人"></el-checkbox>
+                <el-checkbox class="checkone" @change="showcustomer()" label="公司名称"></el-checkbox>
+                <el-checkbox class="checkone" @change="showpeople()" label="客户决策人"></el-checkbox>
                 <el-checkbox class="checkone" @change="showprogress()" label="商机进度"></el-checkbox>
                 <el-checkbox class="checkone" @change="showprobability()" label="成功几率"></el-checkbox>
                 <el-checkbox class="checkone" @change="showmoney()" label="预计成绩金额"></el-checkbox>
                 <el-checkbox class="checkone" @change="showtime()" label="预计成交时间"></el-checkbox>
+                <el-checkbox class="checkone" @change="showuser()" label="负责人"></el-checkbox>
                 <el-checkbox class="checkone" @change="showdepartment()" label="部门"></el-checkbox>
                 <el-checkbox class="checkone" @change="showmechanism()" label="机构"></el-checkbox>
-                <el-checkbox class="checkone" @change="showuser()" label="用户"></el-checkbox>
                 <el-checkbox class="checkone" @change="showremark()" label="备注"></el-checkbox>
             </el-checkbox-group>
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
@@ -90,7 +90,7 @@
                 header-align="left"
                 align="left"
                 min-width="180"
-                label="关联客户"
+                label="公司名称"
                 sortable>
             </el-table-column>
             <el-table-column
@@ -98,8 +98,8 @@
                 v-if="showren"
                 header-align="left"
                 align="left"
-                min-width="90"
-                label="决策人"
+                min-width="115"
+                label="客户决策人"
                 sortable>
             </el-table-column>
             <el-table-column
@@ -145,6 +145,15 @@
                 sortable>
             </el-table-column>
             <el-table-column
+                prop="private_employee"
+                v-if="showyonghu"
+                header-align="left"
+                align="left"
+                min-width="90"
+                label="负责人"
+                sortable>
+            </el-table-column>
+            <el-table-column
                 prop="deptname"
                 v-if="showbumen"
                 header-align="left"
@@ -160,15 +169,6 @@
                 align="left"
                 min-width="200"
                 label="机构"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="private_employee"
-                v-if="showyonghu"
-                header-align="left"
-                align="left"
-                min-width="80"
-                label="用户"
                 sortable>
             </el-table-column>
             <el-table-column
@@ -248,7 +248,7 @@
                 idArr:{
                     id:null,
                 },
-                checklist:['商机编号','商机名称','日期','关联客户','决策人','商机进度','成功几率','预计成绩金额','预计成交时间','部门','机构','用户','备注'],
+                checklist:['商机编号','商机名称','日期','公司名称','客户决策人','商机进度','成功几率','预计成绩金额','预计成交时间','负责人','部门','机构','备注'],
                 showbianhao:true,
                 showmingcheng:true,
                 showriqi:true,
@@ -258,14 +258,17 @@
                 showjilv:true,
                 showjine:true,
                 showshijian:true,
+                showyonghu:true,
                 showbumen:true,
                 showjigou:true,
-                showyonghu:true,
                 showbeizhu:true,
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
                 formLabelWidth: '130px',
             }
+        },
+        activated(){
+            this.reloadTable()
         },
         mounted(){
             this.reloadTable()
@@ -322,11 +325,11 @@
                 addOrUpdateData.createForm = [
                     {"label":"商机编号","inputModel":"opportunity_number",},
                     {"label":"商机名称","inputModel":"opportunity_name"},
-                    {"label":"关联客户","inputModel":"customerpool_id","type":"select"},
-                    {"label":"决策人","inputModel":"contacts_id","type":"select"},
+                    {"label":"公司名称","inputModel":"customerpool_id","type":"select"},
+                    {"label":"客户决策人","inputModel":"contacts_id","type":"select"},
                     {"label":"预计成绩金额","inputModel":"opportunity_achievement","type":"number"},
                     {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
-                    {"label":"用户","inputModel":"user_id","disabled":true},
+                    {"label":"负责人","inputModel":"user_id","disabled":true},
                     {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
                     "opportunity_number": '',
@@ -350,11 +353,11 @@
                 addOrUpdateData.createForm = [
                     {"label":"商机编号","inputModel":"opportunity_number",},
                     {"label":"商机名称","inputModel":"opportunity_name"},
-                    {"label":"关联客户","inputModel":"customerpool_id",},
-                    {"label":"决策人","inputModel":"contacts_id",},
+                    {"label":"公司名称","inputModel":"customerpool_id",},
+                    {"label":"客户决策人","inputModel":"contacts_id",},
                     {"label":"预计成绩金额","inputModel":"opportunity_achievement","type":"number"},
                     {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
-                    {"label":"用户","inputModel":"user_id","disabled":true},
+                    {"label":"负责人","inputModel":"user_id","disabled":true},
                     {"label":"备注","inputModel":"opportunity_remarks"}];
                 addOrUpdateData.setForm = {
                     "opportunity_number": row.opportunity_number,

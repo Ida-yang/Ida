@@ -12,7 +12,7 @@
                         <ul>
                             <li>合同代码：<span>{{agreementdetail.contract_number}}</span></li>
                             <li>合同名称：<span>{{agreementdetail.contract_name}}</span></li>
-                            <li>对应商机：<span>{{agreementdetail.opportunity_name}}</span></li>
+                            <li>商机名称：<span>{{agreementdetail.opportunity_name}}</span></li>
                             <li>合同金额：<span>{{agreementdetail.amount}}</span></li>
                             <li>合同类型：<span>{{agreementdetail.contract_type}}</span></li>
                             <li>客户签约人：<span>{{agreementdetail.signatories}}</span></li>
@@ -142,6 +142,10 @@
                 dialogVisible:false,
                 imgshow:false
             }
+        },
+        activated(){
+            this.loadData();
+            this.loadIMG()
         },
         mounted(){
             this.loadData();

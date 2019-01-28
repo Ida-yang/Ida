@@ -47,10 +47,10 @@
                     </div>
                     <div class="text item" style="min-height:150px;">
                         <ul>
-                            <li>创建人：<span>{{privateUser.private_employee}}</span></li>
-                            <li>部门：<span>{{opportunitydetail.deptname}}</span></li>
-                            <li>机构：<span>{{opportunitydetail.parentname}}</span></li>
-                            <li>决策人：<span>{{contacts.coName}}</span></li>
+                            <li>负责人：<span>{{privateUser.private_employee}}</span></li>
+                            <li>负责人部门：<span>{{opportunitydetail.deptname}}</span></li>
+                            <li>负责人机构：<span>{{opportunitydetail.parentname}}</span></li>
+                            <li>客户决策人：<span>{{contacts.coName}}</span></li>
                             <li>创建时间：<span>{{opportunitydetail.opportunity_time}}</span></li>
                             <!-- <li>签约时间：<span>{{opportunitydetail.opportunity_time}}</span></li> -->
                             <!-- <li>失败时间：<span>{{opportunitydetail.opportunity_time}}</span></li> -->
@@ -154,6 +154,9 @@
                 showfail:false,
                 isprocess:'process'
             }
+        },
+        activated(){
+            this.loadData();
         },
         mounted(){
             this.loadData();

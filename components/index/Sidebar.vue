@@ -148,6 +148,17 @@
                             },
                         ]
                     },
+                    {
+                        icon: 'el-icon-new-quit',
+                        index: '5',
+                        title: '报表',
+                        subs: [
+                            {
+                                index: 'reportForm',
+                                title: '报表',
+                            },
+                        ]
+                    },
                 ],
                 
                 itemlast: [

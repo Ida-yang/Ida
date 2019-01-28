@@ -4,7 +4,7 @@
         <div class="searchcontent" v-if="show">
             <div class="searchList1">
                 <span class="searchtitle">公司名称：</span>
-                <el-input v-model="searchList.keyword" placeholder="公司名称" style="width:500px;"></el-input>
+                <el-input v-model="searchList.keyword" placeholder="公司名称" style="width:450px;"></el-input>
                 &nbsp;&nbsp;
                 <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
             </div>
@@ -18,7 +18,6 @@
                     format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                     placeholder="开始日期">
                 </el-date-picker>
-                <span style="font-size:14px;color:#595959;">至</span>
                 <el-date-picker
                     v-model="searchList.MaxDate"
                     align="right"
@@ -121,8 +120,8 @@
                 <span class="searchtitle">地址关键字：</span>
                 <el-input v-model="searchList.AddressKeyword" placeholder="地址" style="width:223px;"></el-input>
             </div>
-            <div class="searchList">
-                <el-button icon="el-icon-search" style="margin-left:30px;" class="searchbutton" size="mini" @click="search()">查询</el-button>
+            <div class="searchList" style="margin-left:30px;">
+                <el-button icon="el-icon-search" class="searchbutton" size="mini" @click="search()">查询</el-button>
                 &nbsp;&nbsp;
                 <el-button icon="el-icon-circle-close-outline" style="background:#20222a;color:#ffffff;" size="mini" @click="reset()">清空</el-button>
             </div>
@@ -450,10 +449,13 @@
                 areaList: [],
             }
         },
+        activated(){
+            this.loadData()
+            this.reloadTable()
+        },
         mounted(){
             this.loadData()
             this.reloadTable()
-            // this.getCityData()
         },
 
         methods: {
@@ -800,6 +802,9 @@
         width: 100%;
         margin: 8px;
     }
+    .searchList1 .el-date-editor.el-input{
+        width: 222px;
+    }
     .searchtitle{
         font-size: 14px;
         color: #595959;
@@ -824,13 +829,13 @@
         border-left: 0;
         border-right: 0;
     }
-    .country{
+    /* .country{
         display: flex;
-        display: -webkit-flex; /* Safari */
-        justify-content: left;
+        display: -webkit-flex; Safari */
+        /* justify-content: left;
         align-items: center;
     }
     .country .countryitem{
         margin-right: 5px;
-    }
+    } */
 </style>

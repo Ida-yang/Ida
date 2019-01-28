@@ -169,7 +169,12 @@ const router =new Router({
         {
           path: '/programmeDetails',
           component: resolve => require(['../components/index/page/programme/programmeDetails.vue'], resolve),
-          meta: { title: '方案/目标详情',name:'programmeDetails' ,requireAuth:true}
+          meta: { title: '方案/目标详情',requireAuth:true}
+        },
+        {
+          path: '/reportForm',
+          component: resolve => require(['../components/index/page/reportForm/reportForm.vue'], resolve),
+          meta: { title: '报表',name:'reportForm' ,requireAuth:true}
         },
       ]
     },

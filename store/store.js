@@ -100,6 +100,12 @@ const state = {
   //方案列表总数
   programmeListnumber:0,
 
+  //报表列表
+  reportFormList:[],
+  //报表列表总数
+  reportFormListnumber:0,
+  
+
 }
 /*配置全局函数*/
 const mutations = {
