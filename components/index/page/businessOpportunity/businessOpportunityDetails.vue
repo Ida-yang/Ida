@@ -34,6 +34,7 @@
                         <el-button class="info-btn" size="mini" style="float:right;margin-left:10px;" @click="nextStep()" v-if="shownext">下一步</el-button>
                         <el-button class="info-btn" size="mini" style="float:right;margin-left:100px;" @click="endStep()" v-if="shownext">失败关闭</el-button>
                         <span style="line-height:20px;float:right;margin-right:10px;font-size:14px;" v-if="showfail">该商机已关闭</span>
+                        <span style="line-height:20px;float:right;margin-right:10px;font-size:14px;" v-if="showsuccess">签约成功！</span>
                     </div>
                     <el-steps :active="active" finish-status="success" :process-status="isprocess" align-center style="padding:10px;">
                         <el-step v-for="item in stepList" :key="item.step_id" :title="item.step_name" :description="item.step_probability"></el-step>
@@ -143,22 +144,27 @@
                 },
                 active: 0,
                 stepList:null,
+
                 addstepList:{
                     progress_id:null,
                     progress_name:null,
                     progress_probability:null,
                 },
+
+                steptime:null,
+
                 dialogVisible:false,
                 addstep:null,
                 shownext:true,
                 showfail:false,
+                showsuccess:false,
                 isprocess:'process'
             }
         },
-        activated(){
+        mounted(){
             this.loadData();
         },
-        mounted(){
+        activated(){
             this.loadData();
         },
         methods: {
@@ -177,7 +183,7 @@
                     method:'get',
                     url:_this.$store.state.defaultHttp+'opportunity/getopportunityById.do?cId='+_this.$store.state.iscId+'&opportunity_id='+_this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.opportunitydetail = res.data.map.success[0]
                     _this.contacts = res.data.map.success[0].contacts[0]
                     _this.privateUser = res.data.map.success[0].privateUser[0]
@@ -191,18 +197,28 @@
                     }else{
                         for(var i = 0,length = addStep.length;i < length;i++){
                             // console.log(addStep[i].progress_name)
-                            // console.log(i)
-                            if(addStep[i].progress_name == '失败关闭'){
+                            // console.log(addStep[i].createTime)
+                            _this.steptime = addStep[i].createTime
+                            if(addStep[i].progress_probability == '100%'){
+                                _this.active = i+1
+                                _this.shownext = false
+                                _this.showsuccess = true
+                                _this.isprocess = 'wait'
+                                // console.log(_this.shownext)
+                            }else if(addStep[i].progress_name == '失败关闭'){
                                 // _this.active = i+6
                                 _this.active = i
-                                _this.shownext = !_this.shownext
-                                _this.showfail = !_this.showfail
+                                _this.shownext = false
+                                _this.showfail = true
                                 _this.isprocess = 'error'
                             }else{
                                 _this.active = i+1
+                                _this.shownext = true
+                                _this.showsuccess = false
                             }
                         }
                     }
+                    // console.log(_this.steptime)
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -260,10 +276,13 @@
                     let _this = this;
                     let qs =require('querystring')
                     let data = {}
+                    data.previousTime = this.steptime
                     if(_this.active == i){
                         data.progress_name = this.stepList[i].step_name
                         data.progress_probability = this.stepList[i].step_probability
-                        // console.log(data)
+                        if(data.progress_probability == '100%'){
+                            _this.shownext = false
+                        }
                         _this.$confirm('确认修改商机进度吗？一旦确定将不可撤回','提示',{
                             confirmButtonText:'确定',
                             cancelButtonText:'取消',
@@ -280,7 +299,7 @@
                                         type: 'success'
                                     });
                                     _this.active += 1
-                                // _this.$options.methods.reloadTable.bind(_this)(true);
+                                    _this.$options.methods.loadData.bind(_this)(true);
                                 } else {
                                     _this.$message({
                                         message: res.data.msg,
@@ -290,7 +309,9 @@
                             }).catch(function(err){
                                 console.log(err)
                             })
-                        })
+                        }).catch(() => {
+                            _this.shownext = true      
+                        });
                     }
                 }
             },
@@ -315,11 +336,10 @@
                                 message: '关闭成功',
                                 type: 'success'
                             });
-                            // _this.active += 0
                             _this.isprocess = 'error'
                             _this.shownext = !_this.shownext
                             _this.showfail = !_this.showfail
-                        // _this.$options.methods.reloadTable.bind(_this)(true);
+                            _this.$options.methods.loadData.bind(_this)(true);
                         } else {
                             _this.$message({
                                 message: res.data.msg,

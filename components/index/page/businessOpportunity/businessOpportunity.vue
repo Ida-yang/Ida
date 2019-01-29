@@ -119,9 +119,7 @@
                     label="预计成绩金额"
                     sortable>
                     <template slot-scope="scope">
-                        <div>
-                            {{scope.row.opportunity_achievement | rounding}}
-                        </div>
+                        {{scope.row.opportunity_achievement | rounding}}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -284,7 +282,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -294,7 +292,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);

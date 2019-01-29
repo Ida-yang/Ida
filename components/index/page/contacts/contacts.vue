@@ -128,10 +128,10 @@
                     <el-button
                     size="mini"
                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <!-- <el-button
+                    <el-button
                     size="mini"
                     type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -230,7 +230,7 @@
                     url: _this.$store.state.defaultHttp+'getContactsAll.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data)
+                    console.log(res.data.map.success)
                     _this.$store.state.contactsList = res.data.map.success
                     _this.$store.state.contactsListnumber = res.data.count;
                 }).catch(function(err){
@@ -241,7 +241,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -251,7 +251,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -310,7 +310,7 @@
                 this.$router.push({ path: '/contactsaddorupdate' });
             },
             handleEdit(index,row){
-                console.log(row)
+                // console.log(row)
                 let addOrUpdateData = {};
                 addOrUpdateData.createForm = [
                     {"label":"联系人","inputModel":"name"},
@@ -342,7 +342,7 @@
                     "remark": row.remark};
                 addOrUpdateData.submitData = {"id": row.csId};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'updateContacts.do?cId='+this.$store.state.iscId,
-                console.log(addOrUpdateData)
+                // console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/contactsaddorupdate' });
             },
@@ -351,7 +351,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(idArr.id)
+                // console.log(idArr.id)
                 _this.$confirm('是否确认删除吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -361,7 +361,7 @@
                         url:  _this.$store.state.defaultHttp+ 'deleteContacts.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.data.success && res.data.success == true) {
                             _this.$message({
                                 message: '删除成功',
@@ -380,45 +380,45 @@
                 });
             },
             handleDelete(index,row){
-                // let _this = this;
-                // let qs =require('querystring')
-                // let idArr = [];
-                // idArr.id = row.csId
+                let _this = this;
+                let qs =require('querystring')
+                let idArr = [];
+                idArr.id = row.csId
                 // console.log(idArr)
-                // _this.$confirm('是否确认删除[' + row.name + ']？', '提示', {
-                //     confirmButtonText: '确定',
-                //     cancelButtonText: '取消',
-                // }).then(({ value }) => {
-                //     axios({
-                //         method: 'post',
-                //         url: _this.$store.state.defaultHttp+'deleteContacts.do?cId='+_this.$store.state.iscId,
-                //         data:qs.stringify(idArr),
-                //     }).then(function(res){
-                //         console.log(res)
-                //         if(res.data && res.data == 'success') {
-                //             _this.$message({
-                //                 message: '删除成功',
-                //                 type: 'success'
-                //             });
-                //             _this.$options.methods.reloadTable.bind(_this)(true);
-                //         } else {
-                //             _this.$message({
-                //                 message: res.data.msg,
-                //                 type: 'error'
-                //             });
-                //         }
-                //     }).catch(function(err){
-                //         console.log(err);
-                //     })
-                // }).catch(() => {
-                //     this.$message({
-                //         type: 'info',
-                //         message: '取消删除[' + row.name + ']'
-                //     });       
-                // });
+                _this.$confirm('是否确认删除[' + row.name + ']？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'deleteContacts.do?cId='+_this.$store.state.iscId,
+                        data:qs.stringify(idArr),
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.data.success && res.data.success == true) {
+                            _this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            _this.$options.methods.reloadTable.bind(_this)(true);
+                        } else {
+                            _this.$message({
+                                message: res.data.msg,
+                                type: 'error'
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消删除[' + row.name + ']'
+                    });       
+                });
             },
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -434,7 +434,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{

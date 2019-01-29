@@ -1,6 +1,6 @@
 <template>
     <div class="innerspace">
-        <div class="middle">
+        <div class="middles">
             <div class="middlebody">
                 <div id="chart1" :style="{width: '400px', height: '400px'}"></div>
             </div>
@@ -38,7 +38,7 @@
                 </el-table>
             </div>
         </div>
-        <div class="middle">
+        <div class="middles">
             <div class="middlebody">
                 <div id="chart2" :style="{width: '400px', height: '400px'}"></div>
             </div>
@@ -76,7 +76,7 @@
                 </el-table>
             </div>
         </div>
-        <div class="middle">
+        <div class="middles">
             <div class="middlebody">
                 <div id="chart3" :style="{width: '400px', height: '400px'}"></div>
             </div>
@@ -114,7 +114,7 @@
                 </el-table>
             </div>
         </div>
-        <div class="middle">
+        <div class="middles">
             <div class="middlebody">
                 <div id="chart4" :style="{width: '400px', height: '400px'}"></div>
             </div>
@@ -433,21 +433,21 @@
         text-align: center;
         line-height: 24px;
     }
-    .middle{
+    .middles{
         width: 100%;
         height: 400px;
         background-color: #ffffff;
-        margin: 10px 0;
+        margin-top: 20px;
         display: flex;
         display: -webkit-flex; /* Safari */
         justify-content: center;   /*水平居中*/
         align-items: center;
     }
-    .middle .middlebody{
+    .middles .middlebody{
         flex: 1;
         padding: 10px;
     }
-    .middle .middlebody:first-child{
+    .middles .middlebody:first-child{
         border-right: 10px solid #f0f0f0;
     }
     .foot{

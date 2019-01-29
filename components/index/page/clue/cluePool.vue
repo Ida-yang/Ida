@@ -149,6 +149,15 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
+                    prop="createTime"
+                    v-else-if="item.prop == 'createTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="创建时间"
+                    min-width="130"
+                    sortable>
+                </el-table-column>
+                <el-table-column
                     prop="state"
                     v-else-if="item.prop == 'state' && item.state == 1"
                     header-align="left"
@@ -285,7 +294,7 @@
                     url: _this.$store.state.defaultHttp+'customerTwo/getCustomerOneByN.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.cluePoolList = res.data.map.success
                     _this.$store.state.cluePoolListnumber = res.data.count;
                 }).catch(function(err){
@@ -296,7 +305,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -306,7 +315,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -336,7 +345,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(qs.stringify(idArr))
+                // console.log(qs.stringify(idArr))
                 _this.$confirm('是否确认删除吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -378,7 +387,7 @@
                         url: _this.$store.state.defaultHttp+'customerTwo/delete.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.status && res.status == 200) {
                             _this.$message({
                                 message: '删除成功',
@@ -486,7 +495,7 @@
             },
 
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -502,7 +511,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{

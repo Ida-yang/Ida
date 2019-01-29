@@ -153,6 +153,7 @@
             @selection-change="selectInfo">
             <el-table-column
                 header-align="center"
+                fixed
                 align="center"
                 type="selection"
                 width="45"

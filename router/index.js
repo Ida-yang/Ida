@@ -47,9 +47,9 @@ const router =new Router({
           meta: { title: '搜索客户',name:'customerSearch' ,requireAuth:true}
         },
         {
-          path: '/automaticSearch',
-          component: resolve => require(['../components/index/page/customerSearch/automaticSearch.vue'], resolve),
-          meta: { title: '智能获客' ,requireAuth:true}
+          path: '/reportForm',
+          component: resolve => require(['../components/index/page/reportForm/reportForm.vue'], resolve),
+          meta: { title: '获客报表',name:'reportForm' ,requireAuth:true}
         },
         {
           path: '/clue',
@@ -170,11 +170,6 @@ const router =new Router({
           path: '/programmeDetails',
           component: resolve => require(['../components/index/page/programme/programmeDetails.vue'], resolve),
           meta: { title: '方案/目标详情',requireAuth:true}
-        },
-        {
-          path: '/reportForm',
-          component: resolve => require(['../components/index/page/reportForm/reportForm.vue'], resolve),
-          meta: { title: '报表',name:'reportForm' ,requireAuth:true}
         },
       ]
     },

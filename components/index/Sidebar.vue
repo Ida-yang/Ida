@@ -94,10 +94,10 @@
                                 index: 'customerSearch',
                                 title: '搜索客户',
                             },
-                            {
-                                index: 'automaticSearch',
-                                title: '智能获客',
-                            }, 
+                            // {
+                            //     index: 'reportForm',
+                            //     title: '获客报表',
+                            // },
                         ]
                     },
                 ],
@@ -145,17 +145,6 @@
                             {
                                 index: 'socialMarketing',
                                 title: '社交营销',
-                            },
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-new-quit',
-                        index: '5',
-                        title: '报表',
-                        subs: [
-                            {
-                                index: 'reportForm',
-                                title: '报表',
                             },
                         ]
                     },

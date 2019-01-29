@@ -385,7 +385,7 @@
                 stateData:null,
                 typeData:null,
                 nullvalue:null,
-                
+
                 filterList:null,
                 checklist:null,
 
@@ -444,7 +444,7 @@
                     url: _this.$store.state.defaultHttp+'customerTwo/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.clueList = res.data.map.success
                     _this.$store.state.clueListnumber = res.data.count;
                 }).catch(function(err){
@@ -455,7 +455,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -484,7 +484,7 @@
                         // console.log(newArr)
                     }
                 });
-                console.log(newArr)
+                // console.log(newArr)
                 this.idArr.id = newArr;
                 
             },
@@ -558,7 +558,7 @@
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'clueJurisdiction/insertClue.do',
                 }).then(function(res){
-                    console.log(res.data.msg)
+                    // console.log(res.data.msg)
                     if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
                             message:'对不起，您没有新增线索的权限',
@@ -572,7 +572,7 @@
                 });
             },
             handleEdit(index,row){
-                console.log(row)
+                // console.log(row)
                 let _this = this
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
@@ -634,13 +634,13 @@
                     "operatingState": row.operatingState};
                 addOrUpdateData.submitData = {"id": row.id,'csId':row.contacts[0].csId};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerTwo/updateClue.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
-                console.log(addOrUpdateData)
+                // console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'clueJurisdiction/updateClue.do',
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
                             message:'对不起，您没有修改线索的权限',
@@ -659,7 +659,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(idArr)
+                // console.log(idArr)
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
@@ -712,7 +712,7 @@
                 });
             },
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -728,7 +728,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{

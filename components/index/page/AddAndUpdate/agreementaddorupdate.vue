@@ -153,9 +153,11 @@
         },
         mounted(){
             this.loadData();
+            this.loadOpp()
         },
         activated() {
             this.loadData();
+            this.loadOpp()
             // this.restaurants = this.loadData();
         },
         methods:{
@@ -180,7 +182,9 @@
                             this.myForm[item.inputModel] = setForm[item.inputModel];
                         }
                     });
-                    // console.log(this.myForm);
+                    console.log(this.myForm);
+                    this.myForm.customerpool_id = this.addOrUpdateData.setForm.poolName
+                    this.myForm.opportunity_id = this.addOrUpdateData.setForm.opportunity_name
                     this.$emit('input', this.myForm);
                 }
             },
@@ -200,7 +204,11 @@
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
-                data.customerpool_id = this.customerId
+                if(this.myForm.customerpool_id){
+                    data.customerpool_id = this.myForm.customerpool_id
+                }else{
+                    data.customerpool_id = this.customerId
+                }
                 axios({
                     method:'post',
                     url: _this.$store.state.defaultHttp+'opportunity/getOpportunityAll.do?cId='+_this.$store.state.iscId,
@@ -216,7 +224,7 @@
                     url: _this.$store.state.defaultHttp+'getPoolContactsName.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.contactslist = res.data.map.success
                 }).catch(function(err){
                     console.log(err);
@@ -228,7 +236,7 @@
                 let qs =require('querystring')
                 let subData = {};
                 if(_this.addOrUpdateData.submitData) {
-                    subData.id = _this.addOrUpdateData.submitData.id;
+                    subData.contract_id = _this.addOrUpdateData.submitData.id;
                     subData.csId = _this.addOrUpdateData.submitData.csId;
                 }
                 let createForm = _this.addOrUpdateData.createForm;
@@ -312,7 +320,7 @@
                     data: qs.stringify(subData)
                 }).then(function(res){
                     console.log(res)
-                    if(res.status && res.status == "200") {
+                    if(res.data && res.data == "success") {
                         _this.$message({
                             message: '成功',
                             type: 'success'

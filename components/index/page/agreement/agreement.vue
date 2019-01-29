@@ -144,6 +144,33 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
+                    prop="deptname"
+                    v-else-if="item.prop == 'deptname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="部门"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="parentname"
+                    v-else-if="item.prop == 'parentname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="机构"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="create_time"
+                    v-else-if="item.prop == 'create_time' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="创建时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
                     prop="remarks"
                     v-else-if="item.prop == 'remarks' && item.state == 1"
                     header-align="left"
@@ -272,7 +299,7 @@
                 // searchList.pId = this.$store.state.ispId
                 searchList.page = this.page
                 searchList.limit = this.limit
-                console.log(searchList)
+                // console.log(searchList)
                 let filterList = {}
                 filterList.type = '合同'
                 let data = {}
@@ -294,7 +321,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -304,7 +331,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -313,7 +340,7 @@
             //获取列表id
             selectInfo(val){
                 this.multipleSelection = val;
-                console.log(val)
+                // console.log(val)
                 let arr = val;
                 let newArr = [new Array()];
                 arr.forEach((item) => {
@@ -345,7 +372,7 @@
                         url:  _this.$store.state.defaultHttp+ 'delContract.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.status && res.status == 200) {
                             _this.$message({
                                 message: '删除成功',
@@ -400,7 +427,7 @@
                 this.$router.push({ path: '/agreementaddorupdate' });
             },
             handleEdit(index,row){
-                console.log(row)
+                // console.log(row)
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [
@@ -425,7 +452,9 @@
                     "contract_number": row.contract_number,
                     "contract_name": row.contract_name,
                     "customerpool_id": row.poolName,
-                    "opportunity_id": row.opportunity_id,
+                    "poolName": row.customerpool_id,
+                    "opportunity_id": row.opportunity_name,
+                    "opportunity_name":row.opportunity_id,
                     "amount": row.amount,
                     "start_date": row.start_date,
                     "end_date": row.end_date,
@@ -435,6 +464,7 @@
                 addOrUpdateData.submitData = {"id": row.contract_id};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'updateContract.do?cId='+this.$store.state.iscId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
+                console.log(addOrUpdateData)
                 this.$router.push({ path: '/agreementaddorupdate' });
             },
             handleDelete(index,row){
@@ -474,7 +504,7 @@
                 });
             },
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -490,7 +520,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{
