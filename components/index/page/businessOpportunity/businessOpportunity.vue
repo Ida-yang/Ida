@@ -14,19 +14,7 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="shownum()" label="商机编号"></el-checkbox>
-                <el-checkbox class="checkone" @change="showname()" label="商机名称"></el-checkbox>
-                <el-checkbox class="checkone" @change="showdate()" label="日期"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcustomer()" label="公司名称"></el-checkbox>
-                <el-checkbox class="checkone" @change="showpeople()" label="客户决策人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showprogress()" label="商机进度"></el-checkbox>
-                <el-checkbox class="checkone" @change="showprobability()" label="成功几率"></el-checkbox>
-                <el-checkbox class="checkone" @change="showmoney()" label="预计成绩金额"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtime()" label="预计成交时间"></el-checkbox>
-                <el-checkbox class="checkone" @change="showuser()" label="负责人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showdepartment()" label="部门"></el-checkbox>
-                <el-checkbox class="checkone" @change="showmechanism()" label="机构"></el-checkbox>
-                <el-checkbox class="checkone" @change="showremark()" label="备注"></el-checkbox>
+                <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
             </el-checkbox-group>
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
@@ -50,136 +38,138 @@
             prop="opportunity_id"
             @selection-change="selectInfo">
             </el-table-column>
-            <el-table-column
-                prop="opportunity_number"
-                fixed
-                v-if="showbianhao"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="商机编号"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="opportunity_name"
-                fixed
-                v-if="showmingcheng"
-                header-align="left"
-                align="left"
-                min-width="120"
-                label="商机名称"
-                sortable>
-                <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
-                        {{scope.row.opportunity_name}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="opportunity_time"
-                v-if="showriqi"
-                header-align="left"
-                align="left"
-                min-width="120"
-                label="日期"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="customerpool[0].name"
-                v-if="showkehu"
-                header-align="left"
-                align="left"
-                min-width="180"
-                label="公司名称"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].coName"
-                v-if="showren"
-                header-align="left"
-                align="left"
-                min-width="115"
-                label="客户决策人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="opportunityProgress[0].progress_name"
-                v-if="showjindu"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="商机进度"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="opportunityProgress[0].progress_probability"
-                show-overflow-tooltip
-                v-if="showjilv"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="成功几率"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="opportunity_achievement"
-                v-if="showjine"
-                header-align="left"
-                align="left"
-                min-width="140"
-                label="预计成绩金额"
-                sortable>
-                <template slot-scope="scope">
-                    <div>
-                        {{scope.row.opportunity_achievement | rounding}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="opportunity_deal"
-                v-if="showshijian"
-                header-align="left"
-                align="left"
-                min-width="140"
-                label="预计成交时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="private_employee"
-                v-if="showyonghu"
-                header-align="left"
-                align="left"
-                min-width="90"
-                label="负责人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="deptname"
-                v-if="showbumen"
-                header-align="left"
-                align="left"
-                min-width="80"
-                label="部门"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="parentname"
-                v-if="showjigou"
-                header-align="left"
-                align="left"
-                min-width="200"
-                label="机构"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="opportunity_remarks"
-                v-if="showbeizhu"
-                header-align="left"
-                align="left"
-                min-width="80"
-                label="备注"
-                sortable>
-            </el-table-column>
+            <div v-for="(item,index) in filterList" :key="index" >
+                <el-table-column
+                    prop="opportunity_number"
+                    fixed
+                    v-if="item.prop == 'opportunity_number' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="商机编号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunity_name"
+                    fixed
+                    v-else-if="item.prop == 'opportunity_name' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="120"
+                    label="商机名称"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                            {{scope.row.opportunity_name}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunity_time"
+                    v-else-if="item.prop == 'opportunity_time' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="120"
+                    label="日期"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="customerpool[0].name"
+                    v-else-if="item.prop == 'customerpool[0].name' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="180"
+                    label="公司名称"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].coName"
+                    v-else-if="item.prop == 'contacts[0].coName' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="115"
+                    label="客户决策人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunityProgress[0].progress_name"
+                    v-else-if="item.prop == 'opportunityProgress[0].progress_name' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="商机进度"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunityProgress[0].progress_probability"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'opportunityProgress[0].progress_probability' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="成功几率"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunity_achievement"
+                    v-else-if="item.prop == 'opportunity_achievement' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="预计成绩金额"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.opportunity_achievement | rounding}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunity_deal"
+                    v-else-if="item.prop == 'opportunity_deal' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="预计成交时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="private_employee"
+                    v-else-if="item.prop == 'private_employee' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="90"
+                    label="负责人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="deptname"
+                    v-else-if="item.prop == 'deptname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="80"
+                    label="部门"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="parentname"
+                    v-else-if="item.prop == 'parentname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="200"
+                    label="机构"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunity_remarks"
+                    v-else-if="item.prop == 'opportunity_remarks' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="80"
+                    label="备注"
+                    sortable>
+                </el-table-column>
+            </div>
             <el-table-column label="操作"
                 fixed="right"
                 width="150"
@@ -248,20 +238,10 @@
                 idArr:{
                     id:null,
                 },
-                checklist:['商机编号','商机名称','日期','公司名称','客户决策人','商机进度','成功几率','预计成绩金额','预计成交时间','负责人','部门','机构','备注'],
-                showbianhao:true,
-                showmingcheng:true,
-                showriqi:true,
-                showkehu:true,
-                showren:true,
-                showjindu:true,
-                showjilv:true,
-                showjine:true,
-                showshijian:true,
-                showyonghu:true,
-                showbumen:true,
-                showjigou:true,
-                showbeizhu:true,
+                
+                filterList:null,
+                checklist:null,
+                
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
                 formLabelWidth: '130px',
@@ -283,6 +263,11 @@
                 searchList.page = this.page;
                 searchList.limit = this.limit;
                 // console.log(searchList)
+                let filterList = {}
+                filterList.type = '商机'
+                let data = {}
+                data.type = '商机'
+                data.state = 1
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'opportunity/query.do?cId='+_this.$store.state.iscId,
@@ -291,6 +276,26 @@
                     console.log(res.data.map.success)
                     _this.$store.state.businessOpportunityList = res.data.map.success
                     _this.$store.state.businessOpportunityListnumber = res.data.count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(filterList)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.filterList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -447,44 +452,33 @@
                     });       
                 });
             },
-            shownum(){
-                this.showbianhao = !this.showbianhao
-            },
-            showpeople(){
-                this.showren = !this.showren
-            },
-            showprogress(){
-                this.showjindu = !this.showjindu
-            },
-            showprobability(){
-                this.showjilv = !this.showjilv
-            },
-            showmoney(){
-                this.showjine = !this.showjine
-            },
-            showtime(){
-                this.showshijian = !this.showshijian
-            },
-            showdepartment(){
-                this.showbumen = !this.showbumen
-            },
-            showmechanism(){
-                this.showjigou = !this.showjigou
-            },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showcustomer(){
-                this.showkehu = !this.showkehu
-            },
-            showdate(){
-                this.showriqi = !this.showriqi
-            },
-            showremark(){
-                this.showbeizhu = !this.showbeizhu
-            },
-            showuser(){
-                this.showyonghu = !this.showyonghu
+            
+            hangleChange(e,val){
+                console.log(e)
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.pageInfoId = val.pageInfoId
+                if(e == true){
+                    data.state = 1
+                }else{
+                    data.state = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data && res.data =="success"){
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        console.log(err)
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

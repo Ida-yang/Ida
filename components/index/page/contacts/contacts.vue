@@ -21,16 +21,7 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="showcontactsname()" label="联系人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtel()" label="电话"></el-checkbox>
-                <el-checkbox class="checkone" @change="showphone()" label="手机"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtencent()" label="QQ"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcreatetime()" label="最新跟进时间"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcontent()" label="最新跟进记录"></el-checkbox>
-                <el-checkbox class="checkone" @change="shownexttime()" label="下次跟进时间"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcharge()" label="负责人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showstate()" label="状态"></el-checkbox>
+                <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
             </el-checkbox-group>
             <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
@@ -43,90 +34,91 @@
             border
             stripe
             style="width:100%;"
-            @selection-change="selectInfo"
-            >
-            <el-table-column
-            fixed
-            header-align="center"
-            align="center"
-            type="selection"
-            width="45"
-            scope.row.csId
-            prop="csId"
             @selection-change="selectInfo">
-            </el-table-column>
-            <el-table-column label="联系人"
-                prop="name"
+            <el-table-column
                 fixed
-                v-if="showxingming"
-                header-align="left"
-                align="left"
-                min-width="100"
-                sortable>
+                header-align="center"
+                align="center"
+                type="selection"
+                width="45"
+                scope.row.csId
+                prop="csId"
+                @selection-change="selectInfo">
             </el-table-column>
-            <el-table-column label="公司名称"
-                prop="poolname"
-                fixed
-                v-if="showmingcheng"
-                header-align="left"
-                align="left"
-                min-width="150"
-                sortable>
-            </el-table-column>
-            <el-table-column label="电话"
-                prop="telephone"
-                v-if="showdianhua"
-                header-align="left"
-                align="left"
-                sortable>
-            </el-table-column>
-            <el-table-column label="手机"
-                prop="phone"
-                v-if="showshouji"
-                header-align="left"
-                align="left"
-                sortable>
-            </el-table-column>
-            <el-table-column label="QQ"
-                prop="qq"
-                v-if="showqq"
-                header-align="left"
-                align="left"
-                sortable>
-            </el-table-column>
-            <el-table-column label="最新跟进时间"
-                prop="follow[0].createTime"
-                v-if="showgenshi"
-                header-align="left"
-                align="left"
-                min-width="130"
-                sortable>
-            </el-table-column>
-            <el-table-column label="最新跟进记录"
-                prop="follow[0].followContent"
-                show-overflow-tooltip
-                v-if="showgenlu"
-                header-align="left"
-                align="left"
-                min-width="130"
-                sortable>
-            </el-table-column>
-            <el-table-column label="下次联系时间"
-                prop="follow[0].contactTime"
-                v-if="showgengshi"
-                header-align="left"
-                align="left"
-                min-width="140"
-                sortable>
-            </el-table-column>
-            <el-table-column label="负责人"
-                prop="private_employee"
-                v-if="showfuze"
-                header-align="left"
-                align="left"
-                min-width="100"
-                sortable>
-            </el-table-column>
+            <div v-for="(item,index) in filterList" :key="index" >
+                <el-table-column label="联系人"
+                    prop="name"
+                    fixed
+                    v-if="item.prop == 'name' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="公司名称"
+                    prop="poolname"
+                    fixed
+                    v-else-if="item.prop == 'poolname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="150"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="电话"
+                    prop="telephone"
+                    v-else-if="item.prop == 'telephone' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="手机"
+                    prop="phone"
+                    v-else-if="item.prop == 'phone' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="QQ"
+                    prop="qq"
+                    v-else-if="item.prop == 'qq' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="最新跟进时间"
+                    prop="follow[0].createTime"
+                    v-else-if="item.prop == 'follow[0].createTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="最新跟进记录"
+                    prop="follow[0].followContent"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'follow[0].followContent' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="下次联系时间"
+                    prop="follow[0].contactTime"
+                    v-else-if="item.prop == 'follow[0].contactTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    sortable>
+                </el-table-column>
+                <el-table-column label="负责人"
+                    prop="private_employee"
+                    v-else-if="item.prop == 'private_employee' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    sortable>
+                </el-table-column>
+            </div>
             <el-table-column label="操作"
                 fixed="right"
                 width="150"
@@ -203,17 +195,9 @@
                         value:'我的联系人'
                     }
                 ],
-                checklist:['联系人','公司名称','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态'],
-                showxingming:true,
-                showmingcheng:true,
-                showdianhua:true,
-                showshouji:true,
-                showqq:true,
-                showgenshi:true,
-                showgenlu:true,
-                showgengshi:true,
-                showfuze:true,
-                showzhuangtai:true,
+                filterList:null,
+                checklist:null,
+                
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
                 formLabelWidth: '130px',
@@ -235,7 +219,12 @@
                 searchList.pId = this.searchList.pId
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
+                let filterList = {}
+                filterList.type = '联系人'
+                let data = {}
+                data.type = '联系人'
+                data.state = 1
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'getContactsAll.do?cId='+_this.$store.state.iscId,
@@ -244,6 +233,26 @@
                     console.log(res.data)
                     _this.$store.state.contactsList = res.data.map.success
                     _this.$store.state.contactsListnumber = res.data.count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(filterList)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.filterList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -408,35 +417,32 @@
                 //     });       
                 // });
             },
-            showcontactsname(){
-                this.showxingming = !this.showxingming
-            },
-            showtencent(){
-                this.showqq = !this.showqq
-            },
-            showcreatetime(){
-                this.showgenshi = !this.showgenshi
-            },
-            showcontent(){
-                this.showgenlu = !this.showgenlu
-            },
-            shownexttime(){
-                this.showgengshi = !this.showgengshi
-            },
-            showcharge(){
-                this.showfuze = !this.showfuze
-            },
-            showstate(){
-                this.showzhuangtai = !this.showzhuangtai
-            },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showtel(){
-                this.showdianhua = !this.showdianhua
+            hangleChange(e,val){
+                console.log(e)
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.pageInfoId = val.pageInfoId
+                if(e == true){
+                    data.state = 1
+                }else{
+                    data.state = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data && res.data =="success"){
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        console.log(err)
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

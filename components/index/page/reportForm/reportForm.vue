@@ -1,5 +1,157 @@
 <template>
     <div class="innerspace">
+        <div class="middle">
+            <div class="middlebody">
+                <div id="chart1" :style="{width: '400px', height: '400px'}"></div>
+            </div>
+            <div class="middlebody">
+                <el-table
+                    :data="tableData"
+                    ref="multipleTable"
+                    border
+                    stripe
+                    :default-sort = "{order: 'descending'}"
+                    style="width:100%;text-align:center">
+                    <el-table-column
+                        fixed
+                        header-align="center"
+                        align="center"
+                        type="index"
+                        width="45">
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_name"
+                        header-align="left"
+                        align="left"
+                        min-width="120"
+                        label="项目名"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_number"
+                        header-align="left"
+                        align="left"
+                        min-width="90"
+                        label="状态"
+                        sortable>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div class="middle">
+            <div class="middlebody">
+                <div id="chart2" :style="{width: '400px', height: '400px'}"></div>
+            </div>
+            <div class="middlebody">
+                <el-table
+                    :data="tableData"
+                    ref="multipleTable"
+                    border
+                    stripe
+                    :default-sort = "{order: 'descending'}"
+                    style="width:100%;text-align:center">
+                    <el-table-column
+                        fixed
+                        header-align="center"
+                        align="center"
+                        type="index"
+                        width="45">
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_name"
+                        header-align="left"
+                        align="left"
+                        min-width="120"
+                        label="项目名"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_number"
+                        header-align="left"
+                        align="left"
+                        min-width="90"
+                        label="状态"
+                        sortable>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div class="middle">
+            <div class="middlebody">
+                <div id="chart3" :style="{width: '400px', height: '400px'}"></div>
+            </div>
+            <div class="middlebody">
+                <el-table
+                    :data="tableData"
+                    ref="multipleTable"
+                    border
+                    stripe
+                    :default-sort = "{order: 'descending'}"
+                    style="width:100%;text-align:center">
+                    <el-table-column
+                        fixed
+                        header-align="center"
+                        align="center"
+                        type="index"
+                        width="45">
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_name"
+                        header-align="left"
+                        align="left"
+                        min-width="120"
+                        label="项目名"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_number"
+                        header-align="left"
+                        align="left"
+                        min-width="90"
+                        label="状态"
+                        sortable>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div class="middle">
+            <div class="middlebody">
+                <div id="chart4" :style="{width: '400px', height: '400px'}"></div>
+            </div>
+            <div class="middlebody">
+                <el-table
+                    :data="tableData"
+                    ref="multipleTable"
+                    border
+                    stripe
+                    :default-sort = "{order: 'descending'}"
+                    style="width:100%;text-align:center">
+                    <el-table-column
+                        fixed
+                        header-align="center"
+                        align="center"
+                        type="index"
+                        width="45">
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_name"
+                        header-align="left"
+                        align="left"
+                        min-width="120"
+                        label="项目名"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="opportunity_number"
+                        header-align="left"
+                        align="left"
+                        min-width="90"
+                        label="状态"
+                        sortable>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
         <div class="head">
             <el-table
                 :data="tableData"
@@ -24,22 +176,6 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="opportunity_time"
-                    header-align="left"
-                    align="left"
-                    min-width="120"
-                    label="开始日期"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="opportunity_deal"
-                    header-align="left"
-                    align="left"
-                    min-width="180"
-                    label="截止日期"
-                    sortable>
-                </el-table-column>
-                <el-table-column
                     prop="opportunity_number"
                     header-align="left"
                     align="left"
@@ -47,31 +183,7 @@
                     label="状态"
                     sortable>
                 </el-table-column>
-                <el-table-column
-                    prop="private_employee"
-                    header-align="left"
-                    align="left"
-                    min-width="110"
-                    label="分配"
-                    sortable>
-                </el-table-column>
             </el-table>
-        </div>
-        <div class="middle">
-            <div class="middlebody">
-                <div id="chart1" :style="{width: '400px', height: '400px'}"></div>
-            </div>
-            <div class="middlebody">
-                <div id="chart2" :style="{width: '400px', height: '400px'}"></div>
-            </div>
-        </div>
-        <div class="middle">
-            <div class="middlebody">
-                <div id="chart3" :style="{width: '400px', height: '400px'}"></div>
-            </div>
-            <div class="middlebody">
-                <div id="chart4" :style="{width: '400px', height: '400px'}"></div>
-            </div>
         </div>
     </div>
 </template>
@@ -136,9 +248,10 @@
                 let chart4 = echarts.init(document.getElementById('chart4'))
                 // 绘制图表
                 chart1.setOption({
-                    title : { text: '销售漏斗' },
+                    title : { text: '销售漏斗',left: 'center' },
                     tooltip : {},
                     legend: {
+                        bottom: 20,
                         data : ['展现','点击','访问','咨询','订单']
                     },
                     calculable : true,
@@ -158,9 +271,10 @@
                     ]
                 });
                 chart2.setOption({
-                    title: { text: '销售排行' },
+                    title: { text: '销售排行',left: 'center' },
                     tooltip: {},
                     xAxis: {
+                        bottom: 20,
                         data: ["张三", "李四", "王五", "赵六"]
                     },
                     yAxis: {},
@@ -206,6 +320,10 @@
                     }]
                 });
                 chart4.setOption({
+                    title: {
+                        text: '城市分布分析', // 标题文本
+                        left: 'center'
+                    },
                     //  backgroundColor: "#02AFDB",
                     tooltip: {}, // 鼠标移到图里面的浮动提示框
                     dataRange: {
@@ -215,7 +333,7 @@
                         text: ['High', 'Low'],
                         realtime: true,
                         calculable: true,
-                        color: ['orangered', 'yellow', 'lightskyblue']
+                        color: ['#00ace0', '#68cceb', '#c2dce4']
                     },
                     geo: { // 这个是重点配置区
                         map: 'china', // 表示中国地图
@@ -247,27 +365,27 @@
                         coordinateSystem: 'geo' // 对应上方配置
                         },
                         {
-                        name: '启动次数', // 浮动框的标题
+                        name: '浏览量', // 浮动框的标题
                         type: 'map',
                         geoIndex: 0,
                         data: [{
-                            // "name": "北京",
-                            // "value": 599
-                            // }, {
-                            //     "name": "上海",
-                            //     "value": 142
-                            // }, {
-                            //     "name": "黑龙江",
-                            //     "value": 44
-                            // }, {
-                            //     "name": "深圳",
-                            //     "value": 92
-                            // }, {
-                            //     "name": "湖北",
-                            //     "value": 810
-                            // }, {
+                            "name": "北京",
+                            "value": 599
+                            }, {
+                                "name": "上海",
+                                "value": 142
+                            }, {
+                                "name": "黑龙江",
+                                "value": 44
+                            }, {
+                                "name": "深圳",
+                                "value": 92
+                            }, {
+                                "name": "湖北",
+                                "value": 810
+                            }, {
                                 "name": "广东",
-                                "value": 453
+                                "value": 19450
                             }]
                         }
                     ]

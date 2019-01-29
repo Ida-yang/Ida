@@ -26,13 +26,7 @@
                 width="100"
                 trigger="click">
                 <el-checkbox-group class="checklist" v-model="checklist">
-                    <el-checkbox class="checkone" @change="showname()" label="活动名称"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showleader()" label="负责人"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showamount()" label="线索量"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showcreatetime()" label="创建时间"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showwebsite()" label="网址"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showcues()" label="来源"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showremark()" label="备注"></el-checkbox>
+                    <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
                 </el-checkbox-group>
                 <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
                 <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
@@ -58,75 +52,77 @@
                     @selection-change="selectInfo"
                     sortable>
                 </el-table-column>
-                <el-table-column
-                    prop="name"
-                    fixed
-                    v-if="showhuodong"
-                    header-align="left"
-                    align="left"
-                    min-width="150"
-                    label="活动名称"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="private_employee"
-                    v-if="showfuzeren"
-                    header-align="left"
-                    align="left"
-                    min-width="90"
-                    label="负责人"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="clueNum"
-                    v-if="showliang"
-                    header-align="left"
-                    align="left"
-                    min-width="120"
-                    label="线索量"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="createTime"
-                    v-if="showshijian"
-                    header-align="left"
-                    align="left"
-                    min-width="130"
-                    label="创建时间"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="codeURL"
-                    v-if="showwangzhi"
-                    header-align="left"
-                    align="left"
-                    min-width="160"
-                    label="网址"
-                    sortable>
-                    <template slot-scope="scope">
-                        <a :href="scope.row.codeURL">
-                            {{scope.row.codeURL}}
-                        </a>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="typeName"
-                    v-if="showlaiyuan"
-                    header-align="left"
-                    align="left"
-                    min-width="130"
-                    label="来源"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="remarks"
-                    v-if="showbeizhu"
-                    header-align="left"
-                    align="left"
-                    min-width="130"
-                    label="备注"
-                    sortable>
-                </el-table-column>
+                <div v-for="(item,index) in filterList" :key="index" >
+                    <el-table-column
+                        prop="name"
+                        fixed
+                        v-if="item.prop == 'name' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="150"
+                        label="活动名称"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="private_employee"
+                        v-else-if="item.prop == 'private_employee' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="90"
+                        label="负责人"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="clueNum"
+                        v-else-if="item.prop == 'clueNum' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="120"
+                        label="线索量"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="createTime"
+                        v-else-if="item.prop == 'createTime' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="130"
+                        label="创建时间"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="codeURL"
+                        v-else-if="item.prop == 'codeURL' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="160"
+                        label="网址"
+                        sortable>
+                        <template slot-scope="scope">
+                            <a :href="scope.row.codeURL">
+                                {{scope.row.codeURL}}
+                            </a>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="typeName"
+                        v-else-if="item.prop == 'typeName' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="130"
+                        label="来源"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="remarks"
+                        v-else-if="item.prop == 'remarks' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="130"
+                        label="备注"
+                        sortable>
+                    </el-table-column>
+                </div>
                 <el-table-column 
                     label="二维码"
                     fixed="right"
@@ -252,26 +248,16 @@
                     secondid:null,
                     resourceid:null,
                 },
-                checklist:['活动名称','负责人','线索量','创建时间','网址','来源','备注'],
+                
+                filterList:null,
+                checklist:null,
+                // checklist:['活动名称','负责人','线索量','创建时间','网址','来源','备注'],
                 idArr:{
                     id:null,
                 },
                 typeData:null,
                 roleList:null,
                 clickdata:null,
-
-                showhuodong:true,
-                showfuzeren:true,
-                showliang:true,
-                showshijian:true,
-                showwangzhi:true,
-                showlaiyuan:true,
-                showbumen:true,
-                showzhiwei:true,
-                showfuze:true,
-                showzhuangtai:true,
-                showlaiyuan:true,
-                showbeizhu:true,
 
                 qrcode:null,
                 codeURL:null,
@@ -303,6 +289,7 @@
         },
         mounted(){
             this.reloadTable()
+            this.loadcues()
         },
         methods:{
             reloadTable(){
@@ -314,8 +301,11 @@
                 pageInfo.searchName = this.searchList.searchName
                 pageInfo.secondid = this.searchList.secondid
                 pageInfo.cuesid = this.searchList.cuesid
+                let filterList = {}
+                filterList.type = '活动'
                 let data = {}
-                data.type = '客户来源'
+                data.type = '活动'
+                data.state = 1
 
                 axios({
                     method: 'post',
@@ -336,6 +326,33 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(filterList)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.filterList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.checklist = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+            },
+            loadcues(){
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.type = '客户来源'
+                
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoGroupByType.do?cId='+_this.$store.state.iscId,
@@ -479,26 +496,32 @@
                 });
                 // alert('添加成功')
             },
-            showname(){
-                this.showhuodong = !this.showhuodong
-            },
-            showleader(){
-                this.showfuzeren = !this.showfuzeren
-            },
-            showamount(){
-                this.showliang = !this.showliang
-            },
-            showcreatetime(){
-                this.showshijian = !this.showshijian
-            },
-            showwebsite(){
-                this.showwangzhi = !this.showwangzhi
-            },
-            showcues(){
-                this.showlaiyuan = !this.showlaiyuan
-            },
-            showremark(){
-                this.showbeizhu = !this.showbeizhu
+            hangleChange(e,val){
+                console.log(e)
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.pageInfoId = val.pageInfoId
+                if(e == true){
+                    data.state = 1
+                }else{
+                    data.state = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data && res.data =="success"){
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        console.log(err)
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

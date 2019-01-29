@@ -36,7 +36,7 @@
                 <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
             </el-checkbox-group>
             <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
-            <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
+                <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
         </div>
         <el-table
@@ -60,248 +60,258 @@
             </el-table-column>
             <div v-for="(item,index) in filterList" :key="index" >
                 <!-- <el-table-column v-if="item.state == 1" :prop="item.prop" :label="item.name"></el-table-column> -->
-            <el-table-column
-                prop="contacts[0].coName"
-                fixed
-                v-if="item.prop == 'contacts[0].coName' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="联系人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="name"
-                fixed
-                v-else-if="item.prop == 'name' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="180"
-                label="公司名称"
-                sortable>
-                <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
-                        {{scope.row.name}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].telephone"
-                v-else-if="item.prop == 'contacts[0].telephone' && item.state == 1"
-                header-align="left"
-                align="left"
-                label="电话"
-                min-width="95"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].phone"
-                v-else-if="item.prop == 'contacts[0].phone' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="95"
-                label="手机"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].qq"
-                v-else-if="item.prop == 'contacts[0].qq' && item.state == 1"
-                header-align="left"
-                align="left"
-                label="QQ"
-                min-width="95"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="follow[0].createTime"
-                v-else-if="item.prop == 'follow[0].createTime' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="最新跟进时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="follow[0].followContent"
-                show-overflow-tooltip
-                v-else-if="item.prop == 'follow[0].followContent' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="最新跟进记录"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="follow[0].contactTime"
-                v-else-if="item.prop == 'follow[0].contactTime' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="140"
-                label="下次联系时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="privateUser[0].private_employee"
-                v-else-if="item.prop == 'privateUser[0].private_employee' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="负责人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="privateUser[0].private_employee"
-                v-else-if="item.prop == 'privateUser[0].private_employee' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="部门"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="parentname"
-                v-else-if="item.prop == 'parentname' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="机构"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="deptname"
-                v-else-if="item.prop == 'deptname' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="创建时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="state"
-                v-else-if="item.prop == 'state' && item.state == 1"
-                header-align="left"
-                align="left"
-                label="状态"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="cues"
-                v-else-if="item.prop == 'cues' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="线索来源"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="representative"
-                v-else-if="item.prop == 'representative' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="法人代表"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="registrationAuthority"
-                v-else-if="item.prop == 'registrationAuthority' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="登记机关"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="creditCode"
-                v-else-if="item.prop == 'creditCode' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="150"
-                label="社会信用代码"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="registrationNumber"
-                v-else-if="item.prop == 'registrationNumber' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="注册号"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="organizationCode"
-                v-else-if="item.prop == 'organizationCode' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="组织机构代码"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="capital"
-                v-else-if="item.prop == 'capital' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="注册资金"
-                sortable>
-                <template slot-scope="scope">{{scope.row.capital}} 万元</template>
-            </el-table-column>
-            <el-table-column
-                prop="date"
-                v-else-if="item.prop == 'date' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="成立时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="enterpriseScale"
-                v-else-if="item.prop == 'enterpriseScale' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="企业规模"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="financingState"
-                v-else-if="item.prop == 'financingState' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="融资状态"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="industryType"
-                v-else-if="item.prop == 'industryType' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="行业"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="companyType"
-                v-else-if="item.prop == 'companyType' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="公司类型"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="operatingState"
-                v-else-if="item.prop == 'operatingState' && item.state == 1"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="营业状态"
-                sortable>
-            </el-table-column>
+                <el-table-column
+                    prop="contacts[0].coName"
+                    fixed
+                    v-if="item.prop == 'contacts[0].coName' && item.state == 1 && item.pageInfoId == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="联系人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    fixed
+                    v-else-if="item.prop == 'name' && item.state == 1 && item.pageInfoId == 2"
+                    header-align="left"
+                    align="left"
+                    min-width="180"
+                    label="公司名称"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                            {{scope.row.name}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].telephone"
+                    v-else-if="item.prop == 'contacts[0].telephone' && item.state == 1 && item.pageInfoId == 3"
+                    header-align="left"
+                    align="left"
+                    label="电话"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].phone"
+                    v-else-if="item.prop == 'contacts[0].phone' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="95"
+                    label="手机"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].qq"
+                    v-else-if="item.prop == 'contacts[0].qq' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="QQ"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="follow[0].createTime"
+                    v-else-if="item.prop == 'follow[0].createTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="最新跟进时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="follow[0].followContent"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'follow[0].followContent' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="最新跟进记录"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="follow[0].contactTime"
+                    v-else-if="item.prop == 'follow[0].contactTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="下次联系时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="privateUser[0].private_employee"
+                    v-else-if="item.prop == 'privateUser[0].private_employee' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="负责人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="deptname"
+                    v-else-if="item.prop == 'deptname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="部门"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="parentname"
+                    v-else-if="item.prop == 'parentname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="160"
+                    label="机构"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="countryid"
+                    v-else-if="item.prop == 'countryid' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="省-市-区"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.country}}-{{scope.row.city}}-{{scope.row.area}}</template>
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    v-else-if="item.prop == 'createTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="创建时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="state"
+                    v-else-if="item.prop == 'state' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="状态"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="cues"
+                    v-else-if="item.prop == 'cues' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="线索来源"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="representative"
+                    v-else-if="item.prop == 'representative' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="法人代表"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="registrationAuthority"
+                    v-else-if="item.prop == 'registrationAuthority' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="登记机关"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="creditCode"
+                    v-else-if="item.prop == 'creditCode' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="150"
+                    label="社会信用代码"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="registrationNumber"
+                    v-else-if="item.prop == 'registrationNumber' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="注册号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="organizationCode"
+                    v-else-if="item.prop == 'organizationCode' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="组织机构代码"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="capital"
+                    v-else-if="item.prop == 'capital' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="注册资金"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.capital}} 万元</template>
+                </el-table-column>
+                <el-table-column
+                    prop="date"
+                    v-else-if="item.prop == 'date' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="成立时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="enterpriseScale"
+                    v-else-if="item.prop == 'enterpriseScale' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="企业规模"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="financingState"
+                    v-else-if="item.prop == 'financingState' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="融资状态"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="industryType"
+                    v-else-if="item.prop == 'industryType' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="行业"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="companyType"
+                    v-else-if="item.prop == 'companyType' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="公司类型"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="operatingState"
+                    v-else-if="item.prop == 'operatingState' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="营业状态"
+                    sortable>
+                </el-table-column>
             </div>
             <el-table-column label="操作"
                 fixed="right"
@@ -375,11 +385,9 @@
                 stateData:null,
                 typeData:null,
                 nullvalue:null,
+                
                 filterList:null,
-                // checklist:['联系人','公司名称','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','线索来源','法人代表','登记机关','社会信用代码','注册号','组织机构代码','注册资金','成立时间','企业规模','融资状态','行业','公司类型','营业状态'],
                 checklist:null,
-
-                state:false,
 
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
@@ -436,7 +444,7 @@
                     url: _this.$store.state.defaultHttp+'customerTwo/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.clueList = res.data.map.success
                     _this.$store.state.clueListnumber = res.data.count;
                 }).catch(function(err){
@@ -444,10 +452,10 @@
                 });
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'pageInfo/getAllPageInfo.do?cId='+_this.$store.state.iscId,
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    // console.log(res.data)
+                    console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -708,7 +716,7 @@
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
-                data.pageInfoId = val.id
+                data.pageInfoId = val.pageInfoId
                 if(e == true){
                     data.state = 1
                 }else{

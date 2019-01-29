@@ -15,19 +15,7 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="shownumber()" label="合同编号"></el-checkbox>
-                <el-checkbox class="checkone" @change="showname()" label="合同名称"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtype()" label="合同类型"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcustomer()" label="对应客户"></el-checkbox>
-                <el-checkbox class="checkone" @change="showopportunity()" label="商机"></el-checkbox>
-                <el-checkbox class="checkone" @change="showmoney()" label="合同金额"></el-checkbox>
-                <el-checkbox class="checkone" @change="showstart()" label="合同开始日期"></el-checkbox>
-                <el-checkbox class="checkone" @change="showExpire()" label="合同到期日期"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcusSigning()" label="客户签约人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showwoSigning()" label="我方签约人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showremark()" label="备注"></el-checkbox>
-                <el-checkbox class="checkone" @change="showAlready()" label="已回款金额"></el-checkbox>
-                <el-checkbox class="checkone" @change="showSurplus()" label="剩余款项金额"></el-checkbox>
+                <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
             </el-checkbox-group>
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
@@ -42,154 +30,156 @@
             @selection-change="selectInfo"
             >
             <el-table-column
-            fixed
-            header-align="center"
-            align="center"
-            type="selection"
-            width="45"
-            scope.row.contract_id
-            prop="contract_id"
-            @selection-change="selectInfo">
-            </el-table-column>
-            <el-table-column
-                prop="contract_number"
                 fixed
-                v-if="showbianhao"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="合同编号"
-                sortable>
+                header-align="center"
+                align="center"
+                type="selection"
+                width="45"
+                scope.row.contract_id
+                prop="contract_id"
+                @selection-change="selectInfo">
             </el-table-column>
-            <el-table-column
-                prop="contract_name"
-                fixed
-                v-if="showmingcheng"
-                header-align="left"
-                align="left"
-                min-width="150"
-                label="合同名称"
-                sortable>
-                <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
-                        {{scope.row.contract_name}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="contract_type"
-                v-if="showleixing"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="合同类型"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="poolName"
-                v-if="showkehu"
-                header-align="left"
-                align="left"
-                min-width="180"
-                label="公司名称"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="opportunity_id"
-                v-if="showshangji"
-                header-align="left"
-                align="left"
-                min-width="120"
-                label="商机名称"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="amount"
-                v-if="showjine"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="合同金额"
-                sortable>
-                <template slot-scope="scope">
-                    <div>
-                        {{scope.row.amount | rounding}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="start_date"
-                v-if="showkaishi"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="合同开始日期"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="end_date"
-                show-overflow-tooltip
-                v-if="showdaoqi"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="合同到期日期"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="signatories"
-                v-if="showkeqian"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="客户签约人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="our_signatories"
-                v-if="showwoqian"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="我方签约人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="remarks"
-                v-if="showbeizhu"
-                header-align="left"
-                align="left"
-                label="备注"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="already"
-                v-if="showyihui"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="已回款金额"
-                sortable>
-                <template slot-scope="scope">
-                    <div>
-                        {{scope.row.already | rounding}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="surplus"
-                v-if="showshengyu"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="剩余款项金额"
-                sortable>
-                <template slot-scope="scope">
-                    <div>
-                        {{scope.row.surplus | rounding}}
-                    </div>
-                </template>
-            </el-table-column>
+            <div v-for="(item,index) in filterList" :key="index" >
+                <el-table-column
+                    prop="contract_number"
+                    fixed
+                    v-if="item.prop == 'contract_number' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="合同编号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contract_name"
+                    fixed
+                    v-else-if="item.prop == 'contract_name' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="150"
+                    label="合同名称"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                            {{scope.row.contract_name}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="contract_type"
+                    v-else-if="item.prop == 'contract_type' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="合同类型"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="poolName"
+                    v-else-if="item.prop == 'poolName' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="180"
+                    label="公司名称"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="opportunity_id"
+                    v-else-if="item.prop == 'opportunity_id' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="120"
+                    label="商机名称"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="amount"
+                    v-else-if="item.prop == 'amount' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="合同金额"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.amount | rounding}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="start_date"
+                    v-else-if="item.prop == 'start_date' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="合同开始日期"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="end_date"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'end_date' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="合同到期日期"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="signatories"
+                    v-else-if="item.prop == 'signatories' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="客户签约人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="our_signatories"
+                    v-else-if="item.prop == 'our_signatories' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="我方签约人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="remarks"
+                    v-else-if="item.prop == 'remarks' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="备注"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="already"
+                    v-else-if="item.prop == 'already' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="已回款金额"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.already | rounding}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="surplus"
+                    v-else-if="item.prop == 'surplus' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="剩余款项金额"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div>
+                            {{scope.row.surplus | rounding}}
+                        </div>
+                    </template>
+                </el-table-column>
+            </div>
             <el-table-column label="操作"
                 fixed="right"
                 width="150"
@@ -258,20 +248,10 @@
                 idArr:{
                     ids:null,
                 },
-                checklist:['合同编号','合同名称','合同类型','对应客户','商机','合同金额','合同开始日期','合同到期日期','客户签约人','我方签约人','备注','已回款金额','剩余款项金额'],
-                showbianhao:true,
-                showmingcheng:true,
-                showleixing:true,
-                showkehu:true,
-                showshangji:true,
-                showjine:true,
-                showkaishi:true,
-                showdaoqi:true,
-                showkeqian:true,
-                showwoqian:true,
-                showbeizhu:true,
-                showyihui:true,
-                showshengyu:true,
+
+                filterList:null,
+                checklist:null,
+                
                 formLabelWidth: '130px',
             }
         },
@@ -293,6 +273,11 @@
                 searchList.page = this.page
                 searchList.limit = this.limit
                 console.log(searchList)
+                let filterList = {}
+                filterList.type = '合同'
+                let data = {}
+                data.type = '合同'
+                data.state = 1
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'getContractAll.do?cId='+_this.$store.state.iscId,
@@ -301,6 +286,26 @@
                     console.log(res.data.map.success)
                     _this.$store.state.agreementList = res.data.map.success
                     _this.$store.state.agreementListnumber = res.data.count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(filterList)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.filterList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -468,44 +473,32 @@
                     });       
                 });
             },
-            shownumber(){
-                this.showbianhao = !this.showbianhao
-            },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showtype(){
-                this.showleixing = !this.showleixing
-            },
-            showcustomer(){
-                this.showkehu = !this.showkehu
-            },
-            showopportunity(){
-                this.showshangji = !this.showshangji
-            },
-            showmoney(){
-                this.showjine = !this.showjine
-            },
-            showstart(){
-                this.showkaishi = !this.showkaishi
-            },
-            showExpire(){
-                this.showdaoqi = !this.showdaoqi
-            },
-            showcusSigning(){
-                this.showkeqian = !this.showkeqian
-            },
-            showwoSigning(){
-                this.showwoqian = !this.showwoqian
-            },
-            showremark(){
-                this.showbeizhu = !this.showbeizhu
-            },
-            showAlready(){
-                this.showyihui = !this.showyihui
-            },
-            showSurplus(){
-                this.showshengyu = !this.showshengyu
+            hangleChange(e,val){
+                console.log(e)
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.pageInfoId = val.pageInfoId
+                if(e == true){
+                    data.state = 1
+                }else{
+                    data.state = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data && res.data =="success"){
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        console.log(err)
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

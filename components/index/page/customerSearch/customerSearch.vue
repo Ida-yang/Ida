@@ -27,7 +27,7 @@
                 </el-date-picker>
             </div>
             <div class="searchList1 country">
-                <span class="searchtitle"> 省/市/区：</span>
+                <span class="searchtitle"> 省-市-区：</span>
                 <el-select
                     v-model="searchList.country"
                     @change="choseProvince"
@@ -137,22 +137,7 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
-                <el-checkbox class="checkone" @change="showaddr()" label="公司地址"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcap()" label="注册资金"></el-checkbox>
-                <el-checkbox class="checkone" @change="showrepresent()" label="法人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showdate()" label="成立日期"></el-checkbox>
-                <el-checkbox class="checkone" @change="showphone()" label="手机"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtel()" label="电话"></el-checkbox>
-                <el-checkbox class="checkone" @change="showemile()" label="邮箱"></el-checkbox>
-                <el-checkbox class="checkone" @change="showweb()" label="网站"></el-checkbox>
-                <el-checkbox class="checkone" @change="showindustry()" label="行业"></el-checkbox>
-                <el-checkbox class="checkone" @change="showScale()" label="企业规模"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcountry()" label="省/市/区"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcompany()" label="企业类型"></el-checkbox>
-                <el-checkbox class="checkone" @change="showostate()" label="经营状态"></el-checkbox>
-                <el-checkbox class="checkone" @change="showfinance()" label="融资状态"></el-checkbox>
-                <el-checkbox class="checkone" @change="showlisted()" label="上市信息"></el-checkbox>
+                <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
             </el-checkbox-group>
             <!-- <el-button slot="reference" class="info-btn" type="mini">筛选列表</el-button> -->
             <el-button slot="reference" class="info-btn screen" icon="el-icon-more-outline" type="mini"></el-button>
@@ -167,163 +152,166 @@
             style="text-align:center"
             @selection-change="selectInfo">
             <el-table-column
-            header-align="center"
-            align="center"
-            type="selection"
-            width="45"
-            scope.row.id
-            @selection-change="selectInfo">
+                header-align="center"
+                align="center"
+                type="selection"
+                width="45"
+                scope.row.id
+                @selection-change="selectInfo">
             </el-table-column>
-            <el-table-column
-                prop="name"
-                v-if="showmingcheng"
-                header-align="left"
-                align="left"
-                min-width="200"
-                label="公司名称"
-                sortable>
-                <template slot-scope="scope">
-                    <div class="hoverline">
-                        {{scope.row.name}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="address"
-                show-overflow-tooltip
-                v-if="showdizhi"
-                header-align="left"
-                align="left"
-                label="公司地址"
-                min-width="180"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="capital"
-                v-if="showzijin"
-                header-align="left"
-                align="left"
-                label="注册资金"
-                width="110"
-                sortable>
-                <template slot-scope="scope">{{scope.row.capital}} 万元</template>
-            </el-table-column>
-            <el-table-column
-                prop="representative"
-                show-overflow-tooltip
-                v-if="showfaren"
-                header-align="left"
-                align="left"
-                label="法人" 
-                width="80"               
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="date"
-                v-if="showriqi"
-                header-align="left"
-                align="left"
-                label="成立日期"
-                sortable
-                width="120">
-            </el-table-column>
-            <el-table-column
-                prop="coPhone"
-                v-if="showshouji"
-                header-align="left"
-                align="left"
-                label="手机"
-                width="100"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="coTelephone"
-                v-if="showdianhua"
-                header-align="left"
-                align="left"
-                label="固话"
-                width="90"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="coEmail"
-                v-if="showyouxiang"
-                header-align="left"
-                align="left"
-                label="邮箱"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="coWebsite"
-                v-if="showwangzhan"
-                header-align="left"
-                align="left"
-                label="网站"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="industryName"
-                show-overflow-tooltip
-                v-if="showhangye"
-                header-align="left"
-                align="left"
-                label="行业"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="enterpriseScaleName"
-                v-if="showguimo"
-                header-align="left"
-                align="left"
-                label="企业规模"
-                width="110"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                v-if="showquyu"
-                header-align="left"
-                align="left"
-                label="省/市/区"
-                width="110"
-                sortable>
-                <template slot-scope="scope">{{scope.row.countryId}}/{{scope.row.city}}/{{scope.row.area}}</template>
-            </el-table-column>
-            <el-table-column
-                prop="company"
-                v-if="showleixing"
-                header-align="left"
-                align="left"
-                label="企业类型"
-                width="110"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="ostate"
-                v-if="showjingying"
-                header-align="left"
-                align="left"
-                label="经营状态"
-                width="110"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="financing"
-                v-if="showrongzi"
-                header-align="left"
-                align="left"
-                label="融资状态"
-                width="110"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="listed"
-                v-if="showshangshi"
-                header-align="left"
-                align="left"
-                label="上市信息"
-                width="110"
-                sortable>
-            </el-table-column>
+            <div v-for="(item,index) in filterList" :key="index" >
+                <el-table-column
+                    prop="name"
+                    v-if="item.prop == 'name' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="200"
+                    label="公司名称"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div class="hoverline">
+                            {{scope.row.name}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="address"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'address' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="公司地址"
+                    min-width="180"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="capital"
+                    v-else-if="item.prop == 'capital' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="注册资金"
+                    width="110"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.capital}} 万元</template>
+                </el-table-column>
+                <el-table-column
+                    prop="representative"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'representative' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="法人" 
+                    width="80"               
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="date"
+                    v-else-if="item.prop == 'date' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="成立日期"
+                    sortable
+                    width="120">
+                </el-table-column>
+                <el-table-column
+                    prop="coPhone"
+                    v-else-if="item.prop == 'coPhone' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="手机"
+                    width="100"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="coTelephone"
+                    v-else-if="item.prop == 'coTelephone' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="固话"
+                    width="90"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="coEmail"
+                    v-else-if="item.prop == 'coEmail' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="邮箱"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="coWebsite"
+                    v-else-if="item.prop == 'coWebsite' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="网站"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="industryName"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'industryName' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    width="110"
+                    label="行业"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="enterpriseScaleName"
+                    v-else-if="item.prop == 'enterpriseScaleName' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="企业规模"
+                    width="110"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    v-else-if="item.prop == 'countryId' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="省-市-区"
+                    width="140"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.countryId}}-{{scope.row.city}}-{{scope.row.area}}</template>
+                </el-table-column>
+                <el-table-column
+                    prop="company"
+                    v-else-if="item.prop == 'company' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="企业类型"
+                    width="110"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="ostate"
+                    v-else-if="item.prop == 'ostate' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="经营状态"
+                    width="110"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="financing"
+                    v-else-if="item.prop == 'financing' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="融资状态"
+                    width="110"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="listed"
+                    v-else-if="item.prop == 'listed' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="上市信息"
+                    width="110"
+                    sortable>
+                </el-table-column>
+            </div>
         </el-table>
         <div class="block numberPage">
             <el-pagination
@@ -417,24 +405,9 @@
                 idArr:{
                     id:null,
                 },
-                checklist:['公司名称','公司地址','注册资金','法人','成立日期','手机','电话','邮箱','网站','行业','企业规模','省/市/区','企业类型','经营状态','融资状态','上市信息',],
-                // checklist:[],
-                showmingcheng:true,
-                showdizhi:true,
-                showzijin:true,
-                showfaren:true,
-                showriqi:true,
-                showshouji:true,
-                showdianhua:true,
-                showyouxiang:true,
-                showwangzhan:true,
-                showhangye:true,
-                showguimo:true,
-                showquyu:true,
-                showleixing:true,
-                showjingying:true,
-                showrongzi:true,
-                showshangshi:true,
+                
+                filterList:null,
+                checklist:null,
 
                 show:true,
                 text:true,
@@ -583,6 +556,12 @@
                 searchList.page = this.page;
                 searchList.limit = this.limit;
                 // console.log(searchList)
+                let filterList = {}
+                filterList.type = '大数据客户搜索'
+                let data = {}
+                data.type = '大数据客户搜索'
+                data.state = 1
+
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerOne/query.do',
@@ -591,6 +570,26 @@
                     console.log(res.data.rows)
                     _this.$store.state.customerList = res.data.rows
                     _this.$store.state.customerListnumber = res.data.total;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(filterList)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.filterList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -654,53 +653,33 @@
             showdetailindstry(val){
                 console.log(val)
             },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showaddr(){
-                this.showdizhi = !this.showdizhi
-            },
-            showcap(){
-                this.showzijin = !this.showzijin
-            },
-            showrepresent(){
-                this.showfaren = !this.showfaren
-            },
-            showdate(){
-                this.showriqi = !this.showriqi
-            },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showtel(){
-                this.showdianhua = !this.showdianhua
-            },
-            showemile(){
-                this.showyouxiang = !this.showyouxiang
-            },
-            showweb(){
-                this.showwangzhan = !this.showwangzhan
-            },
-            showindustry(){
-                this.showhangye = !this.showhangye
-            },
-            showScale(){
-                this.showguimo = !this.showguimo
-            },
-            showcountry(){
-                this.showquyu = !this.showquyu
-            },
-            showcompany(){
-                this.showleixing = !this.showleixing
-            },
-            showostate(){
-                this.showjingying = !this.showjingying
-            },
-            showfinance(){
-                this.showrongzi = !this.showrongzi
-            },
-            showlisted(){
-                this.showshangshi = !this.showshangshi
+            
+            hangleChange(e,val){
+                console.log(e)
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.pageInfoId = val.pageInfoId
+                if(e == true){
+                    data.state = 1
+                }else{
+                    data.state = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data && res.data =="success"){
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        console.log(err)
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

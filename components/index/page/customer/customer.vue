@@ -37,30 +37,7 @@
             width="100"
             trigger="click">
             <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" @change="showname()" label="公司名称"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcontactsname()" label="联系人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtel()" label="电话"></el-checkbox>
-                <el-checkbox class="checkone" @change="showphone()" label="手机"></el-checkbox>
-                <el-checkbox class="checkone" @change="showtencent()" label="QQ"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcreatetime()" label="最新跟进时间"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcontent()" label="最新跟进记录"></el-checkbox>
-                <el-checkbox class="checkone" @change="shownexttime()" label="下次跟进时间"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcharge()" label="负责人"></el-checkbox>
-                <el-checkbox class="checkone" @change="showstate()" label="状态"></el-checkbox>
-                <el-checkbox class="checkone" @change="showleval()" label="级别"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcues()" label="客户来源"></el-checkbox>
-                <el-checkbox class="checkone" @change="showrepresent()" label="法人代表"></el-checkbox>
-                <el-checkbox class="checkone" @change="showAuthority()" label="登记机关"></el-checkbox>
-                <el-checkbox class="checkone" @change="showCode()" label="社会信用代码"></el-checkbox>
-                <el-checkbox class="checkone" @change="showregistration()" label="注册号"></el-checkbox>
-                <el-checkbox class="checkone" @change="showorganiza()" label="组织机构代码"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcapital()" label="注册资金"></el-checkbox>
-                <el-checkbox class="checkone" @change="showregisterTime()" label="成立时间"></el-checkbox>
-                <el-checkbox class="checkone" @change="showenterprise()" label="企业规模"></el-checkbox>
-                <el-checkbox class="checkone" @change="showfinance()" label="融资状态"></el-checkbox>
-                <el-checkbox class="checkone" @change="showindustry()" label="行业"></el-checkbox>
-                <el-checkbox class="checkone" @change="showcompanyType()" label="公司类型"></el-checkbox>
-                <el-checkbox class="checkone" @change="showoperating()" label="营业状态"></el-checkbox>
+                <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
             </el-checkbox-group>
             <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
             </el-popover>
@@ -72,243 +49,244 @@
             stripe
             :default-sort = "{prop:'id',order: 'descending'}"
             style="width:100%;"
-            @selection-change="selectInfo"
-            >
-            <el-table-column
-            fixed
-            header-align="center"
-            align="center"
-            type="selection"
-            width="45"
-            scope.row.id
-            prop="id"
             @selection-change="selectInfo">
-            </el-table-column>
             <el-table-column
-                prop="pName"
                 fixed
-                v-if="showmingcheng"
-                header-align="left"
-                align="left"
-                min-width="150"
-                label="公司名称"
-                sortable>
-                <template slot-scope="scope">
-                    <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
-                        {{scope.row.pName}}
-                    </div>
-                </template>
+                header-align="center"
+                align="center"
+                type="selection"
+                width="45"
+                scope.row.id
+                prop="id"
+                @selection-change="selectInfo">
             </el-table-column>
-            <el-table-column
-                prop="contacts[0].coName"
-                fixed
-                v-if="showxingming"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="联系人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].telephone"
-                v-if="showdianhua"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="电话"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].phone"
-                v-if="showshouji"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="手机"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="contacts[0].qq"
-                v-if="showqq"
-                header-align="left"
-                align="left"
-                min-width="90"
-                label="QQ"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="follow[0].createTime"
-                v-if="showgenshi"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="最新跟进时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="follow[0].followContent"
-                show-overflow-tooltip
-                v-if="showgenlu"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="最新跟进记录"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="follow[0].contactTime"
-                v-if="showgengshi"
-                header-align="left"
-                align="left"
-                min-width="140"
-                label="下次联系时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="privateUser[0].private_employee"
-                v-if="showfuze"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="负责人"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="status"
-                v-if="showzhuangtai"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="状态"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="levels"
-                v-if="showjibie"
-                header-align="left"
-                align="left"
-                min-width="100"
-                label="级别"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="source"
-                v-if="showlaiyuan"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="客户来源"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="representative"
-                v-if="showdaibiao"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="法人代表"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="registrationAuthority"
-                v-if="showjiguan"
-                header-align="left"
-                align="left"
-                min-width="150"
-                label="登记机关"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="creditCode"
-                v-if="showdaima"
-                header-align="left"
-                align="left"
-                min-width="160"
-                label="社会信用代码"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="registrationNumber"
-                v-if="showzhucehao"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="注册号"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="organizationCode"
-                v-if="showzuzhidaima"
-                header-align="left"
-                align="left"
-                min-width="130"
-                label="组织机构代码"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="capital"
-                v-if="showzijin"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="注册资金"
-                sortable>
-                <template slot-scope="scope">{{scope.row.capital}} 万元</template>
-            </el-table-column>
-            <el-table-column
-                prop="date"
-                v-if="showchengli"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="成立时间"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="enterpriseScale"
-                v-if="showguimo"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="企业规模"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="financingState"
-                v-if="showrongzi"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="融资状态"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="industryType"
-                v-if="showhangye"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="行业"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="companyType"
-                v-if="showgonglei"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="公司类型"
-                sortable>
-            </el-table-column>
-            <el-table-column
-                prop="operatingState"
-                v-if="showyingtai"
-                header-align="left"
-                align="left"
-                min-width="110"
-                label="营业状态"
-                sortable>
-            </el-table-column>
+            <div v-for="(item,index) in filterList" :key="index" >
+                <el-table-column
+                    prop="pName"
+                    fixed
+                    v-if="item.prop == 'pName' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="150"
+                    label="公司名称"
+                    sortable>
+                    <template slot-scope="scope">
+                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                            {{scope.row.pName}}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].coName"
+                    fixed
+                    v-else-if="item.prop == 'contacts[0].coName' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="联系人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].telephone"
+                    v-else-if="item.prop == 'contacts[0].telephone' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="电话"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].phone"
+                    v-else-if="item.prop == 'contacts[0].phone' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="手机"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].qq"
+                    v-else-if="item.prop == 'contacts[0].qq' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="90"
+                    label="QQ"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="follow[0].createTime"
+                    v-else-if="item.prop == 'follow[0].createTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="最新跟进时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="follow[0].followContent"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'follow[0].followContent' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="最新跟进记录"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="follow[0].contactTime"
+                    v-else-if="item.prop == 'follow[0].contactTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="下次联系时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="privateUser[0].private_employee"
+                    v-else-if="item.prop == 'privateUser[0].private_employee' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="负责人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="status"
+                    v-else-if="item.prop == 'status' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="状态"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="levels"
+                    v-else-if="item.prop == 'levels' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="级别"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="source"
+                    v-else-if="item.prop == 'source' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="客户来源"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="representative"
+                    v-else-if="item.prop == 'representative' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="法人代表"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="registrationAuthority"
+                    v-else-if="item.prop == 'registrationAuthority' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="150"
+                    label="登记机关"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="creditCode"
+                    v-else-if="item.prop == 'creditCode' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="160"
+                    label="社会信用代码"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="registrationNumber"
+                    v-else-if="item.prop == 'registrationNumber' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="注册号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="organizationCode"
+                    v-else-if="item.prop == 'organizationCode' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="组织机构代码"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="capital"
+                    v-else-if="item.prop == 'capital' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="注册资金"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.capital}} 万元</template>
+                </el-table-column>
+                <el-table-column
+                    prop="date"
+                    v-else-if="item.prop == 'date' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="成立时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="enterpriseScale"
+                    v-else-if="item.prop == 'enterpriseScale' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="企业规模"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="financingState"
+                    v-else-if="item.prop == 'financingState' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="融资状态"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="industryType"
+                    v-else-if="item.prop == 'industryType' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="行业"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="companyType"
+                    v-else-if="item.prop == 'companyType' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="公司类型"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="operatingState"
+                    v-else-if="item.prop == 'operatingState' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="营业状态"
+                    sortable>
+                </el-table-column>
+            </div>
             <el-table-column label="操作"
                 fixed="right"
                 width="80"
@@ -387,32 +365,9 @@
                 labelData:null,
                 typeData:null,
                 nullvalue:null,
-
-                checklist:['公司名称','联系人','电话','手机','QQ','最新跟进时间','最新跟进记录','下次跟进时间','负责人','状态','级别','客户来源','法人代表','登记机关','社会信用代码','注册号','组织机构代码','注册资金','成立时间','企业规模','融资状态','行业','公司类型','营业状态'],
-                showxingming:true,
-                showmingcheng:true,
-                showdianhua:true,
-                showshouji:true,
-                showqq:true,
-                showgenshi:true,
-                showgenlu:true,
-                showgengshi:true,
-                showfuze:true,
-                showzhuangtai:true,
-                showjibie:true,
-                showlaiyuan:true,
-                showdaibiao:true,
-                showjiguan:true,
-                showdaima:true,
-                showzhucehao:true,
-                showzuzhidaima:true,
-                showzijin:true,
-                showchengli:true,
-                showguimo:true,
-                showrongzi:true,
-                showhangye:true,
-                showgonglei:true,
-                showyingtai:true,
+                
+                filterList:null,
+                checklist:null,
 
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
@@ -458,16 +413,41 @@
                 searchList.customerStateid = this.searchList.keyWord //客户来源
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
+                let filterList = {}
+                filterList.type = '客户'
+                let data = {}
+                data.type = '客户'
+                data.state = 1
 
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerpool/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.customerList = res.data.map.success
                     _this.$store.state.customerListnumber = res.data.count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(filterList)
+                }).then(function(res){
+                    console.log(res.data)
+                    _this.filterList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -677,77 +657,32 @@
                     console.log(err);
                 });
             },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showcontactsname(){
-                this.showxingming = !this.showxingming
-            },
-            showtel(){
-                this.showdianhua = !this.showdianhua
-            },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showtencent(){
-                this.showqq = !this.showqq
-            },
-            showcreatetime(){
-                this.showgenshi = !this.showgenshi
-            },
-            showcontent(){
-                this.showgenlu = !this.showgenlu
-            },
-            shownexttime(){
-                this.showgengshi = !this.showgengshi
-            },
-            showcharge(){
-                this.showfuze = !this.showfuze
-            },
-            showstate(){
-                this.showzhuangtai = !this.showzhuangtai
-            },
-            showleval(){
-                this.showjibie = !this.showjibie
-            },
-            showcues(){
-                this.showlaiyuan = !this.showlaiyuan
-            },
-            showrepresent(){
-                this.showdaibiao = !this.showdaibiao
-            },
-            showAuthority(){
-                this.showjiguan = !this.showjiguan
-            },
-            showCode(){
-                this.showdaima = !this.showdaima
-            },
-            showregistration(){
-                this.showzhucehao = !this.showzhucehao
-            },
-            showorganiza(){
-                this.showzuzhidaima = !this.showzuzhidaima
-            },
-            showcapital(){
-                this.showzijin = !this.showzijin
-            },
-            showregisterTime(){
-                this.showchengli = !this.showchengli
-            },
-            showenterprise(){
-                this.showguimo = !this.showguimo
-            },
-            showfinance(){
-                this.showrongzi = !this.showrongzi
-            },
-            showindustry(){
-                this.showhangye = !this.showhangye
-            },
-            showcompanyType(){
-                this.showgonglei = !this.showgonglei
-            },
-            showoperating(){
-                this.showyingtai = !this.showyingtai
+            hangleChange(e,val){
+                console.log(e)
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.pageInfoId = val.pageInfoId
+                if(e == true){
+                    data.state = 1
+                }else{
+                    data.state = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    console.log(res)
+                    if(res.data && res.data =="success"){
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        console.log(err)
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

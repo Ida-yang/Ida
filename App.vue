@@ -77,6 +77,7 @@ body,
 .radioList > .el-radio-group > .el-radio{
     flex: 0 0 10%;
     line-height: 30px;
+    margin-left: 10px ;
 }
 .nameList{
     display: inline-block;
