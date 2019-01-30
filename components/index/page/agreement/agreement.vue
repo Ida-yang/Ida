@@ -310,7 +310,7 @@
                     url: _this.$store.state.defaultHttp+'getContractAll.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.agreementList = res.data.map.success
                     _this.$store.state.agreementListnumber = res.data.count;
                 }).catch(function(err){
@@ -464,7 +464,7 @@
                 addOrUpdateData.submitData = {"id": row.contract_id};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'updateContract.do?cId='+this.$store.state.iscId,
                 this.$store.state.addOrUpdateData = addOrUpdateData;
-                console.log(addOrUpdateData)
+                // console.log(addOrUpdateData)
                 this.$router.push({ path: '/agreementaddorupdate' });
             },
             handleDelete(index,row){

@@ -352,7 +352,7 @@
                     method:'get',
                     url:_this.$store.state.defaultHttp+'customerTwo/selectByPrimaryKey.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.cluedetail = res.data
                     _this.contacts = res.data.contacts[0]
                     // console.log(_this.cluedetail)
@@ -364,7 +364,7 @@
                 this.thisshow = !this.thisshow
             },
             getRow(index,row){
-                console.log(row.id)
+                // console.log(row.id)
                 this.$store.state.detailsData.submitData = {"id":row.id}
                 this.idArr.id = row.id
                 
@@ -376,7 +376,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(idArr)
+                // console.log(idArr)
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
@@ -405,13 +405,13 @@
                 let idArr = [];
                 idArr.id = this.idArr.id
                 idArr.shift()
-                console.log(idArr)
+                // console.log(idArr)
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerTwo/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data == 'success') {
                         _this.$message({
                             message: '转换成功',
@@ -468,7 +468,7 @@
                 searchList.searchName = this.searchList.keyword;
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerTwo/getUserByClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
@@ -490,7 +490,7 @@
                 data.contactsId = this.followform.contactsId;
                 data.follow_state = this.followform.state;
                 data.customertwo_id = this.detailData.id;
-                console.log(data)
+                // console.log(data)
 
                 axios({
                     method: 'post',

@@ -370,7 +370,7 @@
                     url: _this.$store.state.defaultHttp+'getPrivateUserAll.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.userList = res.data.map.success
                     _this.$store.state.userListnumber = res.data.count
                 }).catch(function(err){
@@ -409,7 +409,7 @@
                 // console.log(newArr)
                 // var value = newArr.shift()
                 this.idArr.private_id = newArr;
-                console.log(this.idArr.private_id)
+                // console.log(this.idArr.private_id)
                 
             },
             //用户添加
@@ -447,7 +447,7 @@
                 data.private_state = this.newform.private_state
                 data.private_email = this.newform.private_email
                 data.private_QQ = this.newform.private_QQ
-                console.log(data)
+                // console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -508,7 +508,7 @@
                     url: _this.$store.state.defaultHttp+'insertPrivateUser.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'添加用户成功',
@@ -530,7 +530,7 @@
             //用户修改
             handleEdit(index,row){
                 let _this = this
-                console.log(row)
+                // console.log(row)
                 let data = {}
                 data.deptid = row.second_id
                 this.newform.private_id = row.private_id
@@ -570,7 +570,7 @@
                 data.private_state = this.newform.private_state
                 data.private_email = this.newform.private_email
                 data.private_QQ = this.newform.private_QQ
-                console.log(data)
+                // console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -624,7 +624,7 @@
                     url: _this.$store.state.defaultHttp+'updatePrivate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'修改用户成功',
@@ -647,7 +647,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.privateId = this.idArr.private_id
-                console.log(idArr)
+                // console.log(idArr)
                 _this.$confirm('确认同步到云服务器吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -657,7 +657,7 @@
                         url:  _this.$store.state.defaultHttp+ 'tbPrivateToPublicUser.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res.data)
+                        // console.log(res.data)
                         if(res.data.code && res.data.code == 200) {
                             _this.$message({
                                 message: '同步成功',
@@ -680,7 +680,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.privateId = row.private_id
-                console.log(idArr)
+                // console.log(idArr)
                 _this.$confirm('确认同步 ['+ row.private_employee +'] 到云服务器吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -690,7 +690,7 @@
                         url:  _this.$store.state.defaultHttp+ 'tbPrivateToPublicUser.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.data.code && res.data.code == 200) {
                             _this.$message({
                                 message: '同步成功',

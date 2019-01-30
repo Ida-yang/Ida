@@ -171,7 +171,7 @@
                     // console.log(res.data)
                     _this.tableData = res.data.map.success
                     _this.tableNumber = res.data.count
-                    console.log(_this.tableData)
+                    // console.log(_this.tableData)
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -180,7 +180,7 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'getContractById.do?cId='+_this.$store.state.iscId+'&contractId='+this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.agreementdetail = res.data
                     // console.log(_this.agreementdetail)
                 }).catch(function(err){
@@ -222,14 +222,14 @@
                 let file = event.target.files[0]
                 let param = new FormData() // 创建form对象
                 param.append('file', file, file.name) // 通过append向form对象添加数据
-                console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
+                // console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
                 let config = {
                     headers: {'Content-Type': 'multipart/form-data'}
                 }
                 // 添加请求头
                 axios.post('http://crm.yunzoe.com/yzcrm/contractUpload.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId+'&contractid='+this.detailData.id, param, config)
                 .then(res => {
-                    console.log(res)
+                    // console.log(res)
                     if (res.data == 'success') {
                         _this.$message({
                             message:'上传成功',
@@ -247,7 +247,7 @@
             showImg(e,val){
                 this.dialogImageUrl = val.imgURL
                 this.dialogVisible = true
-                console.log(this.dialogImageUrl)
+                // console.log(this.dialogImageUrl)
             },
             delImg(e,val){
                 // console.log(val.id)
@@ -264,7 +264,7 @@
                         url: _this.$store.state.defaultHttp+'imgInfo/delImgInfoById.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.data.code && res.data.code == '200') {
                             _this.$message({
                                 message: '删除成功',
@@ -297,7 +297,7 @@
                 this.thisshow = !this.thisshow
             },
             getRow(index,row){
-                console.log(row)
+                // console.log(row)
                 this.$store.state.detailsData.submitData = {"id":row.contract_id}
                 this.idArr.contractId = row.contract_id
                 
@@ -314,7 +314,7 @@
                 searchList.searchName = this.searchList.keyword;
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerTwo/getUserByClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,

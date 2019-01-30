@@ -511,7 +511,7 @@
                 }
             },
             handleSelect(item) {
-                console.log(item);
+                // console.log(item);
             },
             handleInput(val, key) {
                 this.myForm[key] = val;
@@ -597,14 +597,14 @@
                 subData.secondid = this.$store.state.deptid
                 subData.deptid = this.$store.state.insid
                 // console.log(_this.myForm)
-                console.log(subData)
+                // console.log(subData)
 
                 axios({
                     method: 'post',
                     url: _this.addOrUpdateData.submitURL,
                     data: qs.stringify(subData)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == "200") {
                         _this.$message({
                             message: '成功',
@@ -660,7 +660,7 @@
             getCityData(){
                 var that = this
                 axios.get(this.mapJson).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                 if (res.status==200) {
                     var data = res.data
                     // 省市区数据分类

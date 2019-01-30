@@ -168,7 +168,7 @@
                     url: _this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.customerlist = res.data.map.success
                 }).catch(function(err){
                     console.log(err);
@@ -203,7 +203,7 @@
                 }
             },
             handleSelect(item) {
-                console.log(item);
+                // console.log(item);
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -285,14 +285,14 @@
                 subData.secondid = this.$store.state.deptid
                 subData.deptid = this.$store.state.insid
                 subData.user_id = _this.$store.state.ispId
-                console.log(subData)
+                // console.log(subData)
 
                 axios({
                     method: 'post',
                     url: _this.addOrUpdateData.submitURL,
                     data: qs.stringify(subData)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data == "success") {
                         _this.$message({
                             message: '成功',

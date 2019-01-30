@@ -294,7 +294,7 @@
                     url: _this.$store.state.defaultHttp+'customerTwo/getCustomerOneByN.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.cluePoolList = res.data.map.success
                     _this.$store.state.cluePoolListnumber = res.data.count;
                 }).catch(function(err){

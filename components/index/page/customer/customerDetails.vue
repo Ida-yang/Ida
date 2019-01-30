@@ -482,7 +482,7 @@
                     method:'post',
                     url:_this.$store.state.defaultHttp+'customerpool/getPoolById.do?cId='+_this.$store.state.iscId+'&id='+this.detailData.id,
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.customerdetail = res.data.map.success[0]
                     _this.contacts = res.data.map.success[0].contacts[0]
                     // console.log(_this.customerdetail)
@@ -540,7 +540,7 @@
                 this.thisshow = !this.thisshow
             },
             getRow(index,row){
-                console.log(row.id)
+                // console.log(row.id)
                 this.$store.state.detailsData.submitData = {"id":row.id}
                 this.idArr.id = row.id
                 
@@ -548,7 +548,7 @@
                 this.$options.methods.loadData.bind(this)(true);
             },
             Addcontact(){
-                console.log(this.customerdetail.pName)
+                // console.log(this.customerdetail.pName)
                 let addOrUpdateData = {};
                 addOrUpdateData.createForm = [
                     {"label":"联系人","inputModel":"name"},
@@ -589,7 +589,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(idArr)
+                // console.log(idArr)
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerpool/updateTo.do?cId='+_this.$store.state.iscId,
@@ -652,7 +652,7 @@
                 searchList.searchName = this.searchList.keyword;
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                console.log(searchList)
+                // console.log(searchList)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
@@ -674,7 +674,7 @@
                 data.contactsId = this.followform.contactsId;
                 data.follow_state = this.followform.state;
                 data.customerpool_id = this.detailData.id;
-                console.log(data)
+                // console.log(data)
 
                 axios({
                     method: 'post',

@@ -37,7 +37,13 @@
                         <span style="line-height:20px;float:right;margin-right:10px;font-size:14px;" v-if="showsuccess">签约成功！</span>
                     </div>
                     <el-steps :active="active" finish-status="success" :process-status="isprocess" align-center style="padding:10px;">
-                        <el-step v-for="item in stepList" :key="item.step_id" :title="item.step_name" :description="item.step_probability"></el-step>
+                        <el-step v-for="item in stepList" :key="item.step_id" :title="item.step_name" :description="item.step_probability">
+                            <template slot="description">
+                                <p>成功几率：{{item.step_probability}}</p>
+                                <p v-if="showcreate">{{item.createTime}}</p>
+                                <p v-if="showdurate">{{item.duration}}</p>
+                            </template>
+                        </el-step>
                     </el-steps>
                 </el-card>
             </div>
@@ -158,6 +164,8 @@
                 shownext:true,
                 showfail:false,
                 showsuccess:false,
+                showcreate:false,
+                showdurate:false,
                 isprocess:'process'
             }
         },
@@ -189,35 +197,56 @@
                     _this.privateUser = res.data.map.success[0].privateUser[0]
                     _this.customerpool = res.data.map.success[0].customerpool[0]
                     _this.stepList = _this.opportunitydetail.addstep
+                    _this.stepList.length = _this.opportunitydetail.addstep.length - 1
                     _this.addstep = _this.opportunitydetail.opportunityProgress
                     // console.log(_this.addstep)
                     let addStep = _this.addstep
-                    if(addStep == ''){
-                        _this.active = 0;
-                    }else{
+                    if(addStep){
                         for(var i = 0,length = addStep.length;i < length;i++){
-                            // console.log(addStep[i].progress_name)
+                            // console.log(i)
                             // console.log(addStep[i].createTime)
+                            _this.stepList[i].createTime = addStep[i].createTime
                             _this.steptime = addStep[i].createTime
-                            if(addStep[i].progress_probability == '100%'){
-                                _this.active = i+1
-                                _this.shownext = false
-                                _this.showsuccess = true
-                                _this.isprocess = 'wait'
-                                // console.log(_this.shownext)
-                            }else if(addStep[i].progress_name == '失败关闭'){
+                            if(addStep[i].progress_name == '失败关闭'){
                                 // _this.active = i+6
                                 _this.active = i
                                 _this.shownext = false
                                 _this.showfail = true
+                                _this.showsuccess = false
                                 _this.isprocess = 'error'
+                            }else if(addStep[i].progress_probability == '100%'){
+                                _this.active = i+1
+                                _this.shownext = false
+                                _this.showfail = false
+                                _this.showsuccess = true
+                                _this.isprocess = 'wait'
+                                // console.log(_this.shownext)
                             }else{
                                 _this.active = i+1
                                 _this.shownext = true
+                                _this.showfail = false
                                 _this.showsuccess = false
+                                _this.isprocess = 'process'
+                            }
+                            if(i !== 0){
+                                let begintime = new Date(addStep[i].previousTime.replace(/-/g, "/"))
+                                // console.log(begintime)
+                                let endtime = new Date(addStep[i].createTime.replace(/-/g, "/"))
+                                // console.log(endtime)
+                                _this.showcreate = true
+                                _this.showdurate = true
+                                let dateDiff = endtime.getTime() - begintime.getTime();
+                                // console.log(dateDiff)
+                                let dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));
+                                _this.stepList[i].duration = '历时：' + dayDiff + '天'
+                                // console.log(dayDiff)
+                            }else{
+                                _this.showdurate = false
+                                _this.showcreate = true
                             }
                         }
                     }
+                    // console.log(_this.stepList)
                     // console.log(_this.steptime)
                 }).catch(function(err){
                     console.log(err);
@@ -276,7 +305,7 @@
                     let _this = this;
                     let qs =require('querystring')
                     let data = {}
-                    data.previousTime = this.steptime
+                    data.previousTime = this.steptime + ':00'
                     if(_this.active == i){
                         data.progress_name = this.stepList[i].step_name
                         data.progress_probability = this.stepList[i].step_probability
@@ -319,6 +348,7 @@
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
+                data.previousTime = this.steptime + ':00'
                 data.progress_name = '失败关闭'
                 data.progress_probability = '0%'
                 _this.$confirm('确认关闭商机进度吗？一旦确定将不可撤回','提示',{
@@ -337,8 +367,8 @@
                                 type: 'success'
                             });
                             _this.isprocess = 'error'
-                            _this.shownext = !_this.shownext
-                            _this.showfail = !_this.showfail
+                            _this.shownext = false
+                            _this.showfail = true
                             _this.$options.methods.loadData.bind(_this)(true);
                         } else {
                             _this.$message({
@@ -355,7 +385,7 @@
                 this.thisshow = !this.thisshow
             },
             getRow(index,row){
-                console.log(row.opportunity_id)
+                // console.log(row.opportunity_id)
                 this.$store.state.detailsData.submitData = {"id":row.opportunity_id}
                 this.idArr.opportunity_id = row.opportunity_id
                 

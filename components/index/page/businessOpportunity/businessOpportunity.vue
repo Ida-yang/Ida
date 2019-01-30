@@ -271,7 +271,7 @@
                     url: _this.$store.state.defaultHttp+'opportunity/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.businessOpportunityList = res.data.map.success
                     _this.$store.state.businessOpportunityListnumber = res.data.count;
                 }).catch(function(err){
@@ -311,7 +311,7 @@
                         // console.log(newArr)
                     }
                 });
-                console.log(newArr)
+                // console.log(newArr)
                 this.idArr.id = newArr;
                 
             },
@@ -350,7 +350,7 @@
                 this.$router.push({ path: '/Opportunityaddorupdate' });
             },
             handleEdit(index,row){
-                console.log(row)
+                // console.log(row)
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改商机";
                 addOrUpdateData.createForm = [
@@ -375,7 +375,7 @@
                     "opportunity_remarks": row.opportunity_remarks};
                 addOrUpdateData.submitData = {"id":row.opportunity_id};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'opportunity/saveOrUpdate.do?cId='+this.$store.state.iscId,
-                console.log(addOrUpdateData)
+                // console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/Opportunityaddorupdate' });
             },
@@ -384,7 +384,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = this.idArr.id
-                console.log(idArr.id)
+                // console.log(idArr.id)
                 _this.$confirm('是否确认删除吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -394,7 +394,7 @@
                         url:  _this.$store.state.defaultHttp+ 'opportunity/delete.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.status && res.status == 200) {
                             _this.$message({
                                 message: '删除成功',
@@ -417,7 +417,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = row.opportunity_id
-                console.log(idArr)
+                // console.log(idArr)
                 _this.$confirm('是否确认删除[' + row.opportunity_name + ']？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -427,7 +427,7 @@
                         url: _this.$store.state.defaultHttp+'opportunity/delete.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.status && res.status == 200) {
                             _this.$message({
                                 message: '删除成功',
@@ -452,7 +452,7 @@
             },
             
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -468,7 +468,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{

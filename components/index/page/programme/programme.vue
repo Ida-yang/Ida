@@ -306,7 +306,7 @@
                 pageInfo.limit = this.limit
                 pageInfo.state = this.searchList.state
                 pageInfo.secondid = this.searchList.secondid
-                console.log(pageInfo)
+                // console.log(pageInfo)
                 let filterList = {}
                 filterList.type = '方案'
                 let data = {}
@@ -330,7 +330,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -340,14 +340,14 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
             },
             handleNodeClick(data){
-                console.log(data)
+                // console.log(data)
                 this.searchList.secondid = data.deptid
                 // console.log(this.searchList)
                 this.clickdata = data
@@ -367,7 +367,7 @@
                     }
                 });
                 this.idArr.id = newArr;
-                console.log(this.idArr.id)
+                // console.log(this.idArr.id)
                 
             },
             //方案添加
@@ -403,7 +403,7 @@
                 data.projectName = this.newform.projectName
                 data.time = this.newform.time+'-01-01'
                 data.state = this.newform.state
-                console.log(data)
+                // console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -429,7 +429,7 @@
                     url: _this.$store.state.defaultHttp+'project/insertProject.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'添加方案成功',
@@ -451,7 +451,7 @@
             //方案修改
             handleEdit(index,row){
                 let _this = this
-                console.log(row)
+                // console.log(row)
                 let data = {}
                 this.newform.id = row.id
                 this.newform.secondid = row.second_id
@@ -476,7 +476,7 @@
                 data.time = this.newform.time
                 data.state = this.newform.state
                 data.createTime = this.newform.createTime
-                console.log(data)
+                // console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -502,7 +502,7 @@
                     url: _this.$store.state.defaultHttp+'project/updateProject.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'修改方案成功',
@@ -533,7 +533,7 @@
                 let idArr = [];
                 idArr.id = this.idArr.id
                 idArr.shift(0)
-                console.log(idArr)
+                // console.log(idArr)
                 _this.$confirm('确认删除吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -543,7 +543,7 @@
                         url:  _this.$store.state.defaultHttp+ 'project/deleteProject.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res.data)
+                        // console.log(res.data)
                         if(res.data.code && res.data.code == 200) {
                             _this.$message({
                                 message: '删除成功',
@@ -566,7 +566,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = row.id
-                console.log(idArr)
+                // console.log(idArr)
                 _this.$confirm('确认删除 ['+ row.projectName +'] 吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -576,7 +576,7 @@
                         url:  _this.$store.state.defaultHttp+ 'project/deleteProject.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.data.code && res.data.code == 200) {
                             _this.$message({
                                 message: '删除成功',
@@ -595,7 +595,7 @@
                 });
             },
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -611,7 +611,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{

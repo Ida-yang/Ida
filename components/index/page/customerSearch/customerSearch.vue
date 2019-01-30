@@ -458,7 +458,7 @@
                     url: _this.$store.state.defaultHttp+'address/getAddress.do',
                     data: qs.stringify(data),
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.Provinces=res.data;
                 }).catch(function(err){
                     console.log(err);
@@ -568,7 +568,7 @@
                     url: _this.$store.state.defaultHttp+'customerOne/query.do',
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.rows)
+                    // console.log(res.data.rows)
                     _this.$store.state.customerList = res.data.rows
                     _this.$store.state.customerListnumber = res.data.total;
                 }).catch(function(err){
@@ -579,7 +579,7 @@
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data: qs.stringify(filterList)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.filterList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -625,14 +625,14 @@
                 idArr.id = this.idArr.id
                 idArr.secondid = this.$store.state.deptid
                 idArr.deptid = this.$store.state.insid
-                console.log(idArr)
+                // console.log(idArr)
                 _this.Loading = true
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerOne/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.status && res.status == 200) {
                         _this.Loading = false
                         _this.$message({
@@ -652,11 +652,11 @@
                 });
             },
             showdetailindstry(val){
-                console.log(val)
+                // console.log(val)
             },
             
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -672,7 +672,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{
@@ -709,7 +709,7 @@
                     url: _this.$store.state.defaultHttp+'address/getAddress.do',
                     data: qs.stringify(data),
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.cityList=res.data;
                 }).catch(function(err){
                     console.log(err);
@@ -717,7 +717,7 @@
             },
             // 选市
             choseCity(e) {
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 this.searchList.area = ''
                 let qs =require('querystring')
@@ -730,7 +730,7 @@
                     url: _this.$store.state.defaultHttp+'address/getAddress.do',
                     data: qs.stringify(data),
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.areaList=res.data;
                 }).catch(function(err){
                     console.log(err);
@@ -738,7 +738,7 @@
             },
             // 选区
             choseBlock(e) {
-                console.log(e)
+                // console.log(e)
                 this.E=e;
             },
 

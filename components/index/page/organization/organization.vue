@@ -331,7 +331,7 @@
             //上级部门添加
             handleappend(data){
                 let _this = this
-                console.log(data)
+                // console.log(data)
                 this.newform.parentname = data.deptname
                 this.newform.parentid = data.deptid
                 this.dialogVisible = true
@@ -344,13 +344,13 @@
                 data.parentid = this.newform.parentid
                 data.parentname = this.newform.parentname
                 data.deptname = this.newform.deptname
-                console.log(data)
+                // console.log(data)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'dept/insertDept.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.msg && res.data.msg == 'success'){
                         _this.$message({
                             message:'添加成功',
@@ -372,7 +372,7 @@
             },
             //上级部门修改
             handleUpdate(data){
-                console.log(data)
+                // console.log(data)
                 let _this = this;
                 this.newform.parentname = data.parentname
                 this.newform.deptid = data.deptid
@@ -386,13 +386,13 @@
                 let data = {}
                 data.deptid = this.newform.deptid
                 data.deptname = this.newform.deptname
-                console.log(data)
+                // console.log(data)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'dept/updateDeptById.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.msg && res.data.msg == 'success'){
                         _this.$message({
                             message:'修改成功',
@@ -418,7 +418,7 @@
                 let qs =require('querystring')
                 let idData = {}
                 idData.deptid = data.deptid
-                console.log(idData)
+                // console.log(idData)
                 _this.$confirm('是否确认删除？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -428,7 +428,7 @@
                         url:  _this.$store.state.defaultHttp+ 'dept/deleteDeptById.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idData),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.data.msg && res.data.msg == 'success') {
                             _this.$message({
                                 message: '删除成功',
@@ -472,7 +472,7 @@
                 data.deptid = this.roleform.deptid
                 data.name = this.roleform.name
                 data.ids = this.roleform.ids
-                console.log(data)
+                // console.log(data)
                 axios({
                     method:'post',
                     url:_this.$store.state.defaultHttp+'role/saveOrUpdate.do?cId='+_this.$store.state.iscId,
@@ -516,7 +516,7 @@
                         this.checkedrolesets.push(el.id)
                     }
                 });
-                console.log(this.roleform.ids)
+                // console.log(this.roleform.ids)
                 this.roleform.id = val.id
                 this.roleform.name = val.name
                 this.roleform.deptid = val.deptid
@@ -531,7 +531,7 @@
                 data.name = this.roleform.name
                 data.deptid = this.roleform.deptid
                 data.ids = this.roleform.ids
-                console.log(data.ids)
+                // console.log(data.ids)
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'role/saveOrUpdate.do?cId='+_this.$store.state.iscId,
@@ -556,7 +556,7 @@
                 });
             },
             handledelete(val){
-                console.log(val)
+                // console.log(val)
                 let _this = this
                 let data = {}
                 let qs = require('querystring')
@@ -590,7 +590,7 @@
                 })
             },
             CheckAllclues(val) {
-                console.log(val)
+                // console.log(val)
                 let data = this.cluerole
                 data.forEach(el => {
                     if(val == true){
@@ -601,7 +601,7 @@
                         this.roleform.ids.pop(el.id)
                     }
                 });
-                console.log(this.roleform.ids)
+                // console.log(this.roleform.ids)
             },
             CheckAllcustomers(val) {
                 let data = this.customerole
@@ -721,7 +721,7 @@
         height: 100%;
     }
     .leftcontent{
-        width: 30%;
+        width: 35%;
         height: auto;
         float: left;
         box-sizing: border-box;
@@ -731,7 +731,7 @@
         margin: 20px 0;
     }
     .rightcontent{
-        width: 69%;
+        width: 64%;
         height: 100%;
         float: left;
         box-sizing: border-box;

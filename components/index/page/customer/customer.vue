@@ -425,7 +425,7 @@
                     url: _this.$store.state.defaultHttp+'customerpool/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.customerList = res.data.map.success
                     _this.$store.state.customerListnumber = res.data.count;
                 }).catch(function(err){
@@ -454,7 +454,7 @@
             },
             selectInfo(val){
                 this.multipleSelection = val;
-                console.log(val)
+                // console.log(val)
                 let arr = val;
                 let newArr = [new Array()];
                 arr.forEach((item) => {
@@ -534,7 +534,7 @@
                 this.$router.push({ path: '/customeraddorupdate' });
             },
             handleEdit(index,row){
-                console.log(row)
+                // console.log(row)
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改客户";
                 addOrUpdateData.createForm = [
@@ -599,7 +599,7 @@
                     "operatingState": row.operatingState};
                 addOrUpdateData.submitData = {"id": row.id,'csId':row.contacts[0].csId};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'customerpool/updatepool.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId,
-                console.log(addOrUpdateData)
+                // console.log(addOrUpdateData)
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 this.$router.push({ path: '/customeraddorupdate' });
             },
@@ -658,7 +658,7 @@
                 });
             },
             hangleChange(e,val){
-                console.log(e)
+                // console.log(e)
                 let _this = this
                 let qs = require('querystring')
                 let data = {}
@@ -674,7 +674,7 @@
                     url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
                     data:qs.stringify(data),
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data =="success"){
                         _this.$options.methods.reloadTable.bind(_this)(true);
                     }else{

@@ -145,7 +145,7 @@
                 method:'get',
                 url: _this.$store.state.defaultHttp+'customerpool/getPool.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
             }).then(function(res){
-                console.log(res.data)
+                // console.log(res.data)
                 _this.cusoptions = res.data
             }).catch(function(err){
                 console.log(err)
@@ -182,7 +182,7 @@
                             this.myForm[item.inputModel] = setForm[item.inputModel];
                         }
                     });
-                    console.log(this.myForm);
+                    // console.log(this.myForm);
                     this.myForm.customerpool_id = this.addOrUpdateData.setForm.poolName
                     this.myForm.opportunity_id = this.addOrUpdateData.setForm.opportunity_name
                     this.$emit('input', this.myForm);
@@ -194,7 +194,7 @@
                 // this.$emit('input', { ...this.myForm });
             },
             handleChange(val, key){
-                console.log(val)
+                // console.log(val)
                 this.myForm[key] = val
                 this.customerId = val
                 this.loadOpp()
@@ -312,14 +312,14 @@
                 subData.secondid = this.$store.state.deptid
                 subData.deptid = this.$store.state.insid
                 // console.log(_this.myForm)
-                console.log(subData)
+                // console.log(subData)
 
                 axios({
                     method: 'post',
                     url: _this.addOrUpdateData.submitURL,
                     data: qs.stringify(subData)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data && res.data == "success") {
                         _this.$message({
                             message: '成功',

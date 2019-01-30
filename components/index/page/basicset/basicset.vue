@@ -185,7 +185,7 @@
                     url: _this.$store.state.defaultHttp+'typeInfo/getTypeInfoGroupByType.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.$store.state.stateList = res.data
                 }).catch(function(err){
                     console.log(err);
@@ -214,7 +214,7 @@
                 data.sort = this.newform.sort
                 data.typeName = this.newform.typeName
                 data.notes = this.newform.notes
-                console.log(data)
+                // console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -240,7 +240,7 @@
                     url: _this.$store.state.defaultHttp+'typeInfo/saveOrUpdate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'添加状态成功',
@@ -268,7 +268,7 @@
                 this.newform.typeName = row.typeName
                 this.newform.notes = row.notes
                 this.dialogVisible2 = true
-                console.log(this.newform)
+                // console.log(this.newform)
             },
             //状态修改提交按钮
             updatebasicset(){
@@ -280,7 +280,7 @@
                 data.sort = this.newform.sort
                 data.typeName = this.newform.typeName
                 data.notes = this.newform.notes
-                console.log(data)
+                // console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -306,7 +306,7 @@
                     url: _this.$store.state.defaultHttp+'typeInfo/saveOrUpdate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'修改状态成功',
@@ -329,7 +329,7 @@
                 let qs =require('querystring')
                 let idArr = [];
                 idArr.id = row.id
-                console.log(idArr)
+                // console.log(idArr)
                 _this.$confirm('确认删除 ['+ row.typeName +'] 吗？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -339,7 +339,7 @@
                         url:  _this.$store.state.defaultHttp+ 'typeInfo/deleteTypeInfoById.do?cId='+_this.$store.state.iscId,
                         data:qs.stringify(idArr),
                     }).then(function(res){
-                        console.log(res)
+                        // console.log(res)
                         if(res.data.code && res.data.code == 200) {
                             _this.$message({
                                 message: '删除成功',

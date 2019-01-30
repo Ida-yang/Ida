@@ -54,13 +54,37 @@
             }
         },
         mounted(){
-            console.log(window.location.hash)
+            // console.log(window.location.hash)
             this.url = window.location.hash
             this.getSearchString()
         },
         methods:{
+            //key(需要检错的键） url（传入的需要分割的url地址）
+            getSearchString() {
+            // 获取URL中?之后的字符
+                var str = this.url;
+                str = str.substring(11,str.length);
+                // console.log(str)
+                // 以&分隔字符串，获得类似name=xiaoli这样的元素数组
+                var arr = str.split("&");
+                // console.log(arr)
+                var obj = new Object();
+
+                // 将每一个数组元素以=分隔并赋给obj对象 
+                for(var i = 0; i < arr.length; i++) {
+                    var tmp_arr = arr[i].split("=");
+                    obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
+                }
+                // console.log(obj)
+                this.title = obj.n
+                this.cId = obj.c
+                this.pId = obj.p
+                // console.log(this.title)
+                // console.log(this.cId)
+                // console.log(this.pId)
+            },
             addactivity(){
-                console.log(this.newform)
+                // console.log(this.newform)
                 let _this = this;
                 let qs = require('querystring')
                 let data = {}
@@ -68,7 +92,7 @@
                 data.contactsName = this.newform.contactsName
                 data.phone = this.newform.phone
                 data.qq = this.newform.qq
-                console.log(data)
+                // console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -101,7 +125,7 @@
                     url: _this.$store.state.defaultHttp+'customerTwo/addActivityClue.do?cId='+_this.cId+'&pId='+_this.pId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'已提交',
@@ -118,31 +142,7 @@
                     console.log(err);
                 });
             },
-            //key(需要检错的键） url（传入的需要分割的url地址）
-            getSearchString() {
-            // 获取URL中?之后的字符
-                var str = this.url;
-                str = str.substring(11,str.length);
-                console.log(str)
-                // 以&分隔字符串，获得类似name=xiaoli这样的元素数组
-                var arr = str.split("&");
-                // console.log(arr)
-                var obj = new Object();
-
-                // 将每一个数组元素以=分隔并赋给obj对象 
-                for(var i = 0; i < arr.length; i++) {
-                    var tmp_arr = arr[i].split("=");
-                    obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
-                }
-                // console.log(obj)
-                this.title = obj.n
-                this.cId = obj.c
-                this.pId = obj.p
-                console.log(this.title)
-                console.log(this.cId)
-                console.log(this.pId)
-            }
-        },
+        }
     }
 </script>
 

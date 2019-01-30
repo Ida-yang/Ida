@@ -35,30 +35,30 @@
                     auto-complete="off">
                 </el-input>
                 <el-select 
-                    v-else-if="item.inputModel == 'country'"
+                    v-else-if="item.inputModel == 'countryid'"
                     v-model="myForm[item.inputModel]"
                     @change="choseProvince"
                     :placeholder="item.placeholder"
                     style="width:28%;">
-                    <el-option v-for="o in Provinces" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                    <el-option v-for="o in Provinces" :key="o.id" :label="o.name" :value="o.id"></el-option>
                 </el-select>
                 <el-select
                     class="cityseat"
-                    v-else-if="item.inputModel == 'city'"
+                    v-else-if="item.inputModel == 'cityid'"
                     v-model="myForm[item.inputModel]"
                     @change="choseCity"
                     :placeholder="item.placeholder"
                     style="width:28%;">
-                    <el-option v-for="o in cityList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                    <el-option v-for="o in cityList" :key="o.id" :label="o.name" :value="o.id"></el-option>
                 </el-select>
                 <el-select
                     class="areaseat"
-                    v-else-if="item.inputModel == 'area'"
+                    v-else-if="item.inputModel == 'areaid'"
                     v-model="myForm[item.inputModel]"
                     @change="choseBlock"
                     :placeholder="item.placeholder"
                     style="width:28%;">
-                    <el-option v-for="o in areaList" :key="o.id" :label="o.value" :value="o.value"></el-option>
+                    <el-option v-for="o in areaList" :key="o.id" :label="o.name" :value="o.id"></el-option>
                 </el-select>
                 <el-select 
                     v-else-if="item.type && item.type == 'select'"
@@ -148,45 +148,6 @@
         </div>
     </div>
 </template>
-<style>
-    .content {
-        width: 98%;
-    }
-    h3 {
-        /* text-align: center; */
-        margin: 20px 60px;
-    }
-    .myForm {
-        width: 41%;;
-        /* padding: 20px; */
-        float: left;
-    }
-    .formitemcont:nth-child(11),.formitemcont:nth-child(10){
-        margin: 0;
-    }
-    .line{
-        float: left;
-        height: 95%;
-        border-left: 1px solid #000;
-        margin-right: 5px;
-    }
-    .formlist{
-        width: 57%;
-        height: auto;
-        /* background-color: pink; */
-        float: left;
-    }
-    .cityseat{
-        position: absolute;
-        top:-52px;
-        left:30%;
-    }
-    .areaseat{
-        position: absolute;
-        top:-52px;
-        left:60%;
-    }
-</style>
 
 <script>
     import store from '../../../../store/store'
@@ -201,6 +162,7 @@
                 myForm: {
                     poolName:null,
                     address:null,},
+
                 subData: {},
                 mapJson:'../../../../dist/static/map.json',
                 Provinces:[],
@@ -208,6 +170,10 @@
                 areaList: [],
                 Citys:[],
                 block:[],
+                countryid:null,
+                cityid:null,
+                areaid:null,
+
                 page: 1,//默认第一页
                 limit: 15,//默认10条
                 selectData: null,
@@ -219,19 +185,63 @@
                 },
             }
         },
-        created(){
-            this.getCityData()
-        },
         mounted(){
             this.loadData();
             this.loadTable();
+            this.loadCountry();
         },
         activated() {
             this.loadData();
             this.loadTable();
+            this.loadCountry();
             // this.restaurants = this.loadData();
         },
         methods:{
+            loadCountry(){
+                let _this = this
+                let qs =require('querystring')
+                let country = {}
+                if(this.cityid){
+                    country.id = this.cityid
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                        data: qs.stringify(country),
+                    }).then(function(res){
+                        // console.log(res.data)
+                        _this.areaList=res.data;
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                }
+                if(this.countryid){
+                    country.id = this.countryid
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                        data: qs.stringify(country),
+                    }).then(function(res){
+                        // console.log(res.data)
+                        _this.cityList=res.data;
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                }
+                country.id = ''
+
+                //省/市/区
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'address/getAddress.do',
+                    data: qs.stringify(country),
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.Provinces=res.data;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
+            },
             //获取右边表格
             loadTable(){
                 let _this = this
@@ -245,7 +255,7 @@
                     url: _this.$store.state.defaultHttp+'rightPoolName.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(pageInfo),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.tableData = res.data.map.success
                     _this.tableNumber = res.data.count;
                 }).catch(function(err){
@@ -255,6 +265,9 @@
             //加载或重载页面
             loadData() {
                 this.addOrUpdateData = this.$store.state.addOrUpdateData;
+                this.countryid = this.addOrUpdateData.setForm.country
+                this.cityid = this.addOrUpdateData.setForm.city
+                this.areaid = this.addOrUpdateData.setForm.area
                 // console.log(this.addOrUpdateData)
 
                 // 设置默认值
@@ -272,12 +285,15 @@
                             this.myForm[item.inputModel] = setForm[item.inputModel];
                         }
                     });
+                    this.myForm.countryid = this.addOrUpdateData.setForm.country
+                    this.myForm.cityid = this.addOrUpdateData.setForm.city
+                    this.myForm.areaid = this.addOrUpdateData.setForm.area
                     // console.log(this.myForm);
                     this.$emit('input', this.myForm);
                 }
             },
             handleSelect(item) {
-                console.log(item);
+                // console.log(item);
             },
             handleInput(val, key) {
                 this.myForm[key] = val;
@@ -298,7 +314,7 @@
                     url: _this.$store.state.defaultHttp+'rightPoolName.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(pageInfo),
                 }).then(function(res){
-                    console.log(res.data)
+                    // console.log(res.data)
                     _this.tableData = res.data.map.success
                     _this.tableNumber = res.data.count;
                 }).catch(function(err){
@@ -317,7 +333,7 @@
                 let flag = false;
                 createForm.forEach(item => {
                     subData[item.inputModel] = _this.myForm[item.inputModel];
-                    console.log(_this.myForm)
+                    // console.log(_this.myForm)
                     if(item.inputModel == "name" && !subData[item.inputModel]) {//联系人名称不能为空
                         _this.$message({
                             message: "联系人名称不能为空",
@@ -344,14 +360,14 @@
                 subData.secondid = this.$store.state.deptid
                 subData.deptid = this.$store.state.insid
                 // console.log(_this.myForm)
-                console.log(subData)
+                // console.log(subData)
 
                 axios({
                     method: 'post',
                     url: _this.addOrUpdateData.submitURL,
                     data: qs.stringify(subData)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == "200") {
                         _this.$message({
                             message: '成功',
@@ -395,7 +411,7 @@
             getCityData(){
                 var that = this
                 axios.get(this.mapJson).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                 if (res.status==200) {
                     var data = res.data
                     // 省市区数据分类
@@ -432,30 +448,26 @@
                     console.log(error)
                 })
             },
+            
             // 选省
             choseProvince(e) {
-                for (var index2 in this.Provinces) {
-                if (e === this.Provinces[index2].value) {
-                    this.cityList = this.Provinces[index2].children
-                    this.areaList =this.Provinces[index2].children[0].children
-                    this.E = this.areaList[0].id
-                }
-                }console.log(this.myForm.country)
+                let _this = this
+                this.myForm.cityid = ''
+                this.myForm.areaid = ''
+                this.countryid = e
+                _this.$options.methods.loadCountry.bind(_this)(true);
             },
             // 选市
             choseCity(e) {
-                for (var index3 in this.Citys) {
-                if (e === this.Citys[index3].value) {
-                    this.areaList = this.Citys[index3].children
-                    this.E = this.areaList[0].id
-                    // console.log(this.E)
-                }
-                }console.log(this.myForm.city)
+                let _this = this
+                this.myForm.areaid = ''
+                this.cityid = e
+                _this.$options.methods.loadCountry.bind(_this)(true);
             },
             // 选区
             choseBlock(e) {
                 this.E=e;
-                console.log(this.myForm.area)
+                this.areaid = e
             },
             handleSizeChange(val) {
                 let _this = this;
@@ -471,3 +483,43 @@
         
     }
 </script>
+
+<style>
+    .content {
+        width: 98%;
+    }
+    h3 {
+        /* text-align: center; */
+        margin: 20px 60px;
+    }
+    .myForm {
+        width: 41%;;
+        /* padding: 20px; */
+        float: left;
+    }
+    .formitemcont:nth-child(11),.formitemcont:nth-child(10){
+        margin: 0;
+    }
+    .line{
+        float: left;
+        height: 95%;
+        border-left: 1px solid #000;
+        margin-right: 5px;
+    }
+    .formlist{
+        width: 57%;
+        height: auto;
+        /* background-color: pink; */
+        float: left;
+    }
+    .cityseat{
+        position: absolute;
+        top:-52px;
+        left:30%;
+    }
+    .areaseat{
+        position: absolute;
+        top:-52px;
+        left:60%;
+    }
+</style>

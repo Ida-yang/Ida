@@ -130,7 +130,7 @@
                     url: _this.$store.state.defaultHttp+'opportunity/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.welcomeData = res.data.map.success
                 }).catch(function(err){
                     console.log(err);

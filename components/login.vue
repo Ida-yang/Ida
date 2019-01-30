@@ -104,7 +104,7 @@ export default {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(function(res){
-                console.log(res.data.map.success)
+                // console.log(res)
                 if(res.data.msg && res.data.code == 200) {
                     _this.$message({
                       message: '登录成功',

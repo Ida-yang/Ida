@@ -230,7 +230,7 @@
                     url: _this.$store.state.defaultHttp+'getContactsAll.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.contactsList = res.data.map.success
                     _this.$store.state.contactsListnumber = res.data.count;
                 }).catch(function(err){
@@ -286,9 +286,9 @@
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省/市/区","inputModel":"country","type":"select","placeholder":"请选择省"},
-                    {"label":"","inputModel":"city","type":"select","placeholder":"请选择市"},
-                    {"label":"","inputModel":"area","type":"select","placeholder":"请选择区"},
+                    {"label":"省/市/区","inputModel":"countryid","type":"select","placeholder":"请选择省"},
+                    {"label":"","inputModel":"cityid","type":"select","placeholder":"请选择市"},
+                    {"label":"","inputModel":"areaid","type":"select","placeholder":"请选择区"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
@@ -296,9 +296,9 @@
                     "poolName": '',
                     "telephone": '',
                     "phone": '',
-                    "country":'',
-                    "city":'',
-                    "area":'',
+                    "countryid":'',
+                    "cityid":'',
+                    "areaid":'',
                     "qq": '',
                     "sex": '',
                     "birthday":'',
@@ -321,9 +321,9 @@
                     {"label":"性别","inputModel":"sex","type":"radio"},
                     {"label":"生日","inputModel":"birthday","type":"date"},
                     {"label":"职务","inputModel":"identity"},
-                    {"label":"省/市/区","inputModel":"country","type":"select"},
-                    {"label":"","inputModel":"city","type":"select",},
-                    {"label":"","inputModel":"area","type":"select"},
+                    {"label":"省/市/区","inputModel":"countryid","type":"select"},
+                    {"label":"","inputModel":"cityid","type":"select",},
+                    {"label":"","inputModel":"areaid","type":"select"},
                     {"label":"地址","inputModel":"address"},
                     {"label":"备注","inputModel":"remark"}];
                 addOrUpdateData.setForm = {
@@ -331,9 +331,12 @@
                     "poolName": row.poolname,
                     "telephone": row.telephone,
                     "phone": row.phone,
-                    "country":row.country,
-                    "city":row.city,
-                    "area":row.area,
+                    "countryid":row.country,
+                    "country":row.countryid,
+                    "cityid":row.city,
+                    "city":row.cityid,
+                    "areaid":row.area,
+                    "area":row.areaid,
                     "qq": row.qq,
                     "sex": row.sex,
                     "birthday":row.birthday,

@@ -500,12 +500,12 @@
                     this.myForm.countryid = this.addOrUpdateData.setForm.country
                     this.myForm.cityid = this.addOrUpdateData.setForm.city
                     this.myForm.areaid = this.addOrUpdateData.setForm.area
-                    console.log(this.myForm);
+                    // console.log(this.myForm);
                     this.$emit('input', this.myForm);
                 }
             },
             handleSelect(item) {
-                console.log(item);
+                // console.log(item);
             },
             handleInput(val, key) {
                 this.myForm[key] = val;
@@ -585,14 +585,14 @@
                 subData.secondid = this.$store.state.deptid
                 subData.deptid = this.$store.state.insid
                 // console.log(_this.myForm)
-                console.log(subData)
+                // console.log(subData)
 
                 axios({
                     method: 'post',
                     url: _this.addOrUpdateData.submitURL,
                     data: qs.stringify(subData)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.code && res.data.code == "200") {
                         _this.$message({
                             message: '成功',
