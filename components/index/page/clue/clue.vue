@@ -63,7 +63,7 @@
                 <el-table-column
                     prop="contacts[0].coName"
                     fixed
-                    v-if="item.prop == 'contacts[0].coName' && item.state == 1 && item.pageInfoId == 1"
+                    v-if="item.prop == 'contacts[0].coName' && item.state == 1"
                     header-align="left"
                     align="left"
                     min-width="100"
@@ -73,7 +73,7 @@
                 <el-table-column
                     prop="name"
                     fixed
-                    v-else-if="item.prop == 'name' && item.state == 1 && item.pageInfoId == 2"
+                    v-else-if="item.prop == 'name' && item.state == 1"
                     header-align="left"
                     align="left"
                     min-width="180"
@@ -86,8 +86,18 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                    prop="address"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'address' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="地址"
+                    min-width="160"
+                    sortable>
+                </el-table-column>
+                <el-table-column
                     prop="contacts[0].telephone"
-                    v-else-if="item.prop == 'contacts[0].telephone' && item.state == 1 && item.pageInfoId == 3"
+                    v-else-if="item.prop == 'contacts[0].telephone' && item.state == 1"
                     header-align="left"
                     align="left"
                     label="电话"
@@ -109,6 +119,42 @@
                     header-align="left"
                     align="left"
                     label="QQ"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].email"
+                    v-else-if="item.prop == 'email' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="邮箱"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].wechat"
+                    v-else-if="item.prop == 'wechat' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="微信"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].sex"
+                    v-else-if="item.prop == 'sex' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="性别"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].remark"
+                    v-else-if="item.prop == 'remarks' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="备注"
                     min-width="95"
                     sortable>
                 </el-table-column>

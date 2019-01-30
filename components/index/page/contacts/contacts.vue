@@ -85,6 +85,42 @@
                     align="left"
                     sortable>
                 </el-table-column>
+                <el-table-column
+                    prop="email"
+                    v-else-if="item.prop == 'email' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="邮箱"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="wechat"
+                    v-else-if="item.prop == 'wechat' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="微信"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="sex"
+                    v-else-if="item.prop == 'sex' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="性别"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="remark"
+                    v-else-if="item.prop == 'remarks' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="备注"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
                 <el-table-column label="最新跟进时间"
                     prop="follow[0].createTime"
                     v-else-if="item.prop == 'follow[0].createTime' && item.state == 1"
@@ -116,6 +152,43 @@
                     header-align="left"
                     align="left"
                     min-width="100"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="deptname"
+                    v-if="item.prop == 'deptname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="部门"
+                    min-width="110"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="parentname"
+                    v-if="item.prop == 'parentname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="机构"
+                    min-width="110"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="countryid"
+                    v-else-if="item.prop == 'countryid' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="省-市-区"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.country}}-{{scope.row.city}}-{{scope.row.area}}</template>
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    v-if="item.prop == 'createTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="创建时间"
+                    min-width="140"
                     sortable>
                 </el-table-column>
             </div>
@@ -230,7 +303,7 @@
                     url: _this.$store.state.defaultHttp+'getContactsAll.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.contactsList = res.data.map.success
                     _this.$store.state.contactsListnumber = res.data.count;
                 }).catch(function(err){

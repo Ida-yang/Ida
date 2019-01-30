@@ -77,8 +77,17 @@
                     </template>
                 </el-table-column>
                 <el-table-column
+                    prop="address"
+                    show-overflow-tooltip
+                    v-else-if="item.prop == 'address' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="地址"
+                    min-width="160"
+                    sortable>
+                </el-table-column>
+                <el-table-column
                     prop="contacts[0].coName"
-                    fixed
                     v-else-if="item.prop == 'contacts[0].coName' && item.state == 1"
                     header-align="left"
                     align="left"
@@ -111,6 +120,42 @@
                     align="left"
                     min-width="90"
                     label="QQ"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].email"
+                    v-else-if="item.prop == 'email' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="邮箱"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].wechat"
+                    v-else-if="item.prop == 'wechat' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="微信"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].sex"
+                    v-else-if="item.prop == 'sex' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="性别"
+                    min-width="95"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="contacts[0].remark"
+                    v-else-if="item.prop == 'remarks' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    label="备注"
+                    min-width="95"
                     sortable>
                 </el-table-column>
                 <el-table-column
@@ -148,6 +193,43 @@
                     align="left"
                     min-width="100"
                     label="负责人"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="deptname"
+                    v-else-if="item.prop == 'deptname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="部门"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="parentname"
+                    v-else-if="item.prop == 'parentname' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="100"
+                    label="机构"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="countryid"
+                    v-else-if="item.prop == 'countryid' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="省-市-区"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.country}}-{{scope.row.city}}-{{scope.row.area}}</template>
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    v-else-if="item.prop == 'createTime' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="140"
+                    label="创建时间"
                     sortable>
                 </el-table-column>
                 <el-table-column
@@ -425,7 +507,7 @@
                     url: _this.$store.state.defaultHttp+'customerpool/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.customerList = res.data.map.success
                     _this.$store.state.customerListnumber = res.data.count;
                 }).catch(function(err){

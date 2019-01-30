@@ -148,7 +148,7 @@
                     v-else-if="item.prop == 'deptname' && item.state == 1"
                     header-align="left"
                     align="left"
-                    min-width="130"
+                    min-width="100"
                     label="部门"
                     sortable>
                 </el-table-column>
@@ -163,10 +163,10 @@
                 </el-table-column>
                 <el-table-column
                     prop="create_time"
-                    v-else-if="item.prop == 'create_time' && item.state == 1"
+                    v-else-if="item.prop == 'createTime' && item.state == 1"
                     header-align="left"
                     align="left"
-                    min-width="130"
+                    min-width="140"
                     label="创建时间"
                     sortable>
                 </el-table-column>
@@ -310,7 +310,7 @@
                     url: _this.$store.state.defaultHttp+'getContractAll.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.agreementList = res.data.map.success
                     _this.$store.state.agreementListnumber = res.data.count;
                 }).catch(function(err){

@@ -182,7 +182,7 @@
                     header-align="left"
                     align="left"
                     label="公司地址"
-                    min-width="180"
+                    min-width="160"
                     sortable>
                 </el-table-column>
                 <el-table-column

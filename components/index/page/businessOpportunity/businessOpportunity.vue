@@ -356,8 +356,8 @@
                 addOrUpdateData.createForm = [
                     {"label":"商机编号","inputModel":"opportunity_number",},
                     {"label":"商机名称","inputModel":"opportunity_name"},
-                    {"label":"公司名称","inputModel":"customerpool_id",},
-                    {"label":"客户决策人","inputModel":"contacts_id",},
+                    {"label":"公司名称","inputModel":"customerpool_id","type":"select"},
+                    {"label":"客户决策人","inputModel":"contacts_id","type":"select"},
                     {"label":"预计成绩金额","inputModel":"opportunity_achievement","type":"number"},
                     {"label":"预计成交时间","inputModel":"opportunity_deal","type":"date"},
                     {"label":"负责人","inputModel":"user_id","disabled":true},
@@ -368,10 +368,10 @@
                     "customerpool_id": row.customerpool[0].name,
                     "customerpool_name": row.customerpool[0].id,
                     "contacts_id": row.contacts[0].coName,
-                    "contacts_name": row.contacts[0].id,
+                    "contacts_name": row.contacts[0].csId,
                     "opportunity_achievement":row.opportunity_achievement,
                     "opportunity_deal":row.opportunity_deal,
-                    "user_id":this.$store.state.user,
+                    "user_id":row.private_employee,
                     "opportunity_remarks": row.opportunity_remarks};
                 addOrUpdateData.submitData = {"id":row.opportunity_id};
                 addOrUpdateData.submitURL = this.$store.state.defaultHttp+ 'opportunity/saveOrUpdate.do?cId='+this.$store.state.iscId,

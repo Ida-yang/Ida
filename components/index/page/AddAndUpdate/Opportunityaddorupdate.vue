@@ -144,6 +144,8 @@
                     opportunity_achievement : [{ required: true, message: '预计成绩金额不能为空', trigger: 'blur' },],
                     opportunity_deal : [{ required: true, message: '预计成交时间不能为空', trigger: 'blur' },],
                 },
+
+                customerpoolId:null,
             }
         },
         mounted(){
@@ -159,17 +161,50 @@
             loadTable(){
                 let _this = this
                 let qs = require('querystring')
-                let data = {}
-                data.page = 1
-                data.limit = 100000000
+                let pageInfo = {}
+                pageInfo.page = 1
+                pageInfo.limit = 100000000
                 // console.log(data)
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'customerpool/getPoolRight.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
-                    data: qs.stringify(data)
+                    data: qs.stringify(pageInfo)
                 }).then(function(res){
                     // console.log(res.data.map.success)
                     _this.customerlist = res.data.map.success
+                }).catch(function(err){
+                    console.log(err);
+                });
+                if(this.customerpoolId){
+                    let data = {}
+                    data.customerpool_id = this.customerpoolId
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'getPoolContactsName.do?cId='+_this.$store.state.iscId,
+                        data: qs.stringify(data)
+                    }).then(function(res){
+                        // console.log(res.data.map.success)
+                        _this.contactslist = res.data.map.success
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                }
+                
+            },
+            handleSelect(item) {
+                // console.log(item);
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.customerpool_id = item
+                // console.log(data)
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'getPoolContactsName.do?cId='+_this.$store.state.iscId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    // console.log(res.data.map.success)
+                    _this.contactslist = res.data.map.success
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -177,6 +212,7 @@
             //加载或重载页面
             loadData() {
                 this.addOrUpdateData = this.$store.state.addOrUpdateData;
+                this.customerpoolId = this.addOrUpdateData.setForm.customerpool_name
                 // console.log(this.addOrUpdateData)
 
                 // 设置默认值
@@ -201,24 +237,6 @@
                     this.myForm.contacts_id = this.addOrUpdateData.setForm.contacts_name
                     this.$emit('input', this.myForm);
                 }
-            },
-            handleSelect(item) {
-                // console.log(item);
-                let _this = this
-                let qs = require('querystring')
-                let data = {}
-                data.customerpool_id = item
-                // console.log(data)
-                axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'getPoolContactsName.do?cId='+_this.$store.state.iscId,
-                    data: qs.stringify(data)
-                }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.contactslist = res.data.map.success
-                }).catch(function(err){
-                    console.log(err);
-                });
             },
             handleInput(val, key) {
                 this.myForm[key] = val;

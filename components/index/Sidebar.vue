@@ -94,10 +94,10 @@
                                 index: 'customerSearch',
                                 title: '搜索客户',
                             },
-                            // {
-                            //     index: 'reportForm',
-                            //     title: '获客报表',
-                            // },
+                            {
+                                index: 'reportForm',
+                                title: '获客报表',
+                            },
                         ]
                     },
                 ],
@@ -172,10 +172,10 @@
                                 index: 'programme',
                                 title: '方案/目标',
                             },
-                            {
-                                index: 'suibian',
-                                title: '随便',
-                            },
+                            // {
+                            //     index: 'suibian',
+                            //     title: '随便',
+                            // },
                         ]
                     },
                 ],

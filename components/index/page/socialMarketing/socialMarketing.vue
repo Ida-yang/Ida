@@ -86,7 +86,7 @@
                         v-else-if="item.prop == 'createTime' && item.state == 1"
                         header-align="left"
                         align="left"
-                        min-width="130"
+                        min-width="140"
                         label="创建时间"
                         sortable>
                     </el-table-column>
