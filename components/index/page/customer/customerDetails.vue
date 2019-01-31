@@ -414,9 +414,9 @@
         activated(){
             this.loadData();
         },
-        mounted(){
-            this.loadData();
-        },
+        // mounted(){
+        //     this.loadData();
+        // },
         methods: {
             loadData() {
                 this.detailData = this.$store.state.detailsData.submitData;

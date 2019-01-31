@@ -171,7 +171,10 @@
                 },
             }
         },
-        mounted(){
+        // mounted(){
+        //     this.reloadTable()
+        // },
+        activated(){
             this.reloadTable()
         },
         methods:{

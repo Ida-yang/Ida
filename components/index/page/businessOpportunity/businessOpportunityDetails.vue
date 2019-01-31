@@ -169,9 +169,9 @@
                 isprocess:'process'
             }
         },
-        mounted(){
-            this.loadData();
-        },
+        // mounted(){
+        //     this.loadData();
+        // },
         activated(){
             this.loadData();
         },

@@ -150,7 +150,7 @@
                     sortable>
                 </el-table-column>
                 <el-table-column
-                    prop="contacts[0].remark"
+                    prop="remark"
                     v-else-if="item.prop == 'remarks' && item.state == 1"
                     header-align="left"
                     align="left"
@@ -456,9 +456,9 @@
         activated(){
             this.reloadTable()
         },
-        mounted(){
-            this.reloadTable()
-        },
+        // mounted(){
+        //     this.reloadTable()
+        // },
 
         methods: {
             //获取/查询线索列表

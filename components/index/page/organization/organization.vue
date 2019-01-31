@@ -268,7 +268,12 @@
                 setrole:null,
             }
         },
-        mounted(){
+        // mounted(){
+        //     this.loadData()
+        //     this.reloadData()
+        //     this.getresource()
+        // },
+        activated(){
             this.loadData()
             this.reloadData()
             this.getresource()

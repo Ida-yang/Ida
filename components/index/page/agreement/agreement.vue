@@ -285,9 +285,9 @@
         activated(){
             this.reloadTable()
         },
-        mounted(){
-            this.reloadTable()
-        },
+        // mounted(){
+        //     this.reloadTable()
+        // },
 
         methods: {
             //加载所有合同
@@ -310,7 +310,7 @@
                     url: _this.$store.state.defaultHttp+'getContractAll.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.agreementList = res.data.map.success
                     _this.$store.state.agreementListnumber = res.data.count;
                 }).catch(function(err){

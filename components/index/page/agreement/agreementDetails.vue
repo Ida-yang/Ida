@@ -147,10 +147,10 @@
             this.loadData();
             this.loadIMG()
         },
-        mounted(){
-            this.loadData();
-            this.loadIMG()
-        },
+        // mounted(){
+        //     this.loadData();
+        //     this.loadIMG()
+        // },
         methods: {
             loadData() {
                 this.detailData = this.$store.state.detailsData.submitData;

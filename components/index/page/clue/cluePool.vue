@@ -231,6 +231,115 @@
                     min-width="110"
                     sortable>
                 </el-table-column>
+                <el-table-column
+                    prop="representative"
+                    v-else-if="item.prop == 'representative' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="法人代表"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="registrationAuthority"
+                    v-else-if="item.prop == 'registrationAuthority' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="登记机关"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="creditCode"
+                    v-else-if="item.prop == 'creditCode' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="150"
+                    label="社会信用代码"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="registrationNumber"
+                    v-else-if="item.prop == 'registrationNumber' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="注册号"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="organizationCode"
+                    v-else-if="item.prop == 'organizationCode' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="130"
+                    label="组织机构代码"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="capital"
+                    v-else-if="item.prop == 'capital' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="注册资金"
+                    sortable>
+                    <template slot-scope="scope">{{scope.row.capital}} 万元</template>
+                </el-table-column>
+                <el-table-column
+                    prop="date"
+                    v-else-if="item.prop == 'date' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="成立时间"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="enterpriseScale"
+                    v-else-if="item.prop == 'enterpriseScale' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="企业规模"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="financingState"
+                    v-else-if="item.prop == 'financingState' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="融资状态"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="industryType"
+                    v-else-if="item.prop == 'industryType' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="行业"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="companyType"
+                    v-else-if="item.prop == 'companyType' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="公司类型"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    prop="operatingState"
+                    v-else-if="item.prop == 'operatingState' && item.state == 1"
+                    header-align="left"
+                    align="left"
+                    min-width="110"
+                    label="营业状态"
+                    sortable>
+                </el-table-column>
             </div>
             <el-table-column 
                 label="操作"
@@ -313,9 +422,9 @@
         activated(){
             this.reloadTable()
         },
-        mounted(){
-            this.reloadTable()
-        },
+        // mounted(){
+        //     this.reloadTable()
+        // },
         beforeCreate(){
             let _this = this;
                 let qs =require('querystring')
@@ -350,7 +459,7 @@
                     url: _this.$store.state.defaultHttp+'customerTwo/getCustomerOneByN.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.cluePoolList = res.data.map.success
                     _this.$store.state.cluePoolListnumber = res.data.count;
                 }).catch(function(err){
@@ -530,8 +639,8 @@
                 let idArr = [];
                 idArr.ids = this.idArr.id
                 idArr.pId = this.userData.pId
-                idArr.secondid = _this.$store.state.deptid
-                idArr.deptid = _this.$store.state.insid
+                idArr.secondid = ''
+                idArr.deptid = ''
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId,

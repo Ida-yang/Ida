@@ -185,16 +185,10 @@
                 },
             }
         },
-        mounted(){
-            this.loadData();
-            this.loadTable();
-            this.loadCountry();
-        },
         activated() {
             this.loadData();
             this.loadTable();
             this.loadCountry();
-            // this.restaurants = this.loadData();
         },
         methods:{
             loadCountry(){
@@ -291,9 +285,6 @@
                     // console.log(this.myForm);
                     this.$emit('input', this.myForm);
                 }
-            },
-            handleSelect(item) {
-                // console.log(item);
             },
             handleInput(val, key) {
                 this.myForm[key] = val;
@@ -405,48 +396,6 @@
             getRow(index,row){
                 this.myForm.poolName = row.name
                 this.myForm.address = row.address
-            },
-            
-            // 加载china地点数据，三级
-            getCityData(){
-                var that = this
-                axios.get(this.mapJson).then(function(res){
-                    // console.log(res)
-                if (res.status==200) {
-                    var data = res.data
-                    // 省市区数据分类
-                    for (var item in data) {
-                    if (item.match(/0000$/)) {//省
-                        that.Provinces.push({id: item, value: data[item], children: []})
-                    } else if (item.match(/00$/)) {//市
-                        that.Citys.push({id: item, value: data[item], children: []})
-                    } else {//区
-                        that.block.push({id: item, value: data[item]})
-                    }
-                    }
-                    // 分类市级
-                    for (var index in that.Provinces) {
-                    for (var index1 in that.Citys) {
-                        if (that.Provinces[index].id.slice(0, 2) === that.Citys[index1].id.slice(0, 2)) {
-                        that.Provinces[index].children.push(that.Citys[index1])
-                        }
-                    }
-                    }
-                    // 分类区级
-                    for(var item1 in that.Citys) {
-                    for(var item2 in that.block) {
-                        if (that.block[item2].id.slice(0, 4) === that.Citys[item1].id.slice(0, 4)) {
-                        that.Citys[item1].children.push(that.block[item2])
-                        }
-                    }
-                    }
-                }
-                else{
-                    console.log(res.status)
-                }
-                }).catch(function(error){
-                    console.log(error)
-                })
             },
             
             // 选省

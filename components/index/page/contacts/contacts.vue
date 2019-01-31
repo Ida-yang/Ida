@@ -279,9 +279,9 @@
         activated(){
             this.reloadTable()
         },
-        mounted(){
-            this.reloadTable()
-        },
+        // mounted(){
+        //     this.reloadTable()
+        // },
 
         methods: {
             reloadTable() {
@@ -303,7 +303,7 @@
                     url: _this.$store.state.defaultHttp+'getContactsAll.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.contactsList = res.data.map.success
                     _this.$store.state.contactsListnumber = res.data.count;
                 }).catch(function(err){

@@ -246,8 +246,8 @@
                     v-else-if="item.prop == 'levels' && item.state == 1"
                     header-align="left"
                     align="left"
-                    min-width="100"
-                    label="级别"
+                    min-width="110"
+                    label="客户级别"
                     sortable>
                 </el-table-column>
                 <el-table-column
@@ -473,9 +473,9 @@
         activated(){
             this.reloadTable()
         },
-        mounted(){
-            this.reloadTable()
-        },
+        // mounted(){
+        //     this.reloadTable()
+        // },
 
         methods: {
             reloadTable() {
@@ -507,7 +507,7 @@
                     url: _this.$store.state.defaultHttp+'customerpool/query.do?cId='+_this.$store.state.iscId,
                     data: qs.stringify(searchList),
                 }).then(function(res){
-                    console.log(res.data.map.success)
+                    // console.log(res.data.map.success)
                     _this.$store.state.customerList = res.data.map.success
                     _this.$store.state.customerListnumber = res.data.count;
                 }).catch(function(err){

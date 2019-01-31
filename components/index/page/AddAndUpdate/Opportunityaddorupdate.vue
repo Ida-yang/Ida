@@ -148,10 +148,10 @@
                 customerpoolId:null,
             }
         },
-        mounted(){
-            this.loadData();
-            this.loadTable();
-        },
+        // mounted(){
+        //     this.loadData();
+        //     this.loadTable();
+        // },
         activated() {
             this.loadData();
             this.loadTable();

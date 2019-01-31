@@ -133,8 +133,8 @@
                     amount : [{ required: true, message: '合同金额不能为空', trigger: 'blur' },],
                     customerpool_id : [{ required: true, message: '客户不能为空', trigger: 'blur' },],
                     contract_type : [{ required: true, message: '合同类型不能为空', trigger: 'blur' },],
-                    contract_number : [{ required: true, message: '合同编号不能为空', trigger: 'blur' },],
                     contract_name : [{ required: true, message: '合同名称不能为空', trigger: 'blur' },],
+                    contract_number : [{ required: true, message: '合同编号不能为空', trigger: 'blur' },],
                 },
             }
         },
@@ -151,14 +151,9 @@
                 console.log(err)
             });
         },
-        mounted(){
-            this.loadData();
-            this.loadOpp()
-        },
         activated() {
             this.loadData();
             this.loadOpp()
-            // this.restaurants = this.loadData();
         },
         methods:{
             //加载或重载页面

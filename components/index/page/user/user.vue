@@ -27,14 +27,15 @@
                 width="100"
                 trigger="click">
                 <el-checkbox-group class="checklist" v-model="checklist">
-                    <el-checkbox class="checkone" @change="shownumber()" label="编号"></el-checkbox>
+                <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
+                    <!-- <el-checkbox class="checkone" @change="shownumber()" label="编号"></el-checkbox>
                     <el-checkbox class="checkone" @change="showname()" label="用户"></el-checkbox>
                     <el-checkbox class="checkone" @change="showaccount()" label="登录账号"></el-checkbox>
                     <el-checkbox class="checkone" @change="showrole()" label="角色"></el-checkbox>
                     <el-checkbox class="checkone" @change="showphone()" label="手机号"></el-checkbox>
                     <el-checkbox class="checkone" @change="showemail()" label="邮箱"></el-checkbox>
                     <el-checkbox class="checkone" @change="showdepart()" label="部门"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showposition()" label="职位"></el-checkbox>
+                    <el-checkbox class="checkone" @change="showposition()" label="职位"></el-checkbox> -->
                 </el-checkbox-group>
                 <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
                 <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
@@ -60,86 +61,97 @@
                     @selection-change="selectInfo"
                     sortable>
                 </el-table-column>
-                <el-table-column
-                    prop="private_number"
-                    fixed
-                    v-if="showbianhao"
-                    header-align="left"
-                    align="left"
-                    min-width="150"
-                    label="编号"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="private_employee"
-                    fixed
-                    v-if="showmingcheng"
-                    header-align="left"
-                    align="left"
-                    min-width="90"
-                    label="用户"
-                    sortable>
-                    <!-- <template slot-scope="scope">
-                        <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
-                            {{scope.row.private_employee}}
-                        </div>
-                    </template> -->
-                </el-table-column>
-                <el-table-column
-                    prop="private_username"
-                    v-if="showzhanghao"
-                    header-align="left"
-                    align="left"
-                    min-width="120"
-                    label="登录账号"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="name"
-                    v-if="showjuese"
-                    header-align="left"
-                    align="left"
-                    min-width="100"
-                    label="职位"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="private_phone"
-                    v-if="showshouji"
-                    header-align="left"
-                    align="left"
-                    min-width="120"
-                    label="手机号"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="private_email"
-                    v-if="showyouxiang"
-                    header-align="left"
-                    align="left"
-                    min-width="130"
-                    label="邮箱"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="deptname"
-                    show-overflow-tooltip
-                    v-if="showbumen"
-                    header-align="left"
-                    align="left"
-                    min-width="100"
-                    label="部门"
-                    sortable>
-                </el-table-column>
-                <el-table-column
-                    prop="parentname"
-                    v-if="showzhiwei"
-                    header-align="left"
-                    align="left"
-                    min-width="180"
-                    label="机构"
-                    sortable>
-                </el-table-column>
+                <div v-for="(item,index) in filterList" :key="index" >
+                    <el-table-column
+                        prop="private_number"
+                        fixed
+                        v-if="item.prop == 'private_number' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="150"
+                        label="编号"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="private_employee"
+                        fixed
+                        v-if="item.prop == 'private_employee' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="90"
+                        label="用户"
+                        sortable>
+                        <!-- <template slot-scope="scope">
+                            <div @click="openDetails(scope.$index, scope.row)" class="hoverline">
+                                {{scope.row.private_employee}}
+                            </div>
+                        </template> -->
+                    </el-table-column>
+                    <el-table-column
+                        prop="private_username"
+                        v-if="item.prop == 'private_username' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="120"
+                        label="登录账号"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="name"
+                        v-if="item.prop == 'name' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="100"
+                        label="岗位"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="private_phone"
+                        v-if="item.prop == 'private_phone' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="120"
+                        label="手机号"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="private_email"
+                        v-if="item.prop == 'private_email' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="130"
+                        label="邮箱"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="deptname"
+                        show-overflow-tooltip
+                        v-if="item.prop == 'deptname' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="100"
+                        label="部门"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="parentname"
+                        v-if="item.prop == 'parentname' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="180"
+                        label="机构"
+                        sortable>
+                    </el-table-column>
+                    <el-table-column
+                        prop="createTime"
+                        v-if="item.prop == 'createTime' && item.state == 1"
+                        header-align="left"
+                        align="left"
+                        min-width="180"
+                        label="创建时间"
+                        sortable>
+                    </el-table-column>
+                </div>
                 <el-table-column label="操作"
                     fixed="right"
                     width="140"
@@ -304,7 +316,10 @@
                     searchName:null,
                     deptid:null,
                 },
-                checklist:['编号','用户','登录账号','角色','手机号','邮箱','部门','职位'],
+                // checklist:['编号','用户','登录账号','角色','手机号','邮箱','部门','职位'],
+                filterList:null,
+                checklist:null,
+
                 idArr:{
                     private_id:null,
                 },
@@ -350,9 +365,9 @@
         activated(){
             this.reloadTable()
         },
-        mounted(){
-            this.reloadTable()
-        },
+        // mounted(){
+        //     this.reloadTable()
+        // },
         methods:{
             reloadTable(){
                 let _this = this
@@ -362,8 +377,13 @@
                 pageInfo.limit = this.limit
                 pageInfo.searchName = this.searchList.searchName
                 pageInfo.deptid = this.searchList.deptid
+                let dept = {}
+                dept.deptid = this.searchList.deptid
+                let filterList = {}
+                filterList.type = '用户'
                 let data = {}
-                data.deptid = this.searchList.deptid
+                data.type = '用户'
+                data.state = 1
 
                 axios({
                     method: 'post',
@@ -379,10 +399,30 @@
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(data)
+                    data:qs.stringify(dept)
                 }).then(function(res){
                     // console.log(res.data)
                     _this.roleList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(filterList)
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.filterList = res.data
+                }).catch(function(err){
+                    console.log(err);
+                });
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'userPageInfo/getUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data: qs.stringify(data)
+                }).then(function(res){
+                    // console.log(res.data)
+                    _this.checklist = res.data
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -706,6 +746,33 @@
                     }).catch(function(err){
                         console.log(err);
                     });
+                });
+            },
+            hangleChange(e,val){
+                // console.log(e)
+                let _this = this
+                let qs = require('querystring')
+                let data = {}
+                data.pageInfoId = val.pageInfoId
+                if(e == true){
+                    data.state = 1
+                }else{
+                    data.state = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url:  _this.$store.state.defaultHttp+ 'userPageInfo/updateUserPageByid.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                    data:qs.stringify(data),
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data && res.data =="success"){
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else{
+                        console.log(err)
+                    }
+                }).catch(function(err){
+                    console.log(err);
                 });
             },
             shownumber(){

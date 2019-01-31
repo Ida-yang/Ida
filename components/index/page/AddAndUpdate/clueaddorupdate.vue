@@ -105,7 +105,7 @@
                             v-else-if="item.inputModel == 'capital'"
                             type="number"
                             :value="myForm[item.inputModel]"
-                            @input="handleinput($event, item.inputModel)"
+                            @input="handleInput($event, item.inputModel)"
                             style="width:90%;" 
                             auto-complete="off">
                             <span slot="suffix" style="margin-right:20px">万元</span>
@@ -371,14 +371,6 @@
                 console.log(err);
             });
         },
-        // created(){
-        //     this.getCityData()
-        // },
-        mounted(){
-            this.loadData();
-            this.loadTable();
-            this.loadCountry()
-        },
         activated() {
             this.loadData();
             this.loadTable();
@@ -503,9 +495,6 @@
                     // console.log(this.myForm);
                     this.$emit('input', this.myForm);
                 }
-            },
-            handleSelect(item) {
-                // console.log(item);
             },
             handleInput(val, key) {
                 this.myForm[key] = val;
@@ -642,47 +631,6 @@
                 this.myForm.financingState = row.financing  //是否融资
                 this.myForm.enterpriseScale = row.enterpriseScaleName  //企业规模
                 this.myForm.creditCode = row.creditCode  //统一社会信用代码
-            },
-
-            // 加载china地点数据，三级
-            getCityData(){
-                var _this = this
-                axios.get(this.mapJson).then(function(res){
-                    // console.log(res)
-                    if (res.status==200) {
-                        var data = res.data
-                        // 省市区数据分类
-                        for (var item in data) {
-                            if (item.match(/0000$/)) {//省
-                                _this.Provinces.push({id: item, value: data[item], children: []})
-                            } else if (item.match(/00$/)) {//市
-                                _this.Citys.push({id: item, value: data[item], children: []})
-                            } else {//区
-                                _this.block.push({id: item, value: data[item]})
-                            }
-                        }
-                        // 分类市级
-                        for (var index in _this.Provinces) {
-                            for (var index1 in _this.Citys) {
-                                if (_this.Provinces[index].id.slice(0, 2) === _this.Citys[index1].id.slice(0, 2)) {
-                                _this.Provinces[index].children.push(_this.Citys[index1])
-                                }
-                            }
-                        }
-                        // 分类区级
-                        for(var item1 in _this.Citys) {
-                            for(var item2 in _this.block) {
-                                if (_this.block[item2].id.slice(0, 4) === _this.Citys[item1].id.slice(0, 4)) {
-                                _this.Citys[item1].children.push(_this.block[item2])
-                                }
-                            }
-                        }
-                    }else{
-                        console.log(res.status)
-                    }
-                }).catch(function(error){
-                    console.log(error)
-                })
             },
             // 选省
             choseProvince(e) {

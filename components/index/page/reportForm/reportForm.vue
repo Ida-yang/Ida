@@ -218,10 +218,10 @@
             this.loadData()
             this.drawLine();
         },
-        mounted(){
-            this.loadData()
-            this.drawLine();
-        },
+        // mounted(){
+        //     this.loadData()
+        //     this.drawLine();
+        // },
         methods:{
             loadData(){
                 let _this = this;
