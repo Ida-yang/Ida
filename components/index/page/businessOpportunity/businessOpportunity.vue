@@ -248,9 +248,9 @@
         activated(){
             this.reloadTable()
         },
-        // mounted(){
-        //     this.reloadTable()
-        // },
+        mounted(){
+            this.reloadTable()
+        },
 
         methods: {
             reloadTable() {

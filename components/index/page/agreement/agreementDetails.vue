@@ -227,7 +227,7 @@
                     headers: {'Content-Type': 'multipart/form-data'}
                 }
                 // 添加请求头
-                axios.post('http://crm.yunzoe.com/yzcrm/contractUpload.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId+'&contractid='+this.detailData.id, param, config)
+                axios.post(this.$store.state.defaultHttp+'contractUpload.do?cId='+this.$store.state.iscId+'&pId='+this.$store.state.ispId+'&contractid='+this.detailData.id, param, config)
                 .then(res => {
                     // console.log(res)
                     if (res.data == 'success') {

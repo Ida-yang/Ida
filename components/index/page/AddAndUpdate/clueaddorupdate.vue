@@ -371,6 +371,11 @@
                 console.log(err);
             });
         },
+        // mounted() {
+        //     this.loadData();
+        //     this.loadTable();
+        //     this.loadCountry()
+        // },
         activated() {
             this.loadData();
             this.loadTable();

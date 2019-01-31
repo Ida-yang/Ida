@@ -456,9 +456,9 @@
         activated(){
             this.reloadTable()
         },
-        // mounted(){
-        //     this.reloadTable()
-        // },
+        mounted(){
+            this.reloadTable()
+        },
 
         methods: {
             //获取/查询线索列表

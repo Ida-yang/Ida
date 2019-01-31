@@ -46,7 +46,7 @@
             width="45">
             </el-table-column>
             <el-table-column
-                prop="opportunity_name"
+                prop="name"
                 header-align="left"
                 align="left"
                 min-width="120"
@@ -54,7 +54,7 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="opportunity_time"
+                prop="start_time"
                 header-align="left"
                 align="left"
                 min-width="120"
@@ -62,7 +62,7 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="opportunity_deal"
+                prop="end_deal"
                 header-align="left"
                 align="left"
                 min-width="180"
@@ -70,7 +70,7 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="opportunity_number"
+                prop="state"
                 header-align="left"
                 align="left"
                 min-width="90"
@@ -78,7 +78,7 @@
                 sortable>
             </el-table-column>
             <el-table-column
-                prop="private_employee"
+                prop="user"
                 header-align="left"
                 align="left"
                 min-width="110"
@@ -121,20 +121,18 @@
         methods:{
             loadData(){
                 let _this = this;
-                let qs =require('querystring')
-                let searchList = {}
-                searchList.limit = 10;
-                // console.log(searchList)
-                axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'opportunity/query.do?cId='+_this.$store.state.iscId,
-                    data: qs.stringify(searchList),
-                }).then(function(res){
-                    // console.log(res.data.map.success)
-                    _this.$store.state.welcomeData = res.data.map.success
-                }).catch(function(err){
-                    console.log(err);
-                });
+                _this.$store.state.welcomeData = [
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                    {name:'项目名称',start_time:'2019-01-01',end_deal:'2019-03-31',state:'启动',user:'销售'},
+                ]
             },
             drawLine(){
                 // 基于准备好的dom，初始化echarts实例

@@ -268,11 +268,11 @@
                 setrole:null,
             }
         },
-        // mounted(){
-        //     this.loadData()
-        //     this.reloadData()
-        //     this.getresource()
-        // },
+        mounted(){
+            this.loadData()
+            this.reloadData()
+            this.getresource()
+        },
         activated(){
             this.loadData()
             this.reloadData()

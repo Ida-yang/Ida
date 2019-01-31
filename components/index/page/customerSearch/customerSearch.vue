@@ -427,10 +427,10 @@
             this.loadData()
             this.reloadTable()
         },
-        // mounted(){
-        //     this.loadData()
-        //     this.reloadTable()
-        // },
+        mounted(){
+            this.loadData()
+            this.reloadTable()
+        },
 
         methods: {
             loadData(){

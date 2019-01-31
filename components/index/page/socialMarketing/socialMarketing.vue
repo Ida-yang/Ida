@@ -286,11 +286,12 @@
         },
         activated(){
             this.reloadTable()
+            this.loadcues()
         },
-        // mounted(){
-        //     this.reloadTable()
-        //     this.loadcues()
-        // },
+        mounted(){
+            this.reloadTable()
+            this.loadcues()
+        },
         methods:{
             reloadTable(){
                 let _this = this

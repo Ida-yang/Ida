@@ -92,6 +92,7 @@
                 data.contactsName = this.newform.contactsName
                 data.phone = this.newform.phone
                 data.qq = this.newform.qq
+                data.remark = this.title
                 // console.log(data)
                 let arr = [this.newform]
                 let flag = false;

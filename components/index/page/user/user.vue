@@ -365,9 +365,9 @@
         activated(){
             this.reloadTable()
         },
-        // mounted(){
-        //     this.reloadTable()
-        // },
+        mounted(){
+            this.reloadTable()
+        },
         methods:{
             reloadTable(){
                 let _this = this

@@ -440,9 +440,9 @@
         activated(){
             this.reloadTable()
         },
-        // mounted(){
-        //     this.reloadTable()
-        // },
+        mounted(){
+            this.reloadTable()
+        },
         beforeCreate(){
             let _this = this;
                 let qs =require('querystring')

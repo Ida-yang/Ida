@@ -151,6 +151,10 @@
                 console.log(err)
             });
         },
+        // mounted() {
+        //     this.loadData();
+        //     this.loadOpp()
+        // },
         activated() {
             this.loadData();
             this.loadOpp()

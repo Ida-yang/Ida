@@ -282,12 +282,12 @@
                 formLabelWidth: '130px',
             }
         },
+        mounted(){
+            this.reloadTable()
+        },
         activated(){
             this.reloadTable()
         },
-        // mounted(){
-        //     this.reloadTable()
-        // },
 
         methods: {
             //加载所有合同
