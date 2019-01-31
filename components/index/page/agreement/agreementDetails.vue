@@ -6,7 +6,8 @@
                 <el-card class="box-card" v-model="agreementdetail">
                     <div slot="header" class="clearfix">
                         <span>{{agreementdetail.poolName}}</span>
-                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
+                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()" v-show="retracts">收起</el-button>
+                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()" v-show="!retracts">显示</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
@@ -44,7 +45,7 @@
                                 <!-- <img src="/upload/staticImg/bg.jpg" width="100%" alt="图片"> -->
                             </el-dialog>
                         </div>
-                        <div class="text" v-show="thisshow" style="height:150px;">
+                        <div class="text" style="height:150px;">
                             <ul>
                                 <li>创建人：<span>{{agreementdetail.private_employee}}</span></li>
                                 <li>创建人部门：<span>{{agreementdetail.private_employee}}</span></li>
@@ -140,7 +141,9 @@
                 imgurl:null,
                 dialogImageUrl:null,
                 dialogVisible:false,
-                imgshow:false
+                imgshow:false,
+
+                retracts:true,
             }
         },
         activated(){
@@ -295,6 +298,7 @@
             },
             retract(){
                 this.thisshow = !this.thisshow
+                this.retracts = !this.retracts
             },
             getRow(index,row){
                 // console.log(row)

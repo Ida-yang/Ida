@@ -7,7 +7,8 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>{{customerpool.name}}</span>
-                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
+                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()" v-show="retracts">收起</el-button>
+                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()" v-show="!retracts">显示</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
@@ -166,7 +167,9 @@
                 showsuccess:false,
                 showcreate:false,
                 showdurate:false,
-                isprocess:'process'
+                isprocess:'process',
+
+                retracts:true,
             }
         },
         // mounted(){
@@ -383,6 +386,7 @@
             },
             retract(){
                 this.thisshow = !this.thisshow
+                this.retracts = !this.retracts
             },
             getRow(index,row){
                 // console.log(row.opportunity_id)

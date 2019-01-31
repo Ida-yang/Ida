@@ -7,7 +7,8 @@
                 <el-card class="box-card" v-model="cluedetail">
                     <div slot="header" class="clearfix">
                         <span>{{cluedetail.name}}</span>
-                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
+                        <el-button style="float:right;" class="info-btn" size="mini" @click="retract()" v-show="retracts">显示</el-button>
+                        <el-button style="float:right;" class="info-btn" size="mini" @click="retract()" v-show="!retracts">收起</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="cluePool()">转移至线索池</el-button>
                         <el-button style="float:right;" class="info-btn" size="mini" @click="customerSwitching()">转移至客户</el-button>
                     </div>
@@ -267,6 +268,8 @@
                 idArr:{
                     id:null,
                 },
+
+                retracts:true,
             }
         },
         activated(){
@@ -362,6 +365,7 @@
             },
             retract(){
                 this.thisshow = !this.thisshow
+                this.retracts = !this.retracts
             },
             getRow(index,row){
                 // console.log(row.id)

@@ -7,7 +7,8 @@
                 <el-card class="box-card">
                     <div slot="header" class="clearfix">
                         <span>{{programme.projectName}}</span>
-                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()">收起</el-button>
+                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()" v-show="retracts">收起</el-button>
+                        <el-button style="float:right;margin-left:10px;" class="info-btn" size="mini" @click="retract()" v-show="!retracts">显示</el-button>
                     </div>
                     <div class="text item" v-show="thisshow">
                         <ul>
@@ -352,6 +353,8 @@
                 dialogVisible4:false,
                 shownext:true,
                 showfail:false,
+
+                retracts:true,
             }
         },
         activated(){
@@ -400,6 +403,7 @@
             },
             retract(){
                 this.thisshow = !this.thisshow
+                this.retracts = !this.retracts
             },
             getRow(index,row){
                 // console.log(row.id)
@@ -433,7 +437,7 @@
 
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'clueProject/updateClueProject.do?cId='+_this.$store.state.iscId,
+                    url:  _this.$store.state.defaultHttp+ 'cLueProject/updateClueProject.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data),
                 }).then(function(res){
                     // console.log(res)

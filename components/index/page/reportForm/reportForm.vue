@@ -1,5 +1,8 @@
 <template>
     <div class="innerspace">
+        <div class="head">
+            <span>获客报表是基于已签约的客户从行业占比，城市分布，企业规模，成立时间等四个维度分析，从而推荐出最优的拓展城市区域。</span>
+        </div>
         <div class="middles">
             <div class="middlebody">
                 <div id="chart3" :style="{width: '500px', height: '400px'}"></div>
@@ -172,7 +175,7 @@
                 </el-table>
             </div>
         </div>
-        <div class="head">
+        <div class="foot">
             <el-table
                 :data="tableData"
                 ref="multipleTable"
@@ -521,41 +524,17 @@
     }
     .head{
         width: 100%;
-        height: auto;
+        height: 60px;
         background-color: #ffffff;
-        display: flex;
-        display: -webkit-flex; /* Safari */
-        justify-content: center;   /*水平居中*/
-        align-items: center;
-        margin-top: 20px;
-    }
-    .head ul{
-        height: 100%;
-        flex: 1;
         text-align: center;
-        list-style: none;
-        display: flex;
-        display: -webkit-flex; /* Safari */
-        justify-content: center;   /*水平居中*/
-        align-items: center;
-    }
-    .head ul:not(:last-child){
-        border-right: 10px solid #f0f0f0;
-    }
-    .head ul li{
-        /* width: 50%;
-        height: 50px;
-        float: left; */
-        font-size: 14px;
-        flex: 1;
-        text-align: center;
-        line-height: 24px;
+        line-height: 60px;
+        font-size: 20px;
     }
     .middles{
         width: 100%;
         height: auto;
         background-color: #ffffff;
-        margin-top: 20px;
+        margin-top: 10px;
         display: flex;
         display: -webkit-flex; /* Safari */
         justify-content: center;   /*水平居中*/
@@ -575,6 +554,7 @@
     .foot{
         width: 100%;
         height: auto;
+        margin-top: 10px;
         background-color: #ffffff;
     }
 </style>
