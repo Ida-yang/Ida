@@ -57,7 +57,7 @@
         </div>
         <div class="middles">
             <div class="middlebody">
-                <div id="chart4" :style="{width: '400px', height: '400px'}"></div>
+                <div id="chart4" :style="{width: '600px', height: '400px'}"></div>
             </div>
             <div class="middlebody">
                 <el-table
@@ -365,29 +365,7 @@
                 let chart3 = echarts.init(document.getElementById('chart3'))
                 let chart4 = echarts.init(document.getElementById('chart4'))
                 // 绘制图表
-                // chart1.setOption({
-                //     title : { text: '销售漏斗',left: 'center' },
-                //     tooltip : {},
-                //     legend: {
-                //         bottom: 20,
-                //         data : ['展现','点击','访问','咨询','订单']
-                //     },
-                //     calculable : true,
-                //     series : [
-                //         {
-                //             name:'销售漏斗',
-                //             type:'funnel',
-                //             // width: '40%',
-                //             data:[
-                //                 {value:60, name:'访问'},
-                //                 {value:40, name:'咨询'},
-                //                 {value:20, name:'订单'},
-                //                 {value:80, name:'点击'},
-                //                 {value:100, name:'展现'}
-                //             ]
-                //         }
-                //     ]
-                // });
+                //公司规模分析
                 chart1.setOption({
                     title: { text: '公司规模分析',left: 'center' },
                     tooltip: {},
@@ -397,11 +375,12 @@
                     },
                     yAxis: {},
                     series: [{
-                        name: '公司规模分析',
+                        name: '客户数量',
                         type: 'bar',
                         data: [62, 89, 36, 10, 36, 54, 16, 5]
                     }]
                 });
+                //成立年限分析
                 chart2.setOption({
                     title: { text: '成立年限分析',left: 'center' },
                     tooltip: {},
@@ -411,11 +390,12 @@
                     },
                     yAxis: {},
                     series: [{
-                        name: '成立年限分析',
+                        name: '客户数量',
                         type: 'bar',
                         data: [55, 20, 36, 25, 10, 9]
                     }]
                 });
+                //行业占比分析
                 chart3.setOption({
                     title: {
                         text: '行业占比分析', // 标题文本
@@ -431,7 +411,7 @@
                         data: ['电子','化妆品','五金','知识产权','农业','汽配'] // 扇形区域名称
                     },
                     series : [{
-                        name:'行业占比分析',  // 提示框标题
+                        name:'客户数量',  // 提示框标题
                         type: 'pie',
                         radius : '65%',
                         center: ['50%', '50%'],
@@ -452,6 +432,7 @@
                         }
                     }]
                 });
+                //城市分布
                 chart4.setOption({
                     title: {
                         text: '城市分布分析', // 标题文本
@@ -472,12 +453,12 @@
                         map: 'china', // 表示中国地图
                         roam: true,
                         label: {
-                        normal: {
-                            // show: true, // 是否显示对应地名
-                            textStyle: {
-                            color: 'rgba(0,0,0,0.4)'
+                            normal: {
+                                // show: true, // 是否显示对应地名
+                                textStyle: {
+                                    color: 'rgba(0,0,0,0.4)'
+                                }
                             }
-                        }
                         },
                         itemStyle: {
                             normal: {
@@ -495,8 +476,8 @@
                     },
                     series: [{
                         type: 'scatter',
-                        coordinateSystem: 'geo' // 对应上方配置
-                        },
+                            coordinateSystem: 'geo' // 对应上方配置
+                            },
                         {
                         name: '浏览量', // 浮动框的标题
                         type: 'map',
@@ -546,6 +527,7 @@
         display: -webkit-flex; /* Safari */
         justify-content: center;   /*水平居中*/
         align-items: center;
+        margin-top: 20px;
     }
     .head ul{
         height: 100%;
@@ -581,7 +563,11 @@
     }
     .middles .middlebody{
         flex: 1;
+        width: 50%;
         /* padding: 10px; */
+    }
+    .middles .middlebody div{
+        margin:0 auto
     }
     .middles .middlebody:first-child{
         border-right: 10px solid #f0f0f0;

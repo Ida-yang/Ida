@@ -322,7 +322,7 @@
                         el.qrcode = '/weChat/'+_this.$store.state.iscId+'/'+el.url
                         el.codeURL = 'http://crm.yunzoe.com/#/activity?c='+_this.$store.state.iscId+'&p='+_this.$store.state.ispId+'&n='+el.name
                     });
-                    console.log(arr)
+                    // console.log(arr)
                     // console.log(_this.codeURL)
                 }).catch(function(err){
                     console.log(err);

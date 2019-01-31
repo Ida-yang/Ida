@@ -237,6 +237,7 @@
     .foot{
         width: 100%;
         height: auto;
+        margin-top: 20px;
         background-color: #ffffff;
     }
 </style>

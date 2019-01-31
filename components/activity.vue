@@ -132,7 +132,12 @@
                             message:'已提交',
                             type:'success'
                         })
-                        _this.newform = null
+                        _this.newform = {
+                            poolName:null,
+                            contactsName:null,
+                            phone:null,
+                            qq:null,
+                        }
                     }else{
                         _this.$message({
                             message:res.data.msg,

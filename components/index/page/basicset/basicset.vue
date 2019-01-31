@@ -31,7 +31,7 @@
                 >
                 <el-table-column
                     header-align="center"
-                    align="center"
+                    align=""
                     type="selection"
                     width="45"
                     scope.row.id
@@ -41,7 +41,7 @@
                     prop="sort"
                     v-if="showshunxu"
                     header-align="center"
-                    align="left"
+                    align="center"
                     label="顺序"
                     sortable>
                 </el-table-column>
@@ -49,7 +49,7 @@
                     prop="typeName"
                     v-if="showmingcheng"
                     header-align="center"
-                    align="left"
+                    align="center"
                     min-width="120"
                     label="名称"
                     sortable>
@@ -58,7 +58,7 @@
                     prop="notes"
                     v-if="showbeizhu"
                     header-align="center"
-                    align="left"
+                    align="center"
                     min-width="120"
                     label="备注"
                     sortable>
@@ -283,7 +283,7 @@
                 data.sort = this.newform.sort
                 data.typeName = this.newform.typeName
                 data.notes = this.newform.notes
-                // console.log(data)
+                console.log(data)
                 let arr = [this.newform]
                 let flag = false;
                 arr.forEach(item => {
@@ -309,7 +309,7 @@
                     url: _this.$store.state.defaultHttp+'typeInfo/saveOrUpdate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    // console.log(res)
+                    console.log(res)
                     if(res.data.code && res.data.code == 200){
                         _this.$message({
                             message:'修改状态成功',
@@ -391,12 +391,13 @@
     }
     .namecontent li{
         width: 100%;
-        height: 30px;
-        line-height: 30px;
-        padding-left: 20px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 40px;
+        /* text-align: center; */
     }
     .namecontent li:hover{
-        background-color: #f7f7ff;
+        background-color: #f0f0f0;
     }
     .centercontent{
         display: block;

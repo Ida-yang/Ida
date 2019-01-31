@@ -327,22 +327,6 @@
                     console.log(err);
                 });
             },
-            closeTag() {
-                let tagsList = this.$store.state.tagsList;
-                let index;
-                tagsList.forEach((element, i) => {
-                    if(element.name == this.$options.name) {
-                        index = i;
-                    }
-                });
-                const delItem = this.$store.state.tagsList.splice(index, 1)[0];
-                const item = this.$store.state.tagsList[index] ? this.$store.state.tagsList[index] : this.$store.state.tagsList[index - 1];
-                if (item) {
-                    delItem.path === this.$route.fullPath && this.$router.push('/clue');
-                }else{
-                    this.$router.push('/welcome');
-                }
-            },
             handleSizeChange(val) {
                 let _this = this;
                 _this.limit = val;
