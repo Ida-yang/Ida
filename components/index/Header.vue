@@ -242,7 +242,7 @@
         left: 0px;
         box-sizing: border-box;
         width: 100%;
-        height: 60px;
+        height: 50px;
         font-size: 14px;
         color: #000105;
         background: #fdfeff;
@@ -253,12 +253,12 @@
         float: left;
         padding: 0 20px 0 25px;
         cursor: pointer;
-        line-height: 60px;
+        line-height: 50px;
     }
     .header-in{
         position: absolute;
         left: 150px;
-        height: 60px;
+        height: 50px;
         transition: left .3s ease-in-out;
     }
     .content-collapse{
@@ -267,23 +267,23 @@
     /* .header .logo{
         float: left;
         width:150px;
-        line-height: 60px;
+        line-height: 50px;
         font-family: "楷体";
     } */
     .breadcrumb{
-        height: 60px;
+        height: 50px;
     }
     .bre-item{
         font-size: 16px;
-        line-height: 60px;
+        line-height: 50px;
         color: #20222a;
     }
     .header-right{
         float: right;
         /* padding-right: 150px; */
         /* width: 150px; */
-        margin: 17px 60px 0px 10px;
-        height: 60px!important;
+        margin: 12px 60px 0px 10px;
+        height: 50px!important;
         line-height: 25px !important;
     }
     .header-user-con{

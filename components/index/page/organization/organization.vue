@@ -331,6 +331,7 @@
                 this.searchList.parentid = data.parentid
                 this.clickdata = data
                 this.roleform.deptid = data.deptid
+                console.log(data.deptid)
                 this.$options.methods.reloadData.bind(this)(true);
             },
             //上级部门添加
@@ -469,6 +470,7 @@
                     this.roleform.deptname = this.clickdata.deptname
                     this.dialogVisible3 = true
                 }
+                console.log(this.roleform)
             },
             addrole(){
                 let _this = this
@@ -477,12 +479,13 @@
                 data.deptid = this.roleform.deptid
                 data.name = this.roleform.name
                 data.ids = this.roleform.ids
-                // console.log(data)
+                console.log(data)
                 axios({
                     method:'post',
                     url:_this.$store.state.defaultHttp+'role/saveOrUpdate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
+                    console.log(res)
                     if(res.data.msg && res.data.msg == 'success'){
                         _this.$message({
                             message:'添加成功',

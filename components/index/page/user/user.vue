@@ -682,6 +682,7 @@
                     console.log(err);
                 });
             },
+            //同步用户
             handlesynchros(){
                 let _this = this;
                 let qs =require('querystring')

@@ -319,7 +319,7 @@
                     url: _this.$store.state.defaultHttp+'project/getProject.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(pageInfo)
                 }).then(function(res){
-                    // console.log(res.data.map.success)
+                    console.log(res.data.map.success)
                     _this.$store.state.programmeList = res.data.map.success
                     _this.$store.state.programmeListnumber = res.data.count
                 }).catch(function(err){

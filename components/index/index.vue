@@ -18,7 +18,7 @@
     html { overflow-x: hidden; overflow-y: auto; }
     .content-box{
         position: absolute;
-        top: 60px;
+        top: 50px;
     }
     .content{
         background: none repeat scroll 0 0 #fdfeff;
