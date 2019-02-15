@@ -27,15 +27,7 @@
                 width="100"
                 trigger="click">
                 <el-checkbox-group class="checklist" v-model="checklist">
-                <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
-                    <!-- <el-checkbox class="checkone" @change="shownumber()" label="编号"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showname()" label="用户"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showaccount()" label="登录账号"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showrole()" label="角色"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showphone()" label="手机号"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showemail()" label="邮箱"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showdepart()" label="部门"></el-checkbox>
-                    <el-checkbox class="checkone" @change="showposition()" label="职位"></el-checkbox> -->
+                    <el-checkbox class="checkone" v-for="item in filterList" :key="item.id" :label="item.name" :value="item.state" @change="hangleChange($event,item)"></el-checkbox>
                 </el-checkbox-group>
                 <!-- <el-button slot="reference" icon="el-icon-more-outline" type="mini">筛选列表</el-button> -->
                 <el-button slot="reference" icon="el-icon-more" class="info-btn screen" type="mini"></el-button>
@@ -471,7 +463,22 @@
                         type:'info'
                     })
                 }else{
-                    this.dialogVisible = true
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'deptJurisdiction/insert.do',
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message:'对不起，您没有该权限，请联系管理员开通',
+                                type:'error'
+                            })
+                        }else{
+                            this.dialogVisible = true
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
                 }
             },
             //用户添加提交按钮
@@ -572,29 +579,46 @@
                 let _this = this
                 // console.log(row)
                 let data = {}
-                data.deptid = row.second_id
-                this.newform.private_id = row.private_id
-                this.newform.second_id = row.second_id
-                this.newform.secondname = row.deptname
-                this.newform.role_id = row.role_id
-                this.newform.private_phone = row.private_phone
-                this.newform.private_password = row.private_password
-                this.newform.private_passwords = row.private_password
-                this.newform.private_employee = row.private_employee
-                this.newform.private_state = row.private_state
-                this.newform.private_email = row.private_email
-                this.newform.private_QQ = row.private_QQ
-                this.dialogVisible2 = true
+
                 axios({
-                    method: 'post',
-                    url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(data)
-                }).then(function(res){
-                    // console.log(res.data)
-                    _this.roleList = res.data
-                }).catch(function(err){
-                    console.log(err);
-                });
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'deptJurisdiction/insert.do',
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message:'对不起，您没有该权限，请联系管理员开通',
+                                type:'error'
+                            })
+                        }else{
+                            data.deptid = row.second_id
+                            this.newform.private_id = row.private_id
+                            this.newform.second_id = row.second_id
+                            this.newform.secondname = row.deptname
+                            this.newform.role_id = row.role_id
+                            this.newform.private_phone = row.private_phone
+                            this.newform.private_password = row.private_password
+                            this.newform.private_passwords = row.private_password
+                            this.newform.private_employee = row.private_employee
+                            this.newform.private_state = row.private_state
+                            this.newform.private_email = row.private_email
+                            this.newform.private_QQ = row.private_QQ
+                            this.dialogVisible2 = true
+                            axios({
+                                method: 'post',
+                                url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,
+                                data:qs.stringify(data)
+                            }).then(function(res){
+                                // console.log(res.data)
+                                _this.roleList = res.data
+                            }).catch(function(err){
+                                console.log(err);
+                            });
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                
             },
             //用户修改提交按钮
             updateuser(){
@@ -705,6 +729,11 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
+                        }else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
                         } else {
                             _this.$message({
                                 message: res.data.msg,
@@ -738,6 +767,11 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
+                        }else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
                         } else {
                             _this.$message({
                                 message: res.data.msg,
@@ -775,30 +809,6 @@
                 }).catch(function(err){
                     console.log(err);
                 });
-            },
-            shownumber(){
-                this.showbianhao = !this.showbianhao
-            },
-            showname(){
-                this.showmingcheng = !this.showmingcheng
-            },
-            showaccount(){
-                this.showzhanghao = !this.showzhanghao
-            },
-            showrole(){
-                this.showjuese = !this.showjuese
-            },
-            showphone(){
-                this.showshouji = !this.showshouji
-            },
-            showemail(){
-                this.showyouxiang = !this.showyouxiang
-            },
-            showdepart(){
-                this.showbumen = !this.showbumen
-            },
-            showposition(){
-                this.showzhiwei = !this.showzhiwei
             },
             search() {
                 this.$options.methods.reloadTable.bind(this)(true);

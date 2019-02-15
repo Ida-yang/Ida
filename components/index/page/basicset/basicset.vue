@@ -203,10 +203,27 @@
             //状态添加
             handleAdd(){
                 let _this = this
-                this.newform.typeName = null
-                this.newform.sort = null
-                this.newform.notes = null
-                this.dialogVisible = true
+
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'typeInfoJurisdiction/insert.do',
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        this.newform.typeName = null
+                        this.newform.sort = null
+                        this.newform.notes = null
+                        this.dialogVisible = true
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
             },
             //状态添加提交按钮
             addbasicset(){
@@ -266,11 +283,28 @@
             handleEdit(index,row){
                 let _this = this
                 // console.log(row.sort)
-                this.newform.id = row.id
-                this.newform.sort = row.sort
-                this.newform.typeName = row.typeName
-                this.newform.notes = row.notes
-                this.dialogVisible2 = true
+
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'typeInfoJurisdiction/update.do',
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        this.newform.id = row.id
+                        this.newform.sort = row.sort
+                        this.newform.typeName = row.typeName
+                        this.newform.notes = row.notes
+                        this.dialogVisible2 = true
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
                 // console.log(this.newform)
             },
             //状态修改提交按钮
@@ -349,7 +383,12 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
-                        } else {
+                        } else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
+                        }else {
                             _this.$message({
                                 message: res.data.msg,
                                 type: 'error'

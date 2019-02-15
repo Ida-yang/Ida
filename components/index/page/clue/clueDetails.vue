@@ -311,7 +311,7 @@
                     data:qs.stringify(data)
                 }).then(function(res){
                     // console.log(res.data)
-                    _this.stateList = res.data
+                    _this.stateList = res.data.slice(1)
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -422,7 +422,12 @@
                             type: 'success'
                         });
                     _this.closeTag();
-                    } else {
+                    } else if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message: '对不起，您没有该权限，请联系管理员开通',
+                            type: 'error'
+                        })
+                    }else {
                         _this.$message({
                             message: res.data,
                             type: 'error'
@@ -512,6 +517,11 @@
                         _this.$store.state.detailsData.submitData = {"id":_this.detailData.id}
                         _this.$options.methods.loadData.bind(_this)(true);
                         // _this.closeTag()
+                    } else if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message: '对不起，您没有该权限，请联系管理员开通',
+                            type: 'error'
+                        })
                     } else {
                         _this.$message({
                             message: res.data.msg,

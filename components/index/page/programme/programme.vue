@@ -380,12 +380,27 @@
                         message:'请先选择部门，再添加方案',
                         type:'info'
                     })
-                    }else if(this.clickdata.next == ''){
-                    this.newform.projectName = null
-                    this.newform.time = null
-                    this.newform.private_employee = this.$store.state.user
-                    // this.newform.state = '启用'
-                    this.dialogVisible = true
+                }else if(this.clickdata.next == ''){
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'projectJurisdiction/insert.do',
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message:'对不起，您没有该权限，请联系管理员开通',
+                                type:'error'
+                            })
+                        }else{  
+                            this.newform.projectName = null
+                            this.newform.time = null
+                            this.newform.private_employee = this.$store.state.user
+                            // this.newform.state = '启用'
+                            this.dialogVisible = true
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
                 }else{
                     _this.$message({
                         message:'该部门下还有子部门，请选择子部门',
@@ -453,16 +468,33 @@
                 let _this = this
                 // console.log(row)
                 let data = {}
-                this.newform.id = row.id
-                this.newform.secondid = row.second_id
-                this.newform.secondname = row.deptname
-                this.newform.deptid = row.deptid
-                this.newform.projectName = row.projectName
-                this.newform.time = row.time+'-01-01'
-                this.newform.state = row.state
-                this.newform.private_employee = row.private_employee
-                this.newform.createTime = row.createTime
-                this.dialogVisible2 = true
+
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'projectJurisdiction/update.do',
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        this.newform.id = row.id
+                        this.newform.secondid = row.second_id
+                        this.newform.secondname = row.deptname
+                        this.newform.deptid = row.deptid
+                        this.newform.projectName = row.projectName
+                        this.newform.time = row.time+'-01-01'
+                        this.newform.state = row.state
+                        this.newform.private_employee = row.private_employee
+                        this.newform.createTime = row.createTime
+                        this.dialogVisible2 = true
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
             },
             //方案修改提交按钮
             updateprogramme(){
@@ -550,7 +582,12 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
-                        } else {
+                        } else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
+                        }else {
                             _this.$message({
                                 message: res.data.msg,
                                 type: 'error'
@@ -583,7 +620,12 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
-                        } else {
+                        } else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
+                        }else {
                             _this.$message({
                                 message: res.data.msg,
                                 type: 'error'

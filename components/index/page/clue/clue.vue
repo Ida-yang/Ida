@@ -4,7 +4,6 @@
         <div class="radioList">
             <el-radio-group v-model="searchList.label">
                 <span class="nameList">线索分类：</span>
-                <el-radio :label="nullvalue" @change="search()">全部线索</el-radio>
                 <el-radio v-for="item in pIdData" :key="item.label" :label="item.label" @change="search()">{{item.value}}</el-radio>
             </el-radio-group>
             <el-radio-group v-model="searchList.state">
@@ -409,13 +408,13 @@
             return {
                 searchList:{
                     searchName:null,
-                    label:null,
+                    label:'1',
                     state:null,
                     type:null,
                 },
                 searchListNew:{
                     searchName:null,
-                    label:null,
+                    label:'1',
                     state:null,
                     type:null,
                 },
@@ -425,6 +424,7 @@
                     id:null,
                 },
                 pIdData:[
+                    {label:'0',value:'全部线索'},
                     {label:'1',value:'我的线索'},
                     {label:'2',value:'本组'},
                     {label:'3',value:'本机构'},],
@@ -438,6 +438,8 @@
                 dialogFormVisible:false,
                 dialogFormVisible1:false,
                 formLabelWidth: '130px',
+
+                authorityInterface: null,
             }
         },
         beforeCreate(){
@@ -455,9 +457,11 @@
         },
         activated(){
             this.reloadTable()
+            this.reloadData()
         },
         mounted(){
             this.reloadTable()
+            this.reloadData()
         },
 
         methods: {
@@ -467,23 +471,22 @@
                 let qs =require('querystring')
                 let searchList = {}
                 searchList.searchName = this.searchList.searchName;
-                if(this.searchList.label == 1 ){
+                if(this.searchList.label == 0 ){
+                    searchList.pId = _this.nullvalue
+                }else if(this.searchList.label == 1){
                     searchList.pId = _this.$store.state.ispId
                 }else if(this.searchList.label == 2){
                     searchList.secondid = _this.$store.state.deptid
                 }else if(this.searchList.label == 3){
                     searchList.deptid = _this.$store.state.insid
+                }else{
+                    searchList.pId = _this.$store.state.ispId
                 }
                 searchList.stateid = this.searchList.state
                 searchList.cuesid = this.searchList.type
                 searchList.page = this.page;
                 searchList.limit = this.limit;
-                // console.log(searchList)
-                let filterList = {}
-                filterList.type = '线索'
-                let data = {}
-                data.type = '线索'
-                data.state = 1
+                console.log(searchList)
                 
                 axios({
                     method: 'post',
@@ -496,6 +499,17 @@
                 }).catch(function(err){
                     console.log(err);
                 });
+            },
+            //获取筛选列表
+            reloadData() {
+                let _this = this;
+                let qs =require('querystring')
+                let filterList = {}
+                filterList.type = '线索'
+                let data = {}
+                data.type = '线索'
+                data.state = 1
+                
                 axios({
                     method: 'post',
                     url: _this.$store.state.defaultHttp+'userPageInfo/getAllUserPage.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
@@ -602,12 +616,12 @@
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'clueJurisdiction/insertClue.do',
+                    url: _this.$store.state.defaultHttp+'clueJurisdiction/insert.do',
                 }).then(function(res){
                     // console.log(res.data.msg)
                     if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
-                            message:'对不起，您没有新增线索的权限',
+                            message:'对不起，您没有该权限，请联系管理员开通',
                             type:'error'
                         })
                     }else{
@@ -684,12 +698,12 @@
                 this.$store.state.addOrUpdateData = addOrUpdateData;
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'clueJurisdiction/updateClue.do',
+                    url: _this.$store.state.defaultHttp+'clueJurisdiction/update.do',
                 }).then(function(res){
                     // console.log(res)
                     if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
-                            message:'对不起，您没有修改线索的权限',
+                            message:'对不起，您没有该权限，请联系管理员开通',
                             type:'error'
                         })
                     }else{
@@ -706,18 +720,24 @@
                 let idArr = [];
                 idArr.id = this.idArr.id
                 // console.log(idArr)
+                
                 axios({
                     method: 'post',
                     url:  _this.$store.state.defaultHttp+ 'customerTwo/updateState.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
-                    // console.log(res)
-                    if(res.status && res.status == 200) {
+                    console.log(res)
+                    if(res.data && res.data == 'success') {
                         _this.$message({
                             message: '转移成功',
                             type: 'success'
                         });
                         _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message: '对不起，您没有该权限，请联系管理员开通',
+                            type: 'error'
+                        })
                     } else {
                         _this.$message({
                             message: res.data,
@@ -747,6 +767,11 @@
                             type: 'success'
                         });
                         _this.$options.methods.reloadTable.bind(_this)(true);
+                    }else if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message: '对不起，您没有该权限，请联系管理员开通',
+                            type: 'error'
+                        })
                     } else {
                         _this.$message({
                             message: res.data,
@@ -776,7 +801,7 @@
                 }).then(function(res){
                     // console.log(res)
                     if(res.data && res.data =="success"){
-                        _this.$options.methods.reloadTable.bind(_this)(true);
+                        _this.$options.methods.reloadData.bind(_this)(true);
                     }else{
                         console.log(err)
                     }
@@ -785,7 +810,35 @@
                 });
             },
             search() {
-                this.$options.methods.reloadTable.bind(this)(true);
+                const _this = this
+                const qs = require('querystring')
+                if(this.searchList.label == 0 ){
+                    this.authorityInterface = 'clueJurisdiction/all.do'
+                }else if(this.searchList.label == 1 ){
+                    this.authorityInterface = 'clueJurisdiction/my.do'
+                }else if(this.searchList.label == 2){
+                    this.authorityInterface = 'clueJurisdiction/second.do'
+                }else if(this.searchList.label == 3){
+                    this.authorityInterface = 'clueJurisdiction/dept.do'
+                }
+
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+_this.authorityInterface,
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
             },
             reset(){
                 this.searchList = Object.assign({}, this.searchListNew);

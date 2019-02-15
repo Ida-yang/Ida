@@ -41,7 +41,7 @@
         <el-dialog
             title="添加"
             :visible.sync="dialogVisible"
-            width="40%">
+            width="50%">
             <el-form ref="newform" :model="newform" label-width="80px">
                 <el-form-item label="上级部门">
                     <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
@@ -58,7 +58,7 @@
         <el-dialog
             title="修改"
             :visible.sync="dialogVisible2"
-            width="40%">
+            width="50%">
             <el-form ref="newform" :model="newform" label-width="80px">
                 <el-form-item label="上级部门">
                     <el-input v-model="newform.parentname" :disabled="true" style="200px;"></el-input>
@@ -75,7 +75,7 @@
         <el-dialog
             title="添加角色"
             :visible.sync="dialogVisible3"
-            width="40%">
+            width="50%">
             <el-form ref="roleform" :model="roleform" label-width="80px">
                 <el-form-item label="所属部门">
                     <el-input v-model="roleform.deptname" :disabled="true" style="200px;"></el-input>
@@ -120,7 +120,14 @@
                         <el-checkbox class="checkboxclass" v-for="item in agreementrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
-                <el-tab-pane label="系统设置" name="sixth">
+                <el-tab-pane label="社交营销" name="sixth">
+                    <el-checkbox :indeterminate="checksomeactivity" v-model="checkAllactivity" @change="CheckAllactivitys">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroleactivitys" @change="handleCheckedroleactivity">
+                        <el-checkbox class="checkboxclass" v-for="item in activityrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="系统设置" name="seventh">
                     <el-checkbox :indeterminate="checksomeset" v-model="checkAllset" @change="CheckAllsets">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
                     <el-checkbox-group v-model="checkedrolesets" @change="handleCheckedroleset">
@@ -136,7 +143,7 @@
         <el-dialog
             title="修改角色"
             :visible.sync="dialogVisible4"
-            width="40%">
+            width="50%">
             <el-form ref="roleform" :model="roleform" label-width="80px">
                 <el-form-item label="所属部门">
                     <el-input v-model="roleform.deptname" :disabled="true" style="200px;"></el-input>
@@ -181,7 +188,14 @@
                         <el-checkbox class="checkboxclass" v-for="item in agreementrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
                     </el-checkbox-group>
                 </el-tab-pane>
-                <el-tab-pane label="系统设置" name="sixth">
+                <el-tab-pane label="社交营销" name="sixth">
+                    <el-checkbox :indeterminate="checksomeactivity" v-model="checkAllactivity" @change="CheckAllactivitys">全选</el-checkbox>
+                    <div style="margin: 15px 0;"></div>
+                    <el-checkbox-group v-model="checkedroleactivitys" @change="handleCheckedroleactivity">
+                        <el-checkbox class="checkboxclass" v-for="item in activityrole" :key="item.id" :label="item.id" @change="changevalue($event,item.id)">{{item.resourcename}}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="系统设置" name="seventh">
                     <el-checkbox :indeterminate="checksomeset" v-model="checkAllset" @change="CheckAllsets">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
                     <el-checkbox-group v-model="checkedrolesets" @change="handleCheckedroleset">
@@ -244,6 +258,7 @@
                 checkAllcontact: false,
                 checkAllopportunity: false,
                 checkAllagreement: false,
+                checkAllactivity: false,
                 checkAllset: false,
                 
                 checksomeclue: false,
@@ -251,6 +266,7 @@
                 checksomecontact:false,
                 checksomeopportunity:false,
                 checksomeagreement:false,
+                checksomeactivity:false,
                 checksomeset:false,
 
                 checkedroleclues: [],
@@ -258,6 +274,7 @@
                 checkedrolecontacts: [],
                 checkedroleopportunitys: [],
                 checkedroleagreements: [],             
+                checkedroleactivitys: [],             
                 checkedrolesets: [],             
 
                 cluerole: null,
@@ -265,6 +282,7 @@
                 contactrole:null,
                 opportunityrole:null,
                 agreementrole:null,
+                activityrole:null,
                 setrole:null,
             }
         },
@@ -279,6 +297,7 @@
             this.getresource()
         },
         methods:{
+            //加载机构部门树结构
             loadData(){
                 let _this = this
                 axios({
@@ -315,13 +334,14 @@
                     method: 'get',
                     url: _this.$store.state.defaultHttp+'resource/getResources.do',
                 }).then(function(res){
-                    // console.log(res.data)
+                    console.log(res.data)
                     _this.cluerole = res.data.name1
                     _this.customerole = res.data.name2
                     _this.contactrole = res.data.name3
                     _this.opportunityrole = res.data.name4
                     _this.agreementrole = res.data.name5
-                    _this.setrole = res.data.name6
+                    _this.activityrole = res.data.name6
+                    _this.setrole = res.data.name7
                 }).catch(function(err){
                     console.log(err);
                 });
@@ -331,16 +351,32 @@
                 this.searchList.parentid = data.parentid
                 this.clickdata = data
                 this.roleform.deptid = data.deptid
-                console.log(data.deptid)
+                // console.log(data.deptid)
                 this.$options.methods.reloadData.bind(this)(true);
             },
             //上级部门添加
             handleappend(data){
                 let _this = this
                 // console.log(data)
-                this.newform.parentname = data.deptname
-                this.newform.parentid = data.deptid
-                this.dialogVisible = true
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'deptJurisdiction/insert.do',
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        this.newform.parentname = data.deptname
+                        this.newform.parentid = data.deptid
+                        this.dialogVisible = true
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
             },
             //上级部门添加提交按钮
             appenddept(){
@@ -380,10 +416,26 @@
             handleUpdate(data){
                 // console.log(data)
                 let _this = this;
-                this.newform.parentname = data.parentname
-                this.newform.deptid = data.deptid
-                this.newform.deptname = data.deptname
-                this.dialogVisible2 = true
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'deptJurisdiction/update.do',
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        this.newform.parentname = data.parentname
+                        this.newform.deptid = data.deptid
+                        this.newform.deptname = data.deptname
+                        this.dialogVisible2 = true
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
             },
             //上级部门修改提交按钮
             updatedept(){
@@ -440,6 +492,11 @@
                                 message: '删除成功',
                                 type: 'success'
                             });
+                        }else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
                         } else {
                             _this.$message({
                                 message: res.data.msg,
@@ -470,7 +527,7 @@
                     this.roleform.deptname = this.clickdata.deptname
                     this.dialogVisible3 = true
                 }
-                console.log(this.roleform)
+                // console.log(this.roleform)
             },
             addrole(){
                 let _this = this
@@ -479,13 +536,13 @@
                 data.deptid = this.roleform.deptid
                 data.name = this.roleform.name
                 data.ids = this.roleform.ids
-                console.log(data)
+                // console.log(data)
                 axios({
                     method:'post',
                     url:_this.$store.state.defaultHttp+'role/saveOrUpdate.do?cId='+_this.$store.state.iscId,
                     data:qs.stringify(data)
                 }).then(function(res){
-                    console.log(res)
+                    // console.log(res)
                     if(res.data.msg && res.data.msg == 'success'){
                         _this.$message({
                             message:'添加成功',
@@ -510,6 +567,7 @@
                 this.checkedrolecontacts = []
                 this.checkedroleopportunitys = []
                 this.checkedroleagreements = []
+                this.checkedroleactivitys = []
                 this.checkedrolesets = []
                 let ids = val.resources
                 ids.forEach(el => {
@@ -521,6 +579,7 @@
                         this.checkedrolecontacts.push(el.id)
                         this.checkedroleopportunitys.push(el.id)
                         this.checkedroleagreements.push(el.id)
+                        this.checkedroleactivitys.push(el.id)
                         this.checkedrolesets.push(el.id)
                     }
                 });
@@ -659,6 +718,18 @@
                     }
                 });
             },
+            CheckAllactivitys(val) {
+                let data = this.activityrole
+                data.forEach(el => {
+                    if(val == true){
+                        this.checkedroleactivitys.push(el.id)
+                        this.roleform.ids.push(el.id)
+                    }else{
+                        this.checkedroleactivitys.pop(el.id)
+                        this.roleform.ids.pop(el.id)
+                    }
+                });
+            },
             CheckAllsets(val) {
                 let data = this.setrole
                 data.forEach(el => {
@@ -700,6 +771,12 @@
                 let checkedCount = e.length;
                 this.checkAllagreement = checkedCount === this.agreementrole.length;
                 this.checksomeagreement = checkedCount > 0 && checkedCount < this.agreementrole.length;
+            },
+            handleCheckedroleactivity(e) {
+                // console.log(e)
+                let checkedCount = e.length;
+                this.checkAllactivity = checkedCount === this.activityrole.length;
+                this.checksomeactivity = checkedCount > 0 && checkedCount < this.activityrole.length;
             },
             handleCheckedroleset(e) {
                 // console.log(e)

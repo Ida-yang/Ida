@@ -527,6 +527,11 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
+                        }else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
                         } else {
                             _this.$message({
                                 message: res.data.msg,
@@ -559,6 +564,11 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
+                        }else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
                         } else {
                             _this.$message({
                                 message: res.data.msg,
@@ -582,22 +592,38 @@
                 idArr.ids = this.idArr.id
                 idArr.secondid = _this.$store.state.deptid
                 idArr.deptid = _this.$store.state.insid
+
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
-                    data:qs.stringify(idArr),
+                    url: _this.$store.state.defaultHttp+'cluePoolJurisdiction/receive.do',
                 }).then(function(res){
                     // console.log(res)
-                    if(res.data.code && res.data.code == 200) {
+                    if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
-                            message: '领取成功',
-                            type: 'success'
-                        });
-                        _this.$options.methods.reloadTable.bind(_this)(true);
-                    } else {
-                        _this.$message({
-                            message: res.data.msg,
-                            type: 'error'
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        axios({
+                            method: 'post',
+                            url:  _this.$store.state.defaultHttp+ 'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                            data:qs.stringify(idArr),
+                        }).then(function(res){
+                            // console.log(res)
+                            if(res.data.code && res.data.code == 200) {
+                                _this.$message({
+                                    message: '领取成功',
+                                    type: 'success'
+                                });
+                                _this.$options.methods.reloadTable.bind(_this)(true);
+                            } else {
+                                _this.$message({
+                                    message: res.data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        }).catch(function(err){
+                            console.log(err);
                         });
                     }
                 }).catch(function(err){
@@ -611,27 +637,43 @@
                 idArr.ids = row.id
                 idArr.secondid = _this.$store.state.deptid
                 idArr.deptid = _this.$store.state.insid
+
                 axios({
                     method: 'post',
-                    url: _this.$store.state.defaultHttp+'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
-                    data:qs.stringify(idArr),
+                    url: _this.$store.state.defaultHttp+'cluePoolJurisdiction/receive.do',
                 }).then(function(res){
                     // console.log(res)
-                    if(res.data.code && res.data.code == 200) {
+                    if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
-                            message: '领取成功',
-                            type: 'success'
-                        });
-                        _this.$options.methods.reloadTable.bind(_this)(true);
-                    } else {
-                        _this.$message({
-                            message: res.data.msg,
-                            type: 'error'
-                        });
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        axios({
+                            method: 'post',
+                            url: _this.$store.state.defaultHttp+'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId+'&pId='+_this.$store.state.ispId,
+                            data:qs.stringify(idArr),
+                        }).then(function(res){
+                            // console.log(res)
+                            if(res.data.code && res.data.code == 200) {
+                                _this.$message({
+                                    message: '领取成功',
+                                    type: 'success'
+                                });
+                                _this.$options.methods.reloadTable.bind(_this)(true);
+                            } else {
+                                _this.$message({
+                                    message: res.data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        }).catch(function(err){
+                            console.log(err);
+                        })
                     }
                 }).catch(function(err){
                     console.log(err);
-                })
+                });
             },
             handleDistribution(){
                 let _this = this;
@@ -641,28 +683,45 @@
                 idArr.pId = this.userData.pId
                 idArr.secondid = ''
                 idArr.deptid = ''
+
                 axios({
                     method: 'post',
-                    url:  _this.$store.state.defaultHttp+ 'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId,
-                    data:qs.stringify(idArr),
+                    url: _this.$store.state.defaultHttp+'cluePoolJurisdiction/distribution.do',
                 }).then(function(res){
                     // console.log(res)
-                    if(res.data.code && res.data.code == 200) {
+                    if(res.data.msg && res.data.msg == 'error'){
                         _this.$message({
-                            message: '分配成功',
-                            type: 'success'
-                        });
-                        _this.visible2 = false
-                        _this.$options.methods.reloadTable.bind(_this)(true);
-                    } else {
-                        _this.$message({
-                            message: res.data.msg,
-                            type: 'error'
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        axios({
+                            method: 'post',
+                            url:  _this.$store.state.defaultHttp+ 'customerTwo/receiveClue.do?cId='+_this.$store.state.iscId,
+                            data:qs.stringify(idArr),
+                        }).then(function(res){
+                            // console.log(res)
+                            if(res.data.code && res.data.code == 200) {
+                                _this.$message({
+                                    message: '分配成功',
+                                    type: 'success'
+                                });
+                                _this.visible2 = false
+                                _this.$options.methods.reloadTable.bind(_this)(true);
+                            } else {
+                                _this.$message({
+                                    message: res.data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        }).catch(function(err){
+                            console.log(err);
                         });
                     }
                 }).catch(function(err){
                     console.log(err);
                 });
+                
             },
 
             hangleChange(e,val){
@@ -694,7 +753,26 @@
             },
 
             search() {
-                this.$options.methods.reloadTable.bind(this)(true);
+                let _this = this
+                let qs = require('querystring')
+
+                axios({
+                    method: 'post',
+                    url: _this.$store.state.defaultHttp+'cluePoolJurisdiction/select.do',
+                }).then(function(res){
+                    // console.log(res)
+                    if(res.data.msg && res.data.msg == 'error'){
+                        _this.$message({
+                            message:'对不起，您没有该权限，请联系管理员开通',
+                            type:'error'
+                        })
+                    }else{
+                        _this.$options.methods.reloadTable.bind(_this)(true);
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
             },
             reset(){
                 this.searchList = Object.assign({}, this.searchListNew);

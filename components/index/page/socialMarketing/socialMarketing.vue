@@ -415,6 +415,11 @@
                                 type: 'success'
                             });
                             _this.$options.methods.reloadTable.bind(_this)(true);
+                        }else if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message: '对不起，您没有该权限，请联系管理员开通',
+                                type: 'error'
+                            })
                         } else {
                             _this.$message({
                                 message: res.data.msg,
@@ -440,7 +445,23 @@
                         type:'info'
                     })
                 }else{
-                    this.dialogVisible = true
+                    axios({
+                        method: 'post',
+                        url: _this.$store.state.defaultHttp+'activityJurisdiction/insert.do',
+                    }).then(function(res){
+                        // console.log(res)
+                        if(res.data.msg && res.data.msg == 'error'){
+                            _this.$message({
+                                message:'对不起，您没有该权限，请联系管理员开通',
+                                type:'error'
+                            })
+                        }else{
+                            this.dialogVisible = true
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
+                    
                 }
             },
             //活动添加提交按钮
