@@ -215,10 +215,10 @@
                             type:'error'
                         })
                     }else{
-                        this.newform.typeName = null
-                        this.newform.sort = null
-                        this.newform.notes = null
-                        this.dialogVisible = true
+                        _this.newform.typeName = null
+                        _this.newform.sort = null
+                        _this.newform.notes = null
+                        _this.dialogVisible = true
                     }
                 }).catch(function(err){
                     console.log(err);
@@ -295,11 +295,11 @@
                             type:'error'
                         })
                     }else{
-                        this.newform.id = row.id
-                        this.newform.sort = row.sort
-                        this.newform.typeName = row.typeName
-                        this.newform.notes = row.notes
-                        this.dialogVisible2 = true
+                        _this.newform.id = row.id
+                        _this.newform.sort = row.sort
+                        _this.newform.typeName = row.typeName
+                        _this.newform.notes = row.notes
+                        _this.dialogVisible2 = true
                     }
                 }).catch(function(err){
                     console.log(err);

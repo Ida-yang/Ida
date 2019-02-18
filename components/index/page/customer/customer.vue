@@ -567,6 +567,7 @@
                 this.$router.push({ path: '/customerDetails' });
             },
             handleAdd(){
+                const _this = this
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "添加客户";
                 addOrUpdateData.createForm = [
@@ -645,6 +646,7 @@
             },
             handleEdit(index,row){
                 // console.log(row)
+                const _this = this
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改客户";
                 addOrUpdateData.createForm = [

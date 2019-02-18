@@ -392,11 +392,11 @@
                                 type:'error'
                             })
                         }else{  
-                            this.newform.projectName = null
-                            this.newform.time = null
-                            this.newform.private_employee = this.$store.state.user
-                            // this.newform.state = '启用'
-                            this.dialogVisible = true
+                            _this.newform.projectName = null
+                            _this.newform.time = null
+                            _this.newform.private_employee = _this.$store.state.user
+                            // _this.newform.state = '启用'
+                            _this.dialogVisible = true
                         }
                     }).catch(function(err){
                         console.log(err);
@@ -480,16 +480,16 @@
                             type:'error'
                         })
                     }else{
-                        this.newform.id = row.id
-                        this.newform.secondid = row.second_id
-                        this.newform.secondname = row.deptname
-                        this.newform.deptid = row.deptid
-                        this.newform.projectName = row.projectName
-                        this.newform.time = row.time+'-01-01'
-                        this.newform.state = row.state
-                        this.newform.private_employee = row.private_employee
-                        this.newform.createTime = row.createTime
-                        this.dialogVisible2 = true
+                        _this.newform.id = row.id
+                        _this.newform.secondid = row.second_id
+                        _this.newform.secondname = row.deptname
+                        _this.newform.deptid = row.deptid
+                        _this.newform.projectName = row.projectName
+                        _this.newform.time = row.time+'-01-01'
+                        _this.newform.state = row.state
+                        _this.newform.private_employee = row.private_employee
+                        _this.newform.createTime = row.createTime
+                        _this.dialogVisible2 = true
                     }
                 }).catch(function(err){
                     console.log(err);

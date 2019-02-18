@@ -424,6 +424,7 @@
             },
             handleAdd(){
                 let addOrUpdateData = {};
+                const _this = this
                 // addOrUpdateData.title = "添加线索";
                 addOrUpdateData.createForm = [
                     {"label":"合同类型","inputModel":"contract_type","type":"select","options":[
@@ -476,6 +477,7 @@
             },
             handleEdit(index,row){
                 // console.log(row)
+                const _this = this
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改线索";
                 addOrUpdateData.createForm = [

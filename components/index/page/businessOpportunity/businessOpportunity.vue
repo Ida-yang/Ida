@@ -362,6 +362,7 @@
             },
             handleAdd(){
                 let addOrUpdateData = {};
+                const _this = this
                 // addOrUpdateData.title = "添加商机";
                 addOrUpdateData.createForm = [
                     {"label":"商机编号","inputModel":"opportunity_number",},
@@ -405,6 +406,7 @@
             },
             handleEdit(index,row){
                 // console.log(row)
+                const _this = this
                 let addOrUpdateData = {};
                 // addOrUpdateData.title = "修改商机";
                 addOrUpdateData.createForm = [

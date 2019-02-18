@@ -369,9 +369,9 @@
                             type:'error'
                         })
                     }else{
-                        this.newform.parentname = data.deptname
-                        this.newform.parentid = data.deptid
-                        this.dialogVisible = true
+                        _this.newform.parentname = data.deptname
+                        _this.newform.parentid = data.deptid
+                        _this.dialogVisible = true
                     }
                 }).catch(function(err){
                     console.log(err);
@@ -427,10 +427,10 @@
                             type:'error'
                         })
                     }else{
-                        this.newform.parentname = data.parentname
-                        this.newform.deptid = data.deptid
-                        this.newform.deptname = data.deptname
-                        this.dialogVisible2 = true
+                        _this.newform.parentname = data.parentname
+                        _this.newform.deptid = data.deptid
+                        _this.newform.deptname = data.deptname
+                        _this.dialogVisible2 = true
                     }
                 }).catch(function(err){
                     console.log(err);

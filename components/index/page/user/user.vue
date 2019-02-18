@@ -474,7 +474,7 @@
                                 type:'error'
                             })
                         }else{
-                            this.dialogVisible = true
+                            _this.dialogVisible = true
                         }
                     }).catch(function(err){
                         console.log(err);
@@ -592,18 +592,18 @@
                             })
                         }else{
                             data.deptid = row.second_id
-                            this.newform.private_id = row.private_id
-                            this.newform.second_id = row.second_id
-                            this.newform.secondname = row.deptname
-                            this.newform.role_id = row.role_id
-                            this.newform.private_phone = row.private_phone
-                            this.newform.private_password = row.private_password
-                            this.newform.private_passwords = row.private_password
-                            this.newform.private_employee = row.private_employee
-                            this.newform.private_state = row.private_state
-                            this.newform.private_email = row.private_email
-                            this.newform.private_QQ = row.private_QQ
-                            this.dialogVisible2 = true
+                            _this.newform.private_id = row.private_id
+                            _this.newform.second_id = row.second_id
+                            _this.newform.secondname = row.deptname
+                            _this.newform.role_id = row.role_id
+                            _this.newform.private_phone = row.private_phone
+                            _this.newform.private_password = row.private_password
+                            _this.newform.private_passwords = row.private_password
+                            _this.newform.private_employee = row.private_employee
+                            _this.newform.private_state = row.private_state
+                            _this.newform.private_email = row.private_email
+                            _this.newform.private_QQ = row.private_QQ
+                            _this.dialogVisible2 = true
                             axios({
                                 method: 'post',
                                 url: _this.$store.state.defaultHttp+'role/selectRole.do?cId='+_this.$store.state.iscId,

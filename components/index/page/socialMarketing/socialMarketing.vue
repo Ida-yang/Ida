@@ -456,7 +456,7 @@
                                 type:'error'
                             })
                         }else{
-                            this.dialogVisible = true
+                            _this.dialogVisible = true
                         }
                     }).catch(function(err){
                         console.log(err);

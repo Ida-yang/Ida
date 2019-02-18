@@ -363,6 +363,7 @@
                 this.$router.push({ path: '/clueDetails' });
             },
             handleAdd(){
+                const _this = this
                 let addOrUpdateData = {};
                 addOrUpdateData.createForm = [
                     {"label":"联系人","inputModel":"name"},
@@ -414,6 +415,7 @@
             },
             handleEdit(index,row){
                 // console.log(row)
+                const _this = this
                 let addOrUpdateData = {};
                 addOrUpdateData.createForm = [
                     {"label":"联系人","inputModel":"name"},
