@@ -632,8 +632,8 @@
                     url:  _this.$store.state.defaultHttp+ 'customerOne/insert.do?cId='+_this.$store.state.iscId+"&pId="+_this.$store.state.ispId,
                     data:qs.stringify(idArr),
                 }).then(function(res){
-                    // console.log(res)
-                    if(res.status && res.status == 200) {
+                    console.log(res)
+                    if(res.data.msg && res.data.msg == 'success') {
                         _this.Loading = false
                         _this.$message({
                             message: '转移成功',
@@ -643,7 +643,7 @@
                     } else {
                         _this.Loading = false
                         _this.$message({
-                            message: res.data,
+                            message: res.data.msg,
                             type: 'error'
                         });
                     }
