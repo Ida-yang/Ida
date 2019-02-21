@@ -12,26 +12,18 @@ import vuex from 'vuex'
 import store from './store/store';
 import VueResource from 'vue-resource';
 
-// import echarts from 'echarts'
-
 import base from './base';
 
-import VueAreaLinkage from 'vue-area-linkage';
-
-
 Vue.use(base)
-
-Vue.use(VueAreaLinkage)
 
 Vue.use(VueResource);
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
 
-// Vue.prototype.$echarts = echarts 
 
-var lastTime = new Date().getTime();//最后操作时间 
-var currentTime = new Date().getTime();//当前时间
-var timeOut = 3 * 60 * 60 * 1000; //设置超时时间： 3小时
+// var lastTime = new Date().getTime();//最后操作时间 
+// var currentTime = new Date().getTime();//当前时间
+// var timeOut = 3 * 60 * 60 * 1000; //设置超时时间： 3小时
 
    
   // http response 拦截器
@@ -74,14 +66,57 @@ new Vue({
     if(localStorage.getItem('iscId')===null){
       localStorage.setItem('iscId','')
     }
-    this.$store.state.iscId = localStorage.getItem('iscId');
-    this.$store.state.ispId = localStorage.getItem('ispId');
-    this.$store.state.user = localStorage.getItem('user');
-    this.$store.state.deptid = localStorage.getItem('deptid');
-    this.$store.state.roleid = localStorage.getItem('roleid');
-    this.$store.state.insid = localStorage.getItem('insid');
+    if(localStorage.getItem('ispId')===null){
+      localStorage.setItem('ispId','')
+    }
+    if(localStorage.getItem('user')===null){
+      localStorage.setItem('user','')
+    }
+    if(localStorage.getItem('deptid')===null){
+      localStorage.setItem('deptid','')
+    }
+    if(localStorage.getItem('roleid')===null){
+      localStorage.setItem('roleid','')
+    }
+    if(localStorage.getItem('insid')===null){
+      localStorage.setItem('insid','')
+    }
+    this.$store.state.iscId = localStorage.getItem('iscId');//存放cId
+    this.$store.state.ispId = localStorage.getItem('ispId');//存放pId
+    this.$store.state.user = localStorage.getItem('user');//存放用户名
+    this.$store.state.deptid = localStorage.getItem('deptid');//存放部门编号
+    this.$store.state.roleid = localStorage.getItem('roleid');//存放角色编号
+    this.$store.state.insid = localStorage.getItem('insid');//存放机构编号
     // if(this.$store.state.userData == null){
     //   this.$store.state.userData = JSON.parse(localStorage.getItem('userData'))
     // }
+  },
+  mounted() {
+    this.loadHandler()
+  },
+  methods:{
+    loadHandler(){
+      // console.log(localStorage)
+      if(!localStorage.ispId){
+        this.$router.push('/login')
+      }
+    }
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  // console.log(localStorage)
+  if (to.matched.some(record => record.meta.requireAuth)){ // 判断该路由是否需要登录权限
+    // console.log('需要登录');
+    if(localStorage.ispId) { // 判断当前的ispId是否存在 ； 登录存入的ispId
+      next();
+    }else {
+      next({
+        path: '/login',
+        // query: {redirect: to.fullPath} // 将跳转的路由path作为参数，登录成功后跳转到该路由
+      })
+    }
+  }else {
+    next();
   }
 });

@@ -600,13 +600,13 @@
                     data:qs.stringify(idArr),
                 }).then(function(res){
                     // console.log(res)
-                    if(res.status && res.status == 200) {
+                    if(res.data.code && res.data.code == 200) {
                         _this.$message({
                             message: '转移成功',
                             type: 'success'
                         });
                         _this.closeTag();
-                    }else if(res.data.msg && res.data.msg == 'error'){
+                    }else if(res.data.msg && res.data.msg == 'error'){//转移至客户池
                         _this.$message({
                             message: '对不起，您没有该权限，请联系管理员开通',
                             type: 'error'
